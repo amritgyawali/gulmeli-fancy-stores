@@ -1,0 +1,551 @@
+import { f, options } from "../fields.ts";
+import type { ResourceDefinition } from "../resource.ts";
+import { publishFields, publishOptions, seoFields } from "./common.ts";
+
+export const pages: ResourceDefinition = {
+  key: "pages",
+  label: "Pages",
+  singular: "Page",
+  icon: "file-lines",
+  module: "content",
+  labelField: "title",
+  description: "About, contact, policies, FAQ and any custom page.",
+  sections: ["General", "Content", "Publishing", "SEO"],
+  fields: [
+    f.text("title", "Page title", { required: true, section: "General" }),
+    f.slug("slug", "Slug", {
+      required: true,
+      section: "General",
+      derivedFrom: "title",
+      width: "half",
+    }),
+    f.select(
+      "kind",
+      "Page type",
+      options(
+        ["custom", "Custom page"],
+        ["about", "About us"],
+        ["contact", "Contact"],
+        ["privacy", "Privacy policy"],
+        ["terms", "Terms"],
+        ["refund", "Refund policy"],
+        ["returns", "Return policy"],
+        ["shipping", "Shipping policy"],
+        ["cookies", "Cookie policy"],
+        ["faq", "FAQ"],
+      ),
+      { section: "General", defaultValue: "custom", width: "half" },
+    ),
+    f.textarea("summary", "Summary", { section: "General", rows: 2 }),
+    f.richtext("body", "Page content", { section: "Content", rows: 16 }),
+    f.repeater(
+      "blocks",
+      "Extra sections",
+      [
+        f.select(
+          "type",
+          "Type",
+          options("text", "image", "video", "faq", "products", "html"),
+        ),
+        f.text("heading", "Heading"),
+        f.textarea("body", "Body", { rows: 4 }),
+        f.image("image", "Image"),
+        f.boolean("enabled", "Visible", { defaultValue: true }),
+      ],
+      { section: "Content" },
+    ),
+    f.boolean("showInFooter", "Link from the footer", {
+      section: "Publishing",
+      width: "half",
+    }),
+    ...publishFields,
+    ...seoFields("page"),
+  ],
+  columns: [
+    { field: "title", label: "Page" },
+    { field: "slug", label: "Slug", compact: true },
+    { field: "kind", label: "Type", format: "badge", compact: true },
+    {
+      field: "status",
+      label: "Status",
+      format: "badge",
+      options: publishOptions,
+    },
+    { field: "updatedAt", label: "Updated", format: "date" },
+  ],
+  searchFields: ["title", "slug", "body"],
+  filters: [
+    {
+      field: "status",
+      label: "Status",
+      type: "select",
+      options: publishOptions,
+    },
+  ],
+  defaultSort: { field: "updatedAt", direction: "desc" },
+  features: { publish: true, duplicate: true },
+};
+
+export const blogPosts: ResourceDefinition = {
+  key: "blog_posts",
+  label: "Blog posts",
+  singular: "Post",
+  icon: "newspaper",
+  module: "content",
+  labelField: "title",
+  sections: ["General", "Content", "Related", "Publishing", "SEO"],
+  fields: [
+    f.text("title", "Title", { required: true, section: "General" }),
+    f.slug("slug", "Slug", {
+      required: true,
+      section: "General",
+      derivedFrom: "title",
+      width: "half",
+    }),
+    f.text("author", "Author", { section: "General", width: "half" }),
+    f.text("category", "Category", { section: "General", width: "half" }),
+    f.tags("tags", "Tags", { section: "General" }),
+    f.image("featuredImage", "Featured image", {
+      section: "Content",
+      width: "half",
+    }),
+    f.textarea("excerpt", "Excerpt", { section: "Content", rows: 3 }),
+    f.richtext("body", "Post body", { section: "Content", rows: 16 }),
+    f.relation("productIds", "Related products", "products", {
+      section: "Related",
+      multiple: true,
+    }),
+    f.boolean("commentsEnabled", "Allow comments", {
+      section: "Related",
+      defaultValue: true,
+      width: "half",
+    }),
+    f.repeater(
+      "comments",
+      "Comments",
+      [
+        f.text("author", "Author", { width: "half" }),
+        f.datetime("at", "When", { width: "half" }),
+        f.textarea("body", "Comment", { rows: 2 }),
+        f.boolean("approved", "Approved"),
+      ],
+      { section: "Related" },
+    ),
+    ...publishFields,
+    ...seoFields("post"),
+  ],
+  columns: [
+    { field: "featuredImage", label: "", format: "image", width: 46 },
+    { field: "title", label: "Post" },
+    { field: "author", label: "Author", compact: true },
+    { field: "category", label: "Category", compact: true },
+    {
+      field: "status",
+      label: "Status",
+      format: "badge",
+      options: publishOptions,
+    },
+    { field: "publishAt", label: "Publishes", format: "date" },
+  ],
+  searchFields: ["title", "excerpt", "body", "tags"],
+  filters: [
+    {
+      field: "status",
+      label: "Status",
+      type: "select",
+      options: publishOptions,
+    },
+  ],
+  defaultSort: { field: "publishAt", direction: "desc" },
+  features: { publish: true, duplicate: true },
+};
+
+export const faqs: ResourceDefinition = {
+  key: "faqs",
+  label: "FAQ",
+  singular: "FAQ entry",
+  icon: "circle-info",
+  module: "content",
+  labelField: "question",
+  fields: [
+    f.text("question", "Question", { required: true }),
+    f.textarea("answer", "Answer", { required: true, rows: 4 }),
+    f.text("category", "FAQ category", {
+      width: "half",
+      defaultValue: "General",
+    }),
+    f.relation("productId", "Product this belongs to", "products", {
+      width: "half",
+    }),
+    f.number("sortOrder", "Sort order", { width: "half" }),
+    f.boolean("enabled", "Enabled", { defaultValue: true, width: "half" }),
+  ],
+  columns: [
+    { field: "question", label: "Question" },
+    { field: "category", label: "Category", format: "badge", compact: true },
+    { field: "sortOrder", label: "Order", format: "number" },
+    { field: "enabled", label: "Enabled", format: "boolean" },
+  ],
+  searchFields: ["question", "answer", "category"],
+  defaultSort: { field: "sortOrder", direction: "asc" },
+  features: { reorder: true, duplicate: true },
+};
+
+export const banners: ResourceDefinition = {
+  key: "banners",
+  label: "Banners",
+  singular: "Banner",
+  icon: "image",
+  module: "content",
+  labelField: "name",
+  description: "Homepage, category and product banners for app and web.",
+  sections: ["General", "Media", "Link", "Placement", "Publishing"],
+  fields: [
+    f.text("name", "Banner name", {
+      required: true,
+      section: "General",
+      width: "half",
+    }),
+    f.text("heading", "Heading", { section: "General", width: "half" }),
+    f.textarea("subheading", "Subheading", { section: "General", rows: 2 }),
+    f.image("image", "Desktop image", { section: "Media", width: "half" }),
+    f.image("mobileImage", "Mobile image", { section: "Media", width: "half" }),
+    f.url("videoUrl", "Video", { section: "Media" }),
+    f.color("backgroundColor", "Background colour", {
+      section: "Media",
+      defaultValue: "#f85606",
+      width: "half",
+    }),
+    f.text("ctaLabel", "Button label", { section: "Link", width: "half" }),
+    f.url("ctaLink", "Button link", { section: "Link", width: "half" }),
+    f.relation("categoryId", "Or link to a category", "categories", {
+      section: "Link",
+      width: "half",
+    }),
+    f.relation("productId", "Or link to a product", "products", {
+      section: "Link",
+      width: "half",
+    }),
+    f.select(
+      "placement",
+      "Placement",
+      options(
+        ["home", "Homepage"],
+        ["category", "Category page"],
+        ["product", "Product page"],
+        ["cart", "Cart"],
+        ["offers", "Offers"],
+      ),
+      { section: "Placement", defaultValue: "home", width: "half" },
+    ),
+    f.multiselect("devices", "Show on", options("mobile", "desktop"), {
+      section: "Placement",
+      defaultValue: ["mobile", "desktop"],
+    }),
+    f.number("sortOrder", "Sort order", {
+      section: "Placement",
+      width: "half",
+    }),
+    ...publishFields,
+  ],
+  columns: [
+    { field: "image", label: "", format: "image", width: 46 },
+    { field: "name", label: "Banner" },
+    { field: "placement", label: "Placement", format: "badge" },
+    { field: "sortOrder", label: "Order", format: "number", compact: true },
+    {
+      field: "status",
+      label: "Status",
+      format: "badge",
+      options: publishOptions,
+    },
+    { field: "publishAt", label: "Starts", format: "date", compact: true },
+  ],
+  searchFields: ["name", "heading"],
+  filters: [
+    {
+      field: "placement",
+      label: "Placement",
+      type: "select",
+      options: options("home", "category", "product", "cart", "offers"),
+    },
+    {
+      field: "status",
+      label: "Status",
+      type: "select",
+      options: publishOptions,
+    },
+  ],
+  defaultSort: { field: "sortOrder", direction: "asc" },
+  features: { reorder: true, publish: true, duplicate: true },
+};
+
+export const menuItems: ResourceDefinition = {
+  key: "menu_items",
+  label: "Navigation",
+  singular: "Menu item",
+  icon: "bars",
+  module: "content",
+  labelField: "label",
+  description: "Header, mega, mobile, footer and category menus with submenus.",
+  fields: [
+    f.text("label", "Label", { required: true, width: "half" }),
+    f.select(
+      "menu",
+      "Menu",
+      options(
+        ["header", "Header menu"],
+        ["mega", "Mega menu"],
+        ["mobile", "Mobile menu"],
+        ["footer", "Footer menu"],
+        ["categories", "Categories menu"],
+      ),
+      { required: true, defaultValue: "header", width: "half" },
+    ),
+    f.relation("parentId", "Parent item", "menu_items", { width: "half" }),
+    f.select(
+      "target",
+      "Links to",
+      options(
+        ["url", "Custom link"],
+        ["category", "Category"],
+        ["page", "Page"],
+        ["collection", "Collection"],
+      ),
+      {
+        defaultValue: "url",
+        width: "half",
+      },
+    ),
+    f.url("url", "URL", {
+      width: "half",
+      showIf: (values) => values.target === "url",
+    }),
+    f.relation("categoryId", "Category", "categories", {
+      width: "half",
+      showIf: (values) => values.target === "category",
+    }),
+    f.relation("pageId", "Page", "pages", {
+      width: "half",
+      showIf: (values) => values.target === "page",
+    }),
+    f.relation("collectionId", "Collection", "collections", {
+      width: "half",
+      showIf: (values) => values.target === "collection",
+    }),
+    f.text("icon", "Icon name", {
+      width: "half",
+      help: "A FontAwesome 6 icon name, such as tag or fire.",
+    }),
+    f.image("image", "Image", { width: "half" }),
+    f.boolean("newTab", "Open in a new tab", { width: "half" }),
+    f.number("sortOrder", "Sort order", { width: "half" }),
+    f.boolean("enabled", "Enabled", { defaultValue: true, width: "half" }),
+  ],
+  columns: [
+    { field: "label", label: "Item" },
+    { field: "menu", label: "Menu", format: "badge" },
+    {
+      field: "parentId",
+      label: "Parent",
+      format: "relation",
+      resource: "menu_items",
+      compact: true,
+    },
+    { field: "sortOrder", label: "Order", format: "number" },
+    { field: "enabled", label: "Enabled", format: "boolean" },
+  ],
+  searchFields: ["label", "url"],
+  filters: [
+    {
+      field: "menu",
+      label: "Menu",
+      type: "select",
+      options: options("header", "mega", "mobile", "footer", "categories"),
+    },
+  ],
+  defaultSort: { field: "sortOrder", direction: "asc" },
+  features: { reorder: true, duplicate: true },
+};
+
+export const homepageSections: ResourceDefinition = {
+  key: "homepage_sections",
+  label: "Homepage sections",
+  singular: "Homepage section",
+  icon: "table-cells-large",
+  module: "content",
+  labelField: "title",
+  description: "The ordered blocks the storefront home screen renders.",
+  sections: ["General", "Content", "Visibility", "Schedule"],
+  fields: [
+    f.text("title", "Section title", {
+      required: true,
+      section: "General",
+      width: "half",
+    }),
+    f.select(
+      "type",
+      "Section type",
+      options(
+        ["hero_slider", "Hero slider"],
+        ["banner", "Banner"],
+        ["promo_banner", "Promotional banner"],
+        ["categories", "Categories"],
+        ["featured_products", "Featured products"],
+        ["best_sellers", "Best sellers"],
+        ["new_arrivals", "New arrivals"],
+        ["flash_sale", "Flash sale"],
+        ["collection", "Collection"],
+        ["testimonials", "Testimonials"],
+        ["brands", "Brands"],
+        ["video", "Video"],
+        ["gallery", "Image gallery"],
+        ["newsletter", "Newsletter"],
+        ["blog", "Blog"],
+        ["social", "Instagram / social"],
+        ["text", "Custom text"],
+        ["html", "Custom HTML"],
+      ),
+      {
+        required: true,
+        section: "General",
+        defaultValue: "banner",
+        width: "half",
+      },
+    ),
+    f.text("subtitle", "Subtitle", { section: "General" }),
+    f.number("sortOrder", "Position", { section: "General", width: "half" }),
+    f.relation("collectionId", "Collection", "collections", {
+      section: "Content",
+      width: "half",
+    }),
+    f.relation("categoryIds", "Categories", "categories", {
+      section: "Content",
+      multiple: true,
+    }),
+    f.relation("productIds", "Products", "products", {
+      section: "Content",
+      multiple: true,
+    }),
+    f.relation("bannerIds", "Banners", "banners", {
+      section: "Content",
+      multiple: true,
+    }),
+    f.number("itemLimit", "Items to show", {
+      section: "Content",
+      width: "half",
+      defaultValue: 8,
+      min: 1,
+    }),
+    f.select(
+      "layout",
+      "Layout",
+      options(["grid", "Grid"], ["carousel", "Carousel"], ["list", "List"]),
+      {
+        section: "Content",
+        defaultValue: "grid",
+        width: "half",
+      },
+    ),
+    f.textarea("body", "Text content", { section: "Content", rows: 4 }),
+    f.code("html", "Custom HTML", {
+      section: "Content",
+      rows: 6,
+      showIf: (values) => values.type === "html",
+    }),
+    f.url("videoUrl", "Video URL", {
+      section: "Content",
+      showIf: (values) => values.type === "video",
+    }),
+    f.text("ctaLabel", "Button label", { section: "Content", width: "half" }),
+    f.url("ctaLink", "Button link", { section: "Content", width: "half" }),
+    f.boolean("enabled", "Section visible", {
+      section: "Visibility",
+      defaultValue: true,
+      width: "half",
+    }),
+    f.boolean("showOnMobile", "Show on mobile", {
+      section: "Visibility",
+      defaultValue: true,
+      width: "half",
+    }),
+    f.boolean("showOnDesktop", "Show on desktop", {
+      section: "Visibility",
+      defaultValue: true,
+      width: "half",
+    }),
+    f.color("backgroundColor", "Background colour", {
+      section: "Visibility",
+      width: "half",
+    }),
+    f.datetime("startsAt", "Show from", { section: "Schedule", width: "half" }),
+    f.datetime("endsAt", "Hide after", { section: "Schedule", width: "half" }),
+  ],
+  columns: [
+    { field: "sortOrder", label: "#", format: "number", width: 46 },
+    { field: "title", label: "Section" },
+    { field: "type", label: "Type", format: "badge" },
+    { field: "enabled", label: "Visible", format: "boolean" },
+    { field: "startsAt", label: "From", format: "date", compact: true },
+    { field: "endsAt", label: "Until", format: "date", compact: true },
+  ],
+  searchFields: ["title", "subtitle"],
+  defaultSort: { field: "sortOrder", direction: "asc" },
+  features: { reorder: true, duplicate: true },
+};
+
+export const mediaFiles: ResourceDefinition = {
+  key: "media",
+  label: "Media library",
+  singular: "File",
+  icon: "photo-film",
+  module: "media",
+  labelField: "name",
+  description:
+    "Images, video, PDFs and documents reused across the storefront.",
+  fields: [
+    f.text("name", "File name", { required: true, width: "half" }),
+    f.text("folder", "Folder", { width: "half", defaultValue: "General" }),
+    f.select("kind", "Type", options("image", "video", "pdf", "document"), {
+      defaultValue: "image",
+      width: "half",
+    }),
+    f.url("url", "URL", { required: true }),
+    f.text("alt", "Alt text", {
+      help: "Describes the image for screen readers and SEO.",
+    }),
+    f.tags("tags", "Tags"),
+    f.number("width", "Width (px)", { width: "third", min: 0 }),
+    f.number("height", "Height (px)", { width: "third", min: 0 }),
+    f.number("sizeKb", "Size (KB)", { width: "third", min: 0 }),
+    f.textarea("note", "Notes", { rows: 2 }),
+  ],
+  columns: [
+    { field: "url", label: "", format: "image", width: 46 },
+    { field: "name", label: "File" },
+    { field: "folder", label: "Folder", format: "badge", compact: true },
+    { field: "kind", label: "Type", format: "badge" },
+    { field: "sizeKb", label: "KB", format: "number", compact: true },
+    { field: "createdAt", label: "Uploaded", format: "date", compact: true },
+  ],
+  searchFields: ["name", "alt", "tags", "folder"],
+  filters: [
+    {
+      field: "kind",
+      label: "Type",
+      type: "select",
+      options: options("image", "video", "pdf", "document"),
+    },
+  ],
+  defaultSort: { field: "createdAt", direction: "desc" },
+};
+
+export const contentResources = [
+  pages,
+  blogPosts,
+  faqs,
+  banners,
+  menuItems,
+  homepageSections,
+  mediaFiles,
+];

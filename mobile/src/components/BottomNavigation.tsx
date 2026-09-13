@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Badge, SourceIcon, T, Tap } from "./ui";
 import { FontIcon } from "./FontIcon";
 import { useShop } from "@/store/ShopProvider";
+import { useStorefront } from "@/store/StorefrontProvider";
 import { colors } from "@/theme/tokens";
 
 export function BottomNavigation() {
@@ -12,13 +13,24 @@ export function BottomNavigation() {
   const router = useRouter();
   const { bottom } = useSafeAreaInsets();
   const { cartCount, state } = useShop();
+  const { feature, config } = useStorefront();
   const home = path === "/";
   const messages = path === "/messages";
   const offer = path === "/offers";
+  // Which tabs exist is an admin decision, not a code one.
   const items = [
     { label: "Home", route: "/", icon: 10, fa: "house" },
-    { label: "Messages", route: "/messages", icon: 11, fa: "comment-dots" },
-    ...(!home
+    ...(feature("chat")
+      ? [
+          {
+            label: "Messages",
+            route: "/messages",
+            icon: 11,
+            fa: "comment-dots",
+          },
+        ]
+      : []),
+    ...(!home && feature("flashSales")
       ? [{ label: "Buy More Save More", route: "/offers", icon: -1, fa: "tag" }]
       : []),
     { label: "Cart", route: "/cart", icon: 12, fa: "cart-shopping" },
@@ -39,7 +51,7 @@ export function BottomNavigation() {
     >
       {items.map((item) => {
         const selected = path === item.route;
-        const color = selected ? colors.orange : "#4b5563";
+        const color = selected ? config.theme.primaryColor : "#4b5563";
         return (
           <Tap
             key={item.route}

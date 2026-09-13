@@ -17,9 +17,11 @@ import {
   T,
   Tap,
 } from "@/components/ui";
+import { FontIcon } from "@/components/FontIcon";
 import { ProductVisual } from "@/components/ProductVisual";
 import { AccountShimmer } from "@/components/AccountShimmer";
 import { useShop, useCatalog } from "@/store/ShopProvider";
+import { go } from "@/admin/navigate";
 import { openDestination } from "@/services/navigation";
 import { colors, shared } from "@/theme/tokens";
 
@@ -261,13 +263,22 @@ export default function AccountScreen() {
                 </Row>
               )}
             </View>
-            <Tap
-              label="Settings"
-              onPress={() => openDestination("Settings")}
-              style={{ padding: 4 }}
-            >
-              <SourceIcon index={3} size={24} />
-            </Tap>
+            <Row style={{ gap: 10 }}>
+              <Tap
+                label="Admin dashboard"
+                onPress={() => go("/admin")}
+                style={{ padding: 4 }}
+              >
+                <FontIcon name="gauge-high" size={20} color="#4b5563" />
+              </Tap>
+              <Tap
+                label="Settings"
+                onPress={() => openDestination("Settings")}
+                style={{ padding: 4 }}
+              >
+                <SourceIcon index={3} size={24} />
+              </Tap>
+            </Row>
           </Row>
         </LinearGradient>
         <View style={{ paddingHorizontal: 12, paddingTop: 4, gap: 12 }}>

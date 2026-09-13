@@ -48,6 +48,28 @@ To populate the original 30 sample products, review and then run `supabase/seed.
 
 Alternatively, use the Supabase CLI: `npx supabase login`, `npx supabase link --project-ref YOUR_PROJECT_REF`, then `npx supabase db push`. Linking/pushing may ask for the project's database password. App API keys alone do not grant deployment access.
 
+### Admin dashboard tables
+
+Run `supabase/migrations/202609140001_admin_config.sql` after the first
+migration. It creates:
+
+- `admin_members`: who may run the dashboard against this project, and with which role.
+- `app_config`: the published storefront configuration. Everyone can read it — the app needs it to render — and only admins can change it.
+- `app_config_versions`: a version per publish, so a bad change can be rolled back. Republishing identical content does not add a version.
+- `admin_audit`: a server-side record of who changed what, which survives a device being wiped.
+- Policies letting admins read every order, progress orders, and manage the catalogue. Deleting a product is reserved for `super_admin`.
+
+Add yourself as an administrator, using the user id from Supabase's
+Authentication → Users:
+
+```sql
+insert into public.admin_members(user_id, role)
+values ('YOUR-AUTH-USER-UUID', 'super_admin');
+```
+
+Without a row here the dashboard still runs, but publishing configuration and
+catalogue writes are refused by the database.
+
 ## 3. Deploy the Cloudinary upload function
 
 From `mobile/`, after authenticating the Supabase CLI:
@@ -90,9 +112,13 @@ The connected app never falls back to local order creation on a network error. C
 
 ## Store administration and current scope
 
-Use Supabase's Table Editor to manage products and view orders. Upload product photos in Cloudinary's Media Library and paste their HTTPS `secure_url` into `products.image_url`. The app displays that URL before any bundled sample image. `product_group` controls placement: `home`, `offer`, `choice`, `recommendation` or `unavailable`. Set `active=false` to hide a product. Refresh Account or restart the app to reload catalog changes.
+Day-to-day administration happens in the app's own dashboard at `/admin` — see
+[docs/admin-dashboard.md](admin-dashboard.md). Supabase's Table Editor remains
+available for direct database work.
 
-Orders currently use cash on delivery and **Rs. 0 shipping**. `GULMELI10` gives 10% off orders of at least Rs. 500, capped at Rs. 100; this rule is enforced in the SQL function. Adjust the server rule and checkout display together if store terms change. A merchant can update `orders.document.status` to `Shipped` or `Delivered` in the Table Editor; customers cannot change it directly. There is no dedicated merchant dashboard yet.
+Upload product photos in Cloudinary's Media Library and paste their HTTPS `secure_url` into `products.image_url`, or add them from the dashboard's media library. The app displays that URL before any bundled sample image. `product_group` controls placement: `home`, `offer`, `choice`, `recommendation` or `unavailable`. Set `active=false` to hide a product. Refresh Account or restart the app to reload catalog changes.
+
+Orders currently use cash on delivery and **Rs. 0 shipping**. `GULMELI10` gives 10% off orders of at least Rs. 500, capped at Rs. 100; this rule is enforced in the SQL function. Adjust the server rule and checkout display together if store terms change. The dashboard's coupon and shipping screens describe the intended rules and drive the storefront, but the authoritative checkout maths stays in `place_order`: change both together. A merchant can progress an order from the dashboard or by updating `orders.document.status` in the Table Editor; customers cannot change it directly.
 
 Support messages remain drafts, reviews remain private, games have no cash value, and automatic visual search, online payments, push notifications and courier tracking are not connected by this setup.
 

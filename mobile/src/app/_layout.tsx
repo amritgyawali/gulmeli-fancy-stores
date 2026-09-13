@@ -7,6 +7,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useEffect } from "react";
 import { ShopProvider, useShop } from "@/store/ShopProvider";
+import { StorefrontProvider, useStorefront } from "@/store/StorefrontProvider";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { Button, Row, T } from "@/components/ui";
 
@@ -25,11 +26,39 @@ function AppFrame() {
     syncStatus,
     retryBackend,
   } = useShop();
+  const { config, announcement, maintenance, label } = useStorefront();
   const [loaded, error] = useFonts(FontAwesome6.font);
+  const admin = path.startsWith("/admin");
   useEffect(() => {
     if (hydrated && (loaded || error)) void SplashScreen.hideAsync();
   }, [hydrated, loaded, error]);
   if (!hydrated || (!loaded && !error)) return null;
+  // One navigator, rendered either inside the storefront frame or full-bleed
+  // for the dashboard, so navigation state survives moving between the two.
+  const navigator = (
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        contentStyle: { backgroundColor: admin ? "#f6f7f9" : "#f4f4f4" },
+        animation: "none",
+      }}
+    >
+      <Stack.Screen name="index" />
+      <Stack.Screen name="messages" />
+      <Stack.Screen name="offers" />
+      <Stack.Screen name="cart" />
+      <Stack.Screen name="account" />
+      <Stack.Screen name="admin" />
+    </Stack>
+  );
+  // The dashboard is its own full-width surface, without the storefront chrome.
+  if (admin)
+    return (
+      <View style={{ flex: 1, backgroundColor: "#f6f7f9" }}>
+        <StatusBar style="dark" />
+        {navigator}
+      </View>
+    );
   const backgroundColor =
     path === "/"
       ? "#161616"
@@ -54,6 +83,36 @@ function AppFrame() {
         <StatusBar
           style={path === "/" || path === "/offers" ? "light" : "dark"}
         />
+        {!!announcement && (
+          <T
+            size={11}
+            bold
+            color={announcement.textColor}
+            style={{
+              backgroundColor: announcement.backgroundColor,
+              paddingVertical: 5,
+              paddingHorizontal: 10,
+              textAlign: "center",
+            }}
+          >
+            {announcement.text}
+          </T>
+        )}
+        {maintenance.active && (
+          <T
+            accessibilityRole="alert"
+            size={11}
+            color="#7c2d12"
+            style={{ backgroundColor: "#ffedd5", padding: 8 }}
+          >
+            {[
+              maintenance.message,
+              maintenance.eta && `Expected back: ${maintenance.eta}.`,
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          </T>
+        )}
         {storageError && (
           <T
             size={11}
@@ -77,8 +136,12 @@ function AppFrame() {
               <T>Loading your saved account…</T>
             ) : !session ? (
               <Row style={{ justifyContent: "space-between" }}>
-                <T>Shop with Gulmeli Fancy Stores</T>
-                <Button title="Sign in" onPress={() => router.push("/auth")} />
+                <T>{label("homeHeading")}</T>
+                <Button
+                  title={label("login")}
+                  color={config.theme.primaryColor}
+                  onPress={() => router.push("/auth")}
+                />
               </Row>
             ) : (
               <T>{syncStatus || "Connected to your account"}</T>
@@ -97,19 +160,7 @@ function AppFrame() {
             )}
           </View>
         )}
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: { backgroundColor: "#f4f4f4" },
-            animation: "none",
-          }}
-        >
-          <Stack.Screen name="index" />
-          <Stack.Screen name="messages" />
-          <Stack.Screen name="offers" />
-          <Stack.Screen name="cart" />
-          <Stack.Screen name="account" />
-        </Stack>
+        {navigator}
         <BottomNavigation />
       </SafeAreaView>
     </View>
@@ -118,9 +169,11 @@ function AppFrame() {
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <ShopProvider>
-        <AppFrame />
-      </ShopProvider>
+      <StorefrontProvider>
+        <ShopProvider>
+          <AppFrame />
+        </ShopProvider>
+      </StorefrontProvider>
     </SafeAreaProvider>
   );
 }
