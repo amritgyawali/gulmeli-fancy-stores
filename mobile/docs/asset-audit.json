@@ -1,0 +1,177 @@
+{
+  "originalHtmlUnchanged": true,
+  "originalHtmlCount": 10,
+  "originalScreenshotCount": 24,
+  "bundledImageReferences": 30,
+  "imageDecodeErrors": [],
+  "screenshots": [
+    {
+      "file": "designs/stitch/daraz_app_account_screen_1/screen.png",
+      "dimensions": [
+        599,
+        1600
+      ]
+    },
+    {
+      "file": "designs/stitch/daraz_app_account_screen_2/screen.png",
+      "dimensions": [
+        588,
+        1600
+      ]
+    },
+    {
+      "file": "designs/stitch/daraz_app_account_screen_with_dynamic_refresh_updates/screen.png",
+      "dimensions": [
+        555,
+        1600
+      ]
+    },
+    {
+      "file": "designs/stitch/daraz_app_account_screen_with_pull_to_refresh/screen.png",
+      "dimensions": [
+        557,
+        1600
+      ]
+    },
+    {
+      "file": "designs/stitch/daraz_app_account_screen_with_shimmer_refresh/screen.png",
+      "dimensions": [
+        555,
+        1600
+      ]
+    },
+    {
+      "file": "designs/stitch/daraz_app_account_screen_with_swipe_tabs/screen.png",
+      "dimensions": [
+        579,
+        1600
+      ]
+    },
+    {
+      "file": "designs/stitch/daraz_app_cart_screen/screen.png",
+      "dimensions": [
+        336,
+        1600
+      ]
+    },
+    {
+      "file": "designs/stitch/daraz_app_home_screen/screen.png",
+      "dimensions": [
+        257,
+        1600
+      ]
+    },
+    {
+      "file": "designs/stitch/daraz_app_messages_screen/screen.png",
+      "dimensions": [
+        494,
+        1600
+      ]
+    },
+    {
+      "file": "designs/stitch/daraz_buy_more_save_more_offer_screen/screen.png",
+      "dimensions": [
+        268,
+        1600
+      ]
+    },
+    {
+      "file": "designs/references/img_2935.png/screen.png",
+      "dimensions": [
+        738,
+        1600
+      ]
+    },
+    {
+      "file": "designs/references/img_2936.png/screen.png",
+      "dimensions": [
+        738,
+        1600
+      ]
+    },
+    {
+      "file": "designs/references/img_2937.png/screen.png",
+      "dimensions": [
+        738,
+        1600
+      ]
+    },
+    {
+      "file": "designs/references/img_2938.png/screen.png",
+      "dimensions": [
+        738,
+        1600
+      ]
+    },
+    {
+      "file": "designs/references/img_2939.png/screen.png",
+      "dimensions": [
+        738,
+        1600
+      ]
+    },
+    {
+      "file": "designs/references/img_2940.png/screen.png",
+      "dimensions": [
+        738,
+        1600
+      ]
+    },
+    {
+      "file": "designs/references/img_2941.png/screen.png",
+      "dimensions": [
+        738,
+        1600
+      ]
+    },
+    {
+      "file": "designs/references/img_2942.png/screen.png",
+      "dimensions": [
+        738,
+        1600
+      ]
+    },
+    {
+      "file": "designs/references/img_2943.png/screen.png",
+      "dimensions": [
+        738,
+        1600
+      ]
+    },
+    {
+      "file": "designs/references/img_2944.png/screen.png",
+      "dimensions": [
+        738,
+        1600
+      ]
+    },
+    {
+      "file": "designs/references/img_2945.png/screen.png",
+      "dimensions": [
+        738,
+        1600
+      ]
+    },
+    {
+      "file": "designs/references/img_2946.png/screen.png",
+      "dimensions": [
+        738,
+        1600
+      ]
+    },
+    {
+      "file": "designs/references/img_2947.png/screen.png",
+      "dimensions": [
+        738,
+        1600
+      ]
+    },
+    {
+      "file": "designs/references/img_2948.png/screen.png",
+      "dimensions": [
+        738,
+        1600
+      ]
+    }
+  ]
+}

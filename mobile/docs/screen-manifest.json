@@ -1,0 +1,102 @@
+[
+  {
+    "source": "designs/stitch/daraz_app_account_screen_1/code.html",
+    "screenshot": "designs/stitch/daraz_app_account_screen_1/screen.png",
+    "route": "/account",
+    "state": "account_1",
+    "sha256": "37f092624f89182652558ced2d9d1bb1fcdc5070ed3bee6610fad1ecc5aa3ea1",
+    "font": "platform system sans-serif",
+    "images": 0,
+    "svgCount": 21
+  },
+  {
+    "source": "designs/stitch/daraz_app_account_screen_2/code.html",
+    "screenshot": "designs/stitch/daraz_app_account_screen_2/screen.png",
+    "route": "/account",
+    "state": "account_2",
+    "sha256": "23baef06877922a0b4349722032dcaf29dcc71c6ae7afc3732f1f1811cac1ff8",
+    "font": "platform system sans-serif",
+    "images": 0,
+    "svgCount": 21
+  },
+  {
+    "source": "designs/stitch/daraz_app_account_screen_with_dynamic_refresh_updates/code.html",
+    "screenshot": "designs/stitch/daraz_app_account_screen_with_dynamic_refresh_updates/screen.png",
+    "route": "/account",
+    "state": "account_with_dynamic_refresh_updates",
+    "sha256": "b8ccd8d654c5a4397e3fb2b9c820addaf098f919a1aa4f01de5fd29bacfdbb8f",
+    "font": "platform system sans-serif",
+    "images": 0,
+    "svgCount": 27
+  },
+  {
+    "source": "designs/stitch/daraz_app_account_screen_with_pull_to_refresh/code.html",
+    "screenshot": "designs/stitch/daraz_app_account_screen_with_pull_to_refresh/screen.png",
+    "route": "/account",
+    "state": "account_with_pull_to_refresh",
+    "sha256": "d56d564eba78e396b20b9a96c2ec8f7af51e0a0883ec6517fee3a55cf1501d58",
+    "font": "platform system sans-serif",
+    "images": 0,
+    "svgCount": 27
+  },
+  {
+    "source": "designs/stitch/daraz_app_account_screen_with_shimmer_refresh/code.html",
+    "screenshot": "designs/stitch/daraz_app_account_screen_with_shimmer_refresh/screen.png",
+    "route": "/account",
+    "state": "account_with_shimmer_refresh",
+    "sha256": "337d4c8ab25e949461f61d6301bdbb4cdb4b17ff1f6e2994f0c5a403784afcd1",
+    "font": "platform system sans-serif",
+    "images": 0,
+    "svgCount": 27
+  },
+  {
+    "source": "designs/stitch/daraz_app_account_screen_with_swipe_tabs/code.html",
+    "screenshot": "designs/stitch/daraz_app_account_screen_with_swipe_tabs/screen.png",
+    "route": "/account",
+    "state": "account_with_swipe_tabs",
+    "sha256": "7b4e3b553420759df64120bfad3b9f0a0b34d75f0f40c75961a6f1fa4fa93a0a",
+    "font": "platform system sans-serif",
+    "images": 0,
+    "svgCount": 22
+  },
+  {
+    "source": "designs/stitch/daraz_app_cart_screen/code.html",
+    "screenshot": "designs/stitch/daraz_app_cart_screen/screen.png",
+    "route": "/cart",
+    "state": "daraz_app_cart_screen",
+    "sha256": "98a0fca7df9841081130e697735506e857c71b7bb3ff15d9ea65991067af5c1a",
+    "font": "platform system sans-serif",
+    "images": 0,
+    "svgCount": 0
+  },
+  {
+    "source": "designs/stitch/daraz_app_home_screen/code.html",
+    "screenshot": "designs/stitch/daraz_app_home_screen/screen.png",
+    "route": "/",
+    "state": "daraz_app_home_screen",
+    "sha256": "2ded0966cb8c5e18c2a4eb79d5cd5182b9690b9a4a07965bfedb0c994eb0e6a6",
+    "font": "platform system sans-serif",
+    "images": 19,
+    "svgCount": 0
+  },
+  {
+    "source": "designs/stitch/daraz_app_messages_screen/code.html",
+    "screenshot": "designs/stitch/daraz_app_messages_screen/screen.png",
+    "route": "/messages",
+    "state": "daraz_app_messages_screen",
+    "sha256": "e4c682f936924376e9399f81fde881354d491197c05fbdf5237e6d85fac75464",
+    "font": "platform system sans-serif",
+    "images": 0,
+    "svgCount": 14
+  },
+  {
+    "source": "designs/stitch/daraz_buy_more_save_more_offer_screen/code.html",
+    "screenshot": "designs/stitch/daraz_buy_more_save_more_offer_screen/screen.png",
+    "route": "/offers",
+    "state": "daraz_buy_more_save_more_offer_screen",
+    "sha256": "3ab109ebdf6856326862834c52325984558a5115f8fdf4a81645f9947db0769b",
+    "font": "platform system sans-serif",
+    "images": 8,
+    "svgCount": 26
+  }
+]

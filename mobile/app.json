@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "Gulmeli Fancy Stores",
+    "slug": "gulmeli-fancy-store",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "gulmeli",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gulmeli.fancystore"
+    },
+    "android": {
+      "package": "com.gulmeli.fancystore",
+      "predictiveBackGestureEnabled": true
+    },
+    "web": {
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#f4f4f4"
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Gulmeli Fancy Stores to choose a profile or reference photo.",
+          "cameraPermission": "Allow Gulmeli Fancy Stores to take a reference photo.",
+          "microphonePermission": false
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

@@ -1,0 +1,5 @@
+# Local Claude Code config — contains API token, never commit
+.claude/
+
+# Backup of the former embedded git repo (history kept locally only)
+mobile/.git-backup-embedded/
