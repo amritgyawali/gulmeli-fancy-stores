@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Daraz Account Screen</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            daraz: {
+              orange: '#f85606',
+              lightOrange: '#fff1eb',
+              grayBg: '#f4f4f6',
+              textMain: '#212121',
+              textMuted: '#757575',
+              border: '#eaeaea'
+            }
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', '"SF Pro Display"', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom Scoped Styles -->
+<style data-purpose="custom-scroll-and-resets">
+    /* Hide default scrollbars for smooth app-like horizontal scroll */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    body {
+      -webkit-tap-highlight-color: transparent;
+    }
+    .swipe-container {
+      touch-action: pan-y;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    @keyframes ptr-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-ptr-spin {
+      animation: ptr-spin 0.75s linear infinite;
+    }
+
+    /* Skeleton shimmer animation */
+    @keyframes shimmer-sweep {
+      0% {
+        background-position: -200% 0;
+      }
+      100% {
+        background-position: 200% 0;
+      }
+    }
+    .skeleton-shimmer {
+      background: linear-gradient(90deg, #f0f0f2 0%, #e2e2e6 35%, #f6f6f8 50%, #e2e2e6 65%, #f0f0f2 100%);
+      background-size: 250% 100%;
+      animation: shimmer-sweep 1.4s ease-in-out infinite;
+    }
+    .skeleton-shimmer-subtle {
+      background: linear-gradient(90deg, #f7f7f9 0%, #ededf1 35%, #fafafd 50%, #ededf1 65%, #f7f7f9 100%);
+      background-size: 250% 100%;
+      animation: shimmer-sweep 1.4s ease-in-out infinite;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.6); opacity: 0; }
+      70% { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-pop-in {
+      animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes toastFade {
+      0% { transform: translateY(-16px) scale(0.95); opacity: 0; }
+      15% { transform: translateY(0) scale(1); opacity: 1; }
+      85% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-12px) scale(0.95); opacity: 0; }
+    }
+    .animate-toast {
+      animation: toastFade 2.6s ease-in-out forwards;
+    }
+  </style>
+<style data-purpose="icon-badges">
+    .badge-corner {
+      position: absolute;
+      top: -4px;
+      right: -6px;
+      font-size: 10px;
+      line-height: 1;
+      padding: 2px 4px;
+      border-radius: 9999px;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body class="bg-stone-100 text-slate-800 flex justify-center items-start min-h-screen">
+<!-- BEGIN: MobileDeviceFrame -->
+<div class="w-full max-w-[428px] bg-[#f5f5f7] min-h-screen relative pb-24 shadow-2xl overflow-x-hidden flex flex-col justify-between" id="app-container">
+<!-- Floating Success Toast for Refresh Updates -->
+<div class="fixed top-14 left-1/2 -translate-x-1/2 z-50 pointer-events-none hidden" id="refresh-toast">
+<div class="bg-gray-900/90 backdrop-blur-md text-white text-[11px] font-semibold py-1.5 px-3.5 rounded-full shadow-lg flex items-center space-x-1.5 border border-white/10 animate-toast">
+<span class="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-ping"></span>
+<span id="toast-message">Account refreshed • 1 new item updated</span>
+</div>
+</div>
+<!-- BEGIN: PullToRefreshHeaderArea -->
+<div class="absolute top-0 left-0 right-0 z-20 flex flex-col items-center justify-end overflow-hidden pointer-events-none transition-all ease-out" id="ptr-indicator-wrap" style="height: 0px; opacity: 0;">
+<div class="flex flex-col items-center pb-2.5 space-y-1 transform transition-transform duration-150" id="ptr-content-box">
+<!-- Spinner / Icon Container -->
+<div class="w-8 h-8 rounded-full bg-white shadow-md border border-orange-100 flex items-center justify-center text-[#f85606] relative" id="ptr-icon-container">
+<!-- Arrow icon for pulling -->
+<svg class="w-4 h-4 transition-transform duration-200" fill="none" id="ptr-arrow-icon" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24">
+<path d="M19 14l-7 7m0 0l-7-7m7 7V3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<!-- Circular spinner for refreshing -->
+<svg class="w-5 h-5 hidden animate-ptr-spin text-[#f85606]" fill="none" id="ptr-spinner-icon" viewbox="0 0 24 24">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+<path class="opacity-100" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+<!-- Checkmark for completed refresh -->
+<svg class="w-4 h-4 hidden text-emerald-600" fill="none" id="ptr-check-icon" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="text-[11px] font-semibold text-[#f85606] tracking-tight drop-shadow-sm" id="ptr-status-label">Pull to refresh</span>
+</div>
+</div>
+<!-- END: PullToRefreshHeaderArea -->
+<!-- Wrapper that slides down during pull -->
+<div class="w-full flex-1 flex flex-col justify-between transition-transform duration-200 ease-out will-change-transform relative" id="ptr-scrollable-body">
+<!-- BEGIN: TopBarAndStatus -->
+<header class="sticky top-0 z-30 bg-gradient-to-b from-[#fceae4] via-[#fbede8] to-[#f5f5f7] pt-2 px-4 pb-2 select-none" id="ptr-touch-trigger-header">
+<!-- iOS Status Bar Simulation -->
+<div class="flex justify-between items-center text-xs font-semibold text-gray-900 tracking-tight mb-2 px-1">
+<div class="flex items-center space-x-1.5">
+<span class="text-[14px]">4:32</span>
+<!-- Silent mode bell icon -->
+<svg class="w-3.5 h-3.5 text-gray-800" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2C10.9 2 10 2.9 10 4V4.29C7.03 5.17 5 7.9 5 11.14V17L3.71 18.29C3.32 18.68 3.59 19.35 4.14 19.35H19.86C20.41 19.35 20.68 18.68 20.29 18.29L19 17V11.14C19 7.9 16.97 5.17 14 4.29V4C14 2.9 13.1 2 12 2ZM10 20.35C10 21.46 10.9 22.35 12 22.35C13.1 22.35 14 21.46 14 20.35H10Z"></path>
+<line stroke="currentColor" stroke-width="2" x1="3" x2="21" y1="3" y2="21"></line>
+</svg>
+</div>
+<div class="flex items-center space-x-2 text-[12px]">
+<!-- Signal Dots -->
+<div class="flex items-end space-x-[2px] h-3">
+<span class="w-[3px] h-1.5 bg-gray-900 rounded-sm"></span>
+<span class="w-[3px] h-2 bg-gray-900 rounded-sm"></span>
+<span class="w-[3px] h-2.5 bg-gray-900 rounded-sm"></span>
+<span class="w-[3px] h-3 bg-gray-900 rounded-sm"></span>
+</div>
+<span class="font-bold text-[11px] tracking-tighter">LTE</span>
+<!-- Battery Pill -->
+<div class="flex items-center space-x-0.5">
+<div class="border border-gray-900 rounded-md px-[2px] py-[1px] flex items-center h-3.5 w-6 bg-transparent relative">
+<div class="h-2 w-2.5 bg-yellow-400 rounded-sm"></div>
+<span class="absolute inset-0 flex items-center justify-center text-[8px] font-extrabold text-gray-900">35</span>
+</div>
+<div class="w-0.5 h-1.5 bg-gray-900 rounded-r-sm"></div>
+</div>
+</div>
+</div>
+<!-- Profile Container (Houses Real Content & Skeleton Shimmer) -->
+<div class="relative min-h-[58px] mt-3 px-1">
+<!-- Actual Profile Content -->
+<div class="flex items-center justify-between transition-opacity duration-300" id="actual-profile-header">
+<div class="flex items-center space-x-3.5">
+<!-- Avatar with camera icon -->
+<div class="relative">
+<div class="w-14 h-14 rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-sm">
+<svg class="w-10 h-10 text-[#4c84ff]" fill="none" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="#f0f5ff" r="46" stroke="#2563eb" stroke-width="5"></circle>
+<path d="M28 42 L38 35 L42 42" stroke="#2563eb" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"></path>
+<path d="M72 42 L62 35 L58 42" stroke="#2563eb" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"></path>
+<path d="M30 58 Q50 78 70 58" fill="none" stroke="#ea4335" stroke-linecap="round" stroke-width="6"></path>
+</svg>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-slate-700 p-1 rounded-full border-2 border-white shadow">
+<svg class="w-3 h-3 text-white" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z" fill-rule="evenodd"></path>
+</svg>
+</div>
+</div>
+<!-- User Name & Counters -->
+<div>
+<h1 class="text-[22px] font-extrabold text-[#1a1a1a] tracking-tight leading-tight">Amrit Gyawali</h1>
+<div class="flex items-center text-[12px] text-gray-500 font-medium space-x-1.5 mt-0.5">
+<span><strong class="text-gray-800 transition-colors duration-300" id="user-wishlist-count">10</strong> WishList</span>
+<span>•</span>
+<span><strong class="text-gray-800 transition-colors duration-300" id="user-followed-count">3</strong> Followed Stores</span>
+<span>•</span>
+<span><strong class="text-gray-800 transition-colors duration-300" id="user-voucher-count">1</strong> Vouchers</span>
+</div>
+</div>
+</div>
+<!-- Right Action Area: Demo Refresh Button & Settings Cog -->
+<div class="flex items-center space-x-1">
+<button class="text-[10px] font-semibold text-[#f85606] bg-orange-100/80 hover:bg-orange-200/70 active:scale-95 px-2 py-1 rounded-full transition-all flex items-center space-x-1 shadow-xs border border-orange-200/60" id="btn-quick-refresh-demo" title="Test Pull-to-refresh">
+<svg class="w-3 h-3 text-[#f85606]" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>Refresh</span>
+</button>
+<button aria-label="Settings" class="text-gray-800 p-1 active:scale-95 transition-transform">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</div>
+<!-- Profile Skeleton Shimmer Overlay -->
+<div class="absolute inset-0 flex items-center justify-between pointer-events-none opacity-0 transition-opacity duration-200" id="skeleton-profile-header">
+<div class="flex items-center space-x-3.5">
+<div class="w-14 h-14 rounded-full skeleton-shimmer border border-white/60 shrink-0"></div>
+<div class="space-y-2">
+<div class="w-36 h-5 rounded-md skeleton-shimmer"></div>
+<div class="flex items-center space-x-2">
+<div class="w-16 h-3 rounded skeleton-shimmer"></div>
+<div class="w-20 h-3 rounded skeleton-shimmer"></div>
+<div class="w-14 h-3 rounded skeleton-shimmer"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center space-x-1.5">
+<div class="w-16 h-6 rounded-full skeleton-shimmer"></div>
+<div class="w-7 h-7 rounded-full skeleton-shimmer"></div>
+</div>
+</div>
+</div>
+<!-- Desktop PTR Hint / Notice -->
+<div class="mt-2 flex items-center justify-between text-[10px] text-orange-950/60 bg-gradient-to-r from-orange-50/90 via-amber-50/70 to-orange-50/90 px-2 py-0.5 rounded-md border border-orange-200/50">
+<span class="flex items-center gap-1 font-medium">
+<svg class="w-2.5 h-2.5 text-[#f85606]" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M19 14l-7 7m0 0l-7-7m7 7V3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    Pull or drag down from top to refresh
+  </span>
+<span class="text-[9px] font-bold text-[#f85606]/80 uppercase tracking-tighter" id="refresh-badge-state">Swipe Ready</span>
+</div>
+</header>
+<!-- END: TopBarAndStatus -->
+<!-- CONTENT HOLDER: Real Content + Shimmer Overlay -->
+<div class="relative flex-1">
+<!-- BEGIN: MainContentArea (Actual Content) -->
+<main class="px-3 space-y-3 pt-1 transition-opacity duration-300" id="account-main-content">
+<!-- Promo Cards Section -->
+<section class="grid grid-cols-2 gap-2.5" data-purpose="promo-cards">
+<!-- Daraz Gems Card -->
+<div class="bg-white rounded-xl p-2.5 shadow-sm border border-gray-100 flex items-center space-x-2.5">
+<!-- 40% Off Icon -->
+<div class="w-14 h-14 rounded-lg bg-gradient-to-tr from-amber-500 to-orange-400 p-1 flex flex-col items-center justify-center text-white shrink-0 shadow-inner">
+<span class="text-[9px] font-bold uppercase leading-tight text-amber-100">UP TO</span>
+<span class="text-[17px] font-black leading-none text-yellow-200 drop-shadow-sm">40%</span>
+<span class="text-[10px] font-extrabold tracking-tight text-white leading-tight">OFF</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center text-[12px] font-bold text-gray-800 tracking-tight">
+<span>Daraz Gems</span>
+<svg class="w-3 h-3 ml-0.5 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+<p class="text-[11px] text-gray-500 font-medium">Get <span class="text-rose-600 font-bold">40%</span> Off</p>
+<button class="mt-1 bg-[#ff4d4f] hover:bg-[#e03a3d] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+              Use Now
+            </button>
+</div>
+</div>
+<!-- Daraz Freebie Card -->
+<div class="bg-white rounded-xl p-2.5 shadow-sm border border-gray-100 flex items-center space-x-2.5">
+<!-- Freebie Earbuds Icon -->
+<div class="w-14 h-14 rounded-lg bg-gradient-to-tr from-purple-700 to-purple-500 p-1 flex flex-col items-center justify-between shrink-0 relative overflow-hidden shadow-inner">
+<div class="flex justify-center items-center w-full h-8 pt-1">
+<span class="text-2xl">🎧</span>
+</div>
+<div class="bg-amber-400 text-purple-900 font-black text-[9px] px-1.5 py-0.2 rounded leading-tight w-full text-center">
+              FREE
+            </div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center text-[12px] font-bold text-gray-800 tracking-tight truncate">
+<span>Daraz Freebie</span>
+<svg class="w-3 h-3 ml-0.5 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+<p class="text-[10px] text-red-600 font-bold truncate">Invite &amp; Win</p>
+<button class="mt-1 bg-[#ff3b30] hover:bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+              Play Now
+            </button>
+</div>
+</div>
+</section>
+<!-- Mini Shortcut Icons Carousel -->
+<section class="bg-white rounded-xl py-3 px-2 shadow-sm border border-gray-100" data-purpose="feature-shortcuts">
+<div class="grid grid-cols-5 gap-1 text-center">
+<!-- Daraz Land -->
+<div class="flex flex-col items-center space-y-1">
+<div class="w-9 h-9 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-lg">
+              🌳
+            </div>
+<span class="text-[11px] font-medium text-gray-700 tracking-tight">Daraz Land</span>
+</div>
+<!-- Daraz Candy -->
+<div class="flex flex-col items-center space-y-1">
+<div class="w-9 h-9 rounded-full bg-pink-50 border border-pink-200 flex items-center justify-center text-lg">
+              🍬
+            </div>
+<span class="text-[11px] font-medium text-gray-700 tracking-tight">Daraz Candy</span>
+</div>
+<!-- BMSM -->
+<div class="flex flex-col items-center space-y-1">
+<div class="w-9 h-9 rounded-full bg-amber-500 text-white flex flex-col items-center justify-center leading-none text-[8px] font-black border border-amber-600">
+<span>BUY+</span>
+<span>SAVE+</span>
+</div>
+<span class="text-[11px] font-medium text-gray-700 tracking-tight">BMSM</span>
+</div>
+<!-- Voucher -->
+<div class="flex flex-col items-center space-y-1">
+<div class="w-9 h-9 rounded-full bg-purple-50 border border-purple-200 flex items-center justify-center text-lg">
+              🎟️
+            </div>
+<span class="text-[11px] font-medium text-gray-700 tracking-tight">Voucher</span>
+</div>
+<!-- Affiliate -->
+<div class="flex flex-col items-center space-y-1">
+<div class="w-9 h-9 rounded-full bg-orange-50 border border-orange-200 flex items-center justify-center text-lg">
+              👤
+            </div>
+<span class="text-[11px] font-medium text-gray-700 tracking-tight">Affiliate</span>
+</div>
+</div>
+<!-- Slider indicator dot -->
+<div class="flex justify-center items-center space-x-1 mt-2.5">
+<span class="w-3.5 h-1 bg-[#f85606] rounded-full"></span>
+<span class="w-3.5 h-1 bg-gray-200 rounded-full"></span>
+</div>
+</section>
+<!-- BEGIN: MyOrdersSection -->
+<section class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 transition-all duration-200 swipe-container cursor-grab active:cursor-grabbing relative overflow-hidden" data-purpose="orders-summary" id="my-orders-section">
+<!-- Section Header -->
+<div class="flex justify-between items-center pb-2 border-b border-gray-100">
+<div class="flex items-center space-x-2">
+<h2 class="text-[15px] font-bold text-gray-900">My Orders</h2>
+<span class="text-[10px] font-medium text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+<svg class="w-2.5 h-2.5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+  Swipe
+</span>
+</div>
+<a class="text-[12px] text-gray-500 flex items-center font-medium hover:text-gray-800" href="#">
+            View All Orders
+            <svg class="w-3.5 h-3.5 ml-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+<!-- Order Stages Icons -->
+<div class="grid grid-cols-5 gap-1 pt-3 pb-1 text-center" id="orders-status-tab-group" role="tablist">
+<!-- To Pay -->
+<button aria-selected="false" class="order-tab-btn flex flex-col items-center space-y-1.5 cursor-pointer p-1.5 rounded-xl transition-all duration-200 active:scale-90 hover:bg-orange-50/60 outline-none relative" data-index="0" data-tab-id="to-pay" role="tab" type="button">
+<div class="order-tab-icon-wrap w-7 h-7 flex items-center justify-center text-[#ff5722] transition-transform duration-200 relative">
+<svg class="w-6 h-6 transition-colors" fill="currentColor" viewbox="0 0 24 24">
+<path d="M21 7.28V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-2.28c.59-.35 1-.99 1-1.72V9c0-.73-.41-1.37-1-1.72zM20 9v6h-7V9h7zM5 19V5h14v2h-6c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6v2H5z"></path>
+<circle cx="16" cy="12" r="1.5"></circle>
+</svg>
+<span class="badge-corner bg-[#ff4d4f] text-white text-[9px] px-1 py-0.2 rounded-full border border-white hidden" id="badge-to-pay">1</span>
+</div>
+<span class="order-tab-label text-[11px] font-normal text-gray-700 transition-colors">To Pay</span>
+</button>
+<!-- To Ship -->
+<button aria-selected="false" class="order-tab-btn flex flex-col items-center space-y-1.5 cursor-pointer p-1.5 rounded-xl transition-all duration-200 active:scale-90 hover:bg-orange-50/60 outline-none relative" data-index="1" data-tab-id="to-ship" role="tab" type="button">
+<div class="order-tab-icon-wrap w-7 h-7 flex items-center justify-center text-[#ff5722] transition-transform duration-200 relative">
+<svg class="w-6 h-6 transition-colors" fill="currentColor" viewbox="0 0 24 24">
+<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1z"></path>
+</svg>
+<span class="badge-corner bg-[#ff4d4f] text-white text-[9px] px-1 py-0.2 rounded-full border border-white hidden" id="badge-to-ship">1</span>
+</div>
+<span class="order-tab-label text-[11px] font-normal text-gray-700 transition-colors">To Ship</span>
+</button>
+<!-- To Receive -->
+<button aria-selected="false" class="order-tab-btn flex flex-col items-center space-y-1.5 cursor-pointer p-1.5 rounded-xl transition-all duration-200 active:scale-90 hover:bg-orange-50/60 outline-none relative" data-index="2" data-tab-id="to-receive" role="tab" type="button">
+<div class="order-tab-icon-wrap w-7 h-7 flex items-center justify-center text-[#ff5722] transition-transform duration-200 relative">
+<svg class="w-6 h-6 transition-colors" fill="currentColor" viewbox="0 0 24 24">
+<path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path>
+</svg>
+<span class="badge-corner bg-[#ff4d4f] text-white text-[9px] px-1 py-0.2 rounded-full border border-white hidden" id="badge-to-receive">1</span>
+</div>
+<span class="order-tab-label text-[11px] font-normal text-gray-700 transition-colors">To Receive</span>
+</button>
+<!-- To Review (with badge) -->
+<button aria-selected="true" class="order-tab-btn flex flex-col items-center space-y-1.5 relative cursor-pointer p-1.5 rounded-xl transition-all duration-200 active:scale-90 bg-orange-50 ring-1 ring-[#f85606]/30 shadow-xs outline-none" data-index="3" data-tab-id="to-review" role="tab" type="button">
+<div class="order-tab-icon-wrap w-7 h-7 flex items-center justify-center text-[#f85606] relative scale-105 transition-transform duration-200">
+<svg class="w-6 h-6 transition-colors" fill="currentColor" viewbox="0 0 24 24">
+<path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"></path>
+</svg>
+<!-- Badge "1" -->
+<span class="badge-corner bg-[#ff4d4f] text-white text-[9px] px-1 py-0.2 rounded-full border border-white transition-all duration-300" id="badge-to-review">1</span>
+</div>
+<span class="order-tab-label text-[11px] font-bold text-[#f85606] transition-colors">To Review</span>
+</button>
+<!-- Returns & Cancellations -->
+<button aria-selected="false" class="order-tab-btn flex flex-col items-center space-y-1.5 cursor-pointer p-1.5 rounded-xl transition-all duration-200 active:scale-90 hover:bg-orange-50/60 outline-none" data-index="4" data-tab-id="returns" role="tab" type="button">
+<div class="order-tab-icon-wrap w-7 h-7 flex items-center justify-center text-[#ff5722] transition-transform duration-200">
+<svg class="w-6 h-6 transition-colors" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"></path>
+</svg>
+</div>
+<span class="order-tab-label text-[10px] leading-tight font-normal text-gray-700 text-center transition-colors">Returns &amp; Cancellations</span>
+</button>
+</div>
+<!-- Horizontal Carousel Viewport with Swipe Support -->
+<div class="mt-3 overflow-hidden select-none relative" id="orders-carousel-viewport">
+<div class="flex transition-transform duration-300 ease-out will-change-transform" id="orders-slider-track" style="transform: translateX(-300%);">
+<!-- Slide 0: To Pay -->
+<div class="w-full flex-shrink-0 pr-0.5">
+<div class="bg-stone-50 border border-stone-200 rounded-lg p-2.5 flex items-center justify-between transition-all duration-200">
+<div class="flex items-center space-x-2.5 min-w-0">
+<div class="w-9 h-9 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center overflow-hidden shrink-0 shadow-inner">
+<span class="text-lg">💳</span>
+</div>
+<div class="min-w-0">
+<p class="text-[12px] font-bold text-gray-800 leading-snug truncate">No pending payments</p>
+<p class="text-[10.5px] text-gray-500 truncate max-w-[170px]">Explore deals and checkout your favorite items.</p>
+</div>
+</div>
+<button class="border border-[#f85606] text-[#f85606] hover:bg-orange-50 text-[11px] font-semibold px-2.5 py-1 rounded-md transition-colors shrink-0 active:scale-95">
+          Shop Now
+        </button>
+</div>
+</div>
+<!-- Slide 1: To Ship -->
+<div class="w-full flex-shrink-0 pr-0.5">
+<div class="bg-stone-50 border border-stone-200 rounded-lg p-2.5 flex items-center justify-between transition-all duration-200">
+<div class="flex items-center space-x-2.5 min-w-0">
+<div class="w-9 h-9 rounded-full bg-orange-50 border border-orange-200 flex items-center justify-center overflow-hidden shrink-0 shadow-inner">
+<span class="text-lg">📦</span>
+</div>
+<div class="min-w-0">
+<p class="text-[12px] font-bold text-gray-800 leading-snug truncate">No items to ship</p>
+<p class="text-[10.5px] text-gray-500 truncate max-w-[170px]">Sellers are preparing pending packages.</p>
+</div>
+</div>
+<button class="border border-amber-500 text-amber-600 hover:bg-amber-50 text-[11px] font-semibold px-2.5 py-1 rounded-md transition-colors shrink-0 active:scale-95">
+          Check Updates
+        </button>
+</div>
+</div>
+<!-- Slide 2: To Receive -->
+<div class="w-full flex-shrink-0 pr-0.5">
+<div class="bg-stone-50 border border-stone-200 rounded-lg p-2.5 flex items-center justify-between transition-all duration-200">
+<div class="flex items-center space-x-2.5 min-w-0">
+<div class="w-9 h-9 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center overflow-hidden shrink-0 shadow-inner">
+<span class="text-lg">🚚</span>
+</div>
+<div class="min-w-0">
+<p class="text-[12px] font-bold text-gray-800 leading-snug truncate">No orders on the way</p>
+<p class="text-[10.5px] text-gray-500 truncate max-w-[170px]">Track deliveries and courier details here.</p>
+</div>
+</div>
+<button class="border border-blue-500 text-blue-600 hover:bg-blue-50 text-[11px] font-semibold px-2.5 py-1 rounded-md transition-colors shrink-0 active:scale-95">
+          Track Order
+        </button>
+</div>
+</div>
+<!-- Slide 3: To Review -->
+<div class="w-full flex-shrink-0 pr-0.5">
+<div class="bg-stone-50 border border-stone-200 rounded-lg p-2.5 flex items-center justify-between transition-all duration-200">
+<div class="flex items-center space-x-2.5 min-w-0">
+<div class="w-9 h-9 rounded-full bg-slate-900 border border-gray-300 flex items-center justify-center overflow-hidden shrink-0 shadow-inner" id="review-slider-icon">
+<span class="text-xl">💿</span>
+</div>
+<div class="min-w-0">
+<p class="text-[12px] font-bold text-gray-800 leading-snug truncate" id="review-slider-title">Review your purchase today!</p>
+<p class="text-[10.5px] text-gray-500 truncate max-w-[170px]" id="review-slider-desc">Share your review with others sho...</p>
+</div>
+</div>
+<button class="border border-red-500 text-red-500 hover:bg-red-50 text-[11px] font-semibold px-2.5 py-1 rounded-md transition-colors shrink-0 active:scale-95">
+          Review Now
+        </button>
+</div>
+</div>
+<!-- Slide 4: Returns & Cancellations -->
+<div class="w-full flex-shrink-0 pr-0.5">
+<div class="bg-stone-50 border border-stone-200 rounded-lg p-2.5 flex items-center justify-between transition-all duration-200">
+<div class="flex items-center space-x-2.5 min-w-0">
+<div class="w-9 h-9 rounded-full bg-stone-100 border border-stone-300 flex items-center justify-center overflow-hidden shrink-0 shadow-inner">
+<span class="text-lg">🔄</span>
+</div>
+<div class="min-w-0">
+<p class="text-[12px] font-bold text-gray-800 leading-snug truncate">No returns or cancellations</p>
+<p class="text-[10.5px] text-gray-500 truncate max-w-[170px]">View your completed returns history.</p>
+</div>
+</div>
+<button class="border border-stone-400 text-stone-700 hover:bg-stone-100 text-[11px] font-semibold px-2.5 py-1 rounded-md transition-colors shrink-0 active:scale-95">
+          History
+        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Visual Swipe / Carousel Dots Indicator -->
+<div class="flex justify-center items-center space-x-1 mt-2.5" id="order-tab-dots">
+<span class="w-1.5 h-1.5 rounded-full bg-gray-200 transition-all duration-200" data-dot-idx="0"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-gray-200 transition-all duration-200" data-dot-idx="1"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-gray-200 transition-all duration-200" data-dot-idx="2"></span>
+<span class="w-3.5 h-1.5 rounded-full bg-[#f85606] transition-all duration-200" data-dot-idx="3"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-gray-200 transition-all duration-200" data-dot-idx="4"></span>
+</div>
+</section>
+<!-- END: MyOrdersSection -->
+<!-- BEGIN: RecentlyViewedSection -->
+<section class="bg-white rounded-xl p-3 shadow-sm border border-gray-100" data-purpose="recently-viewed">
+<div class="flex justify-between items-center mb-2.5">
+<div class="flex items-center space-x-2">
+<h2 class="text-[15px] font-bold text-gray-900">Recently Viewed</h2>
+<span class="text-[9px] font-extrabold uppercase bg-orange-100 text-[#f85606] px-1.5 py-0.5 rounded-md hidden tracking-tight" id="badge-recently-updated">Updated</span>
+</div>
+<a class="text-[12px] text-gray-500 flex items-center font-medium hover:text-gray-800" href="#">
+            View More
+            <svg class="w-3.5 h-3.5 ml-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+<!-- Product Cards Grid: Dynamic container with horizontal overflow support or flexible grid -->
+<div class="grid grid-cols-3 gap-2.5 transition-all duration-300" id="recently-viewed-grid">
+<!-- Item 1: LED Strip -->
+<div class="flex flex-col recent-card-item">
+<div class="w-full aspect-square bg-gray-50 rounded-lg border border-gray-200 overflow-hidden relative flex items-center justify-center">
+<div class="relative w-full h-full flex items-center justify-center p-2">
+<!-- Visual LED spool simulation -->
+<div class="w-20 h-20 rounded-full border-4 border-dashed border-purple-500 flex items-center justify-center bg-gradient-to-tr from-cyan-400 via-amber-300 to-fuchsia-500 shadow-sm">
+<div class="w-10 h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center text-[8px] font-bold text-gray-700">LED</div>
+</div>
+<div class="absolute bottom-1 left-1 bg-white border border-gray-300 rounded p-0.5 text-[8px] shadow">
+                  🎛️
+                </div>
+</div>
+</div>
+<div class="mt-1.5">
+<div class="text-[13px] font-black text-[#f85606]">Rs449</div>
+</div>
+</div>
+<!-- Item 2: 18+ Sign -->
+<div class="flex flex-col recent-card-item">
+<div class="w-full aspect-square bg-white rounded-lg border border-gray-200 overflow-hidden relative flex items-center justify-center">
+<span class="absolute top-0 left-0 bg-[#ff3b30] text-white text-[9px] font-bold px-1 py-0.2 rounded-br">↓ 17%</span>
+<div class="w-18 h-18 rounded-full border-[5px] border-red-600 flex flex-col items-center justify-center p-1">
+<span class="text-[17px] font-black leading-none text-black">18+</span>
+<span class="text-[7px] font-bold tracking-tight text-gray-600 uppercase">ONLY</span>
+</div>
+</div>
+<div class="mt-1.5">
+<div class="text-[13px] font-black text-[#f85606]">Rs990</div>
+<div class="text-[11px] text-gray-400 line-through">Rs1,200</div>
+</div>
+</div>
+<!-- Item 3: Luxury Watch -->
+<div class="flex flex-col recent-card-item">
+<div class="w-full aspect-square bg-amber-50 rounded-lg border border-gray-200 overflow-hidden relative flex items-center justify-center">
+<span class="absolute top-0 left-0 bg-[#ff3b30] text-white text-[9px] font-bold px-1 py-0.2 rounded-br z-10">↓ 50%</span>
+<!-- Luxury Watch Illustration -->
+<div class="w-full h-full bg-gradient-to-br from-amber-100 via-amber-200 to-yellow-500 flex items-center justify-center relative">
+<div class="w-16 h-16 rounded-full bg-yellow-400 border-2 border-yellow-600 shadow-md flex items-center justify-center">
+<div class="w-12 h-12 rounded-full border border-yellow-700 bg-amber-900/10 flex items-center justify-center">
+<span class="text-xl">⌚</span>
+</div>
+</div>
+<span class="absolute bottom-1 right-1 bg-black text-white text-[7px] px-1 rounded">LIMITED</span>
+</div>
+</div>
+<div class="mt-1.5">
+<div class="text-[13px] font-black text-[#f85606]">Rs8,086</div>
+<div class="text-[11px] text-gray-400 line-through">Rs16,172</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: RecentlyViewedSection -->
+<!-- BEGIN: ServicesAndToolsGrid -->
+<section class="bg-white rounded-xl p-3 shadow-sm border border-gray-100" data-purpose="services-grid">
+<!-- Row 1 -->
+<div class="grid grid-cols-4 gap-2 text-center pb-4">
+<!-- Help Center -->
+<div class="flex flex-col items-center space-y-1.5 cursor-pointer">
+<div class="w-10 h-10 rounded-xl bg-red-500 flex items-center justify-center text-white shadow-sm">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+<path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"></path>
+</svg>
+</div>
+<span class="text-[11px] font-medium text-gray-800 leading-tight">Help Center</span>
+</div>
+<!-- Daraz Candy -->
+<div class="flex flex-col items-center space-y-1.5 cursor-pointer">
+<div class="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center text-white text-xl shadow-sm">
+              🍭
+            </div>
+<span class="text-[11px] font-medium text-gray-800 leading-tight">Daraz Candy</span>
+</div>
+<!-- Pickup Points -->
+<div class="flex flex-col items-center space-y-1.5 cursor-pointer">
+<div class="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center text-white shadow-sm relative">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<div class="absolute -bottom-1 -right-1 bg-purple-600 text-white rounded-full p-0.5 text-[8px]">
+                📍
+              </div>
+</div>
+<span class="text-[11px] font-medium text-gray-800 leading-tight">Pickup Points</span>
+</div>
+<!-- Payment Options -->
+<div class="flex flex-col items-center space-y-1.5 cursor-pointer">
+<div class="w-10 h-10 rounded-xl bg-teal-600 flex items-center justify-center text-white shadow-sm">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+<path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"></path>
+</svg>
+</div>
+<span class="text-[11px] font-medium text-gray-800 leading-tight">Payment Options</span>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="grid grid-cols-4 gap-2 text-center pt-2">
+<!-- Contact Customer Care -->
+<div class="flex flex-col items-center space-y-1.5 cursor-pointer">
+<div class="w-10 h-10 rounded-xl bg-fuchsia-100 flex items-center justify-center text-cyan-600 border border-fuchsia-200">
+<svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2C6.48 2 2 6.48 2 12v3c0 1.66 1.34 3 3 3h1v-7H4v-1c0-4.41 3.59-8 8-8s8 3.59 8 8v1h-2v7h1c1.66 0 3-1.34 3-3v-3c0-5.52-4.48-10-10-10zm-4 12H6v3h2v-3zm10 0h-2v3h2v-3z"></path>
+</svg>
+</div>
+<span class="text-[11px] font-medium text-gray-800 leading-tight">Contact Customer Care</span>
+</div>
+<!-- Buy Any 3 -->
+<div class="flex flex-col items-center space-y-1.5 cursor-pointer">
+<div class="w-10 h-10 rounded-xl bg-amber-400 flex flex-col items-center justify-center font-black text-[9px] text-amber-950 shadow-sm leading-tight">
+<span>CHOICE</span>
+</div>
+<span class="text-[11px] font-medium text-gray-800 leading-tight">Buy<br/>Any 3</span>
+</div>
+<!-- My Reviews -->
+<div class="flex flex-col items-center space-y-1.5 cursor-pointer">
+<div class="w-10 h-10 rounded-xl bg-emerald-500 flex flex-col items-center justify-center text-white shadow-sm">
+<div class="flex text-[8px] space-x-0.5">
+<span>★</span><span>★</span><span>★</span>
+</div>
+</div>
+<span class="text-[11px] font-medium text-gray-800 leading-tight">My Reviews</span>
+</div>
+<!-- My Affiliates -->
+<div class="flex flex-col items-center space-y-1.5 cursor-pointer">
+<div class="w-10 h-10 rounded-xl bg-rose-50 border border-rose-200 flex flex-col items-center justify-center text-rose-500 shadow-sm">
+<span class="text-base">👥</span>
+<span class="text-[6px] font-bold uppercase tracking-tighter">Commission</span>
+</div>
+<span class="text-[11px] font-medium text-gray-800 leading-tight">My Affiliates</span>
+</div>
+</div>
+</section>
+<!-- END: ServicesAndToolsGrid -->
+</main>
+<!-- END: MainContentArea -->
+<!-- BEGIN: SkeletonShimmerOverlay (Displays during Pull-to-Refresh) -->
+<div aria-hidden="true" class="absolute inset-0 px-3 space-y-3 pt-1 pointer-events-none opacity-0 transition-opacity duration-300 z-10" id="skeleton-main-overlay">
+<!-- Skeleton Gems & Freebies Cards -->
+<section class="grid grid-cols-2 gap-2.5">
+<!-- Skeleton Card 1 -->
+<div class="bg-white rounded-xl p-2.5 shadow-sm border border-gray-100 flex items-center space-x-2.5">
+<div class="w-14 h-14 rounded-lg skeleton-shimmer shrink-0"></div>
+<div class="flex-1 min-w-0 space-y-1.5">
+<div class="w-20 h-3.5 rounded skeleton-shimmer"></div>
+<div class="w-14 h-2.5 rounded skeleton-shimmer"></div>
+<div class="w-16 h-4 rounded-full skeleton-shimmer mt-1"></div>
+</div>
+</div>
+<!-- Skeleton Card 2 -->
+<div class="bg-white rounded-xl p-2.5 shadow-sm border border-gray-100 flex items-center space-x-2.5">
+<div class="w-14 h-14 rounded-lg skeleton-shimmer shrink-0"></div>
+<div class="flex-1 min-w-0 space-y-1.5">
+<div class="w-20 h-3.5 rounded skeleton-shimmer"></div>
+<div class="w-14 h-2.5 rounded skeleton-shimmer"></div>
+<div class="w-16 h-4 rounded-full skeleton-shimmer mt-1"></div>
+</div>
+</div>
+</section>
+<!-- Skeleton Shortcut Icons Carousel -->
+<section class="bg-white rounded-xl py-3 px-2 shadow-sm border border-gray-100">
+<div class="grid grid-cols-5 gap-1 text-center">
+<div class="flex flex-col items-center space-y-1.5">
+<div class="w-9 h-9 rounded-full skeleton-shimmer"></div>
+<div class="w-12 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex flex-col items-center space-y-1.5">
+<div class="w-9 h-9 rounded-full skeleton-shimmer"></div>
+<div class="w-12 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex flex-col items-center space-y-1.5">
+<div class="w-9 h-9 rounded-full skeleton-shimmer"></div>
+<div class="w-12 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex flex-col items-center space-y-1.5">
+<div class="w-9 h-9 rounded-full skeleton-shimmer"></div>
+<div class="w-12 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex flex-col items-center space-y-1.5">
+<div class="w-9 h-9 rounded-full skeleton-shimmer"></div>
+<div class="w-12 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+</div>
+<div class="flex justify-center items-center space-x-1 mt-2.5">
+<div class="w-3.5 h-1 rounded-full skeleton-shimmer"></div>
+<div class="w-3.5 h-1 rounded-full skeleton-shimmer"></div>
+</div>
+</section>
+<!-- Skeleton My Orders Section -->
+<section class="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+<!-- Header -->
+<div class="flex justify-between items-center pb-2 border-b border-gray-100">
+<div class="w-24 h-4 rounded skeleton-shimmer"></div>
+<div class="w-20 h-3 rounded skeleton-shimmer"></div>
+</div>
+<!-- 5 Order Status Icons -->
+<div class="grid grid-cols-5 gap-1 pt-3 pb-1 text-center">
+<div class="flex flex-col items-center space-y-2 p-1.5">
+<div class="w-7 h-7 rounded-lg skeleton-shimmer"></div>
+<div class="w-10 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex flex-col items-center space-y-2 p-1.5">
+<div class="w-7 h-7 rounded-lg skeleton-shimmer"></div>
+<div class="w-10 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex flex-col items-center space-y-2 p-1.5">
+<div class="w-7 h-7 rounded-lg skeleton-shimmer"></div>
+<div class="w-11 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex flex-col items-center space-y-2 p-1.5">
+<div class="w-7 h-7 rounded-lg skeleton-shimmer"></div>
+<div class="w-11 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex flex-col items-center space-y-2 p-1.5">
+<div class="w-7 h-7 rounded-lg skeleton-shimmer"></div>
+<div class="w-12 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+</div>
+<!-- Active Order Banner Preview -->
+<div class="mt-3 bg-stone-50 border border-stone-200/80 rounded-lg p-2.5 flex items-center justify-between">
+<div class="flex items-center space-x-2.5">
+<div class="w-9 h-9 rounded-full skeleton-shimmer shrink-0"></div>
+<div class="space-y-1.5">
+<div class="w-32 h-3.5 rounded skeleton-shimmer"></div>
+<div class="w-44 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+</div>
+<div class="w-16 h-6 rounded skeleton-shimmer shrink-0"></div>
+</div>
+<div class="flex justify-center items-center space-x-1 mt-2.5">
+<div class="w-1.5 h-1.5 rounded-full skeleton-shimmer"></div>
+<div class="w-1.5 h-1.5 rounded-full skeleton-shimmer"></div>
+<div class="w-1.5 h-1.5 rounded-full skeleton-shimmer"></div>
+<div class="w-3.5 h-1.5 rounded-full skeleton-shimmer"></div>
+<div class="w-1.5 h-1.5 rounded-full skeleton-shimmer"></div>
+</div>
+</section>
+<!-- Skeleton Recently Viewed Section -->
+<section class="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+<div class="flex justify-between items-center mb-2.5">
+<div class="w-28 h-4 rounded skeleton-shimmer"></div>
+<div class="w-16 h-3 rounded skeleton-shimmer"></div>
+</div>
+<div class="grid grid-cols-3 gap-2.5">
+<!-- Item 1 -->
+<div class="flex flex-col space-y-2">
+<div class="w-full aspect-square rounded-lg skeleton-shimmer"></div>
+<div class="w-14 h-3.5 rounded skeleton-shimmer"></div>
+</div>
+<!-- Item 2 -->
+<div class="flex flex-col space-y-2">
+<div class="w-full aspect-square rounded-lg skeleton-shimmer"></div>
+<div class="space-y-1">
+<div class="w-14 h-3.5 rounded skeleton-shimmer"></div>
+<div class="w-10 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex flex-col space-y-2">
+<div class="w-full aspect-square rounded-lg skeleton-shimmer"></div>
+<div class="space-y-1">
+<div class="w-14 h-3.5 rounded skeleton-shimmer"></div>
+<div class="w-10 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Skeleton Services & Tools Grid -->
+<section class="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+<div class="grid grid-cols-4 gap-2 text-center pb-3">
+<div class="flex flex-col items-center space-y-1.5">
+<div class="w-10 h-10 rounded-xl skeleton-shimmer"></div>
+<div class="w-14 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex flex-col items-center space-y-1.5">
+<div class="w-10 h-10 rounded-xl skeleton-shimmer"></div>
+<div class="w-14 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex flex-col items-center space-y-1.5">
+<div class="w-10 h-10 rounded-xl skeleton-shimmer"></div>
+<div class="w-14 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex flex-col items-center space-y-1.5">
+<div class="w-10 h-10 rounded-xl skeleton-shimmer"></div>
+<div class="w-14 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-2 text-center pt-1">
+<div class="flex flex-col items-center space-y-1.5">
+<div class="w-10 h-10 rounded-xl skeleton-shimmer"></div>
+<div class="w-14 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex flex-col items-center space-y-1.5">
+<div class="w-10 h-10 rounded-xl skeleton-shimmer"></div>
+<div class="w-14 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex flex-col items-center space-y-1.5">
+<div class="w-10 h-10 rounded-xl skeleton-shimmer"></div>
+<div class="w-14 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex flex-col items-center space-y-1.5">
+<div class="w-10 h-10 rounded-xl skeleton-shimmer"></div>
+<div class="w-14 h-2.5 rounded skeleton-shimmer"></div>
+</div>
+</div>
+</section>
+</div>
+<!-- END: SkeletonShimmerOverlay -->
+</div>
+<!-- END: CONTENT HOLDER -->
+</div>
+<!-- END: ptr-scrollable-body -->
+<!-- BEGIN: BottomNavigation -->
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[428px] bg-white border-t border-gray-200 py-1.5 px-3 flex justify-between items-center z-40" data-purpose="bottom-tab-bar">
+<!-- Home Tab -->
+<a class="flex flex-col items-center flex-1 text-gray-600 active:text-orange-600" href="#">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24">
+<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10px] font-medium mt-0.5">Home</span>
+</a>
+<!-- Messages Tab -->
+<a class="flex flex-col items-center flex-1 text-gray-600 relative active:text-orange-600" href="#">
+<div class="relative">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24">
+<path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="badge-corner bg-rose-600 text-white text-[9px] px-1 py-0.2 rounded-full border border-white">13</span>
+</div>
+<span class="text-[10px] font-medium mt-0.5">Messages</span>
+</a>
+<!-- Central Promo Button: UP TO 50% OFF -->
+<div class="flex flex-col items-center flex-1 -mt-3">
+<button class="w-12 h-12 rounded-full bg-gradient-to-b from-[#f85606] to-[#d84000] text-white flex flex-col items-center justify-center shadow-lg border-2 border-white active:scale-95 transition-transform">
+<span class="text-[8px] font-bold leading-tight uppercase">UP TO</span>
+<span class="text-[12px] font-black leading-tight tracking-tighter">50%</span>
+<span class="text-[7px] font-extrabold uppercase leading-none">OFF</span>
+</button>
+</div>
+<!-- Cart Tab -->
+<a class="flex flex-col items-center flex-1 text-gray-600 relative active:text-orange-600" href="#">
+<div class="relative">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24">
+<path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="badge-corner bg-rose-600 text-white text-[9px] px-1 py-0.2 rounded-full border border-white">33</span>
+</div>
+<span class="text-[10px] font-medium mt-0.5">Cart</span>
+</a>
+<!-- Account Tab (Active) -->
+<a class="flex flex-col items-center flex-1 text-[#f85606]" href="#">
+<div class="w-6 h-6 rounded-full bg-[#f85606] flex items-center justify-center text-white">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<span class="text-[10px] font-bold mt-0.5">Account</span>
+</a>
+</nav>
+<!-- END: BottomNavigation -->
+</div>
+<!-- END: MobileDeviceFrame -->
+<!-- Pull To Refresh Interaction & Live Data Simulation Script -->
+<script>
+  (function initPullToRefresh() {
+    const container = document.getElementById('app-container');
+    const scrollBody = document.getElementById('ptr-scrollable-body');
+    const indicatorWrap = document.getElementById('ptr-indicator-wrap');
+    const arrowIcon = document.getElementById('ptr-arrow-icon');
+    const spinnerIcon = document.getElementById('ptr-spinner-icon');
+    const checkIcon = document.getElementById('ptr-check-icon');
+    const statusLabel = document.getElementById('ptr-status-label');
+    const demoBtn = document.getElementById('btn-quick-refresh-demo');
+    const refreshBadge = document.getElementById('refresh-badge-state');
+    const toast = document.getElementById('refresh-toast');
+    const toastMessage = document.getElementById('toast-message');
+
+    // Content and Skeleton Elements
+    const actualProfile = document.getElementById('actual-profile-header');
+    const skeletonProfile = document.getElementById('skeleton-profile-header');
+    const actualContent = document.getElementById('account-main-content');
+    const skeletonContent = document.getElementById('skeleton-main-overlay');
+
+    // Live update targets
+    const badgeToReview = document.getElementById('badge-to-review');
+    const badgeToShip = document.getElementById('badge-to-ship');
+    const userWishlist = document.getElementById('user-wishlist-count');
+    const userVoucher = document.getElementById('user-voucher-count');
+    const recentlyGrid = document.getElementById('recently-viewed-grid');
+    const recentlyBadge = document.getElementById('badge-recently-updated');
+    const reviewSliderTitle = document.getElementById('review-slider-title');
+    const reviewSliderDesc = document.getElementById('review-slider-desc');
+
+    let refreshCycle = 0;
+    let startY = 0;
+    let currentY = 0;
+    let isPulling = false;
+    let isRefreshing = false;
+    const threshold = 68; // threshold px to trigger refresh
+    const maxPull = 100; // max visual pull distance
+
+    // New products pool to simulate fresh recently viewed browse history
+    const dynamicItems = [
+      {
+        id: 'item-earbuds',
+        tag: 'NEW',
+        tagColor: 'bg-emerald-600',
+        discount: '↓ 40%',
+        price: 'Rs1,450',
+        original: 'Rs2,410',
+        title: 'Mini Wireless Earbuds Pro',
+        iconHtml: `<div class="w-full h-full bg-gradient-to-tr from-indigo-50 to-blue-100 flex items-center justify-center relative"><span class="text-3xl filter drop-shadow-sm">🎧</span><span class="absolute bottom-1 right-1 bg-blue-600 text-white text-[7px] px-1 rounded font-bold">BT 5.3</span></div>`
+      },
+      {
+        id: 'item-watch',
+        tag: 'HOT',
+        tagColor: 'bg-rose-600',
+        discount: '↓ 35%',
+        price: 'Rs2,899',
+        original: 'Rs4,450',
+        title: 'Sport Smartwatch Ultra',
+        iconHtml: `<div class="w-full h-full bg-gradient-to-br from-slate-900 via-slate-800 to-zinc-900 flex items-center justify-center relative"><span class="text-3xl filter drop-shadow">⌚</span><span class="absolute bottom-1 right-1 bg-emerald-500 text-white text-[7px] px-1 rounded font-bold">IP68</span></div>`
+      },
+      {
+        id: 'item-shoes',
+        tag: 'DEAL',
+        tagColor: 'bg-amber-600',
+        discount: '↓ 45%',
+        price: 'Rs1,999',
+        original: 'Rs3,650',
+        title: 'Breathable Running Sneakers',
+        iconHtml: `<div class="w-full h-full bg-gradient-to-tr from-amber-50 to-orange-100 flex items-center justify-center relative"><span class="text-3xl filter drop-shadow">👟</span><span class="absolute bottom-1 right-1 bg-black text-white text-[7px] px-1 rounded font-bold">PRO</span></div>`
+      }
+    ];
+
+    function showToast(msg) {
+      if (!toast) return;
+      toastMessage.textContent = msg;
+      toast.classList.remove('hidden');
+      const inner = toast.firstElementChild;
+      inner.classList.remove('animate-toast');
+      void inner.offsetWidth; // retrigger animation
+      inner.classList.add('animate-toast');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 2700);
+    }
+
+    function applyDataUpdates() {
+      refreshCycle++;
+
+      // 1. Update order badges and user stats
+      if (refreshCycle % 2 === 1) {
+        // Cycle 1: Update 'To Review' badge from 1 to 2, add 'To Ship' badge
+        badgeToReview.textContent = '2';
+        badgeToReview.classList.add('animate-pop-in');
+
+        badgeToShip.classList.remove('hidden');
+        badgeToShip.textContent = '1';
+        badgeToShip.classList.add('animate-pop-in');
+
+        userWishlist.textContent = '12';
+        userWishlist.classList.add('text-[#f85606]');
+        userVoucher.textContent = '2';
+        userVoucher.classList.add('text-[#f85606]');
+
+        if (reviewSliderTitle) reviewSliderTitle.textContent = '2 items ready for your review!';
+        if (reviewSliderDesc) reviewSliderDesc.textContent = 'Earn up to 20 Daraz Gems per review...';
+
+        showToast('Account refreshed • 2 new order statuses updated');
+      } else {
+        // Cycle 2: Rotate to 3 reviews, update Wishlist and vouchers
+        badgeToReview.textContent = '3';
+        badgeToReview.classList.add('animate-pop-in');
+
+        userWishlist.textContent = '14';
+        userVoucher.textContent = '3';
+
+        if (reviewSliderTitle) reviewSliderTitle.textContent = 'Review your 3 delivered orders!';
+        showToast('Account refreshed • Wishlist & Vouchers synced');
+      }
+
+      // Remove highlight color after gentle pulse
+      setTimeout(() => {
+        userWishlist.classList.remove('text-[#f85606]');
+        userVoucher.classList.remove('text-[#f85606]');
+      }, 1800);
+
+      // 2. Prepend a freshly browsed item to Recently Viewed section!
+      if (recentlyGrid) {
+        const itemData = dynamicItems[(refreshCycle - 1) % dynamicItems.length];
+        
+        // Remove existing if present to cycle seamlessly
+        const existingNewItem = document.getElementById(itemData.id);
+        if (existingNewItem) existingNewItem.remove();
+
+        const newCard = document.createElement('div');
+        newCard.id = itemData.id;
+        newCard.className = 'flex flex-col recent-card-item animate-pop-in';
+        newCard.innerHTML = `
+          <div class="w-full aspect-square bg-white rounded-lg border-2 border-orange-300 overflow-hidden relative flex items-center justify-center shadow-xs">
+            <span class="absolute top-0 left-0 ${itemData.tagColor} text-white text-[8px] font-black px-1.5 py-0.5 rounded-br z-10">${itemData.tag}</span>
+            <span class="absolute top-0 right-0 bg-[#ff3b30] text-white text-[8px] font-bold px-1 py-0.5 rounded-bl z-10">${itemData.discount}</span>
+            ${itemData.iconHtml}
+          </div>
+          <div class="mt-1.5">
+            <div class="text-[13px] font-black text-[#f85606]">${itemData.price}</div>
+            <div class="text-[11px] text-gray-400 line-through">${itemData.original}</div>
+          </div>
+        `;
+
+        // Keep 3 items in standard view by pruning the last item if grid exceeds 3
+        recentlyGrid.prepend(newCard);
+        const cards = recentlyGrid.querySelectorAll('.recent-card-item');
+        if (cards.length > 3) {
+          cards[cards.length - 1].remove();
+        }
+
+        if (recentlyBadge) {
+          recentlyBadge.classList.remove('hidden');
+          recentlyBadge.classList.add('animate-pop-in');
+        }
+      }
+    }
+
+    function showSkeletonShimmer() {
+      // Fade out actual content slightly and show shimmering skeleton
+      actualProfile.style.opacity = '0';
+      actualContent.style.opacity = '0';
+      skeletonProfile.classList.remove('opacity-0');
+      skeletonProfile.classList.add('opacity-100');
+      skeletonContent.classList.remove('opacity-0');
+      skeletonContent.classList.add('opacity-100');
+      if (refreshBadge) refreshBadge.textContent = 'Updating...';
+    }
+
+    function hideSkeletonShimmer() {
+      // Smoothly hide shimmering skeletons and restore actual content
+      skeletonProfile.classList.remove('opacity-100');
+      skeletonProfile.classList.add('opacity-0');
+      skeletonContent.classList.remove('opacity-100');
+      skeletonContent.classList.add('opacity-0');
+
+      setTimeout(() => {
+        actualProfile.style.opacity = '1';
+        actualContent.style.opacity = '1';
+        if (refreshBadge) refreshBadge.textContent = 'Swipe Ready';
+      }, 100);
+    }
+
+    function updatePullVisual(distance) {
+      // Calculate damped resistance
+      const pullDist = Math.min(distance * 0.45, maxPull);
+      const progress = Math.min(pullDist / threshold, 1);
+
+      indicatorWrap.style.height = `${pullDist}px`;
+      indicatorWrap.style.opacity = `${Math.min(progress * 1.2, 1)}`;
+      scrollBody.style.transform = `translateY(${pullDist}px)`;
+
+      if (distance >= threshold * 2.2) {
+        arrowIcon.style.transform = 'rotate(180deg)';
+        statusLabel.textContent = 'Release to refresh';
+      } else {
+        const rot = Math.min(progress * 180, 180);
+        arrowIcon.style.transform = `rotate(${rot}deg)`;
+        statusLabel.textContent = 'Pull to refresh';
+      }
+    }
+
+    function triggerRefreshAnimation() {
+      if (isRefreshing) return;
+      isRefreshing = true;
+
+      // Enter skeleton loading shimmer state
+      showSkeletonShimmer();
+
+      // Hold container at refreshed position
+      scrollBody.style.transition = 'transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1)';
+      scrollBody.style.transform = `translateY(56px)`;
+      indicatorWrap.style.transition = 'height 0.25s cubic-bezier(0.2, 0.9, 0.3, 1)';
+      indicatorWrap.style.height = `56px`;
+      indicatorWrap.style.opacity = '1';
+
+      // State: Refreshing
+      arrowIcon.classList.add('hidden');
+      checkIcon.classList.add('hidden');
+      spinnerIcon.classList.remove('hidden');
+      statusLabel.textContent = 'Refreshing...';
+
+      // Simulate network reload with skeleton shimmer (~1.25s duration)
+      setTimeout(() => {
+        // State: Completed / Updated
+        spinnerIcon.classList.add('hidden');
+        checkIcon.classList.remove('hidden');
+        statusLabel.textContent = 'Updated just now';
+
+        // Apply dynamic new content before restoring visibility
+        applyDataUpdates();
+
+        // Smooth transition back to refreshed live content
+        hideSkeletonShimmer();
+
+        // Animate close after celebration
+        setTimeout(() => {
+          scrollBody.style.transition = 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
+          scrollBody.style.transform = 'translateY(0px)';
+          indicatorWrap.style.transition = 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
+          indicatorWrap.style.height = '0px';
+          indicatorWrap.style.opacity = '0';
+
+          setTimeout(() => {
+            // Reset to initial state
+            arrowIcon.classList.remove('hidden');
+            arrowIcon.style.transform = 'rotate(0deg)';
+            spinnerIcon.classList.add('hidden');
+            checkIcon.classList.add('hidden');
+            statusLabel.textContent = 'Pull to refresh';
+            isRefreshing = false;
+          }, 360);
+        }, 500);
+      }, 1250);
+    }
+
+    function cancelPull() {
+      scrollBody.style.transition = 'transform 0.25s ease-out';
+      indicatorWrap.style.transition = 'all 0.25s ease-out';
+      scrollBody.style.transform = 'translateY(0px)';
+      indicatorWrap.style.height = '0px';
+      indicatorWrap.style.opacity = '0';
+      setTimeout(() => {
+        arrowIcon.style.transform = 'rotate(0deg)';
+      }, 250);
+    }
+
+    // Touch Event Handlers
+    container.addEventListener('touchstart', (e) => {
+      if (isRefreshing) return;
+      if (window.scrollY > 5) return;
+      // Do not conflict if touching inside horizontal order carousel track
+      if (e.target.closest('#my-orders-section')) return;
+
+      startY = e.touches[0].clientY;
+      currentY = startY;
+      isPulling = true;
+      scrollBody.style.transition = 'none';
+      indicatorWrap.style.transition = 'none';
+    }, { passive: true });
+
+    container.addEventListener('touchmove', (e) => {
+      if (!isPulling || isRefreshing) return;
+      currentY = e.touches[0].clientY;
+      const diff = currentY - startY;
+      if (diff > 0 && window.scrollY <= 0) {
+        updatePullVisual(diff);
+      }
+    }, { passive: true });
+
+    container.addEventListener('touchend', (e) => {
+      if (!isPulling || isRefreshing) return;
+      isPulling = false;
+      const diff = currentY - startY;
+      if (diff * 0.45 >= threshold) {
+        triggerRefreshAnimation();
+      } else {
+        cancelPull();
+      }
+    });
+
+    container.addEventListener('touchcancel', () => {
+      if (!isPulling || isRefreshing) return;
+      isPulling = false;
+      cancelPull();
+    });
+
+    // Mouse Drag support for preview on Desktop
+    let isMouseDown = false;
+    container.addEventListener('mousedown', (e) => {
+      if (isRefreshing) return;
+      if (window.scrollY > 5) return;
+      // Skip if clicking buttons, links or inside orders slider
+      if (e.target.closest('#my-orders-section') || e.target.closest('button') || e.target.closest('a')) return;
+
+      isMouseDown = true;
+      startY = e.clientY;
+      currentY = startY;
+      isPulling = true;
+      scrollBody.style.transition = 'none';
+      indicatorWrap.style.transition = 'none';
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isMouseDown || !isPulling || isRefreshing) return;
+      currentY = e.clientY;
+      const diff = currentY - startY;
+      if (diff > 0) {
+        updatePullVisual(diff);
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!isMouseDown || !isPulling) return;
+      isMouseDown = false;
+      isPulling = false;
+      const diff = currentY - startY;
+      if (diff * 0.45 >= threshold) {
+        triggerRefreshAnimation();
+      } else {
+        cancelPull();
+      }
+    });
+
+    // Demo trigger button for quick review
+    if (demoBtn) {
+      demoBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        triggerRefreshAnimation();
+      });
+    }
+  })();
+</script>
+<!-- Tab and Swipe Interactivity Script -->
+<script>
+  (function initOrderSwipeTabs() {
+    const tabs = document.querySelectorAll('.order-tab-btn');
+    const track = document.getElementById('orders-slider-track');
+    const dots = document.querySelectorAll('#order-tab-dots [data-dot-idx]');
+    const swipeArea = document.getElementById('my-orders-section');
+    const totalTabs = tabs.length;
+    let currentIndex = 3; // Default 'To Review' (index 3)
+
+    function updateTabsUI(idx) {
+      currentIndex = idx;
+      
+      // Update Tab Buttons UI
+      tabs.forEach((t, i) => {
+        const isSelected = i === idx;
+        t.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+        
+        const iconWrap = t.querySelector('.order-tab-icon-wrap');
+        const label = t.querySelector('.order-tab-label');
+
+        if (isSelected) {
+          t.className = 'order-tab-btn flex flex-col items-center space-y-1.5 relative cursor-pointer p-1.5 rounded-xl transition-all duration-200 active:scale-90 bg-orange-50 ring-1 ring-[#f85606]/30 shadow-xs outline-none';
+          if (iconWrap) {
+            iconWrap.className = 'order-tab-icon-wrap w-7 h-7 flex items-center justify-center text-[#f85606] relative scale-105 transition-transform duration-200';
+          }
+          if (label) {
+            label.className = 'order-tab-label text-[11px] font-bold text-[#f85606] transition-colors';
+          }
+        } else {
+          t.className = 'order-tab-btn flex flex-col items-center space-y-1.5 cursor-pointer p-1.5 rounded-xl transition-all duration-200 active:scale-90 hover:bg-orange-50/60 outline-none relative';
+          if (iconWrap) {
+            iconWrap.className = 'order-tab-icon-wrap w-7 h-7 flex items-center justify-center text-[#ff5722] transition-transform duration-200 relative';
+          }
+          if (label) {
+            const isReturns = t.getAttribute('data-tab-id') === 'returns';
+            label.className = `order-tab-label ${isReturns ? 'text-[10px] leading-tight text-center' : 'text-[11px]'} font-normal text-gray-700 transition-colors`;
+          }
+        }
+      });
+
+      // Update Dots Indicator
+      dots.forEach((dot, dIdx) => {
+        if (dIdx === idx) {
+          dot.className = 'w-3.5 h-1.5 rounded-full bg-[#f85606] transition-all duration-200';
+        } else {
+          dot.className = 'w-1.5 h-1.5 rounded-full bg-gray-200 transition-all duration-200';
+        }
+      });
+
+      // Slide the carousel track
+      track.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
+      track.style.transform = `translateX(-${idx * 100}%)`;
+    }
+
+    // Tab Click Listeners
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', (e) => {
+        const targetIdx = parseInt(tab.getAttribute('data-index'), 10);
+        updateTabsUI(targetIdx);
+      });
+    });
+
+    // Touch & Mouse Drag Swipe Handling
+    let startX = 0;
+    let currentX = 0;
+    let isDragging = false;
+    let startY = 0;
+    let isHorizontalScroll = null;
+    const threshold = 40; // minimum pixels for swipe switch
+
+    function handleStart(clientX, clientY) {
+      isDragging = true;
+      startX = clientX;
+      currentX = clientX;
+      startY = clientY;
+      isHorizontalScroll = null;
+      track.style.transition = 'none';
+    }
+
+    function handleMove(clientX, clientY) {
+      if (!isDragging) return;
+      currentX = clientX;
+      const deltaX = currentX - startX;
+      const deltaY = clientY - startY;
+
+      if (isHorizontalScroll === null) {
+        if (Math.abs(deltaX) > 6 || Math.abs(deltaY) > 6) {
+          isHorizontalScroll = Math.abs(deltaX) > Math.abs(deltaY);
+        }
+      }
+
+      if (isHorizontalScroll) {
+        const viewportWidth = swipeArea.offsetWidth || 380;
+        let offsetPercent = (-currentIndex * 100) + (deltaX / viewportWidth) * 100;
+        // Rubber banding at edges
+        if ((currentIndex === 0 && deltaX > 0) || (currentIndex === totalTabs - 1 && deltaX < 0)) {
+          offsetPercent = (-currentIndex * 100) + (deltaX / viewportWidth) * 35;
+        }
+        track.style.transform = `translateX(${offsetPercent}%)`;
+      }
+    }
+
+    function handleEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      const deltaX = currentX - startX;
+
+      if (isHorizontalScroll && Math.abs(deltaX) > threshold) {
+        if (deltaX < 0 && currentIndex < totalTabs - 1) {
+          // Swiped Left -> Go to Next Tab
+          updateTabsUI(currentIndex + 1);
+        } else if (deltaX > 0 && currentIndex > 0) {
+          // Swiped Right -> Go to Previous Tab
+          updateTabsUI(currentIndex - 1);
+        } else {
+          // Snap back
+          updateTabsUI(currentIndex);
+        }
+      } else {
+        updateTabsUI(currentIndex);
+      }
+      isHorizontalScroll = null;
+    }
+
+    // Touch Events
+    swipeArea.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      handleStart(touch.clientX, touch.clientY);
+    }, { passive: true });
+
+    swipeArea.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      handleMove(touch.clientX, touch.clientY);
+      if (isHorizontalScroll) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    swipeArea.addEventListener('touchend', () => {
+      handleEnd();
+    });
+
+    swipeArea.addEventListener('touchcancel', () => {
+      handleEnd();
+    });
+
+    // Mouse Events for Desktop Testing & Dragging
+    swipeArea.addEventListener('mousedown', (e) => {
+      // Avoid conflict with direct button clicks
+      if (e.target.closest('button') && !e.target.closest('#orders-carousel-viewport')) return;
+      handleStart(e.clientX, e.clientY);
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        handleMove(e.clientX, e.clientY);
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isDragging) {
+        handleEnd();
+      }
+    });
+
+  })();
+</script>
+</body></html>

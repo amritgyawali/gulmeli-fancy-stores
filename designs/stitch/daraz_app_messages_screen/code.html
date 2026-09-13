@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Messages - Daraz</title>
+<!-- Tailwind CSS CDN with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '#f85606',
+            darazBg: '#f4f4f6',
+            unreadRed: '#ff3b30'
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom Scrollbar & Utility Styles -->
+<style data-purpose="custom-layout">
+    body {
+      -webkit-tap-highlight-color: transparent;
+      background-color: #e5e7eb;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<style data-purpose="banner-decorations">
+    /* Custom CSS gradients and patterns simulating promo campaigns */
+    .banner-early-bird {
+      background: linear-gradient(135deg, #e8edff 0%, #f4e8fd 45%, #6a57e3 85%, #4622b3 100%);
+    }
+    .banner-hot-deals {
+      background: linear-gradient(105deg, #ff4c00 0%, #ff7700 50%, #ffa100 85%, #ffe600 100%);
+    }
+    .banner-gems-purple {
+      background: linear-gradient(135deg, #590069 0%, #87018d 35%, #a5027c 70%, #d2177c 100%);
+    }
+    .banner-mega-deals {
+      background: linear-gradient(120deg, #1c0347 0%, #460982 50%, #6811aa 100%);
+    }
+    .perspective-card {
+      transform: perspective(600px) rotateY(-8deg) rotateX(4deg);
+    }
+  </style>
+</head>
+<body class="font-sans antialiased text-gray-900 flex justify-center items-start min-h-screen">
+<!-- BEGIN: MobileDeviceFrame -->
+<div class="w-full max-w-[430px] min-h-screen bg-[#f4f4f7] pb-24 shadow-2xl relative overflow-hidden flex flex-col">
+<!-- BEGIN: iOSStatusBar -->
+<header class="w-full pt-3 px-7 flex justify-between items-center bg-[#f4f4f7] select-none text-[15px] font-semibold tracking-tight z-30">
+<!-- Time & location icon -->
+<div class="flex items-center gap-1.5">
+<span class="font-bold text-[16px]">4:13</span>
+<!-- Speaker / Mute / Notification Icon -->
+<svg class="w-3.5 h-3.5 text-black -mt-0.5" fill="currentColor" viewbox="0 0 24 24">
+<path d="M5.889 16H2a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h3.889l5.294-4.332a.5.5 0 0 1 .817.387v15.89a.5.5 0 0 1-.817.387L5.889 16zm13.525-4l3.536 3.536-1.414 1.414L18 13.414l-3.536 3.536-1.414-1.414L16.586 12l-3.536-3.536 1.414-1.414L18 10.586l3.536-3.536 1.414 1.414L19.414 12z"></path>
+</svg>
+</div>
+<!-- Cellular, LTE, Battery Indicators -->
+<div class="flex items-center gap-1.5 text-black">
+<!-- Signal strength bars -->
+<div class="flex items-end gap-[2px] h-3.5">
+<div class="w-[3px] h-1.5 bg-black rounded-[0.5px]"></div>
+<div class="w-[3px] h-2 bg-black rounded-[0.5px]"></div>
+<div class="w-[3px] h-2.5 bg-black rounded-[0.5px]"></div>
+<div class="w-[3px] h-3.5 bg-black rounded-[0.5px]"></div>
+</div>
+<span class="text-xs font-bold tracking-tighter pl-0.5">LTE</span>
+<!-- Battery Pill with 39% Inside -->
+<div class="flex items-center ml-1">
+<div class="w-7 h-3.5 border-[1.5px] border-black rounded-[4px] px-[2px] py-[1px] flex items-center justify-start relative bg-white/40">
+<div class="h-full bg-black rounded-[1px] w-[39%]"></div>
+<span class="absolute inset-0 flex items-center justify-center text-[8.5px] font-bold tracking-tight text-black">39</span>
+</div>
+<div class="w-[1.5px] h-1.5 bg-black rounded-r-sm"></div>
+</div>
+</div>
+</header>
+<!-- END: iOSStatusBar -->
+<!-- BEGIN: MessagesHeader -->
+<div class="px-5 pt-3 pb-3 flex items-center justify-between bg-[#f4f4f7]">
+<div class="flex items-center gap-3">
+<h1 class="text-2xl font-bold tracking-tight text-gray-900">Messages</h1>
+<!-- Mark all as read broom/tick icon & label -->
+<button class="flex items-center gap-1 text-[13px] text-gray-700 font-medium hover:text-black transition-colors pt-1" type="button">
+<!-- Broom / Sweeper Icon -->
+<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="m16 4 3 3L7 19l-4 1 1-4L16 4z"></path>
+<path d="m14 6 3 3"></path>
+<path d="M5 21c.5-4 4-4 4-4"></path>
+</svg>
+<span>Mark all as read</span>
+</button>
+</div>
+</div>
+<!-- END: MessagesHeader -->
+<!-- BEGIN: CategoryNavigation -->
+<nav class="px-5 py-2 grid grid-cols-4 gap-2 bg-[#f4f4f7] border-b border-gray-200/50 pb-4">
+<!-- 1. Chats -->
+<a class="flex flex-col items-center group cursor-pointer" href="#">
+<div class="w-[58px] h-[58px] rounded-full bg-[#18c29c] flex items-center justify-center shadow-sm relative transition-transform active:scale-95">
+<!-- Chat speech bubble icon -->
+<svg class="w-7 h-7 text-white" fill="currentColor" viewbox="0 0 24 24">
+<path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"></path>
+</svg>
+</div>
+<span class="text-xs font-medium text-gray-700 mt-2">Chats</span>
+</a>
+<!-- 2. Orders -->
+<a class="flex flex-col items-center group cursor-pointer" href="#">
+<div class="w-[58px] h-[58px] rounded-full bg-[#2a77f4] flex items-center justify-center shadow-sm relative transition-transform active:scale-95">
+<!-- Order package box icon -->
+<svg class="w-7 h-7 text-white" fill="currentColor" viewbox="0 0 24 24">
+<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" opacity="0"></path>
+<path d="M20 4H4v3h16V4zm1 5H3v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V9zm-8 4H9v-2h6v2z"></path>
+</svg>
+</div>
+<span class="text-xs font-medium text-gray-700 mt-2">Orders</span>
+</a>
+<!-- 3. Alerts -->
+<a class="flex flex-col items-center group cursor-pointer" href="#">
+<div class="w-[58px] h-[58px] rounded-full bg-[#f99b1d] flex items-center justify-center shadow-sm relative transition-transform active:scale-95">
+<!-- Lightning / Notification Bell Icon -->
+<svg class="w-7 h-7 text-white" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-5-8.5l-3 4h2.5v3.5l3-4H13V7.5z"></path>
+</svg>
+<!-- Badge 13 -->
+<span class="absolute -top-1 -right-1 bg-[#ff2525] text-white text-[11px] font-bold rounded-full min-w-[20px] h-[20px] px-1 flex items-center justify-center border-2 border-white shadow">
+            13
+          </span>
+</div>
+<span class="text-xs font-medium text-gray-700 mt-2">Alerts</span>
+</a>
+<!-- 4. Promos -->
+<a class="flex flex-col items-center group cursor-pointer" href="#">
+<div class="w-[58px] h-[58px] rounded-full bg-[#f83a74] flex items-center justify-center shadow-sm relative transition-transform active:scale-95">
+<!-- Megaphone icon -->
+<svg class="w-7 h-7 text-white -rotate-12" fill="currentColor" viewbox="0 0 24 24">
+<path d="M18 11.03V5.53A2.5 2.5 0 0 0 15.5 3H15L7.75 7H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h1.5l1 5.5A1.5 1.5 0 0 0 8 22h1a1.5 1.5 0 0 0 1.48-1.74L9.8 15h4.7a2.5 2.5 0 0 0 2.5-2.5v-1.47h1zM20 7v10h1.5A1.5 1.5 0 0 0 23 15.5v-7A1.5 1.5 0 0 0 21.5 7H20z"></path>
+</svg>
+<!-- Red Unread Dot -->
+<span class="absolute top-0 right-0 bg-[#ff2525] w-3 h-3 rounded-full border-2 border-white"></span>
+</div>
+<span class="text-xs font-medium text-gray-700 mt-2">Promos</span>
+</a>
+</nav>
+<!-- END: CategoryNavigation -->
+<!-- Section Heading: Last 7 days -->
+<div class="px-5 pt-3 pb-1">
+<span class="text-[13px] font-semibold text-gray-500 tracking-tight">Last 7 days</span>
+</div>
+<!-- BEGIN: PromoFeedCards -->
+<main class="flex-1 px-4 py-2 space-y-4">
+<!-- Card 1: 9.9 Early Bird Deals -->
+<article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden" data-purpose="promo-card">
+<!-- Card Header -->
+<div class="px-4 pt-3.5 pb-2.5 flex items-start gap-2.5">
+<!-- Megaphone badge -->
+<div class="w-9 h-9 rounded-full bg-[#f83a74] flex items-center justify-center flex-shrink-0 relative mt-0.5">
+<svg class="w-5 h-5 text-white -rotate-12" fill="currentColor" viewbox="0 0 24 24">
+<path d="M18 11.03V5.53A2.5 2.5 0 0 0 15.5 3H15L7.75 7H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h1.5l1 5.5A1.5 1.5 0 0 0 8 22h1a1.5 1.5 0 0 0 1.48-1.74L9.8 15h4.7a2.5 2.5 0 0 0 2.5-2.5v-1.47h1z"></path>
+</svg>
+<span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#ff2525] rounded-full border-2 border-white"></span>
+</div>
+<div class="flex-1 min-w-0">
+<h2 class="text-[14.5px] font-bold text-gray-900 leading-snug flex items-center gap-1">
+              छिट्टो गर्नुहोस्🛒🏃
+            </h2>
+<p class="text-[12px] text-gray-400 mt-0.5">43 minutes ago</p>
+</div>
+</div>
+<!-- Banner Visual Representation -->
+<div class="mx-3 rounded-xl overflow-hidden banner-early-bird relative p-3.5 h-44 flex flex-col justify-between border border-indigo-100/50">
+<div class="flex justify-between items-start z-10">
+<div>
+<span class="inline-block bg-[#ffeed9] text-[#f85606] font-black text-[13px] px-2 py-0.5 rounded tracking-wide border border-orange-200">
+                9.9 SALE
+              </span>
+<h3 class="text-xl font-black text-[#1a1261] tracking-tight mt-1 leading-none uppercase">
+                EARLY BIRD<br/><span class="text-[#20108a]">DEALS</span> <span class="text-purple-600 inline-block text-lg">👾</span>
+</h3>
+</div>
+<!-- Round Discount Badge -->
+<div class="w-14 h-14 rounded-full bg-gradient-to-tr from-[#6a42ec] to-[#8d69ff] text-white flex flex-col items-center justify-center p-1 shadow-md border-2 border-dashed border-white/70">
+<span class="text-[8.5px] font-bold uppercase tracking-tighter leading-none">UP TO</span>
+<span class="text-[15px] font-black leading-none my-0.5">35%</span>
+<span class="text-[8px] font-bold uppercase leading-none">OFF</span>
+</div>
+</div>
+<!-- Illustrated Product Shelf Showcase -->
+<div class="relative flex items-end justify-end space-x-2 mt-auto z-10">
+<!-- Headphone -->
+<div class="w-12 h-12 bg-gray-900/80 rounded-lg flex items-center justify-center shadow-lg border border-white/40">
+<svg class="w-8 h-8 text-red-500" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 3a9 9 0 0 0-9 9v7c0 1.1.9 2 2 2h4v-8H5v-1a7 7 0 0 1 14 0v1h-4v8h4c1.1 0 2-.9 2-2v-7a9 9 0 0 0-9-9z"></path>
+</svg>
+</div>
+<!-- Pickle jar / container -->
+<div class="w-11 h-14 bg-amber-800/90 rounded-md border-2 border-amber-950 flex flex-col items-center justify-center shadow-lg relative p-0.5 text-center">
+<span class="bg-black text-[6px] text-white font-bold px-1 rounded">ACHAR</span>
+<span class="text-[7px] text-amber-200 font-bold mt-1 leading-none">CHICKEN</span>
+</div>
+<!-- Backpack -->
+<div class="w-16 h-24 bg-[#1f262d] rounded-t-xl rounded-b-md shadow-xl flex flex-col items-center justify-between py-1.5 border border-gray-700">
+<div class="w-6 h-2 bg-gray-600 rounded-full"></div>
+<div class="w-10 h-10 border border-gray-500/40 rounded flex items-center justify-center">
+<span class="text-[7px] text-gray-400 font-bold">EVEREST</span>
+</div>
+<div class="w-12 h-3 bg-gray-800 rounded"></div>
+</div>
+<!-- Food warmer appliance -->
+<div class="w-16 h-16 bg-white rounded-lg shadow-xl border border-gray-200 p-1 flex flex-col justify-between">
+<div class="w-full h-3 bg-amber-400 rounded-t-sm"></div>
+<div class="flex gap-1 justify-center my-0.5">
+<div class="w-4 h-4 bg-yellow-100 rounded-sm"></div>
+<div class="w-4 h-4 bg-yellow-200 rounded-sm"></div>
+</div>
+<div class="w-full h-2 bg-gray-100 rounded-full"></div>
+</div>
+</div>
+<!-- Podium base platform graphic -->
+<div class="absolute -bottom-6 right-0 w-64 h-16 bg-gradient-to-t from-teal-200/90 to-teal-100/70 rounded-tl-full -z-0"></div>
+</div>
+<!-- Card Footer Note -->
+<div class="px-4 py-3 text-[13.5px] text-gray-700 flex items-center leading-normal">
+<span>Be the first to save up to 35% OFF on best deals🤩</span>
+</div>
+</article>
+<!-- Card 2: Hot Deals Alert -->
+<article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden" data-purpose="promo-card">
+<!-- Card Header -->
+<div class="px-4 pt-3.5 pb-2.5 flex items-start gap-2.5">
+<div class="w-9 h-9 rounded-full bg-[#f83a74] flex items-center justify-center flex-shrink-0 relative mt-0.5">
+<svg class="w-5 h-5 text-white -rotate-12" fill="currentColor" viewbox="0 0 24 24">
+<path d="M18 11.03V5.53A2.5 2.5 0 0 0 15.5 3H15L7.75 7H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h1.5l1 5.5A1.5 1.5 0 0 0 8 22h1a1.5 1.5 0 0 0 1.48-1.74L9.8 15h4.7a2.5 2.5 0 0 0 2.5-2.5v-1.47h1z"></path>
+</svg>
+<span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#ff2525] rounded-full border-2 border-white"></span>
+</div>
+<div class="flex-1 min-w-0">
+<h2 class="text-[14.5px] font-bold text-gray-900 leading-snug flex items-center gap-1">
+              ALERT: HIGH TEMPERATURE🔥
+            </h2>
+<p class="text-[12px] text-gray-400 mt-0.5">13:30 PM</p>
+</div>
+</div>
+<!-- Banner Visual: Hot Deals -->
+<div class="mx-3 rounded-xl overflow-hidden banner-hot-deals relative p-4 h-44 flex flex-col justify-between text-white shadow-inner">
+<!-- Text left -->
+<div class="z-10 max-w-[200px]">
+<span class="inline-block bg-white text-[#ff4c00] font-black text-[13px] px-2 py-0.5 rounded tracking-wide shadow-sm">
+              9.9 SALE
+            </span>
+<h3 class="text-2xl font-black text-white italic tracking-tight mt-1 drop-shadow-md leading-none">
+              HOT DEALS
+            </h3>
+<p class="text-[12px] font-medium text-amber-100 mt-1 drop-shadow">Deals that wow hearts</p>
+<!-- 55% Off Circular Badge -->
+<div class="mt-2 w-14 h-14 rounded-full bg-gradient-to-tr from-[#ffe600] to-[#ffd000] text-orange-950 flex flex-col items-center justify-center p-1 shadow-xl border-2 border-dashed border-red-500 font-extrabold">
+<span class="text-[8px] leading-none font-bold">UP TO</span>
+<span class="text-[16px] leading-none font-black my-0.5">55%</span>
+<span class="text-[7.5px] leading-none font-bold">OFF</span>
+</div>
+</div>
+<!-- Product cluster graphics -->
+<div class="absolute right-3 bottom-2.5 flex items-end gap-1.5 z-10">
+<!-- Helmet -->
+<div class="w-16 h-16 rounded-full bg-stone-900 border-2 border-stone-800 shadow-2xl flex items-center justify-center relative overflow-hidden">
+<div class="w-12 h-6 bg-stone-700/80 rounded-t-full border border-stone-500/50 mt-1"></div>
+<span class="absolute bottom-2 text-[7px] text-gray-300 font-mono">DOT</span>
+</div>
+<!-- Watch -->
+<div class="w-10 h-14 bg-zinc-900 rounded-lg border border-zinc-700 flex flex-col items-center justify-center shadow-lg p-0.5">
+<div class="w-7 h-7 rounded-full border-2 border-amber-500/60 bg-black flex items-center justify-center">
+<div class="w-1 h-2 border-l border-b border-white"></div>
+</div>
+</div>
+<!-- Induction Cooktop -->
+<div class="w-24 h-16 bg-zinc-950 rounded-lg border-2 border-zinc-800 shadow-2xl p-1.5 flex flex-col justify-between">
+<div class="w-12 h-12 rounded-full border-2 border-dashed border-zinc-600/70 mx-auto flex items-center justify-center">
+<div class="w-6 h-6 rounded-full border border-orange-500/80"></div>
+</div>
+<div class="flex justify-between items-center px-1">
+<span class="w-1 h-1 bg-red-500 rounded-full"></span>
+<span class="text-[6px] font-mono text-gray-400">TOUCH</span>
+</div>
+</div>
+</div>
+<!-- Floating sparks & speed lines -->
+<div class="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+<span class="absolute right-1 bottom-1 text-[8px] text-white/50 transform -rotate-90 origin-bottom-right">*T&amp;Cs Apply</span>
+</div>
+<!-- Footer -->
+<div class="px-4 py-3 text-[13.5px] text-gray-700 flex items-center leading-normal">
+<span>Enjoy up to 55% OFF on deals🛒 Shop your favorites now✅</span>
+</div>
+</article>
+<!-- Card 3: 40% OFF Gems Treasure Chest -->
+<article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden" data-purpose="promo-card">
+<!-- Card Header -->
+<div class="px-4 pt-3.5 pb-2.5 flex items-start gap-2.5">
+<!-- Notification Bell Badge with unread dot -->
+<div class="w-9 h-9 rounded-full bg-[#f99b1d] flex items-center justify-center flex-shrink-0 relative mt-0.5">
+<svg class="w-5 h-5 text-white" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-5-8.5l-3 4h2.5v3.5l3-4H13V7.5z"></path>
+</svg>
+<span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#ff2525] rounded-full border-2 border-white"></span>
+</div>
+<div class="flex-1 min-w-0">
+<h2 class="text-[14.5px] font-bold text-gray-900 leading-snug flex items-center gap-1">
+              40% OFF — shopping?🛍️
+            </h2>
+<p class="text-[12px] text-gray-400 mt-0.5">09:10 AM</p>
+</div>
+</div>
+<!-- Banner Visual: Gems Purple Box -->
+<div class="mx-3 rounded-xl overflow-hidden banner-gems-purple relative p-4 h-44 flex flex-col justify-between text-white shadow-inner">
+<div class="z-10">
+<span class="inline-block bg-white text-[#87018d] font-black text-[13px] px-2 py-0.5 rounded tracking-wide">
+              9.9 SALE
+            </span>
+<p class="text-[11px] font-bold text-yellow-300 tracking-tight uppercase mt-1">PLAY GEMS TREASURE CHEST &amp;</p>
+<h3 class="text-xl font-black text-yellow-400 tracking-tight leading-none uppercase drop-shadow">
+              WIN FREE GIFTS<br/><span class="text-white">DAILY</span>
+</h3>
+<!-- 40% OFF badge -->
+<div class="mt-2 w-14 h-14 rounded-full bg-[#e4f836] text-purple-950 flex flex-col items-center justify-center p-0.5 shadow-lg border border-yellow-200">
+<span class="text-[7.5px] font-extrabold uppercase leading-tight">EXTRA</span>
+<span class="text-[16px] font-black leading-none">40%</span>
+<span class="text-[7.5px] font-bold uppercase leading-tight">OFF</span>
+</div>
+</div>
+<!-- Treasure Chest Illustration -->
+<div class="absolute right-2 bottom-2 z-10 flex items-end">
+<!-- Chest with products overflowing -->
+<div class="w-32 h-20 bg-amber-700 rounded-b-xl border-4 border-amber-900 shadow-2xl relative flex items-center justify-around px-1">
+<!-- Golden Lock -->
+<div class="absolute top-1 left-1/2 -translate-x-1/2 w-4 h-5 bg-yellow-400 rounded-sm border border-amber-800"></div>
+<!-- Bottles & Oils Inside -->
+<div class="w-6 h-12 bg-red-600 rounded-t-md border border-white -mt-10 shadow">
+<span class="text-[5px] text-white font-bold block text-center mt-1">MAK</span>
+</div>
+<div class="w-7 h-10 bg-emerald-600 rounded-md border border-yellow-300 -mt-8 shadow p-0.5">
+<span class="text-[5px] text-yellow-100 font-bold block text-center">WARM</span>
+</div>
+<div class="w-8 h-14 bg-amber-200 rounded border border-amber-500 -mt-12 shadow flex flex-col items-center justify-center">
+<span class="text-[6px] text-green-800 font-bold text-center leading-none">LEMON TREE</span>
+</div>
+</div>
+</div>
+<span class="absolute right-1 bottom-1 text-[7px] text-white/60 transform -rotate-90 origin-bottom-right">9 - 15 Sep | T&amp;C Applied</span>
+</div>
+<!-- Footer -->
+<div class="px-4 py-3 text-[13.5px] text-gray-700 flex items-center leading-normal">
+<span>Free gifts &amp; 40% OFF coupons waiting in Gems!💎🛍️</span>
+</div>
+</article>
+</main>
+<!-- END: PromoFeedCards -->
+<!-- BEGIN: BottomNavigation -->
+<nav aria-label="Bottom Navigation" class="fixed bottom-0 left-0 right-0 w-full max-w-[430px] mx-auto bg-white border-t border-gray-200/90 py-1 px-3 flex items-center justify-around z-40 select-none shadow-[0_-4px_12px_rgba(0,0,0,0.04)]">
+<!-- 1. Home Tab -->
+<a class="flex flex-col items-center justify-center flex-1 py-1 text-gray-600 hover:text-brand transition-colors" href="#">
+<!-- Home Icon -->
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24">
+<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+<span class="text-[11px] font-medium mt-0.5">Home</span>
+</a>
+<!-- 2. Messages Tab (ACTIVE) -->
+<a class="flex flex-col items-center justify-center flex-1 py-1 text-[#f85606] relative" href="#">
+<div class="relative">
+<!-- Chat bubble icon -->
+<svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24">
+<path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"></path>
+</svg>
+<!-- Badge 13 -->
+<span class="absolute -top-1.5 -right-3 bg-[#ff2525] text-white text-[10px] font-bold rounded-full min-w-[17px] h-[17px] px-0.5 flex items-center justify-center border-2 border-white">
+            13
+          </span>
+</div>
+<span class="text-[11px] font-bold mt-0.5">Messages</span>
+</a>
+<!-- 3. Center Highlight / BUY+ SAVE+ -->
+<a class="flex flex-col items-center justify-center flex-1 py-0.5 transition-transform active:scale-95" href="#">
+<div class="w-12 h-10 rounded-2xl bg-gradient-to-b from-[#ff7700] to-[#f85606] flex flex-col items-center justify-center shadow-md text-white border-2 border-white leading-none px-1">
+<span class="text-[9px] font-black tracking-tighter uppercase">BUY+</span>
+<span class="text-[8.5px] font-black tracking-tighter uppercase mt-0.5">SAVE+</span>
+</div>
+</a>
+<!-- 4. Cart Tab -->
+<a class="flex flex-col items-center justify-center flex-1 py-1 text-gray-600 hover:text-brand transition-colors relative" href="#">
+<div class="relative">
+<!-- Cart Icon -->
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24">
+<circle cx="8" cy="21" r="1"></circle>
+<circle cx="19" cy="21" r="1"></circle>
+<path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+</svg>
+<!-- Badge 33 -->
+<span class="absolute -top-1.5 -right-3 bg-[#ff2525] text-white text-[10px] font-bold rounded-full min-w-[17px] h-[17px] px-0.5 flex items-center justify-center border-2 border-white">
+            33
+          </span>
+</div>
+<span class="text-[11px] font-medium mt-0.5">Cart</span>
+</a>
+<!-- 5. Account Tab -->
+<a class="flex flex-col items-center justify-center flex-1 py-1 text-gray-600 hover:text-brand transition-colors" href="#">
+<!-- User Icon -->
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24">
+<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+<circle cx="12" cy="7" r="4"></circle>
+</svg>
+<span class="text-[11px] font-medium mt-0.5">Account</span>
+</a>
+</nav>
+<!-- END: BottomNavigation -->
+</div>
+<!-- END: MobileDeviceFrame -->
+</body></html>

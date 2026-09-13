@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Daraz Online Shopping - Mobile App</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Custom Tailwind Config for Daraz Theme -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            daraz: {
+              orange: '#f85606',
+              deepOrange: '#e04900',
+              yellow: '#ffba00',
+              red: '#f5222d',
+              lightOrange: '#fff4eb',
+              grayBg: '#f4f4f4',
+              textDark: '#212121',
+              textSub: '#757575',
+              border: '#eaeaea'
+            }
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<!-- Lucide Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style data-purpose="custom-scrollbars-and-resets">
+    /* Hide scrollbars on modern mobile interfaces while allowing horizontal and vertical scrolling */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    body {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      background-color: #f4f4f4;
+    }
+  </style>
+<style data-purpose="badges-and-accents">
+    /* Specific Daraz brand styling badges and angled shapes */
+    .daraz-sale-header-ribbon {
+      background: linear-gradient(90deg, #f85606 0%, #ff7828 50%, #f85606 100%);
+      clip-path: polygon(0 0, 97% 0, 100% 50%, 97% 100%, 0 100%, 3% 50%);
+    }
+    .floating-fab {
+      box-shadow: 0 4px 14px rgba(248, 86, 6, 0.45);
+    }
+  </style>
+</head>
+<body class="text-daraz-textDark font-sans antialiased pb-24 max-w-md mx-auto min-h-screen bg-[#f4f4f4] relative shadow-2xl overflow-x-hidden">
+<!-- BEGIN: StickyTopSearchBar -->
+<header class="sticky top-0 z-40 bg-[#161616] text-white pt-2.5 pb-2 px-3 shadow-md" data-purpose="app-search-header">
+<!-- Top Status Bar Row Mock (iOS dynamic status area) -->
+<div class="flex items-center justify-between text-xs text-white/80 pb-1.5 px-2">
+<div class="flex items-center space-x-1.5 font-semibold text-sm tracking-tight text-white">
+<span>1:51</span>
+<i class="fa-solid fa-location-arrow text-[10px] transform -rotate-45"></i>
+</div>
+<div class="flex items-center space-x-2 text-[13px] text-white">
+<i class="fa-solid fa-signal text-xs"></i>
+<i class="fa-solid fa-wifi text-xs"></i>
+<div class="flex items-center space-x-0.5 bg-[#f85606] px-1 py-0.2 rounded text-[10px] font-bold text-white leading-tight">
+<span>54</span>
+</div>
+</div>
+</div>
+<!-- Main Search Input & Actions -->
+<div class="flex items-center gap-2">
+<!-- Search Bar Capsule -->
+<div class="flex-1 bg-white rounded-lg flex items-center pl-3 pr-1 py-1 border border-gray-200">
+<input class="w-full text-xs font-normal text-gray-800 focus:outline-none border-none p-0 bg-transparent" placeholder="dim light for bedroom" type="text" value="dim light for bedroom"/>
+<!-- Camera Search Icon -->
+<button aria-label="Camera visual search" class="px-2 text-gray-500 hover:text-gray-800">
+<i class="fa-solid fa-camera text-base"></i>
+</button>
+<!-- Search Button -->
+<button class="bg-[#f85606] hover:bg-[#e04900] text-white text-xs font-semibold px-3 py-1.5 rounded-md transition-colors">
+          Search
+        </button>
+</div>
+<!-- Digital Goods Icon on Far Right -->
+<a class="flex flex-col items-center justify-center text-center text-[8px] font-bold leading-tight px-1 text-white hover:opacity-90" href="#">
+<div class="w-7 h-7 bg-white text-[#f85606] rounded flex flex-col items-center justify-center p-0.5 border border-[#f85606]">
+<span class="text-[6.5px] uppercase font-black tracking-tighter leading-[7px] text-[#f85606]">DIGITAL</span>
+<span class="text-[6px] uppercase font-bold tracking-tighter text-[#212121] -mt-0.5">GOODS</span>
+</div>
+</a>
+</div>
+</header>
+<!-- END: StickyTopSearchBar -->
+<main>
+<!-- BEGIN: HeroPromoBanner -->
+<section class="relative bg-[#111111] text-white overflow-hidden" data-purpose="hero-promotions">
+<div class="relative w-full h-[180px] bg-gradient-to-r from-black via-[#1c1d22] to-[#0d0f12] flex items-center justify-between px-4 py-2">
+<!-- Banner Content Left -->
+<div class="z-10 max-w-[55%]">
+<div class="flex items-center space-x-1.5 mb-1.5">
+<span class="bg-[#f85606] text-white text-[9px] font-extrabold px-1 py-0.5 rounded leading-none">9.9</span>
+<span class="border border-white/40 text-[8px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded leading-none">BRANDHOUSE</span>
+</div>
+<h1 class="text-xl font-black uppercase tracking-tight text-white leading-tight">
+            HOUSE OF BRANDS
+          </h1>
+<div class="inline-flex items-center text-[9px] text-[#22c55e] font-semibold bg-white/10 px-1.5 py-0.5 rounded mt-1">
+<i class="fa-solid fa-truck-fast mr-1"></i> Free Delivery*
+          </div>
+<div class="mt-2.5">
+<button class="bg-[#f85606] text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md flex items-center">
+              Shop Now
+            </button>
+</div>
+</div>
+<!-- Banner Promotional Visuals Right -->
+<div class="relative z-10 flex items-center justify-end w-[45%] h-full">
+<!-- Big 60% OFF Stamp Circle -->
+<div class="absolute -left-5 top-8 w-13 h-13 rounded-full bg-[#f85606] p-1 text-center shadow-lg border-2 border-white flex flex-col justify-center items-center">
+<span class="text-[7px] uppercase font-extrabold tracking-tighter leading-none">UP TO</span>
+<span class="text-xs font-black tracking-tight leading-none">60%</span>
+<span class="text-[6px] uppercase font-bold leading-none">OFF</span>
+</div>
+<!-- Mock Showcase Products -->
+<div class="flex items-end space-x-1">
+<div class="w-20 h-28 bg-gradient-to-t from-blue-900 to-sky-600 rounded-lg flex items-center justify-center p-1 shadow-md">
+<i class="fa-solid fa-vest text-3xl text-white opacity-95"></i>
+</div>
+<div class="w-16 h-24 bg-[#232323] rounded-lg border border-white/20 flex items-center justify-center p-1 shadow-md">
+<i class="fa-solid fa-bag-shopping text-2xl text-yellow-500"></i>
+</div>
+</div>
+<!-- Slider Pagination Dots / Counter -->
+<span class="absolute bottom-1 right-1 text-[9px] bg-black/60 px-1.5 py-0.5 rounded text-white/80 font-mono">
+            5/13
+          </span>
+</div>
+</div>
+<!-- Trust Bar / Benefits Ribbon -->
+<div class="bg-[#212121] py-1.5 px-3 flex items-center justify-between text-[10px] text-gray-200 border-t border-white/10">
+<div class="flex items-center space-x-1">
+<i class="fa-regular fa-credit-card text-[#ffba00]"></i>
+<span class="font-medium">Safe Payment</span>
+</div>
+<span class="text-gray-500">|</span>
+<div class="flex items-center space-x-1">
+<i class="fa-solid fa-truck-fast text-sky-400"></i>
+<span class="font-medium">Fast Delivery</span>
+</div>
+<span class="text-gray-500">|</span>
+<div class="flex items-center space-x-1">
+<i class="fa-solid fa-box-open text-orange-400"></i>
+<span class="font-medium">Free Return</span>
+</div>
+</div>
+</section>
+<!-- END: HeroPromoBanner -->
+<!-- BEGIN: QuickCategoryNavigation -->
+<section class="bg-white py-3 px-2 shadow-sm" data-purpose="quick-services-carousel">
+<div class="flex items-center space-x-3 overflow-x-auto no-scrollbar py-1">
+<!-- Interactive Big Action: Gems Treasure Chest -->
+<a class="flex-shrink-0 bg-gradient-to-r from-orange-100 to-amber-50 rounded-xl p-2 flex items-center space-x-2 border border-orange-200 w-36" href="#">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+<span class="text-[7.5px] font-black text-center leading-[8.5px]">GEMS<br/>TREASURE<br/>CHEST</span>
+</div>
+<div class="flex-1">
+<h4 class="text-[11px] font-bold text-gray-900 leading-tight">Win Free Gifts</h4>
+<div class="text-[9px] font-bold text-[#f85606] flex items-center mt-0.5">
+<span>Play Now</span>
+<i class="fa-solid fa-chevron-right text-[7px] ml-0.5"></i>
+</div>
+</div>
+</a>
+<!-- Service Icon: 9.9 Sale -->
+<a class="flex-shrink-0 flex flex-col items-center text-center w-14" href="#">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex flex-col items-center justify-center text-white shadow-sm font-black leading-none">
+<span class="text-xs">9.9</span>
+<span class="text-[6.5px] tracking-wider uppercase font-bold">SALE</span>
+</div>
+<span class="text-[10px] font-medium text-gray-700 mt-1 leading-tight">Sale is Live!</span>
+</a>
+<!-- Service Icon: CHOICE -->
+<a class="flex-shrink-0 flex flex-col items-center text-center w-14" href="#">
+<div class="w-10 h-10 rounded-xl bg-yellow-400 flex items-center justify-center text-black font-black text-[10px] tracking-tighter shadow-sm">
+            CHOICE
+          </div>
+<span class="text-[10px] font-medium text-gray-700 mt-1 leading-tight">Buy Any 3</span>
+</a>
+<!-- Service Icon: Daraz Freebie -->
+<a class="flex-shrink-0 flex flex-col items-center text-center w-14" href="#">
+<div class="w-10 h-10 rounded-xl bg-purple-600 flex flex-col items-center justify-center text-white shadow-sm relative">
+<i class="fa-solid fa-gift text-sm text-yellow-300"></i>
+<span class="text-[6.5px] bg-yellow-400 text-purple-900 px-1 font-bold rounded-sm mt-0.5">FREE</span>
+</div>
+<span class="text-[10px] font-medium text-gray-700 mt-1 leading-tight">Daraz Freebie</span>
+</a>
+<!-- Service Icon: Buy More Save More -->
+<a class="flex-shrink-0 flex flex-col items-center text-center w-14" href="#">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-orange-600 to-red-500 flex flex-col items-center justify-center text-white shadow-sm font-extrabold leading-tight text-[8px]">
+<span>BUY+</span>
+<span>SAVE+</span>
+</div>
+<span class="text-[10px] font-medium text-gray-700 mt-1 leading-tight">Buy More Save More</span>
+</a>
+<!-- Service Icon: Daraz Mall -->
+<a class="flex-shrink-0 flex flex-col items-center text-center w-14" href="#">
+<div class="w-10 h-10 rounded-xl bg-[#0f1466] flex flex-col items-center justify-center text-white shadow-sm relative font-bold text-[8px]">
+<i class="fa-solid fa-shield text-xs text-yellow-400 mb-0.5"></i>
+<span class="text-[6px] tracking-tighter">100% AUT</span>
+</div>
+<span class="text-[10px] font-medium text-gray-700 mt-1 leading-tight">Daraz Mall</span>
+</a>
+<!-- Service Icon: Daraz Land -->
+<a class="flex-shrink-0 flex flex-col items-center text-center w-14" href="#">
+<div class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-sm">
+<i class="fa-solid fa-tree text-lg"></i>
+</div>
+<span class="text-[10px] font-medium text-gray-700 mt-1 leading-tight">Daraz Land</span>
+</a>
+<!-- Service Icon: Voucher -->
+<a class="flex-shrink-0 flex flex-col items-center text-center w-14" href="#">
+<div class="w-10 h-10 rounded-xl bg-indigo-500 flex items-center justify-center text-white shadow-sm">
+<i class="fa-solid fa-ticket text-lg text-amber-300"></i>
+</div>
+<span class="text-[10px] font-medium text-gray-700 mt-1 leading-tight">Voucher</span>
+</a>
+</div>
+</section>
+<!-- END: QuickCategoryNavigation -->
+<!-- BEGIN: ClaimVouchersSection -->
+<section class="mt-2.5 mx-2 bg-white rounded-xl p-3 shadow-sm" data-purpose="voucher-claim-hub">
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-sm font-bold text-gray-900 tracking-tight">Claim Vouchers to Save More</h3>
+<a class="text-xs text-[#f85606] font-semibold flex items-center hover:underline" href="#">
+<span class="w-4 h-4 rounded bg-orange-100 text-[#f85606] text-[8px] flex items-center justify-center mr-1 font-bold">9.9</span>
+          More vouchers <i class="fa-solid fa-chevron-right text-[9px] ml-0.5"></i>
+</a>
+</div>
+<!-- Voucher Ticket Card Strip -->
+<div class="bg-pink-50/60 rounded-lg p-2.5 border border-pink-100 flex items-center justify-between">
+<!-- 4% OFF Voucher -->
+<div class="pr-2 border-r border-dashed border-gray-300">
+<div class="text-[#f85606] font-black text-xs">4% OFF</div>
+<div class="text-[10px] text-gray-500 font-medium">Voucher Max</div>
+</div>
+<!-- Rs. 150 Free Shipping -->
+<div class="px-2 flex-1">
+<div class="text-teal-600 font-black text-xs">Rs.150</div>
+<div class="text-[10px] text-gray-500 font-medium">Free shipping</div>
+</div>
+<!-- Collect All Action -->
+<div>
+<button class="bg-[#f85606] hover:bg-[#e04900] text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm">
+            Collect All
+          </button>
+</div>
+</div>
+</section>
+<!-- END: ClaimVouchersSection -->
+<!-- BEGIN: 9.9CampaignFeaturedSection -->
+<section class="mt-2.5 bg-gradient-to-b from-[#f85606] via-[#ff6f00] to-orange-500 p-2.5 pt-3 rounded-t-2xl shadow-sm text-white" data-purpose="major-campaign-banner-grid">
+<!-- 9.9 Live Banner Header -->
+<div class="daraz-sale-header-ribbon py-1 px-4 text-center mx-auto mb-3 shadow">
+<div class="inline-flex items-center space-x-2">
+<span class="bg-white text-[#f85606] text-[10px] font-black px-1.5 py-0.5 rounded leading-none shadow-xs">
+            9.9 SALE <span class="text-[7.5px] block text-gray-700 font-normal">8 SEP (8 PM) - 15 SEP</span>
+</span>
+<span class="text-xs font-extrabold tracking-wide uppercase text-white drop-shadow">
+            9.9 Sale is Live now
+          </span>
+</div>
+</div>
+<!-- 3-Column Highlights Cards -->
+<div class="grid grid-cols-3 gap-2">
+<!-- Card 1: Home & Living -->
+<div class="bg-white rounded-xl p-2 text-daraz-textDark flex flex-col justify-between shadow-sm overflow-hidden">
+<div class="w-full aspect-square bg-gray-100 rounded-lg flex items-center justify-center p-1 mb-1.5 overflow-hidden">
+<img alt="Creatine Monohydrate" class="object-contain w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBttR2upXlE0iyB0NhDis8YxKu-4Rke5hyFUNXqjSLf3GSBCR02mmw_VMVJpaEalOy0_yR0jYyjCvrorm807mdQ0rd2hiLiYE6f3-SM9vjzqMRTpDIXkRqGbTGH9frgho-gKixiZKSf8fUCziUmSwDFVKfBwLNFLC4t0q2-rmUflSF-M0rDLS_7YiEjgczzTyQ_8iiRwocuq-5H6M3qJ0zj7HoCLRjKK7vCFaIILs-_Rxu4aZdKOf_Y"/>
+</div>
+<div class="text-center font-bold text-[11px] text-gray-800 leading-tight">
+            Home &amp; Living
+          </div>
+</div>
+<!-- Card 2: 9.9 Campaign -->
+<div class="bg-gradient-to-b from-amber-100 to-amber-200 rounded-xl p-2 text-daraz-textDark flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="w-full aspect-square bg-white rounded-lg flex items-center justify-center p-1 mb-1.5 overflow-hidden">
+<img alt="9.9 Campaign items" class="object-contain w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAx5O7Eax6OMObnAiI7ZQuhuozZHirLvWyPTa3W1HbgN28IlvRaa-NVPlD96eAVHfPcmpDJPxfFXjMDdOKgAMrNtOcz0o2iMmeLlt8kTwgFKcjKZmI9AK3wT6IEFeaYNGd8_A0C-_ppJwTRmc_hzKJhGq-nuxsnOjBS3r5ueC8D1HuK8GS7Mp_6OHIbcNLmFZfgVDyvN8vWUMLRUTdpsqKbDulXL2Y69bfY30PV4pKsSeC96qcbSPBE"/>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-black text-[10px] text-amber-900 leading-tight">9.9<br/>Campaign</span>
+<div class="w-5 h-5 bg-white text-[#f85606] rounded-full flex items-center justify-center shadow-xs">
+<i class="fa-solid fa-chevron-right text-[9px]"></i>
+</div>
+</div>
+</div>
+<!-- Card 3: Electronics -->
+<div class="bg-white rounded-xl p-2 text-daraz-textDark flex flex-col justify-between shadow-sm overflow-hidden">
+<div class="w-full aspect-square bg-gray-100 rounded-lg flex items-center justify-center p-1 mb-1.5 overflow-hidden border border-red-200 relative">
+<div class="absolute top-0 inset-x-0 bg-red-600 text-white text-[6px] font-bold text-center py-0.5">
+              12 MONTHS GUARANTEE
+            </div>
+<img alt="Electronics Wi-Fi Router" class="object-contain w-full h-full mt-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBw_Dk_BMhHRctzKX7N1ujRMLnTSQiA6c0E__wM_xjQ1OtbXORy8SSA6-sBAQuxVPhKfpEeJWQhw3rmobUH_yO471Ak7fwX2iOAioVTXvf0kkxzyt5eDmCPIZp1o5EoxCBv2X5G-ePeYQk34mBCflndBaIyq1yXMx2eSEo5YscqV_uY4IvHha3YRgfkomW9XkDEGsoLQIzNjWPYlHdHmPvtY-61Q1YQihOsO8qXqujvk9o5AswlgHzR"/>
+</div>
+<div class="text-center font-bold text-[11px] text-gray-800 leading-tight">
+            Electronics
+          </div>
+</div>
+</div>
+</section>
+<!-- END: 9.9CampaignFeaturedSection -->
+<!-- BEGIN: FlashSaleSection -->
+<section class="mt-2.5 bg-white py-3 px-3 shadow-sm" data-purpose="flash-sale-carousel">
+<!-- Flash Sale Title & CTA Header -->
+<div class="flex items-center justify-between mb-2.5">
+<div class="flex items-center space-x-1.5">
+<h2 class="text-base font-black text-gray-900 tracking-tight flex items-center">
+            Fla<i class="fa-solid fa-bolt text-[#f85606] text-sm mx-0.5"></i>h Sale
+          </h2>
+</div>
+<a class="text-xs text-[#f85606] font-bold uppercase tracking-tight flex items-center hover:underline" href="#">
+<span class="w-3.5 h-3.5 rounded-full bg-orange-100 text-[#f85606] text-[8px] flex items-center justify-center mr-1">9.9</span>
+          SHOP MORE <i class="fa-solid fa-chevron-right text-[9px] ml-0.5"></i>
+</a>
+</div>
+<!-- Flash Sale Products Horizontal Scroll Grid -->
+<div class="grid grid-cols-3 gap-2.5">
+<!-- Flash Item 1: Shorts -->
+<div class="flex flex-col">
+<div class="relative w-full aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-100">
+<img alt="Men 2-in-1 Running Shorts" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeS0KIRkgrM5C84XmLgt-qq8oFsbU15Qa2uXG1w6cWr0zZz4AYf5PYKVkZVD8oQostcSHtJOftD34Ul4Oy7sfAR_D17nIaMAyo8gKzGAJSCTKIB-GkPfXXpF68MKOxJ0S-vnfRMHz9Y_uI8zfoBzx9mkKkLcnTiuXclnD0KsF67w7fLRK4eP8H_UvTGa4RPGgLXxBcDmjSbBe6FZnBQOIc5KEFmN9ChQ9N17XGLO3RKhBHM3IpSkjS"/>
+</div>
+<div class="mt-1.5 flex items-baseline justify-between">
+<span class="text-xs font-black text-[#f85606]">Rs.499</span>
+<span class="bg-red-500 text-white text-[9px] font-bold px-1 rounded">-50%</span>
+</div>
+</div>
+<!-- Flash Item 2: UNIDUS Pack -->
+<div class="flex flex-col">
+<div class="relative w-full aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-100">
+<span class="absolute top-0 left-0 bg-amber-600 text-white text-[7px] font-black px-1 py-0.2 rounded-br">NEW PACK</span>
+<img alt="Unidus Long Love" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU2Ac5hREMsm-ZDOB4aDLEBKY9AGGGdUp_JhZ3A-TqDcv3BwkM6Td8pJOkz6xoeCzppGseMCM1Jb5eP-FmqJMdFqe7hTR2-hNxyYKdbbCVLuBKJr_Cpkf6_eR-mdDwF-TdZ3GLyLVHnLAfSXNRNx5zzYLF0VcMu8wfb_3paiWwK4BAmiNVfudU39sb1qqefJZAu8x563eIOlUTZOIqGs4BlIPcG9LOlebtedebR4dIlu_LUbafNjat"/>
+</div>
+<div class="mt-1.5 flex items-baseline justify-between">
+<span class="text-xs font-black text-[#f85606]">Rs.603</span>
+<span class="bg-red-500 text-white text-[9px] font-bold px-1 rounded">-4%</span>
+</div>
+</div>
+<!-- Flash Item 3: Black Air Sneakers -->
+<div class="flex flex-col">
+<div class="relative w-full aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-100">
+<img alt="Men's Casual Air Fashion Shoes" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJhdyx8d6yJ6gEzD-FYlhMZW8H5rvi2mGg-QCZv2Aj_XdoBXFtjHCN_2MAEL7M3W1nO6uFTwCWDDQCBT7yusYyPhcQC7EmndMrKN1as4WjegLMOHHuXX8jZFxZgjuWnUEt3CYqP3_9cIrpA5dh5CChYGSM6Z73h4DeiSC8eXRj2ifY7pzDaUEJZl3t2waj4KSNmZXVtTot9n3YK_OaW-96maCdYFh6kPhS8H4vWJL1QmEZV1AQVrHw"/>
+</div>
+<div class="mt-1.5 flex items-baseline justify-between">
+<span class="text-xs font-black text-[#f85606]">Rs.1,499</span>
+<span class="bg-red-500 text-white text-[9px] font-bold px-1 rounded">-25%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- END: FlashSaleSection -->
+<!-- BEGIN: DailyBachatBazarSection -->
+<section class="mt-2.5 bg-white py-3 px-3 shadow-sm" data-purpose="daily-grocery-deals">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center space-x-1.5">
+<h3 class="text-sm font-black text-gray-900 tracking-tight">Daily Bachat Bazar</h3>
+<span class="bg-yellow-400 text-black text-[9px] font-black px-1 rounded">CHOICE</span>
+</div>
+<a class="text-xs text-[#f85606] font-semibold flex items-center" href="#">
+<span class="text-[9px] mr-1">9.9</span>
+          Shop Now | Free Gift! <i class="fa-solid fa-chevron-right text-[9px] ml-0.5"></i>
+</a>
+</div>
+<div class="grid grid-cols-3 gap-2.5">
+<!-- Bachat Item 1 -->
+<div class="flex flex-col">
+<div class="w-full aspect-square bg-gray-50 rounded-lg p-1.5 border border-gray-100 flex items-center justify-center">
+<img alt="Jiri Creatine Monohydrate" class="object-contain w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkDeJBVzn2o_7-31yG0LaD7kGF3r2b5SwqQFubhZXCzQi9_cBLst96FSfu4glbkj54J8nHeKgZvypEyJwlMffdKg0JWQF0C_Y8YWtUi0aNZRPiiSC68pI0ByFLv8K7od261uCvDzDE-cYyI8xZoynuELkAtMZPIkGUHNlQeB5T2KD3PSPIaAsiWr0gmPJIg3Yan9W3PQBGD8BSgAW9qBvHe-P0BlW4CUkHiDET4oyzFzWdTlkKvIdS"/>
+</div>
+<div class="mt-1.5 flex items-center justify-between">
+<span class="text-xs font-bold text-gray-900">Rs.854</span>
+<span class="bg-yellow-400 text-gray-900 text-[9px] font-bold px-1 rounded">-14%</span>
+</div>
+</div>
+<!-- Bachat Item 2 -->
+<div class="flex flex-col">
+<div class="w-full aspect-square bg-gray-50 rounded-lg p-1 border border-gray-100 flex items-center justify-center">
+<img alt="Catch Meat Masala" class="object-contain w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlYna1R7Qy2zxhpws5OXlBWA9U_0cM0zbJVFqCRPNHSR5QNMMr27Cboz3XcSeR3pu3EalPGF1MRPnqA0vZWSVYzpE7I8BGNgPXd7nc_hME4FNvpnxDAcgl-C4NYbu2NlYb2mmsHpkqHsLJZqj_HM_sHxzTZ04JZ7HYawzsb3D-tPuzdcqXwolb41RMQBr69jwjSg-ZBmUe3iuJOBbFDYtbg5PCyL3xHbNn5DOcQbWcKKMCVxt7gEaE"/>
+</div>
+<div class="mt-1.5 flex items-center justify-between">
+<span class="text-xs font-bold text-gray-900">Rs.175</span>
+<span class="bg-amber-400 text-gray-900 text-[8.5px] font-extrabold px-1 rounded">HOT</span>
+</div>
+</div>
+<!-- Bachat Item 3 -->
+<div class="flex flex-col">
+<div class="w-full aspect-square bg-gray-50 rounded-lg p-1 border border-gray-100 flex items-center justify-center">
+<img alt="Garnier Color Naturals" class="object-contain w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtceUgMlO7szg7TNGfAe9cR0D4HrjhPk2M0rqDXwQ6prMChtxjzvvVycpF7nuJwEzzwGQY5Pgxf294MZiiOsR2Ctg_cz4hSrexa-ZNP2Rq3QbksDAznUMDMUdSxOiZhKPNAV9VouVnYMriy5CTSj8tV6Whx1v572shmvKNZpyzbokviBkBIiJA9Vbnl63enfxn4A4CSxNqysI3b2ElkHR_MXD82M2XXlwuaM0NSnSYHYszld3MB3yk"/>
+</div>
+<div class="mt-1.5 flex items-center justify-between">
+<span class="text-xs font-bold text-gray-900">Rs.517</span>
+<span class="bg-yellow-400 text-gray-900 text-[9px] font-bold px-1 rounded">-9%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- END: DailyBachatBazarSection -->
+<!-- BEGIN: TopRankingSection -->
+<section class="mt-2.5 bg-white py-3 px-3 shadow-sm" data-purpose="top-ranking-products">
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-base font-black text-gray-900 tracking-tight">
+          Top <span class="text-[#f85606]">Ranking</span>
+</h3>
+<a class="text-xs text-gray-500 font-medium flex items-center hover:text-gray-900" href="#">
+          Discover More Rankings <i class="fa-solid fa-chevron-right text-[9px] ml-1"></i>
+</a>
+</div>
+<!-- Top Ranking Horizontal Scroll Cards -->
+<div class="flex space-x-2.5 overflow-x-auto no-scrollbar py-1">
+<!-- Rank Card 1: Smartwatches -->
+<div class="flex-shrink-0 w-28 bg-orange-50/50 rounded-xl p-2 border border-orange-100">
+<div class="text-center font-bold text-[11px] text-gray-800 mb-1">Smartwatches</div>
+<div class="relative w-full aspect-square bg-white rounded-lg flex items-center justify-center p-1 shadow-2xs">
+<div class="absolute top-1 left-1 w-5 h-5 bg-amber-400 rounded-full flex items-center justify-center shadow text-white font-black text-[9px] border border-white">
+              1
+            </div>
+<img alt="Top Smartwatch" class="object-contain w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0Ggra5Zg-7FL_oZAOK_1ZkiF4m-TC8ejIfsqZX0n6aJQAOXXTtkYb5Qzv-nPEf7i8HZWQ70CkaOj5a5jU7IGKLaQUqV36iPZGdRnstnB1m2pVEH-NuCF3N1ghzniI4O_nkxXYp5Vp4vpIUZnHChcy3EEyGoA7wFkGF33TXFlmYCBqMMI6K8VS0otktuBsl3DAjz1x4YENR07emcVCCOkRSPpukTczDUwpaH108ppDa2Lkak_8Ozyx"/>
+</div>
+</div>
+<!-- Rank Card 2: Belts -->
+<div class="flex-shrink-0 w-28 bg-orange-50/50 rounded-xl p-2 border border-orange-100">
+<div class="text-center font-bold text-[11px] text-gray-800 mb-1">Belts</div>
+<div class="relative w-full aspect-square bg-white rounded-lg flex items-center justify-center p-1 shadow-2xs">
+<div class="absolute top-1 left-1 w-5 h-5 bg-amber-400 rounded-full flex items-center justify-center shadow text-white font-black text-[9px] border border-white">
+              1
+            </div>
+<img alt="Top Tactical Belt" class="object-contain w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzE7n8lJ5dWZFINEBHcGcUf_9D5pzEPWQU-F5FxiNRjseURxa8yxMA0XdNJ1mZQHkPclG1_SydidCJ-9Ko64sJXQAjulHlO1f_TTqkqFH0z15KZS71S4mMzZjNto4MCfY12q2XejHaFV7FqNGZQWqV_JSUWzKHtOfVWCjYZzFF0wVr2Q4sMjJk6ls5pzQ6RgTzk68IuC0yQhRSSgF2ID6o3d18-NsfaUVX7IsupSdIN1g-M907pG_2"/>
+</div>
+</div>
+<!-- Rank Card 3: Garden Planters -->
+<div class="flex-shrink-0 w-28 bg-orange-50/50 rounded-xl p-2 border border-orange-100">
+<div class="text-center font-bold text-[11px] text-gray-800 mb-1">Garden Planters</div>
+<div class="relative w-full aspect-square bg-white rounded-lg flex items-center justify-center p-1 shadow-2xs">
+<div class="absolute top-1 left-1 w-5 h-5 bg-amber-400 rounded-full flex items-center justify-center shadow text-white font-black text-[9px] border border-white">
+              1
+            </div>
+<img alt="Garden Planters" class="object-contain w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClajqpVRgoCE0SBnk0Xtbt8jnsg2rm1wauZYG7fDh1HM3Y7_khDRvUH983P1RAdvEy-LbgsVkiBrYtHyL-fNqwJjUYmu0Bs3X1URWIEBPMBUvPvpM4wCsEAgbB65KAG16Bg_l80ZS2aQ2SEZ04Wpl_QwxkZ7XDZjvHRTrwynleUUDM1l43QLWoDKZLsOMgNsZALjocduWZaRHL2drvTJik09oX4Go9ozzmMEcIDCUxh3tGWcUFDPOJ"/>
+</div>
+</div>
+<!-- Rank Card 4: Wall Lights -->
+<div class="flex-shrink-0 w-28 bg-orange-50/50 rounded-xl p-2 border border-orange-100">
+<div class="text-center font-bold text-[11px] text-gray-800 mb-1">Wall Light</div>
+<div class="relative w-full aspect-square bg-white rounded-lg flex items-center justify-center p-1 shadow-2xs">
+<div class="absolute top-1 left-1 w-5 h-5 bg-amber-400 rounded-full flex items-center justify-center shadow text-white font-black text-[9px] border border-white">
+              1
+            </div>
+<img alt="Wall Lamp" class="object-contain w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhdCwvczAEGEZKuin8qj4jVd7WqwuQ9oNDq9HW_pz71OWfZrF3LQSwyojTBhc6B0Q54ImdSitbNpNTYvVw10zIZYIp7iUmPI8iuUUiJhRFgeB7vUeELVrdBInfTaZ9C12tAx732732XenRroSnfQ7aCsf0dT4x7GyYKTwdIpAE6swM1bySWpA5UTzE54eSclXcXCeyt-VlgpArhR44trmPFKQkgwhiGMmG7XHYACLOALf42wADAq8F"/>
+</div>
+</div>
+</div>
+</section>
+<!-- END: TopRankingSection -->
+<!-- BEGIN: ForYouFeedTabsAndGrid -->
+<section class="mt-2.5" data-purpose="for-you-feed">
+<!-- Sticky Navigation Tabs for Infinite Feed -->
+<div class="sticky top-[58px] z-30 bg-white border-b border-gray-200 px-2 py-2 flex items-center space-x-3 overflow-x-auto no-scrollbar shadow-xs">
+<button class="flex items-center space-x-1 pb-1 border-b-2 border-[#f85606] text-[#f85606] font-extrabold text-xs flex-shrink-0">
+<i class="fa-solid fa-shapes text-xs"></i>
+<span>For You</span>
+</button>
+<button class="flex items-center space-x-1 pb-1 text-gray-600 font-bold text-xs flex-shrink-0">
+<span class="bg-pink-600 text-white text-[8px] font-black px-1 rounded">MAX</span>
+<span>Voucher Max</span>
+</button>
+<button class="flex items-center space-x-1 pb-1 text-gray-600 font-bold text-xs flex-shrink-0">
+<i class="fa-solid fa-fire text-red-500 text-xs"></i>
+<span>Hot deals</span>
+</button>
+<button class="flex items-center space-x-1 pb-1 text-gray-600 font-bold text-xs flex-shrink-0">
+<i class="fa-solid fa-truck-fast text-teal-500 text-xs"></i>
+<span>Fast Delivery</span>
+</button>
+</div>
+<!-- Feed Products 2-Column Responsive Grid -->
+<div class="p-2 grid grid-cols-2 gap-2">
+<!-- Feed Item 1: Oversized Tee -->
+<article class="bg-white rounded-xl overflow-hidden shadow-xs flex flex-col justify-between">
+<div class="relative w-full aspect-square bg-gray-100">
+<img alt="Shopmee Men's T-shirt" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDHvt1dpnqi9b0JVO6Y4ihumQypNtVKzzLMmC4ZAKC2vq9wAAg1bnm0bYp-46tBQB82SWwl0_Gs04QeyXockQAtGQocD_5jHuuxz56GEPYuNto47WwJxNOZOgtE3AWXQsmX8SxYMtMljwTY4pKip919kOhWEWIhwStlqVE_BC1HCePADhLPGhpn85Z644pXTvQHJlqjkBWIM5T1QBExR1bCTUXoKu6bW87yJSdpVPKazhcNcFeQOBX"/>
+<div class="absolute bottom-1 left-1 flex items-center space-x-1">
+<span class="bg-emerald-600 text-white text-[8px] font-black px-1 py-0.5 rounded leading-none">FREE DELIVERY</span>
+<span class="bg-purple-600 text-white text-[8px] font-black px-1 py-0.5 rounded leading-none">GEMS</span>
+</div>
+</div>
+<div class="p-2 flex-1 flex flex-col justify-between">
+<div class="line-clamp-2 text-xs font-medium text-gray-800 leading-snug">
+<span class="bg-[#f85606] text-white text-[8px] font-black px-1 py-0.2 rounded mr-1">9.9</span>
+              Shopmee Men's T-shirt Loose Fit Oversized
+            </div>
+<div class="mt-2">
+<div class="flex items-baseline space-x-1">
+<span class="text-sm font-black text-[#f85606]">Rs.399</span>
+<span class="text-[10px] text-red-500 font-bold">-71%</span>
+</div>
+<div class="inline-block bg-emerald-50 text-emerald-700 text-[8.5px] font-bold px-1 rounded mt-0.5">
+<i class="fa-solid fa-bolt mr-0.5"></i> Fast delivery
+              </div>
+<div class="flex items-center text-[9.5px] text-gray-400 mt-1">
+<i class="fa-solid fa-star text-amber-400 mr-0.5 text-[8.5px]"></i>
+<span class="text-gray-600 font-medium">3.9 (31)</span>
+<span class="mx-1">·</span>
+<span>201 sold</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Feed Item 2: Tactical Belt -->
+<article class="bg-white rounded-xl overflow-hidden shadow-xs flex flex-col justify-between">
+<div class="relative w-full aspect-square bg-gray-100">
+<img alt="Men Tactical Military Belt" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGQuvQxe8UIhY4fCwZrpYxCHaL95v2fnHohjdA9N4Q7w2KNxx25UUXuav3xL8z-ssAwjxevJEiKYDCm1uRqsj7KVUnigqlgyEUgL57K4OicrJUP1YJqjHZIUYaHdUFl5F1jMybkW8HATagL9_E6JKiHZFbcnlYDXrqAy_lf9grFhbe_bCFcHf46kLKk76nc4sjfjwYoUMZxHAf2Rnw4flp5aA_bbrp6n5myeC9WKvRPfIrQLE-D3bJ"/>
+<div class="absolute bottom-1 left-1 flex items-center space-x-1">
+<span class="bg-emerald-600 text-white text-[8px] font-black px-1 py-0.5 rounded leading-none">FREE DELIVERY</span>
+<span class="bg-pink-600 text-white text-[8px] font-black px-1 py-0.5 rounded leading-none">VOUCHER MAX</span>
+</div>
+</div>
+<div class="p-2 flex-1 flex flex-col justify-between">
+<div class="line-clamp-2 text-xs font-medium text-gray-800 leading-snug">
+<span class="bg-[#f85606] text-white text-[8px] font-black px-1 py-0.2 rounded mr-1">9.9</span>
+              Men Tactical Belt Quick Release Heavy Duty
+            </div>
+<div class="mt-2">
+<div class="flex items-baseline space-x-1">
+<span class="text-sm font-black text-[#f85606]">Rs.379</span>
+<span class="text-[10px] text-red-500 font-bold">-24%</span>
+</div>
+<div class="inline-block bg-emerald-50 text-emerald-700 text-[8.5px] font-bold px-1 rounded mt-0.5">
+<i class="fa-solid fa-bolt mr-0.5"></i> Fast delivery
+              </div>
+<div class="flex items-center text-[9.5px] text-gray-400 mt-1">
+<i class="fa-solid fa-star text-amber-400 mr-0.5 text-[8.5px]"></i>
+<span class="text-gray-600 font-medium">4.6 (162)</span>
+<span class="mx-1">·</span>
+<span>965 sold</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Feed Item 3: Waffle Polo Shirt -->
+<article class="bg-white rounded-xl overflow-hidden shadow-xs flex flex-col justify-between">
+<div class="relative w-full aspect-square bg-gray-100">
+<img alt="Summer Stylish Ice Silk Polo" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6Wz7FPgpUbfaJkJbY4Zx-DBtnpbhnGCfcyQFBuczhG6AxxtnsAvJu3PHLDCqqYRmDxOZaOw-RGg-vk4gtd2o-1C5K8nfe-8WVcNuoyAwOd6G_F-sS1tI9iyhARq2RvEfV7_wXceVX911B2mhFzZ-3pcgoEgT8NJn9r6Ude33oF4khucAtc7F5kuXCxK6oUs4o3Ne01qERTpTVxDNDl5rzpt7I9Pp3UaJqKeHCekLYZmT3CPrhMlBF"/>
+<div class="absolute bottom-1 left-1 flex items-center space-x-1">
+<span class="bg-emerald-600 text-white text-[8px] font-black px-1 py-0.5 rounded leading-none">FREE DELIVERY</span>
+<span class="bg-purple-600 text-white text-[8px] font-black px-1 py-0.5 rounded leading-none">GEMS</span>
+</div>
+</div>
+<div class="p-2 flex-1 flex flex-col justify-between">
+<div class="line-clamp-2 text-xs font-medium text-gray-800 leading-snug">
+<span class="bg-[#f85606] text-white text-[8px] font-black px-1 py-0.2 rounded mr-1">9.9</span>
+              Summer Stylish Ice Silk Waffle Polo Shirt
+            </div>
+<div class="mt-2">
+<div class="flex items-baseline space-x-1">
+<span class="text-sm font-black text-[#f85606]">Rs.499</span>
+<span class="text-[10px] text-red-500 font-bold">-50%</span>
+</div>
+<div class="bg-purple-100 text-purple-800 text-[8.5px] font-bold px-1 rounded inline-block mt-0.5">
+                Gems save Rs.5
+              </div>
+<div class="flex items-center text-[9.5px] text-gray-400 mt-1">
+<i class="fa-solid fa-star text-amber-400 mr-0.5 text-[8.5px]"></i>
+<span class="text-gray-600 font-medium">4.1 (74)</span>
+<span class="mx-1">·</span>
+<span>514 sold</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Feed Item 4: Yoga Harem Pants -->
+<article class="bg-white rounded-xl overflow-hidden shadow-xs flex flex-col justify-between">
+<div class="relative w-full aspect-square bg-gray-100">
+<img alt="Embroidery Yoga Trousers" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRgtgTFbggCc4F9vtkBwh75lSHSKhGuS6pViI1GjrA0M-9hE85Aorxa0ZWmBhRVagcSUsQU7d59zG-04OCaJrTKFASFfBS0adjMzEBzLg0-MYnjDEuMIR8382INCmscQCigGOTJc27PHLGanyFhrhPre3sE-eAot3FyGFMSVhh0ehFQdkg0wHkInBX1c3gUff9jl4Sq056QHNpnWL933fm4urev4k4mh5AjdoQtvZS2WYvjjHyepAD"/>
+<div class="absolute bottom-1 left-1 flex items-center space-x-1">
+<span class="bg-emerald-600 text-white text-[8px] font-black px-1 py-0.5 rounded leading-none">FREE DELIVERY</span>
+<span class="bg-purple-600 text-white text-[8px] font-black px-1 py-0.5 rounded leading-none">GEMS</span>
+</div>
+</div>
+<div class="p-2 flex-1 flex flex-col justify-between">
+<div class="line-clamp-2 text-xs font-medium text-gray-800 leading-snug">
+              Binay Embroidery Yoga Traditional Loose Pants
+            </div>
+<div class="mt-2">
+<div class="flex items-baseline space-x-1">
+<span class="text-sm font-black text-[#f85606]">Rs.909</span>
+<span class="text-[10px] text-red-500 font-bold">-19%</span>
+</div>
+<div class="bg-purple-100 text-purple-800 text-[8.5px] font-bold px-1 rounded inline-block mt-0.5">
+                Gems save Rs.9
+              </div>
+<div class="flex items-center text-[9.5px] text-gray-400 mt-1">
+<i class="fa-solid fa-star text-amber-400 mr-0.5 text-[8.5px]"></i>
+<span class="text-gray-600 font-medium">4.6 (28)</span>
+<span class="mx-1">·</span>
+<span>158 sold</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Feed Item 5: Ice Silk Face Visor -->
+<article class="bg-white rounded-xl overflow-hidden shadow-xs flex flex-col justify-between">
+<div class="relative w-full aspect-square bg-gray-100">
+<img alt="Ice Silk Sun Visor Mask" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq5talA-CFx9GWgZcDVc9xSIelA8tIylqjD78YqGJQyEFCZyI69pSkQb8EIAIPcstYdxipygn5Na_QxnSPvEbX1XtHOGqh8tDZjJfdRA-1KTp2ViIeGS4SsPahNfY5dQUC0CeNLcd64aOqYHR0DOsrC0Y6WDTqNNSXHkTi3-2YrfYnh9s3JaQFJXd5bInJc8UPw1RX5ajOtM4hbgjQcFyYNamiv2wAVYHkXvchxFlsrRfjYLvbrwxp"/>
+<div class="absolute bottom-1 left-1 flex items-center space-x-1">
+<span class="bg-emerald-600 text-white text-[8px] font-black px-1 py-0.5 rounded leading-none">FREE DELIVERY</span>
+<span class="bg-pink-600 text-white text-[8px] font-black px-1 py-0.5 rounded leading-none">VOUCHER MAX</span>
+</div>
+</div>
+<div class="p-2 flex-1 flex flex-col justify-between">
+<div class="line-clamp-2 text-xs font-medium text-gray-800 leading-snug">
+<span class="bg-[#f85606] text-white text-[8px] font-black px-1 py-0.2 rounded mr-1">9.9</span>
+              Pack of 2 Ice Silk Face UV Shield Protector
+            </div>
+<div class="mt-2">
+<div class="flex items-baseline space-x-1">
+<span class="text-sm font-black text-[#f85606]">Rs.350</span>
+<span class="text-[10px] text-red-500 font-bold">-46%</span>
+</div>
+<div class="flex items-center text-[9.5px] text-gray-400 mt-1">
+<i class="fa-solid fa-star text-amber-400 mr-0.5 text-[8.5px]"></i>
+<span class="text-gray-600 font-medium">5 (1)</span>
+<span class="mx-1">·</span>
+<span>33 sold</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Feed Item 6: Automatic Skeleton Watch -->
+<article class="bg-white rounded-xl overflow-hidden shadow-xs flex flex-col justify-between">
+<div class="relative w-full aspect-square bg-gray-100">
+<img alt="Automatic Skeleton Leather Watch" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAH9vhUM0MGCBnbEIgaYMm5deQcK31tZzzK8F27UZXI8gP9m_KR3vMDmdigk4TO2d653T9d1RqX3B6zSkRwFscpVZmZAzVfmDiaBK2brWlqPZ9Iq6ykE6cU_9O7gyyXZF0boVF6j2FJZnOFp103YEi8Ld_ixeMZi_W-C6fe7_2Jah1iVkdZ4z0vVUyrivKAkcGExXbK0Mye2ZYygtCLjShn30UdwqjeO5dJd_fK0repG1hl9LOEpm68"/>
+<div class="absolute bottom-1 left-1 flex items-center space-x-1">
+<span class="bg-emerald-600 text-white text-[8px] font-black px-1 py-0.5 rounded leading-none">FREE DELIVERY</span>
+<span class="bg-purple-600 text-white text-[8px] font-black px-1 py-0.5 rounded leading-none">GEMS</span>
+</div>
+</div>
+<div class="p-2 flex-1 flex flex-col justify-between">
+<div class="line-clamp-2 text-xs font-medium text-gray-800 leading-snug">
+              SKMEI 9238 Automatic Mechanical Watch Luxury
+            </div>
+<div class="mt-2">
+<div class="flex items-baseline space-x-1">
+<span class="text-sm font-black text-[#f85606]">Rs.3,200</span>
+<span class="text-[10px] text-red-500 font-bold">-36%</span>
+</div>
+<div class="bg-purple-100 text-purple-800 text-[8.5px] font-bold px-1 rounded inline-block mt-0.5">
+                Gems save Rs.32
+              </div>
+<div class="flex items-center text-[9.5px] text-gray-400 mt-1">
+<i class="fa-solid fa-star text-amber-400 mr-0.5 text-[8.5px]"></i>
+<span class="text-gray-600 font-medium">5 (1)</span>
+</div>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- END: ForYouFeedTabsAndGrid -->
+</main>
+<!-- BEGIN: FloatingDiscountBubble -->
+<!-- Left Side Orange Campaign Bubble (UP TO 70% OFF / 50 LAKHS) -->
+<aside class="fixed bottom-16 left-2 z-40" data-purpose="floating-promotional-sticker">
+<div class="w-14 h-14 rounded-full bg-gradient-to-tr from-amber-600 via-orange-500 to-yellow-400 flex flex-col items-center justify-center text-white text-center p-1 border-2 border-white shadow-xl floating-fab animate-pulse cursor-pointer">
+<span class="text-[7.5px] font-black leading-tight tracking-tight uppercase">UP TO</span>
+<span class="text-[11px] font-black leading-tight tracking-tighter">70% OFF</span>
+</div>
+</aside>
+<!-- END: FloatingDiscountBubble -->
+<!-- BEGIN: StickyBottomNavigationBar -->
+<nav class="fixed bottom-0 inset-x-0 max-w-md mx-auto z-50 bg-white border-t border-gray-200 py-1 px-3 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]" data-purpose="bottom-tab-navigation">
+<div class="flex items-center justify-around">
+<!-- Nav Item: Home (Active) -->
+<a class="flex flex-col items-center justify-center text-[#f85606]" href="#">
+<i class="fa-solid fa-house text-lg"></i>
+<span class="text-[10px] font-bold mt-0.5">Home</span>
+</a>
+<!-- Nav Item: Messages (With Badge 13) -->
+<a class="flex flex-col items-center justify-center text-gray-600 hover:text-[#f85606] relative" href="#">
+<div class="relative">
+<i class="fa-regular fa-comment-dots text-lg"></i>
+<span class="absolute -top-1.5 -right-2.5 bg-[#f85606] text-white text-[9px] font-bold rounded-full h-4 min-w-[16px] px-1 flex items-center justify-center border-2 border-white">
+            13
+          </span>
+</div>
+<span class="text-[10px] font-medium mt-0.5">Messages</span>
+</a>
+<!-- Nav Item: Cart (With Badge 33) -->
+<a class="flex flex-col items-center justify-center text-gray-600 hover:text-[#f85606] relative" href="#">
+<div class="relative">
+<i class="fa-solid fa-cart-shopping text-lg"></i>
+<span class="absolute -top-1.5 -right-2.5 bg-[#f85606] text-white text-[9px] font-bold rounded-full h-4 min-w-[16px] px-1 flex items-center justify-center border-2 border-white">
+            33
+          </span>
+</div>
+<span class="text-[10px] font-medium mt-0.5">Cart</span>
+</a>
+<!-- Nav Item: Account -->
+<a class="flex flex-col items-center justify-center text-gray-600 hover:text-[#f85606]" href="#">
+<i class="fa-regular fa-user text-lg"></i>
+<span class="text-[10px] font-medium mt-0.5">Account</span>
+</a>
+</div>
+</nav>
+<!-- END: StickyBottomNavigationBar -->
+</body></html>
