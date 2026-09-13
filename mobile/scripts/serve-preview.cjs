@@ -16,6 +16,56 @@ const mime = {
   ".woff2": "font/woff2",
   ".ico": "image/x-icon",
 };
+/**
+ * Resolves a path against Expo Router's dynamic routes, the way a static host
+ * rewrite would: /admin/r/products/prod_1 falls back to the exported
+ * admin/r/[resource]/[id].html template, which then reads the real URL.
+ * A literal folder is always preferred, and the search backtracks so a partly
+ * literal path can still land on a parameterised page.
+ */
+function dynamicRoute(pathname) {
+  const isFile = (p) => fs.existsSync(p) && fs.statSync(p).isFile();
+  const isDir = (p) => fs.existsSync(p) && fs.statSync(p).isDirectory();
+  const parameterNames = (dir) => {
+    try {
+      return [
+        ...new Set(
+          fs
+            .readdirSync(dir)
+            .filter((entry) => entry.startsWith("["))
+            .map((entry) => entry.replace(/\.html$/, "")),
+        ),
+      ];
+    } catch {
+      return [];
+    }
+  };
+
+  const resolve = (dir, segments) => {
+    const [segment, ...rest] = segments;
+    if (segment === undefined) {
+      const index = path.join(dir, "index.html");
+      return isFile(index) ? index : null;
+    }
+    for (const name of [segment, ...parameterNames(dir)]) {
+      if (rest.length === 0) {
+        const page = path.join(dir, `${name}.html`);
+        if (isFile(page)) return page;
+        const nested = path.join(dir, name, "index.html");
+        if (isFile(nested)) return nested;
+        continue;
+      }
+      const child = path.join(dir, name);
+      if (!isDir(child)) continue;
+      const found = resolve(child, rest);
+      if (found) return found;
+    }
+    return null;
+  };
+
+  return resolve(root, pathname.split("/").filter(Boolean));
+}
+
 http
   .createServer((req, res) => {
     try {
@@ -27,13 +77,18 @@ http
         res.writeHead(403).end();
         return;
       }
+      const isFile = (p) => fs.existsSync(p) && fs.statSync(p).isFile();
+      // Nested routes such as /admin export as admin/index.html, which is what
+      // a static host serves for the bare path.
       const candidates =
         pathname === "/"
           ? [path.join(root, "index.html")]
-          : [requested, requested + ".html"];
-      const file = candidates.find(
-        (p) => fs.existsSync(p) && fs.statSync(p).isFile(),
-      );
+          : [
+              requested,
+              requested + ".html",
+              path.join(requested, "index.html"),
+            ];
+      const file = candidates.find(isFile) || dynamicRoute(pathname);
       if (!file) {
         res.writeHead(404).end("Not found");
         return;
