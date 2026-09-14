@@ -12,9 +12,15 @@ export default defineConfig({
     trace: "retain-on-failure",
   },
   webServer: {
-    command: "node scripts/serve-preview.cjs",
+    // The storefront journeys verify the local demo data and device-only
+    // persistence, so they run against a fresh local-mode export built from
+    // the current source.
+    command:
+      "npx expo export --platform web --output-dir dist-local-test --clear && node scripts/serve-preview.cjs",
     url: "http://localhost:8082",
+    timeout: 300_000,
     reuseExistingServer: true,
+    env: { EXPO_PUBLIC_BACKEND: "local", PREVIEW_ROOT: "dist-local-test" },
   },
   reporter: "list",
   workers: 1,

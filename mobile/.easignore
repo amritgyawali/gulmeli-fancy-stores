@@ -1,0 +1,37 @@
+# Files excluded from EAS Build uploads. Mirrors .gitignore, except that
+# .env.local is uploaded so the EXPO_PUBLIC_* values reach the build.
+
+node_modules/
+.expo/
+dist/
+dist-backend-test/
+dist-local-test/
+web-build/
+expo-env.d.ts
+
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+.metro-health-check*
+
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+*.log
+.DS_Store
+*.pem
+
+.env
+supabase/.temp/
+*.tsbuildinfo
+example
+
+/ios
+/android
+
+test-results/
+playwright-report/

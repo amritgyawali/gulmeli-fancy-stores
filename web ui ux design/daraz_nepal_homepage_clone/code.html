@@ -1,0 +1,1444 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Online Shopping in Nepal | Best Deals &amp; Offers - Daraz.com.np</title>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- FontAwesome for standard e-commerce & system icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            daraz: {
+              orange: '#f85606',
+              darkOrange: '#d04402',
+              bg: '#f5f5f5',
+              text: '#212121',
+              muted: '#757575',
+              border: '#e2e8f0',
+              link: '#0f828a'
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="base-typography">
+    body {
+      font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #212121;
+    }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+<style data-purpose="card-hover-effects">
+    .daraz-card {
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .daraz-card:hover {
+      box-shadow: 0 4px 16px 0 rgba(0,0,0,0.12);
+      transform: translateY(-2px);
+    }
+    .flash-card:hover {
+      box-shadow: 0 2px 10px 0 rgba(0,0,0,0.08);
+    }
+  </style>
+<style data-purpose="custom-hover-effects">
+  .daraz-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+  }
+  .category-item:hover {
+    transform: translateY(-2px);
+    border-color: #f85606;
+  }
+  .flash-card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.1) !important;
+  }
+  #cart-drawer {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #cart-drawer.open {
+    transform: translateX(0);
+  }
+  #cart-backdrop {
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  }
+  #cart-backdrop.open {
+    opacity: 1;
+    visibility: visible;
+  }
+</style></head>
+<body class="bg-[#f5f5f5] text-[#212121] antialiased text-xs sm:text-sm">
+<!-- BEGIN: TopUtilityHeader -->
+<header class="w-full bg-[#f85606] text-white">
+<!-- Top mini utility bar -->
+<div class="max-w-[1188px] mx-auto px-2 flex justify-between items-center text-[11px] font-medium py-1">
+<div class="flex items-center space-x-6">
+<a class="hover:underline opacity-95" href="#">SAVE MORE ON APP</a>
+<a class="hover:underline opacity-95" href="#">BECOME A SELLER</a>
+<a class="hover:underline opacity-95" href="#">HELP &amp; SUPPORT</a>
+</div>
+<div class="flex items-center space-x-6">
+<a class="hover:underline uppercase tracking-wide" href="#">AMRIT'S ACCOUNT</a>
+<a class="hover:underline" href="#">भाषा परिवर्तन</a>
+</div>
+</div>
+<!-- Main Navigation / Search Bar -->
+<div class="max-w-[1188px] mx-auto px-2 py-3 flex items-center justify-between gap-8">
+<!-- Logo -->
+<a class="flex items-center gap-1 shrink-0" href="#">
+<div class="text-3xl font-extrabold tracking-tight text-white flex items-center">
+<span class="text-white">Daraz</span>
+<span class="w-2.5 h-2.5 bg-white rounded-full ml-0.5 mt-2"></span>
+</div>
+</a>
+<!-- Search Input Container -->
+<div id="search-wrapper" class="relative flex-1 max-w-[760px]">
+  <div class="relative flex items-center">
+    <input id="main-search-input" class="w-full h-10 pl-4 pr-12 rounded-[2px] text-sm text-gray-800 placeholder-gray-400 bg-white border-none focus:ring-0 focus:outline-none" placeholder="Search in Daraz" type="text" autocomplete="off">
+    <button class="absolute right-0 top-0 h-10 w-11 bg-[#ffebe2] hover:bg-[#fed6c5] flex items-center justify-center rounded-r-[2px] transition text-[#f85606]">
+      <i class="fa-solid fa-magnifying-glass text-base"></i>
+    </button>
+  </div>
+  <div id="search-dropdown" class="hidden absolute top-full left-0 right-0 mt-1 bg-white rounded-b-md shadow-2xl border border-gray-200 z-50 overflow-hidden text-gray-800 text-xs">
+    <div id="search-dropdown-content" class="p-3"></div>
+  </div>
+</div>
+<!-- Cart Icon -->
+<div class="shrink-0 flex items-center">
+<a aria-label="Shopping Cart" class="relative p-2 text-white hover:text-gray-100" href="#" id="cart-toggle-btn">
+<i class="fa-solid fa-cart-shopping text-2xl"></i>
+<span class="absolute top-0 right-0 bg-white text-[#f85606] text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center shadow">
+            0
+          </span>
+</a>
+</div>
+</div>
+</header>
+<!-- END: TopUtilityHeader -->
+<!-- BEGIN: MainContent -->
+<main class="max-w-[1188px] mx-auto px-2 py-3">
+<!-- Hero Promotional Banner Section -->
+<section class="grid grid-cols-12 gap-3 mb-4" data-purpose="hero-carousel-and-app-download">
+<!-- Mega Sale 9.9 Main Carousel Banner -->
+<div class="col-span-12 lg:col-span-10 relative bg-gradient-to-r from-[#d82a0b] via-[#f85606] to-[#fc8621] rounded-[2px] overflow-hidden min-h-[340px] flex items-center p-6 text-white shadow-sm">
+<div class="max-w-[65%] z-10">
+<div class="inline-flex items-center gap-2 mb-2">
+<span class="bg-black/30 backdrop-blur-sm text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">8 SEP (8PM) - 15 SEP</span>
+</div>
+<h1 class="text-4xl sm:text-5xl font-black tracking-tight drop-shadow-md leading-none mb-1">
+            9.9 <span class="text-yellow-300">SALE</span>
+</h1>
+<p class="text-lg font-bold text-yellow-100 mb-4 tracking-wide">BIGGEST SALE OF THE SEASON</p>
+<div class="flex flex-wrap gap-2 mb-5">
+<div class="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded border border-white/30 text-center">
+<span class="text-xs uppercase block text-yellow-200 font-bold">UP TO</span>
+<span class="text-sm font-extrabold">Rs. 50L OFF</span>
+</div>
+<div class="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded border border-white/30 text-center">
+<span class="text-xs uppercase block text-yellow-200 font-bold">ENJOY</span>
+<span class="text-sm font-extrabold">FREE DELIVERY</span>
+</div>
+<div class="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded border border-white/30 text-center">
+<span class="text-xs uppercase block text-yellow-200 font-bold">EXTRA</span>
+<span class="text-sm font-extrabold">70% OFF</span>
+</div>
+</div>
+<a class="inline-block bg-white text-[#f85606] hover:bg-yellow-50 font-black text-sm px-7 py-2.5 rounded-full shadow-lg transition" href="#">
+            Shop Now
+          </a>
+</div>
+<!-- Banner Right Graphic Embellishments -->
+<div class="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center opacity-95">
+<div class="relative w-72 h-72 rounded-full bg-white/10 flex items-center justify-center border border-white/20 shadow-inner">
+<i class="fa-solid fa-bag-shopping text-8xl text-yellow-300/40"></i>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+<span class="text-xs uppercase tracking-widest text-white/90">Exclusive Brands</span>
+<span class="text-2xl font-black text-white">MEGA DEALS</span>
+<span class="text-xs bg-yellow-400 text-black font-extrabold px-2 py-0.5 rounded mt-1">LIMITED STOCK</span>
+</div>
+</div>
+</div>
+<!-- Dots Indicator -->
+<div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-1.5 z-20">
+<span class="w-2 h-2 rounded-full bg-white"></span>
+<span class="w-2 h-2 rounded-full bg-white/50"></span>
+<span class="w-2 h-2 rounded-full bg-white/50"></span>
+<span class="w-2 h-2 rounded-full bg-white/50"></span>
+<span class="w-2 h-2 rounded-full bg-white/50"></span>
+</div>
+</div>
+<!-- Download App Side Promo Card -->
+<div class="col-span-12 lg:col-span-2 bg-white rounded-[2px] p-3.5 flex flex-col justify-between items-center text-center border border-gray-200 shadow-sm">
+<div class="w-full">
+<div class="flex items-center justify-center gap-1 text-[#f85606] font-bold text-xs mb-1">
+<i class="fa-solid fa-mobile-screen-button"></i>
+<span class="">Download the App</span>
+</div>
+<p class="text-[11px] text-gray-500 mb-2">Free Delivery &amp; Limited Deals</p>
+<!-- App QR Code Block -->
+<div class="w-32 h-32 mx-auto bg-gray-50 border border-dashed border-gray-300 p-2 rounded flex flex-col items-center justify-center mb-2">
+<i class="fa-solid fa-qrcode text-6xl text-gray-800"></i>
+<span class="text-[9px] text-gray-500 mt-1 font-mono">SCAN TO GET APP</span>
+</div>
+</div>
+<!-- Badges -->
+<div class="w-full space-y-1.5 pt-1">
+<a class="w-full bg-black text-white rounded px-2 py-1.5 flex items-center justify-center gap-2 text-[10px] hover:bg-gray-800 transition" href="#">
+<i class="fa-brands fa-apple text-sm"></i>
+<div class="text-left leading-tight">
+<span class="text-[8px] block leading-none text-gray-400">Download on</span>
+<span class="font-bold">App Store</span>
+</div>
+</a>
+<a class="w-full bg-black text-white rounded px-2 py-1.5 flex items-center justify-center gap-2 text-[10px] hover:bg-gray-800 transition" href="#">
+<i class="fa-brands fa-google-play text-xs text-yellow-400"></i>
+<div class="text-left leading-tight">
+<span class="text-[8px] block leading-none text-gray-400">GET IT ON</span>
+<span class="font-bold">Google Play</span>
+</div>
+</a>
+</div>
+</div>
+</section>
+<!-- Secondary Promotional Ribbon -->
+<div class="w-full mb-6 bg-gradient-to-r from-[#d82a0b] via-[#f85606] to-[#f42e12] rounded-[2px] p-2.5 text-white flex items-center justify-between shadow-sm cursor-pointer hover:opacity-95 transition">
+<div class="flex items-center space-x-3 pl-4">
+<span class="text-xl font-black italic tracking-wide text-yellow-300">9.9 SALE</span>
+<span class="font-bold text-sm sm:text-base tracking-wide uppercase">9.9 Sale is LIVE NOW</span>
+</div>
+<div class="flex items-center pr-3">
+<span class="bg-yellow-400 hover:bg-yellow-300 text-black font-extrabold text-xs px-4 py-1.5 rounded uppercase tracking-wider flex items-center gap-1 shadow">
+          Shop Now <i class="fa-solid fa-chevron-right text-[10px]"></i>
+</span>
+</div>
+</div>
+<!-- BEGIN: FlashSaleSection -->
+<section class="mb-6" data-purpose="flash-sale-section">
+<div class="text-lg font-bold text-gray-800 mb-2">Flash Sale</div>
+<div class="bg-white rounded-[2px] p-3 border border-gray-100 shadow-sm">
+<!-- Subheader with Sale State & Shop All -->
+<div class="flex items-center justify-between pb-3 mb-3 border-b border-gray-100">
+<div class="flex items-center gap-4">
+<span class="text-[#f85606] font-bold text-sm">On Sale Now</span>
+<div class="flex items-center text-xs text-gray-500 gap-1.5">
+<span class="">Ending in</span>
+<div class="flex items-center gap-1 font-mono font-bold text-white">
+<span class="bg-[#d04402] px-1.5 py-0.5 rounded-[2px]">04</span>:
+                <span class="bg-[#d04402] px-1.5 py-0.5 rounded-[2px]">28</span>:
+                <span class="bg-[#d04402] px-1.5 py-0.5 rounded-[2px]">45</span>
+</div>
+</div>
+</div>
+<a class="text-[#f85606] border border-[#f85606] hover:bg-[#fff6f2] font-semibold text-xs px-3.5 py-1.5 rounded-[2px] transition uppercase" href="#">
+            SHOP ALL PRODUCTS
+          </a>
+</div>
+<!-- Product Cards Slider Row (6 Items) -->
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
+<!-- Flash Item 1 -->
+<article class="flash-card bg-white p-2 flex flex-col justify-between transition cursor-pointer">
+<div>
+<div class="w-full aspect-square bg-gray-50 rounded mb-2 overflow-hidden flex items-center justify-center p-2">
+<img alt="LUX Soft Rose Body Wash" class="object-contain w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYz2UUBFsDFewS3ArP8_s6LCApLhHmMgvSdAMIp_JzIuUoTPd9JT7b9pTRlagvB7gGcFRV2VSq4Ya1fTnrD7zSOjoyVnj82PqOTmgMgYo4GLnu5uvlFOyN8y2UI7PrO22xbKnQCRmA5JPnLg5AYj97gjI-1C5GtcY_Mezr2oxjgYZxGeYMs6s3xVeqC_lgPuOEvhkYc-7242wWTbJ8dkeK8qj650fSJudP-8QBYBp49Nnaew3yC296">
+</div>
+<h3 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+                LUX Soft Rose Body Wash with French Rose &amp; Almond
+              </h3>
+</div>
+<div>
+<div class="text-base font-bold text-[#f85606]">Rs. 108</div>
+<div class="text-[11px] text-gray-400">
+<span class="line-through">Rs. 200</span>
+<span class="text-gray-800 ml-1 font-semibold">-51%</span>
+</div>
+</div>
+</article>
+<!-- Flash Item 2 -->
+<article class="flash-card bg-white p-2 flex flex-col justify-between transition cursor-pointer">
+<div>
+<div class="w-full aspect-square bg-gray-50 rounded mb-2 overflow-hidden flex items-center justify-center p-2">
+<img alt="The Derma Co Sunscreen" class="object-contain w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ9ncNBXg3Grrb3jOB3SnCQ33imiS-QVsOu0mqkl4a1_qiKtClrMEzfbugKb-4y1Efx0JgGnrAC1HFJ4YaN4sq_lB95iyNSCjIe-uEqzr_7QHQ5C3aVoJDJz2KViLfAONV6B5-mhyq300QwnlI0zjsAM_oWjxVzPGpoQDqtPOybZzWZawPw-aFXMeCQ0iL-mWw7F5naU9KdgjyJIgCGPxG58DlEwvlkaylKxPYyVwExHJmhjs4Z0HT">
+</div>
+<h3 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+                The Derma Co 1% Hyaluronic Sunscreen Aqua Gel
+              </h3>
+</div>
+<div>
+<div class="text-base font-bold text-[#f85606]">Rs. 669</div>
+<div class="text-[11px] text-gray-400">
+<span class="line-through">Rs. 799</span>
+<span class="text-gray-800 ml-1 font-semibold">-16%</span>
+</div>
+</div>
+</article>
+<!-- Flash Item 3 -->
+<article class="flash-card bg-white p-2 flex flex-col justify-between transition cursor-pointer">
+<div>
+<div class="w-full aspect-square bg-gray-50 rounded mb-2 overflow-hidden flex items-center justify-center p-2">
+<img alt="GANESH HEMP PREMIUM SOCKS" class="object-contain w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWcksTUx8IXi4d-pos-l5qbl4sR7gJfyLyuWVhzw98jBFbl8Lln2dHV8-ESFU3iOPxGQYKYM1vn305HN1g8HZwteCVea5Dw__Nl51W8vphxoIlJTTE0e7e-rpuLlfjh1UWFY4xYEVVphIyYcKCYbn6BmPGxLA-F_h86G7_XOTD2T3vht7RXhMhmwbOhsBUoMBkqqwCfXaX2239bhePkZR_-lz0lQYjVBofltctCBXR8i39Y98mhCbc">
+</div>
+<h3 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+                GANESH HEMP PREMIUM SOCKS Unisex Eco-friendly
+              </h3>
+</div>
+<div>
+<div class="text-base font-bold text-[#f85606]">Rs. 149</div>
+<div class="text-[11px] text-gray-400">
+<span class="line-through">Rs. 199</span>
+<span class="text-gray-800 ml-1 font-semibold">-25%</span>
+</div>
+</div>
+</article>
+<!-- Flash Item 4 -->
+<article class="flash-card bg-white p-2 flex flex-col justify-between transition cursor-pointer">
+<div>
+<div class="w-full aspect-square bg-gray-50 rounded mb-2 overflow-hidden flex items-center justify-center p-2">
+<img alt="Ultima Aura Earbuds" class="object-contain w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLpQcSwRX7Dgtw1vBDSeoN0TApVe2JXu6aTjqVHAjqpki6iTW3oolxv-kD08IpadcHYiP-hzd48e05qGqmaCVfpZK25vxbDf8ymLHzFcGllr41FIzPagdiNcwmLftje-stihZIUrv10zP_drjaDABCftfj_bRo7cTDUMt8MvzsRZ94_bAdLhfwVbB3Dz5Oo8Ic2YbXPScPwsxt3NwJqLpG2pyhzdIAH2O-Ot3RitcmYTup7D_glsak">
+</div>
+<h3 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+                Ultima Aura Earbuds, Hi-Res Audio Certified with ANC
+              </h3>
+</div>
+<div>
+<div class="text-base font-bold text-[#f85606]">Rs. 3,489</div>
+<div class="text-[11px] text-gray-400">
+<span class="line-through">Rs. 5,999</span>
+<span class="text-gray-800 ml-1 font-semibold">-42%</span>
+</div>
+</div>
+</article>
+<!-- Flash Item 5 -->
+<article class="flash-card bg-white p-2 flex flex-col justify-between transition cursor-pointer">
+<div>
+<div class="w-full aspect-square bg-gray-50 rounded mb-2 overflow-hidden flex items-center justify-center p-2">
+<img alt="Horlicks Classic Malt" class="object-contain w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBA-sSqv8VxEd3IuK9RBNSgYw0x4wbiLGRx1sil7oF8YoGFdububeaVviCU0Y9VR-nksSIdJ9tTJA-8Z8ninqi0cOOXrueoXR2i600sQMT5HYQelzr7hhRzKC8yRTpz49ChpvesEFep87H0OiVwRtyy15_hNZIBW8jLosRVNASc90v_SLLbwMMxKh084pJAnFw1N3iTirqdOdbZ6CB3bsK6Mt2MdC7nn8e4pOv2mg2Rw9ta9opTPPuj">
+</div>
+<h3 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+                Horlicks Classic Malt Jar 500 gm Health Drink
+              </h3>
+</div>
+<div>
+<div class="text-base font-bold text-[#f85606]">Rs. 399</div>
+<div class="text-[11px] text-gray-400">
+<span class="line-through">Rs. 445</span>
+<span class="text-gray-800 ml-1 font-semibold">-10%</span>
+</div>
+</div>
+</article>
+<!-- Flash Item 6 -->
+<article class="flash-card bg-white p-2 flex flex-col justify-between transition cursor-pointer">
+<div>
+<div class="w-full aspect-square bg-gray-50 rounded mb-2 overflow-hidden flex items-center justify-center p-2">
+<img alt="Doorway Pull Up Bar" class="object-contain w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7HM8AIj56YBOw1F7VesvSOWLQ5sYv0XeWRiVRiohw1cKiC3r9pUzOsb_3bTzNXtSKTmPZWBC7v4dzoQ1-vS5cxKXRowZQ-LfXuos3Gn5pwCVtFI3UQ12OFxUCok59d1QaZ7eUP8EiVqUmpWubeaIco7KDM1hztHG9BgE3bFtL8ePNnuHL9tEeQTlzTpqQxRMGy7aQtbNThft8bvM8BkEtTRQQ1pV6_s01i_48GjJUKdAGhPL5RmeG">
+</div>
+<h3 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+                Doorway Pull Up Bar, Heavy Duty Multi-Grip Chin-up
+              </h3>
+</div>
+<div>
+<div class="text-base font-bold text-[#f85606]">Rs. 872</div>
+<div class="text-[11px] text-gray-400">
+<span class="line-through">Rs. 1,050</span>
+<span class="text-gray-800 ml-1 font-semibold">-17%</span>
+</div>
+</div>
+</article>
+</div>
+</div>
+</section>
+<!-- END: FlashSaleSection -->
+<!-- BEGIN: CategoriesSection -->
+<section class="mb-6" data-purpose="categories-grid-section">
+<div class="text-lg font-bold text-gray-800 mb-2">Categories</div>
+<div class="bg-white rounded-[2px] border border-gray-200 divide-y divide-gray-100 shadow-sm">
+<!-- Category Row 1 (8 Items) -->
+<div class="grid grid-cols-4 sm:grid-cols-8 divide-x divide-gray-100">
+<a class="p-3 text-center flex flex-col items-center hover:bg-gray-50 transition" href="#">
+<div class="w-16 h-16 mb-2 flex items-center justify-center">
+<img alt="Casual" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8z7amjqMUdKOMJfirwqxtxJq8dQcU_4sqRqpPOdssR_vzX_levasvDOKubZbxgZe2qrPYuks9Ye8OrPR9nrVWg4tf6ltNyjtWvgbVI8ofAFdM77S_RlzIdzhqXKEaLIg4UAJ4Aut67D2g9UYCHZr4p2xGDH4FnJOBL5pZ7ly1DhOaqLIqXwztT2Z_uZ8G-kA-zNmZpaWMwbrhX8nOKyEe75V25AQK1es194FcG66JfcaEq4eDROu2">
+</div>
+<span class="text-xs text-gray-700 leading-tight">Casual</span>
+</a>
+<a class="p-3 text-center flex flex-col items-center hover:bg-gray-50 transition" href="#">
+<div class="w-16 h-16 mb-2 flex items-center justify-center">
+<img alt="Smartwatches" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2p9p_c1WVPiTeSaNWnrMjhj81Gnvt9US1C04wx17yw2dkbS7uqU_34_7QDH6HiYs6LwGNK1IaBJ99IzLYlg9obCS7yMha6IsvJ-F2ukB9bWpGplCjn5AY1PoY3u8B7tJOHpgcsRtjLUrHKYmBmdOxkq2EHvsDJaOC3QQ7o56VKn018-bpJtFGEio7pbC3-lhMKTv7rzVY94MqCGtS8U4bIBhkUxEo28LTI8YBBg8A4ca3jPjSetfZ">
+</div>
+<span class="text-xs text-gray-700 leading-tight">Smartwatches</span>
+</a>
+<a class="p-3 text-center flex flex-col items-center hover:bg-gray-50 transition" href="#">
+<div class="w-16 h-16 mb-2 flex items-center justify-center">
+<img alt="Docks &amp; Stands" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClSwFjYiTYsf4LH3Luo8E-ejdtH9fAcfP14TSDgHo-Q8922lKZX-SSBG8t_vqGxbmqdYF_YBig6ustdzbnGNMGieqf8lx17qUI-dtRSFYd-TNG6XGyia53zyKyaippjt4ri5tJPmv1s6k6rzxOPYX8wHb09F9ZVR6HSUgitRJCRepflYNttSatfukI06IoM5OrNiar_eGj-YS1xClFMPPOMaxu8OcI2Q0uV-YJbZJTXmDxRcAP_ZBL">
+</div>
+<span class="text-xs text-gray-700 leading-tight">Docks &amp; Stands</span>
+</a>
+<a class="p-3 text-center flex flex-col items-center hover:bg-gray-50 transition" href="#">
+<div class="w-16 h-16 mb-2 flex items-center justify-center">
+<img alt="Tripods" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSSY6TjK41yUYZAHm_ruy4FVYPAPXQez9DPJToQw-KfBs8l7J4xBvbSxHy56FZWEWitj6KHLhzydY2sBRnZGIJUOFNSolv0m1Uoa3KB6lXuxX0pviLOb7DEJ-2KvKdm8De2Lqnpp_Up73SmdQMeWFY35-ucKEGECFZdM0juyhf6yyNwLHolVd6UQBI6bGLW4lhYCN4Mkba9TXwHKRLpu4nYRIx4ZBIoROGDIQg1D3Q-59x3vpE-2su">
+</div>
+<span class="text-xs text-gray-700 leading-tight">Tripods</span>
+</a>
+<a class="p-3 text-center flex flex-col items-center hover:bg-gray-50 transition" href="#">
+<div class="w-16 h-16 mb-2 flex items-center justify-center">
+<img alt="Dental Flosses &amp; Sticks" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVHPqjQ1jj59G9sTU0cSzujxy7Ite__EMcvr1qF6qHs_-pI388xbBWSFsFt3FMcLAYsCzBzSUkFSRhv-GjlVzpLF5zGT7pWYzFv2a021mu4ImzPzpDm4BJyagWjmYlBXxQkuBmwyzHC0sr1prVYeZfqTwR_1zUx4PSdTm6d7bCT9UEvodJ3YIG_9cn01EdX8O9CPwBT3vXcRxyOK1DbyD7IMvO3SRUICfwXvkfhD5F3Udvr3bvqcfp">
+</div>
+<span class="text-xs text-gray-700 leading-tight">Dental Flosses &amp; Sticks</span>
+</a>
+<a class="p-3 text-center flex flex-col items-center hover:bg-gray-50 transition" href="#">
+<div class="w-16 h-16 mb-2 flex items-center justify-center">
+<img alt="Fashion" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVoyn5CfY59ObdbVeqsb9pyY0UAbTwNGvZfUWdqI7MQfDfoy7uKCcp5PGawRNVjNFuxOahZXEZTYtK1GDrH3wRtpHs1YT9vZVOF9xOOHwlgCvWk2dN1DIWwYcohEG5L49ZF8w3dfwiKf6hbj-naG2DUqeEEZy8g4DNYZU28vkCbHCSoLdYN5tjdOdvNZ1tA6YSY50g3jeVznxWZuezG0R9w2RogeAncKF7P82qZYRHa3MTCwmxZdhW">
+</div>
+<span class="text-xs text-gray-700 leading-tight">Fashion</span>
+</a>
+<a class="p-3 text-center flex flex-col items-center hover:bg-gray-50 transition" href="#">
+<div class="w-16 h-16 mb-2 flex items-center justify-center">
+<img alt="Microphone Accessories" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmv9jbt_WN-WmDddLJZ0UP6lBEcS1AJpHLEuY9YEWY5SKaiKE6nBRNY1qBgL_WZUVYgdbFvCl_jHJ9HdbcD2w-RxO5crUEGRNeYfUH_CeGTNvQK0Ikaunv4GYLtTvFLMrVwrD-7FIDlgM8JuTA2kXYTe64G2_5LEhKkl86_5fX_g6ALfacLGl-eg8FdGhI9wkoAVZjW98ikXSPOYG-UNTJk_DHwx59TWUkp542uqlDmUdbuENsc_xc">
+</div>
+<span class="text-xs text-gray-700 leading-tight">Microphone Accessories</span>
+</a>
+<a class="p-3 text-center flex flex-col items-center hover:bg-gray-50 transition" href="#">
+<div class="w-16 h-16 mb-2 flex items-center justify-center">
+<img alt="App-Enabled Toys" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTpcSqL0-BmsEbw-ZDVh-1idS8fIBDqiWRcDmbl0ROaUwplsSQAcV0lcpgJGer5J87JmSs3WEhxORwjnFFk1x1jiaNrYahcf22rONgg-LhADtgL6t43HEOo6ccAJ8hqbMCpn2LVtxWjbjM93jf27OfSaJSp_5Bwls01YyKHpMLszunQzMlZiwlACAxn3iqPGwKtR2jtB35BuqsVYBKG7qqdgRZJLyuwcK-eJX4qQq4_zGs605ZH8Cw">
+</div>
+<span class="text-xs text-gray-700 leading-tight">App-Enabled Toys</span>
+</a>
+</div>
+<!-- Category Row 2 (8 Items) -->
+<div class="grid grid-cols-4 sm:grid-cols-8 divide-x divide-gray-100">
+<a class="p-3 text-center flex flex-col items-center hover:bg-gray-50 transition" href="#">
+<div class="w-16 h-16 mb-2 flex items-center justify-center">
+<img alt="Sports" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAo7t2orhWfiNGy9eGfBeJBMhTta0K9CXeZSR8HucBoz223MA6LCyfNMMWf8pCBDgpcCFJSjymOM-Gse7zuBYfnOWbtiXC_J6ev9EjPBQfNZL4hTd-aqm6TBL48GYqISkjLEQTkQmo5HKlyzjtyeo9MAp8dknT2LRmIBVen0wp53g6O4Rx9BY0-Zp4HDxLXt4TJCTdBbqSwac2uwog4tnblnFhyz_I3WYq5rfxfza0w97BfJHuYNzyy">
+</div>
+<span class="text-xs text-gray-700 leading-tight">Sports</span>
+</a>
+<a class="p-3 text-center flex flex-col items-center hover:bg-gray-50 transition" href="#">
+<div class="w-16 h-16 mb-2 flex items-center justify-center">
+<img alt="Wall Decor" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1K1ZVXqXnw4otYuk9LftbT4zxd50VGjTsSxU1dzLUYXUpp7VGr27aQKqPo0FKBkmKKud6mKQv4rTQskcbrxkTGIcOeQNrD5viTDCRVkYq_sTGOfbdt_9liBjISEoOatLnbZeIdQRPwQEQwBwykM9Q-cT2uxGXcveHR2FFJ0gR1KszRe2ZB1W6brKnl8WNseDbKAHourhcU5X3eS2IJXy5Ii2pwJohICqKQyYDsFl2CXi0fWuiFTI3">
+</div>
+<span class="text-xs text-gray-700 leading-tight">Wall Decor</span>
+</a>
+<a class="p-3 text-center flex flex-col items-center hover:bg-gray-50 transition" href="#">
+<div class="w-16 h-16 mb-2 flex items-center justify-center">
+<img alt="Face Mask" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEZEEXt3GHz1G1uNpOlx-vbyKIQTYeeMUcE0wLmAagzklisM7PSWK_7zT_R-THQnNwPPEi8dGau8SkMugYar1DIae5L0ZyLgJCo56bfL01LlNE8mDWtELN5wTERI_SqGPuvULcUS038rsTXjnC8dxBaJGNyYO_6zPkOuP0G-PBsH0MPTPAz3mq2lL85qyCIixcOrDWf0L7HlurNLrAScbb_zXlO_pU4rgd_lBWgAy7ipKvntdHQ98a">
+</div>
+<span class="text-xs text-gray-700 leading-tight">Face Mask</span>
+</a>
+<a class="p-3 text-center flex flex-col items-center hover:bg-gray-50 transition" href="#">
+<div class="w-16 h-16 mb-2 flex items-center justify-center">
+<img alt="Investment silver" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATyCMzowRLyJlNFC2DLKEzwEwzihHI4RIMiVgmCy2KkXxAhv7cLcYZ_hQIb5rq72A9XTKmiXmnUHsrNULnwHaEPTUDxl4Ef8UczZ4amRWSZ6xc0KB4WnzKTNMMcmlWr32xJa9hD2W0VWx93Ob8cp5AWqfyrHXgdPgmNi8s-2fbso-t7lSUzlJwHC3wOt4UQXmvvXd2xCDt1vtw51_AqDuirKBaG6VRlIRXHwktUQzQKxEFiPIo6g2T">
+</div>
+<span class="text-xs text-gray-700 leading-tight">Investment silver</span>
+</a>
+<a class="p-3 text-center flex flex-col items-center hover:bg-gray-50 transition" href="#">
+<div class="w-16 h-16 mb-2 flex items-center justify-center">
+<img alt="Breast Pump Accessories" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxPzpIgNhLVw3a5SF-6zitYABj6crP13NWnJE4jzyZg-zlSfbRzBy670SEp1nhYdRidZYiXZC2qYCSQz0ZGvN1hKHH3zpr6biR-ANbm16wzDCcGH43bJhVEYkXD7vjQ_R6PYfCxh6wGnbeV6n83eF1anBTsI5-NyqthjNdGH_PxrMNET2j2hNyWdi6DnIJhW1SKYlIMHE-r58GvLL1xRQu4tN3jE4jjDsf-oah5b9bGwsCdIySN_y_">
+</div>
+<span class="text-xs text-gray-700 leading-tight">Breast Pump Accessories</span>
+</a>
+<a class="p-3 text-center flex flex-col items-center hover:bg-gray-50 transition" href="#">
+<div class="w-16 h-16 mb-2 flex items-center justify-center">
+<img alt="Vinegar &amp; Cooking Wine" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrnTSXYKTf2oBmd4sgv7iqtp3iF1myDxTVJ9BRWMiyPzzYARyPboSKnaz_kSozwaiqFf3qtax4UA9PN0AkYHRYFJs6sCA1XuwrQ_NKFN1iYb6lcmnWbQNU0Njqh213lcSfciVbNuuFUe-A9gSaEtIbKiw5DP6wg6_e1EEG9qMxWwxjFxS1pQhQnHzAmrkDCnwWQoLHb9CD4Dxh6IJKR_NYdApsLn9USoShOmNsUIvxSTGPMpjn76M0">
+</div>
+<span class="text-xs text-gray-700 leading-tight">Vinegar &amp; Cooking Wine</span>
+</a>
+<a class="p-3 text-center flex flex-col items-center hover:bg-gray-50 transition" href="#">
+<div class="w-16 h-16 mb-2 flex items-center justify-center">
+<img alt="Convertible" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuLWUdIP3eHYIdfDaDSdzfQ_mBM_fKHYkDqXha7MGiXe_rMHlxQBno7wMvaiEI8HAqB7jp7K02-AblQXrbV-C8074dx1cTTTRk5Fh5muuHt5NO5w1EfMRELpx1i4j9JU5iDrtTcvTxBnRbRu15KeqsENjLPNP81Sy59TusBb2uq8DRqGSDrjb2w2_TuS4sqVTZq3FlSRXNDPliW_41UkcIJFv3QVX8k4DSv5fDSolXfSjiB4xbbTm8">
+</div>
+<span class="text-xs text-gray-700 leading-tight">Convertible</span>
+</a>
+<a class="p-3 text-center flex flex-col items-center hover:bg-gray-50 transition" href="#">
+<div class="w-16 h-16 mb-2 flex items-center justify-center">
+<img alt="Other Projector Accessories" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT-stN7VMFthjPHaSTTXppxjcmgNYEM1HxON4k9-zLdRjWRoWfHwq29CvVtVM0X5s0TbhA60YIse5gQfvbDpXFVSV_bT8WjE7zri1udKPXivos209_tDNQzwMBVBkZUQgsFF_HIHpnqgB2_RHpNiWo1_lJcj9eaXKlJpFoscjUnRk_M36ppuFQ3H6kTMmGACsjlbhPoLqTDfvG-SKYiKA0ytdsvWNj9rVv0GwbjlDwEhodYX2jSPl4">
+</div>
+<span class="text-xs text-gray-700 leading-tight">Other Projector Accessories</span>
+</a>
+</div>
+</div>
+</section>
+<!-- END: CategoriesSection -->
+<!-- BEGIN: JustForYouSection -->
+<section class="mb-8" data-purpose="just-for-you-products">
+<div class="text-lg font-bold text-gray-800 mb-3">Just For You</div>
+<!-- 6-Column Responsive Product Grid Replicating Catalog -->
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
+<!-- Row 1 -->
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Prime Picks Premium Dental Flosser" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIg72cE_2BOicMAcvI7YWZ6ZjL0KDS1wTgRGs2bxOLQwMLduH_tPatc6rnohUMLBigpumFWUlN-5t7rAs0nm7kMbf_2YRTje-mc_YD0ckoREkG5uFIPoe6vsZzVPBPEFVDv19Bb8NzJwWnD9Jjg7e4JArcmhNxmYx2f-Y6Hw5Jl1JvtWLs-tZXWC3MtF5-islX2OeEjkDi-Rls3q2thsT6t9WR_G4NkIRCPxCicBMFRdGIEVLBZCDA">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Prime Picks Premium Dental Flosser | IPX7...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 899 <span class="text-[10px] text-gray-400 font-normal">-85%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+<span class="text-gray-400 ml-1">(422)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="3M Women Multipurpose Breast Lift Boob Top" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSYe6fiRRUSBaCOWVPog6khgy2OvICY0183e8Wo5r-CUod5TV7IIylpOGOx6uG83D0Kprs5-57x8p3jDl1aKy2Z7H2VY09bIyIaNwAjVZafMbTJ2ekZOMJEXRygH_X70vYjcghmSWMX5fAz9dI9QzLCgtGg_U2dXPheinnXzp3ApOE1AzA11cLaS_CXAlslKtgDrh3V0t781FYijNl3BK4JLh95Vjm9ykfGQwAKy8GzwJtcW073HHR">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              3M Women Multipurpose Breast Lift Boob Top Tape...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 189 <span class="text-[10px] text-gray-400 font-normal">-67%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+<span class="text-gray-400 ml-1">(61)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Pack of 4 Pcs Summer Men Breathable Boxer" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNBvOQkSdkmkWACeMaOyPQHWZ-ngft6-JJ4KtQa5jEkaGQ8svhzZcg_kjEOo0Ad9V9ojuFUrHR0r1ahN0hv4aocv-sIQ52z8GPmtRhT3ANxpGksDq-ImAE-NU7TliTj7kdojJ3fBQ4sgeVdLm761TPyRLiAuTiDI168wzPghRkZnZK4dijSGkTUO7jHxtUcHtd5IOWc5DO2fUNMzRuuHFGJgZfOJiaWK0CxObJdbiqbCpElVoDxGoQ">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Pack of 4 Pcs Summer Men Breathable Boxer Briefs...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 565 <span class="text-[10px] text-gray-400 font-normal">-60%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+<span class="text-gray-400 ml-1">(52)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Passport Holder Travel Wallet Organizer" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKJ-L1D-D6gq7KxJ7YMoUDlSwWiPA6speB0JZ4FjIxaslDSYVcUFwWmFu9IXIFhfgdmFjDaBU_e-wizMHyDqVFTZQC4ev2KNimiuyCJxxz2RPR3RubZqpyL7VLadsGCWsVZ0FTNiz5hyn5txUr3kbCauFdspolmelTciu3x-WzR4GRJFbcr-GjQhRsCTNEui_Gc22lphO9tFND-wGZoVSBWSoEStLffMRXk-nFIilBa0tY_AjsbGYH">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Passport Holder Travel Wallet Organizer For Men...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 525 <span class="text-[10px] text-gray-400 font-normal">-48%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+<span class="text-gray-400 ml-1">(122)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Plug in LED Night Light Mini USB LED Light" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzYToaRh-OX_jGTakAfF05i42F-xDLQKrXcn-NUYxpABt30Tk-2Oxxfi6purjFyeNAw9GABowB_jASLhksyrS5mfKPbEBEk0p-Ku4UvQRoJC4H9VGWCsQ9Jgt12ub2x8K_-pFQ2Nfv9ujw9rbh33H-M9N8QBM2I-fDxrrCrUCJ1M8UaWM0Ah6iMNflGDXRwWIekXffMcBP_6bB7Nl6frX7gs4ASuraH8QAfz_palZQf8ycffDMa0bP">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Plug in LED Night Light Mini USB LED Light...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 26 <span class="text-[10px] text-gray-400 font-normal">-68%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+<span class="text-gray-400 ml-1">(282)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="VGR V 390 Mini Professional Men Shaver" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCswbMKF6zyFoU6pIdDIQP-PKnZTlfFe0DMFkdXCUm2JL8gDUTEubELVYchlV6aEI_mGeB5QKeJEbwMTbViEJft8w3PYgadCnQDp5_afP7jgiTUopqxBYuUSGgQUY9z4Wsb7f9zMMuLfT8UpJMBzxxrykvbNDpQef0u7YlHVs7HQoHoNbeXhZ-P-XofAklBJxsDkM2wuJQcvIUA73BQKhKrccNa388-uO0UxRuUXirRrOEUfV5OJVr8">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              VGR V 390 Mini Professional Men's Shaver
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 975 <span class="text-[10px] text-gray-400 font-normal">-18%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+<span class="text-gray-400 ml-1">(67)</span>
+</div>
+</div>
+</article>
+<!-- Row 2 -->
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Aluminum Laptop Stand" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDn8pNa5d954PTTg-7d9W6orRyIT29cQVpQvKKK_KQOVDI2nh8r6wfxyXXHsPBkBEecqx0K7hCbbWgM6v9yJL1cFOaAYedLTPaq-tF_WbWODUfXMVeHvbVWIAyz4KvnFlcXeUXPVtAEcQHrKl-ET_PkXDQh_pOKOWHJD6LK-bUwQyTKsGsbYdRSc8XhRLaB3eI7AIynKNT9Jn_geTHSk3TTDy1ifZ6Mcz0zEaJkFzz92-AlXduow_A2">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Aluminum Laptop Stand with and without Coolin...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 475 <span class="text-[10px] text-gray-400 font-normal">-37%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+<span class="text-gray-400 ml-1">(228)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Tshirt Tanktop Halfpant Set" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJlykIo9rkaEx5pHqJUl4ZLjoABwoqFsnpuJN9ld0objNfJ94rYfRxBMcQiSDfvpeLkZBr196e6wwiQjWa04bZijD6wqqq-nt0bU_5obXvmBb_yErT1kAxCCCc71o1K86F0sA1qXba9EyGjZfV247opiJwRzs6gyEcDXID9ZSfoCjChE8kDsc14smj_aVulVV14S-ax28Ck1ZEN0fCb2pkQB9CkFvkhdUY3XC6r0r238YLPVkvsk0P">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Tshirt, Tanktop &amp; Halfpant set of 3pcs/fashionable...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 854 <span class="text-[10px] text-gray-400 font-normal">-64%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+<span class="text-gray-400 ml-1">(342)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Genuine Leather Wallet For Men" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG2Og0gphiGPSponYX7pHb8jVdMqhqsAQEhlugBy2k8sFW8RtBaB2dMYw4ztzP8a-z97VRKVtD-s_V__hxq1p5WyzbF8WvLFIFjYTw_LnN4Pe74Wu9jbEBYm1YzhunN7Xvd2V_wHFE9k4exY1o1uIXMo7JVqeM9bxH5Frxeh9pRwoVQsNeZJ5QEJIqk76avrduev6bZhvd8HOVA3ypXyDGC3qYXqvcIvthaZ1DRzaZee3g952k9GEk">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Genuine Leather Wallet For Men Black Bi Fold...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 527 <span class="text-[10px] text-gray-400 font-normal">-45%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+<span class="text-gray-400 ml-1">(57)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Moisturizing Foot Socks" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYN33VNdfguAh54zhVUnn9EItjRxmLYax3xA70sy2YWQOEKk3xZGuxeUacdmtGzCBQ4aAbNFIsWRdFRuR8Mq7rlPPKjnkPHyTSV7MP9sRvqnMfX-G3JjrL2M8oW0Nqdfwx1J970hYA1-dDSjvp10ZbM-xXIiSaNETOAfh6JpWAfpApCRc0JvNdSR9Dg_GtJigLyREYXEPptb_bY4XLSyAYXEqsmf2ddP8K8wO9Ag3eAWRJq45fkoKD">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Moisturizing Foot Socks, Silicone Socks for...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 575 <span class="text-[10px] text-gray-400 font-normal">-50%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+<span class="text-gray-400 ml-1">(10)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Ultima Rapid 45W Powerbank" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPiyrTJEhntuiYuz7TfuNmqFO4ao9lpPsOj3udzmA0J_uJ8K7hB9K6Vm8hfqnczhD2qY7_mG7DoBJJ6mBnXqapoD4mrh-bwFh-2VqJbxZE6EFOc44a-9Hqhq2CZ6gEKSNA5bCD3pl72ujZlv2yPIwRk_S7weU3iCkPMM3oA6tiTa0HKQLHIweg63ni5zbEiPQYGIbV9vjW_0Ufz3yMGeaECMUgBKOTxM7tSu3gq8Txg1hv6P3ubx3S">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              [New Launch] Ultima Rapid 45 | 45Watt Dual...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 1,699 <span class="text-[10px] text-gray-400 font-normal">-53%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+<span class="text-gray-400 ml-1">(68)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="BEARDO Blue Blood Perfume" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxF3YCdUbd1Rx-6GRMY2mSq84pu8BTVqWkqe9_BHhuu7iZEV5eH1pXR2mtHC-innBpxCnV6cp3IE0SNAfKOOvtwzkvF6HW3LdjKxox7YaP-2unipRKQzRGtCEzb8JlPmzQZ_PTyrjQubHNpr06yvbL07M3_r-4Tc8iwx2I10D0AYJkEe0etAK3g3gDp8a2C3OWeN6dzAOBIiEVEKw8_q2DNv8rNSEK5xGr_-2KCNKoVlkgPY_M9bp9">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              BEARDO Blue Blood Perfume EDP 100 ML
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 1,999 <span class="text-[10px] text-gray-400 font-normal">-38%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+<span class="text-gray-400 ml-1">(13)</span>
+</div>
+</div>
+</article>
+<!-- Row 3 -->
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Adjustable Tangle Free Jump Rope" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUjDlyP9dBD-K1GO3BbaLNZ38QttNvDUF7_5h3kZvBpkMhIE1CbZdtqByMleCuVcPk0XMzOzH4zXBZzXIkviurLvtOpUuSrQZBeQZ-Y_orqxamrpYIP4hsqcLi6iC7-D6yh1Qo02R-fmxh-XJNoujmzMYWFBh3BhbMVIhbcFv4MRowJFcOtpNlhleRqCk6yb-9v3nxXmbXarCcuMy2u_37WUfOEcCUxTMRzV5dnhaCwqV1rqyu0x_W">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Adjustable Tangle Free Bearing Jump Rope...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 125 <span class="text-[10px] text-gray-400 font-normal">-84%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+<span class="text-gray-400 ml-1">(1829)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="celimax The Vita A Retinal" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfZ1A8kiH09STEYrTsuqNJO027A3FDKUmeszcYBNUKpVqxFJnPwmAL7bv88P1siGL1z_5Lu0iMKz_peH0QJnDnpf94lJJMjTXSJZbP7z_bUKzPtGT9BMy2hzmYpKQeUgv18PSuhaclyBbdPgcBXmYXeB1vV7uLCwwMAmnpPd-IpFp99AqAMi7mVuRXQZCPDeuCk_OxkYXwjoUXav96LfSkYCP5cq-aG5LEPZ_k3pOTGe3X35X76-gu">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              celimax The Vita A Retinal Shot Tightening Booster ...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 930 <span class="text-[10px] text-gray-400 font-normal">-77%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+<span class="text-gray-400 ml-1">(32)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Ultra Pods Pro Earbuds" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzSA6MGuxWe1zN10pPO79FV6IAS-DSQPqBmuP7k12Xy7tpPNyFnXTQZX-bPoGIfHvh7mVWVkgQt2zjW7aEm5V3WUtFkYRcnfCiRmm2INF563vdtu0bUpG46oR4D5s3V1p4q-yafa1-oVRxj_j6lxO2fJmboQ5BtiwTiVb6hUB0JN4677sfvuaiLIWjRgi-oSOgzO-d-djttn9doNYPw0CjA1isyMTHApMQdXWHe8wREy6rfQSsDy2P">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Ultra Pods Pro Earbuds Sandproof Cycling...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 304 <span class="text-[10px] text-gray-400 font-normal">-77%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+<span class="text-gray-400 ml-1">(218)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="2 in 1 Shorts with Inside Stockings" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDo0voQdqY5X-xSHkGhcDO3gL0sel66sox0TUi_TIQiapH1v3DZja3pYhqU6vdWBWfVGl8BUWZPNqq-ekJG1dfXoFTyJoqLuOqGLO45m1uBUri5p8hOS0VNPH6Y7gKVaZ5CTiz1JEPbeiWX-dwxEWmoYGeefn-Gw3bk_6eqEkHSkscALmroTIEmJSG0Bt3HzddcacApbt0hzzRK3_d0IFLeUxznTLqQxzXENAOznbkT2lDj3_0HY2s8">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              2 in 1 Shorts With Inside Stockings For Women
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 599 <span class="text-[10px] text-gray-400 font-normal">-40%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+<span class="text-gray-400 ml-1">(3)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Adjustable Hand Grip Strengthener" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlHXpRnFQm9sT9Nr8Bxy8kmqJomaYwEHDNh2FAZbf3OeIPq2dG-wn0-dzZ5TIwjMWtJ5iHmKVkJk0UCTf6VmES85HKzrl8Fl-ecYlLaF45NOm6-JEkel_VbKg09Tzzio1-IPOnVbOBgJYJC9iBZBBdt_eiAxZd10TEWAE-djRvH1SOwWPEZ_TOXWgeP7aSsHPFPtmKMcqZJkdQp1mwnUT7CGKovODKXBOPw-Y_xx9I9Fo1Ndxs3j0J">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Adjustable Hand Grip Strengthener 5-60kg /...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 110 <span class="text-[10px] text-gray-400 font-normal">-83%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+<span class="text-gray-400 ml-1">(375)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Combo Dry Fruits Pack" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVW5wNAVRP_OzSdlskZT-Lh2TgwVIcXoDFelp4lv4y_G6aM9-Yz2SMNcUbMz7QcGaTv-Z1iTZRi487ueNJKq7FVCv_ONfjYgU_XsGTrYOpFd9RBcSaykwZ-e8R07NrErTBrA-JBXDU5ZH3QyZWgO8LPB5MgjyaLbweXAfklv-KGTwoatAFjmxd_uWSEGh0crqK-eIq9JwTnmDy-dXHVz7DuXh74rKt8BbAcE-y4v-vLqMt6BLHM5rg">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Combo Dry Fruits Pack Each Of 50 Gm (Cashew...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 680</div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+<span class="text-gray-400 ml-1">(37)</span>
+</div>
+</div>
+</article>
+<!-- Row 4 -->
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Vintage T9 Rechargeable Professional" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBm6O8XpG9CYrme3QBKRNZi6RSN0ZV9YAV2KnjDbBfP3GBpExB0SSrVdnbeawfSxo0R1pjq8LnEoi9mNWMAaBOhwD09p43W4wflbaf3fMsYg3rBA3v-yTWFqpV9njhjZguNr4wqdPCUhQ8wbZZWI9XIuLCFz13m4y3KffBlULQPziHwrJbNn0M0zz7AUr4QqK9qerY_qR03dCnB-mj1Dnj6Vjvb5yHwdCvm4SWXN6VOVjCPT0f7wN5">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Vintage T9 Rechargeable Professional electric...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 191 <span class="text-[10px] text-gray-400 font-normal">-62%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+<span class="text-gray-400 ml-1">(30)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Dopamine Detox By Thibaut Meurisse" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPkZk8MFhYhsVaGelz9Ob7xGdmm0XCyd-TIN0ktgJ6QM20ko1tpZV9ZwX46x5rwhjLMTWHlrZ5_bz-cmnX53ept6ju2_4oE8BCSXst_g1gNVOOB_RArxs_E4pwGKpjt80JuADYNv4ez_dvlOHtpYlHEVTAOGjbRvdr2alPez13KKEB2n_-QpHHe-DMPxUBd9r_ZCepcS8BnBn1KQZf98ktBXxpMJwCgTukXS55CbTiosRAuLfNAqmH">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Dopamine Detox By Thibaut Meurisse
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 364 <span class="text-[10px] text-gray-400 font-normal">-74%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+<span class="text-gray-400 ml-1">(192)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="New Summer Special Denim Suspender Skirt" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdRkoj7NAdM0YKxNIq7gb0fsBfAWAlj253-AzDkrLveJ5YnbaG4blGeg3Ee2OAr79tSmrYQXlCaH6IZ8S5EwY757cGawyf3CN2IGDEjb9Tet_6SOZbN4ub43kL-VnKeAXjgUR1I6x2jsUg3KQ-8UhLlO40n8AemuFl6MQAbW3OiiG0vYkqHgsJwRH_GsDWv-y5mSyCiAvBf-QvGl4-SJZ026b_nzBRGf-aNWrIl_T_HjEuWP7ulibH">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              New Summer Special Denim Suspender Skirt F...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 1,363 <span class="text-[10px] text-gray-400 font-normal">-28%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+<span class="text-gray-400 ml-1">(12)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="MuscleBlaze Creatine Monohydrate" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwcotVh252SvScN2mOBbyzJ2QeKJCCmv8h-pX-eNo8mlE-nsGovOOplcVq6TLFdAV6hDHq_3XbjqtSuyHHvH6nxKvfX-BeyCHvMq2SRp_E9WyGC8vNQCmNAfoiNfxXon3b1X1GqJwOjqKQ87qV3ntUzhB38fgUOFLiaowkhXnNTbVMbFTBCUkYYRk2e7qscW29_7LpbPsLhaj1nN4TSIRAtfTUT9YJjCSMhqDUamzycUKI9g6TWKnb">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              MuscleBlaze Creatine Monohydrate...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 2,999 <span class="text-[10px] text-gray-400 font-normal">-40%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+<span class="text-gray-400 ml-1">(170)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Fancyro Women Pink Sheer Polyester Babydoll" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAisOsvUslVUrfu4LxFLhm0Nx-L1g3JT33XwSFlAkgHGYR6pRLibLMy7A4dZ4tiV6BX8VzEcrGR9Xtn5U9qXNnZFhhv-sFc_W2VciHD6aViTWfJky6d2_1JIZx8q0sfUX6KqlqR4rIEOjHlfd39Gfmoq2FIoY8gbVP2vtxRlFLVi_z6OYjDV6k9s7XezYM-NecRCLZr2WVIfnIFUoaRHd5fP2rM_64hw_5AdygKEhQd5aCn14C5Cnsx">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Fancyro Women Pink Sheer Polyester Babydoll...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 1,190 <span class="text-[10px] text-gray-400 font-normal">-34%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+<span class="text-gray-400 ml-1">(5)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Baidyanath Shodhit Shilajit" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIaTcF877JeWhIl0iFmg9paLdTjA2aq_T6QkgUqwEdtvgFSmFQeJlwIbh1dt0b8bu5Gu0CEpDEPeMjEDoGIUbo56uBl-V8A1MrkWiJ8vbb4MG-UtFcdNDEkLtUjOeN6a82CBQMM0_A4yIZPoNyCepCe1X1HQBnFSEivLMTsrO2tBS4D2AiDriyQQkBvIzMgjSgLeVPrI2quoGdc-oFa_AUqdFGExRjJyqgdrczYsayvv5x6oc00Mht">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Baidyanath Shodhit Shilajit (30 Capsules)
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 315 <span class="text-[10px] text-gray-400 font-normal">-2%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+<span class="text-gray-400 ml-1">(58)</span>
+</div>
+</div>
+</article>
+<!-- Row 5 -->
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Fine cotton trouser Paint" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5wTMVmU5ynIaPUQ1c9lkwgi4wqUIQrYZsuTf8bKJcLyiq9Fa2ETEeiFpc6rcUOV_3YmURroy9wbnIRYU8tsuTsCJb9nV6NYTAPj9pVzxddH1viE0K3ijZQ4svTVqzAVL5veg7OJ1SNcBHE639uTPCkLO_Vd8pf1F4PP8LtPfvEL6yuFveBcQV2uceoBeSCswODZk5Oy-GbE6DMgMA9SLxLI9Nb6HlvkwLqweMOuvVHPhPWvf9CAIs">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Fine cotton trouser Paint
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 465 <span class="text-[10px] text-gray-400 font-normal">-53%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+<span class="text-gray-400 ml-1">(142)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="UPS Router Backup Wall-Mount" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3u-HFq49wkSoZ5dZQzmiQ1vdCZF2nzrMfsiamzHPSU8-9OB5hotTzLCDGX58_iD3oHniPPYh1OIfdZ9j4MY4MJk7OBeyB_DcxxsdJu7y0aZgpFbW7vfROsvRkpMJGuKf8H_ZtioGegHJv8XoMqfSOWakcvcU6MbIZBsLYqyE79UjRGpe9oMcF6v6AvU-6ecfYWyxvGk1EowxRhJZxjl7TdU8H0ypb8bTcMkWGfP1tBqgXAmbMkRAU">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              UPS Router Backup Wall-Mount Power Supply for...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 862 <span class="text-[10px] text-gray-400 font-normal">-43%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+<span class="text-gray-400 ml-1">(269)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Sun Glasses UV Sandproof Cycling" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZnDmn0ap-kLsfqnYw0ByuOwbyhZoEsCsTwCLIwI6zTJi7EhVVuLyhDY6jTqq3-x6s9cGcliMjFY6KdZ4smdlKXdmhBnWuPHoJjbFVwBYFzX71s_qscguTMm2lb4qdI4p2P1aIEH6z2vN22o7q_7ARp26MXxdUhRsNdljNt_AgnO6GH0ffuLcUto0V0ZGvyMFMHCfxaTrVUHWedRD40Tre7hNtOIKCUiVWRvHgV7YCeMzSamgFTrZj">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Sun Glasses UV Sandproof Cycling...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 668 <span class="text-[10px] text-gray-400 font-normal">-58%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+<span class="text-gray-400 ml-1">(8)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Virtual Reality 3D VR Box" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfh49w_FQvawxG2DSH6DxlmnubCVfXk8U3eWbOsVTW1RiA1bSAeb9Y0aLt0w2XQcaQYdNq28xxsrQZrwBHaxUj7G-mPJmxyS0ge93HcziBLiE8cGW17kteTSkB9yD-b3_QNG7SrHtdjFGwBCvfdf419ly_KFiJpOB9dwE_iIymeqajiPqZJYakWIgsZ9MKahRrKQHBdt3asdDVGiFyFjbjRyqdCzstGObAhZ0FeU8RgYIaNXnIcnFR">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Virtual Reality 3D for 4.5-6.0 inch Mobile Phones VR
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 444 <span class="text-[10px] text-gray-400 font-normal">-56%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+<span class="text-gray-400 ml-1">(110)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Wooden Money Piggy Bank" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAza0HJSfiIa6UC8vLcEDjn4fjJXyh2YuLkKZNQFup6TFrGyCBVP9FNq-t4xUWEv5DP-iWlXOlx0JP_e0fD3fgtVp-wMspqbIJxbG7JTU33tMmlVlWMfCrJm02cpFy9b_tcBq_n-6O5TWhE-r1PI2___W0GGwz27vw8IPpWwkutD-InE-16sB48oWIpkdZUogHCRu--SyLXGxtezt0x0r4tDhly3nkKrJQJ80xseuOQ70qC6o51cXYc">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Wooden Money Piggy Bank, Money Saving Box...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 364 <span class="text-[10px] text-gray-400 font-normal">-60%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+<span class="text-gray-400 ml-1">(38)</span>
+</div>
+</div>
+</article>
+<article class="daraz-card bg-white rounded-[2px] p-2 flex flex-col justify-between cursor-pointer border border-transparent hover:border-gray-200">
+<div>
+<div class="w-full aspect-square bg-gray-50 mb-2 overflow-hidden">
+<img alt="Chia Seeds 1 kg Jar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKYVTKLapoIEBiz6uoixkK73XzMmMty-WDc74QL5Jme3Sbk2Bjqp0U3a_aI9Vzulw0zkVIB4U40plsF6Cwac8C_zP8Dku1CeDGDZs8dkSCXqCOr9QvH4NUKbH1CNhADuyveZoEEpx-mHykxoY24AkdT7hTFlbfdBrvRAqgINkufeffKCheEieGoaYZpcq5X8KbbiLiTBfbtEO2sDIxm269K_A7kyx0zVcHSKaYl7SpXY5gdhLVIdni">
+</div>
+<h4 class="text-xs text-gray-800 line-clamp-2 leading-snug mb-1">
+              Chia Seeds - 1 kg (Jar) - Healthy food for eating...
+            </h4>
+</div>
+<div>
+<div class="text-sm font-bold text-[#f85606]">Rs. 900 <span class="text-[10px] text-gray-400 font-normal">-40%</span></div>
+<div class="flex items-center text-[10px] text-yellow-500 mt-1">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+<span class="text-gray-400 ml-1">(596)</span>
+</div>
+</div>
+</article>
+</div>
+<!-- Load More Button -->
+<div class="mt-8 flex justify-center">
+<button class="w-96 py-3 border border-[#f85606] text-[#f85606] hover:bg-[#fff0eb] font-bold text-xs uppercase tracking-wider rounded-[2px] transition shadow-sm">
+          LOAD MORE
+        </button>
+</div>
+</section>
+<!-- END: JustForYouSection -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: ComprehensiveFooter -->
+<footer class="bg-white border-t border-gray-200 pt-8 pb-4 text-xs text-gray-600" data-purpose="site-footer">
+<div class="max-w-[1188px] mx-auto px-2">
+<!-- Top Columns: Customer Care, Daraz, App Download -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 pb-8 border-b border-gray-200">
+<!-- Column 1 -->
+<div>
+<h5 class="text-gray-800 font-bold mb-3 uppercase tracking-wider text-xs">Customer Care</h5>
+<ul class="space-y-1.5 text-[11px]">
+<li class=""><a class="hover:text-[#f85606]" href="#">Help Center</a></li>
+<li class=""><a class="hover:text-[#f85606]" href="#">How to Buy</a></li>
+<li class=""><a class="hover:text-[#f85606]" href="#">Returns &amp; Refunds</a></li>
+<li class=""><a class="hover:text-[#f85606]" href="#">Contact Us</a></li>
+</ul>
+</div>
+<!-- Column 2 -->
+<div>
+<h5 class="text-gray-800 font-bold mb-3 uppercase tracking-wider text-xs">Daraz</h5>
+<ul class="space-y-1.5 text-[11px]">
+<li class=""><a class="hover:text-[#f85606]" href="#">About Daraz</a></li>
+<li class=""><a class="hover:text-[#f85606]" href="#">Careers</a></li>
+<li class=""><a class="hover:text-[#f85606]" href="#">Daraz Blog</a></li>
+<li class=""><a class="hover:text-[#f85606]" href="#">Terms &amp; Conditions</a></li>
+<li class=""><a class="hover:text-[#f85606]" href="#">Privacy Policy</a></li>
+<li class=""><a class="hover:text-[#f85606]" href="#">Digital Payments</a></li>
+<li class=""><a class="hover:text-[#f85606]" href="#">Daraz Customer University</a></li>
+<li class=""><a class="hover:text-[#f85606]" href="#">Daraz Affiliate Program</a></li>
+<li class=""><a class="hover:text-[#f85606]" href="#">Review &amp; Win</a></li>
+<li class=""><a class="hover:text-[#f85606]" href="#">Meet the winners</a></li>
+<li class=""><a class="hover:text-[#f85606]" href="#">Daraz University</a></li>
+<li class=""><a class="hover:text-[#f85606]" href="#">Sell on Daraz</a></li>
+<li class=""><a class="hover:text-[#f85606]" href="#">Code of Conduct</a></li>
+</ul>
+</div>
+<!-- Column 3 & 4 Combined App Promo and Badges -->
+<div class="md:col-span-2 flex flex-col justify-start">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-11 h-11 bg-[#f85606] rounded-xl flex items-center justify-center text-white text-2xl font-bold shadow-sm">
+<i class="fa-solid fa-bag-shopping"></i>
+</div>
+<div>
+<div class="text-[#f85606] font-bold text-sm leading-tight">Happy Shopping</div>
+<div class="text-gray-500 text-xs">Download App</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-6">
+<a class="bg-black text-white px-3 py-1.5 rounded flex items-center gap-2 text-[10px] hover:bg-gray-800" href="#">
+<i class="fa-brands fa-apple text-base"></i>
+<div class="text-left">
+<span class="block text-[8px] text-gray-400 leading-none">Download on</span>
+<span class="font-bold">App Store</span>
+</div>
+</a>
+<a class="bg-black text-white px-3 py-1.5 rounded flex items-center gap-2 text-[10px] hover:bg-gray-800" href="#">
+<i class="fa-brands fa-google-play text-sm text-yellow-400"></i>
+<div class="text-left">
+<span class="block text-[8px] text-gray-400 leading-none">GET IT ON</span>
+<span class="font-bold">Google Play</span>
+</div>
+</a>
+<a class="bg-black text-white px-3 py-1.5 rounded flex items-center gap-2 text-[10px] hover:bg-gray-800" href="#">
+<i class="fa-solid fa-cube text-red-500 text-sm"></i>
+<div class="text-left">
+<span class="block text-[8px] text-gray-400 leading-none">EXPLORE IT ON</span>
+<span class="font-bold">AppGallery</span>
+</div>
+</a>
+</div>
+<!-- Payment Methods & Verified Badges -->
+<div class="grid grid-cols-2 gap-4 pt-2">
+<div>
+<div class="text-gray-700 font-bold text-xs mb-2 uppercase">Payment Methods</div>
+<div class="flex items-center space-x-2 text-2xl text-gray-400">
+<span class="px-2 py-0.5 bg-gray-100 rounded text-[10px] font-extrabold text-blue-800 border">VISA</span>
+<span class="px-2 py-0.5 bg-gray-100 rounded text-[10px] font-extrabold text-red-600 border">Mastercard</span>
+<span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-[10px] font-bold border">eSewa</span>
+<span class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-[10px] font-bold border">Khalti</span>
+</div>
+</div>
+<div>
+<div class="text-gray-700 font-bold text-xs mb-2 uppercase">Verified by</div>
+<div class="inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 rounded border border-gray-200">
+<i class="fa-solid fa-shield-halved text-green-600 text-sm"></i>
+<span class="font-bold text-[10px] text-gray-700">PCI DSS</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- SEO Informational Text Accordion Block -->
+<div class="py-6 border-b border-gray-200 text-[10px] text-gray-500 leading-relaxed grid grid-cols-1 md:grid-cols-4 gap-6">
+<div>
+<h6 class="font-bold text-gray-700 text-xs mb-1.5">Experience Hassle-Free Online Shopping in Nepal with Daraz</h6>
+<p class="mb-2">E-commerce has evolved over the past few years and since it's easier and more convenient, it is evident that customers are actually switching to the trend of online shopping. Daraz Nepal is the pioneer online shopping platform that offers seamless access to hundreds of top brands across smartphones, laptops, electronics, appliances, fashion, home essentials, and groceries.</p>
+<h6 class="font-bold text-gray-700 text-xs mt-3 mb-1.5">Convenient Online Shopping in Nepal</h6>
+<p class="">Daraz is the ultimate Nepali eCommerce website offering customer support and high-standard delivery. The online store is updated daily with thousands of products catering to all consumer needs.</p>
+</div>
+<div>
+<p class="mb-2">Daraz is a global online marketplace with presence in Pakistan, Bangladesh, Nepal, Sri Lanka and Myanmar.</p>
+<p class="font-semibold text-gray-700 mb-1">General Information:</p>
+<p class="">Daraz Kaymu Private Limited<br>Kathmandu Metropolitan City, Ward No. 11, Thapathali, Kathmandu, Nepal<br>VAT No: 602403687</p>
+<p class="mt-2 font-semibold text-gray-700">Grievance handling Information:</p>
+<p class="">Grievance Management: 015970597<br>Email: customer.experience.np@care.daraz.com</p>
+<h6 class="font-bold text-gray-700 text-xs mt-3 mb-1 uppercase">TRENDING</h6>
+<p class="line-clamp-3">Daraz 11.11 Sale, 12.12 Sale, Dashain Dhamaka, Mobile Week, Valentine's Day Sale, Cricket Streaming, Grocery Shopping in Nepal, Realme GT 2 Pro, Realme GT Neo 3.</p>
+</div>
+<div>
+<h6 class="font-bold text-gray-700 text-xs mb-1.5 uppercase">Top Categories &amp; Brands</h6>
+<p class="font-semibold text-gray-600 mb-0.5">NEW MOBILE PHONES IN NEPAL</p>
+<p class="mb-2 line-clamp-3">Samsung Mobile Phones, Xiaomi Mobiles, Nokia Mobiles, Oppo Mobiles, Apple iPhones, OnePlus, Sony Mobiles, Huawei Mobiles, Lenovo Mobiles, Colors Mobiles, HTC, Umidigi.</p>
+<p class="font-semibold text-gray-600 mb-0.5">LATEST LAPTOPS</p>
+<p class="mb-2">Apple Laptops, Samsung Laptops, Asus Laptops, Acer Laptops, HP Laptops, Dell Laptops.</p>
+<p class="font-semibold text-gray-600 mb-0.5">LED TVS PRICES</p>
+<p class="mb-2">Samsung LED TVs, Sony LED TVs, Videocon LED TVs.</p>
+<p class="font-semibold text-gray-600 mb-0.5">SUMMER APPLIANCES</p>
+<p class="">Air Conditioners, Refrigerators &amp; Fridges, Deep Freezers, Portable Power, Water Dispensers.</p>
+</div>
+<div>
+<p class="font-semibold text-gray-600 mb-0.5">COMPUTER COMPONENTS</p>
+<p class="mb-2 line-clamp-2">Ram, Motherboards, Processors, Desktop Casings, CPU Cooling Fans, Gaming Graphic Cards.</p>
+<p class="font-semibold text-gray-600 mb-0.5">WOMEN'S FASHION</p>
+<p class="mb-2 line-clamp-2">Clothes, Ladies Watches, Jewelry, Sarees, Ladies Kurti Designs, Women Undergarments, Shirts for Ladies &amp; Girls.</p>
+<p class="font-semibold text-gray-600 mb-0.5">MEN'S FASHION</p>
+<p class="mb-2 line-clamp-2">Mens Jeans, Bags for Men, Mens Shoes, Mens T-Shirts, Men's Watches.</p>
+<p class="font-semibold text-gray-600 mb-0.5">ONLINE GROCERY STORE</p>
+<p class="mb-2">Rice, Chocolates, Tea, Coffee.</p>
+<p class="font-semibold text-gray-600 mb-0.5">SHOP WORLDWIDE WITH LAZADA</p>
+<p class="">Singapore, Malaysia, Philippines, Indonesia, Vietnam, Thailand</p>
+</div>
+</div>
+<!-- Daraz International & Copyright Footer Note -->
+<div class="pt-4 flex flex-col md:flex-row items-center justify-between text-gray-500 text-[11px] gap-4">
+<!-- Daraz Country Domains -->
+<div class="flex items-center flex-wrap gap-4">
+<span class="font-bold text-gray-700">Daraz International:</span>
+<a class="flex items-center gap-1.5 hover:text-[#f85606]" href="#">
+<i class="fa-solid fa-flag text-green-700"></i> <span class="">Pakistan</span>
+</a>
+<a class="flex items-center gap-1.5 hover:text-[#f85606]" href="#">
+<i class="fa-solid fa-flag text-emerald-600"></i> <span class="">Bangladesh</span>
+</a>
+<a class="flex items-center gap-1.5 hover:text-[#f85606]" href="#">
+<i class="fa-solid fa-flag text-amber-600"></i> <span class="">Sri Lanka</span>
+</a>
+<a class="flex items-center gap-1.5 hover:text-[#f85606]" href="#">
+<i class="fa-solid fa-flag text-yellow-500"></i> <span class="">Myanmar</span>
+</a>
+<a class="flex items-center gap-1.5 text-gray-900 font-bold hover:text-[#f85606]" href="#">
+<i class="fa-solid fa-flag text-red-600"></i> <span class="">Nepal</span>
+</a>
+</div>
+<!-- Social Icons & Copyright -->
+<div class="flex items-center space-x-6">
+<div class="flex items-center space-x-3 text-sm">
+<span class="font-bold text-gray-700 text-xs">Follow Us:</span>
+<a class="text-blue-600 hover:opacity-80" href="#"><i class="fa-brands fa-facebook"></i></a>
+<a class="text-pink-600 hover:opacity-80" href="#"><i class="fa-brands fa-instagram"></i></a>
+<a class="text-red-600 hover:opacity-80" href="#"><i class="fa-brands fa-youtube"></i></a>
+</div>
+<span class="text-gray-400">© Daraz 2026</span>
+</div>
+</div>
+</div>
+</footer>
+<!-- END: ComprehensiveFooter -->
+
+
+<!-- Cart Backdrop -->
+<div id="cart-backdrop" class="fixed inset-0 bg-black/50 z-50 opacity-0 invisible flex justify-end transition-all"></div>
+<!-- Slide-out Cart Drawer -->
+<div id="cart-drawer" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-white z-50 shadow-2xl flex flex-col translate-x-full">
+  <!-- Header -->
+  <div class="p-4 bg-[#f85606] text-white flex items-center justify-between shadow-sm">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-bag-shopping text-lg"></i>
+      <h2 class="text-base font-bold tracking-wide">My Shopping Cart (2)</h2>
+    </div>
+    <button id="cart-close-btn" class="text-white hover:text-gray-200 p-1 text-lg rounded">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <!-- Free Shipping Promo Banner in Cart -->
+  <div class="bg-[#fff6f2] px-4 py-2 text-xs border-b border-[#fed6c5] flex items-center gap-2 text-[#f85606]">
+    <i class="fa-solid fa-truck-fast text-sm"></i>
+    <span class="">Add <strong>Rs. 300</strong> more to qualify for <strong>FREE DELIVERY</strong>!</span>
+  </div>
+
+  <!-- Items List -->
+  <div class="flex-1 overflow-y-auto p-4 divide-y divide-gray-100 space-y-3">
+    <!-- Item 1 -->
+    <div class="pt-3 flex gap-3 items-start">
+      <div class="w-16 h-16 bg-gray-50 border rounded flex items-center justify-center shrink-0 p-1">
+        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYz2UUBFsDFewS3ArP8_s6LCApLhHmMgvSdAMIp_JzIuUoTPd9JT7b9pTRlagvB7gGcFRV2VSq4Ya1fTnrD7zSOjoyVnj82PqOTmgMgYo4GLnu5uvlFOyN8y2UI7PrO22xbKnQCRmA5JPnLg5AYj97gjI-1C5GtcY_Mezr2oxjgYZxGeYMs6s3xVeqC_lgPuOEvhkYc-7242wWTbJ8dkeK8qj650fSJudP-8QBYBp49Nnaew3yC296" alt="LUX Soft Rose Body Wash" class="object-contain max-h-full max-w-full">
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex justify-between items-start">
+          <h3 class="text-xs font-medium text-gray-800 line-clamp-2 leading-snug">LUX Soft Rose Body Wash with French Rose &amp; Almond</h3>
+          <button class="text-gray-400 hover:text-red-500 ml-2 text-xs"><i class="fa-regular fa-trash-can"></i></button>
+        </div>
+        <div class="text-xs text-gray-400 mt-0.5">Variant: 250ml</div>
+        <div class="flex items-center justify-between mt-2">
+          <div class="text-sm font-bold text-[#f85606]">Rs. 108</div>
+          <div class="flex items-center border border-gray-300 rounded">
+            <button class="px-2 py-0.5 text-gray-600 hover:bg-gray-100 text-xs">-</button>
+            <span class="px-2 text-xs font-semibold text-gray-800">1</span>
+            <button class="px-2 py-0.5 text-gray-600 hover:bg-gray-100 text-xs">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Item 2 -->
+    <div class="pt-3 flex gap-3 items-start">
+      <div class="w-16 h-16 bg-gray-50 border rounded flex items-center justify-center shrink-0 p-1">
+        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ9ncNBXg3Grrb3jOB3SnCQ33imiS-QVsOu0mqkl4a1_qiKtClrMEzfbugKb-4y1Efx0JgGnrAC1HFJ4YaN4sq_lB95iyNSCjIe-uEqzr_7QHQ5C3aVoJDJz2KViLfAONV6B5-mhyq300QwnlI0zjsAM_oWjxVzPGpoQDqtPOybZzWZawPw-aFXMeCQ0iL-mWw7F5naU9KdgjyJIgCGPxG58DlEwvlkaylKxPYyVwExHJmhjs4Z0HT" alt="The Derma Co Sunscreen" class="object-contain max-h-full max-w-full">
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex justify-between items-start">
+          <h3 class="text-xs font-medium text-gray-800 line-clamp-2 leading-snug">The Derma Co 1% Hyaluronic Sunscreen Aqua Gel</h3>
+          <button class="text-gray-400 hover:text-red-500 ml-2 text-xs"><i class="fa-regular fa-trash-can"></i></button>
+        </div>
+        <div class="text-xs text-gray-400 mt-0.5">Variant: 50g</div>
+        <div class="flex items-center justify-between mt-2">
+          <div class="text-sm font-bold text-[#f85606]">Rs. 669</div>
+          <div class="flex items-center border border-gray-300 rounded">
+            <button class="px-2 py-0.5 text-gray-600 hover:bg-gray-100 text-xs">-</button>
+            <span class="px-2 text-xs font-semibold text-gray-800">1</span>
+            <button class="px-2 py-0.5 text-gray-600 hover:bg-gray-100 text-xs">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing Breakdown & Checkout -->
+  <div class="p-4 border-t border-gray-200 bg-gray-50 space-y-2.5">
+    <div class="flex justify-between text-xs text-gray-600">
+      <span class="">Subtotal</span>
+      <span class="font-medium text-gray-800">Rs. 777</span>
+    </div>
+    <div class="flex justify-between text-xs text-gray-600">
+      <span class="">Delivery Fee</span>
+      <span class="font-medium text-gray-800">Rs. 60</span>
+    </div>
+    <div class="flex justify-between text-xs text-green-600">
+      <span class="">Voucher Discount</span>
+      <span class="font-medium">-Rs. 50</span>
+    </div>
+    <div class="border-t border-gray-200 pt-2 flex justify-between text-sm font-bold text-gray-900">
+      <span class="">Total</span>
+      <span class="text-[#f85606] text-base">Rs. 787</span>
+    </div>
+    <button class="w-full py-3 bg-[#f85606] hover:bg-[#d04402] text-white font-bold text-xs uppercase tracking-wider rounded-[2px] shadow transition flex items-center justify-center gap-2 mt-2">
+      <span class="">Proceed to Checkout</span>
+      <i class="fa-solid fa-arrow-right text-xs"></i>
+    </button>
+  </div>
+</div><script>
+  (function() {
+    const cartBtn = document.getElementById('cart-toggle-btn');
+    const closeBtn = document.getElementById('cart-close-btn');
+    const drawer = document.getElementById('cart-drawer');
+    const backdrop = document.getElementById('cart-backdrop');
+
+    function openCart(e) {
+      if (e) e.preventDefault();
+      if (drawer) drawer.classList.add('open');
+      if (backdrop) backdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCart() {
+      if (drawer) drawer.classList.remove('open');
+      if (backdrop) backdrop.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    if (cartBtn) cartBtn.addEventListener('click', openCart);
+    if (closeBtn) closeBtn.addEventListener('click', closeCart);
+    if (backdrop) backdrop.addEventListener('click', closeCart);
+  })();
+</script>
+
+<script>
+  (function() {
+    const searchInput = document.getElementById('main-search-input');
+    const searchDropdown = document.getElementById('search-dropdown');
+    const dropdownContent = document.getElementById('search-dropdown-content');
+    const searchWrapper = document.getElementById('search-wrapper');
+
+    if (!searchInput || !searchDropdown || !dropdownContent) return;
+
+    const sampleProducts = [
+      {
+        title: 'Ultima Aura Earbuds ANC',
+        price: 'Rs. 3,489',
+        category: 'Electronics',
+        img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBLpQcSwRX7Dgtw1vBDSeoN0TApVe2JXu6aTjqVHAjqpki6iTW3oolxv-kD08IpadcHYiP-hzd48e05qGqmaCVfpZK25vxbDf8ymLHzFcGllr41FIzPagdiNcwmLftje-stihZIUrv10zP_drjaDABCftfj_bRo7cTDUMt8MvzsRZ94_bAdLhfwVbB3Dz5Oo8Ic2YbXPScPwsxt3NwJqLpG2pyhzdIAH2O-Ot3RitcmYTup7D_glsak'
+      },
+      {
+        title: 'Vintage T9 Rechargeable Professional Trimmer',
+        price: 'Rs. 191',
+        category: 'Men Fashion',
+        img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBBm6O8XpG9CYrme3QBKRNZi6RSN0ZV9YAV2KnjDbBfP3GBpExB0SSrVdnbeawfSxo0R1pjq8LnEoi9mNWMAaBOhwD09p43W4wflbaf3fMsYg3rBA3v-yTWFqpV9njhjZguNr4wqdPCUhQ8wbZZWI9XIuLCFz13m4y3KffBlULQPziHwrJbNn0M0zz7AUr4QqK9qerY_qR03dCnB-mj1Dnj6Vjvb5yHwdCvm4SWXN6VOVjCPT0f7wN5'
+      },
+      {
+        title: 'Prime Picks Premium Dental Flosser',
+        price: 'Rs. 899',
+        category: 'Personal Care',
+        img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBIg72cE_2BOicMAcvI7YWZ6ZjL0KDS1wTgRGs2bxOLQwMLduH_tPatc6rnohUMLBigpumFWUlN-5t7rAs0nm7kMbf_2YRTje-mc_YD0ckoREkG5uFIPoe6vsZzVPBPEFVDv19Bb8NzJwWnD9Jjg7e4JArcmhNxmYx2f-Y6Hw5Jl1JvtWLs-tZXWC3MtF5-islX2OeEjkDi-Rls3q2thsT6t9WR_G4NkIRCPxCicBMFRdGIEVLBZCDA'
+      },
+      {
+        title: 'Aluminum Laptop Stand Cooling',
+        price: 'Rs. 475',
+        category: 'Electronics',
+        img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDn8pNa5d954PTTg-7d9W6orRyIT29cQVpQvKKK_KQOVDI2nh8r6wfxyXXHsPBkBEecqx0K7hCbbWgM6v9yJL1cFOaAYedLTPaq-tF_WbWODUfXMVeHvbVWIAyz4KvnFlcXeUXPVtAEcQHrKl-ET_PkXDQh_pOKOWHJD6LK-bUwQyTKsGsbYdRSc8XhRLaB3eI7AIynKNT9Jn_geTHSk3TTDy1ifZ6Mcz0zEaJkFzz92-AlXduow_A2'
+      },
+      {
+        title: 'MuscleBlaze Creatine Monohydrate',
+        price: 'Rs. 2,999',
+        category: 'Health & Fitness',
+        img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDwcotVh252SvScN2mOBbyzJ2QeKJCCmv8h-pX-eNo8mlE-nsGovOOplcVq6TLFdAV6hDHq_3XbjqtSuyHHvH6nxKvfX-BeyCHvMq2SRp_E9WyGC8vNQCmNAfoiNfxXon3b1X1GqJwOjqKQ87qV3ntUzhB38fgUOFLiaowkhXnNTbVMbFTBCUkYYRk2e7qscW29_7LpbPsLhaj1nN4TSIRAtfTUT9YJjCSMhqDUamzycUKI9g6TWKnb'
+      },
+      {
+        title: 'Sun Glasses UV Sandproof Cycling',
+        price: 'Rs. 668',
+        category: 'Sports & Outdoors',
+        img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDZnDmn0ap-kLsfqnYw0ByuOwbyhZoEsCsTwCLIwI6zTJi7EhVVuLyhDY6jTqq3-x6s9cGcliMjFY6KdZ4smdlKXdmhBnWuPHoJjbFVwBYFzX71s_qscguTMm2lb4qdI4p2P1aIEH6z2vN22o7q_7ARp26MXxdUhRsNdljNt_AgnO6GH0ffuLcUto0V0ZGvyMFMHCfxaTrVUHWedRD40Tre7hNtOIKCUiVWRvHgV7YCeMzSamgFTrZj'
+      }
+    ];
+
+    const sampleTerms = ['earbuds', 'shoes', 'watch', 'tshirt', 'trimmer', 'laptop', 'bag', 'sunglasses', 'serum', 'creatine', 'flosser'];
+    const trendingTerms = ['Airpods ANC', 'T9 Trimmer', 'Smart Watch', 'Silicone Socks', 'Chia Seeds', 'Gym Grip'];
+    const recentSearches = ['Wireless Earbuds', 'Laptop Stand', 'Men Wallet'];
+
+    function renderSuggestions(query) {
+      const val = (query || '').trim().toLowerCase();
+      if (!val) {
+        dropdownContent.innerHTML = `
+          <div class="space-y-3">
+            <div>
+              <div class="flex items-center justify-between text-gray-500 font-bold mb-1.5 text-[11px] uppercase tracking-wide">
+                <span>Recent Searches</span>
+                <button type="button" id="clear-history" class="hover:text-red-500 text-[10px] font-normal">Clear</button>
+              </div>
+              <div class="flex flex-wrap gap-1.5">
+                ${recentSearches.map(t => `<button type="button" class="suggestion-chip px-2.5 py-1 bg-gray-100 hover:bg-orange-50 hover:text-[#f85606] rounded-full text-gray-700 transition">${t}</button>`).join('')}
+              </div>
+            </div>
+            <div class="pt-2 border-t border-gray-100">
+              <div class="text-gray-500 font-bold mb-1.5 text-[11px] uppercase tracking-wide">Trending Searches</div>
+              <div class="flex flex-wrap gap-1.5">
+                ${trendingTerms.map(t => `<button type="button" class="suggestion-chip px-2.5 py-1 bg-orange-50 hover:bg-orange-100 text-[#f85606] rounded-full font-medium transition">🔥 ${t}</button>`).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        const matchedTerms = sampleTerms.filter(t => t.includes(val));
+        const matchedProducts = sampleProducts.filter(p => p.title.toLowerCase().includes(val) || p.category.toLowerCase().includes(val));
+
+        let html = '<div class="space-y-2">';
+        if (matchedTerms.length > 0) {
+          html += `<div class="divide-y divide-gray-100">`;
+          matchedTerms.slice(0, 4).forEach(t => {
+            html += `
+              <div class="suggestion-item py-1.5 px-2 hover:bg-gray-50 flex items-center justify-between cursor-pointer rounded">
+                <div class="flex items-center gap-2 text-gray-700">
+                  <i class="fa-solid fa-magnifying-glass text-gray-400 text-[10px]"></i>
+                  <span>${t}</span>
+                </div>
+                <span class="text-[10px] text-[#f85606]">in Daraz</span>
+              </div>`;
+          });
+          html += `</div>`;
+        }
+
+        html += `
+          <div class="py-1.5 px-2 bg-gray-50 rounded flex items-center justify-between suggestion-item cursor-pointer hover:bg-orange-50">
+            <span class="text-gray-700">Search "<strong>${val}</strong>" in Electronics</span>
+            <i class="fa-solid fa-arrow-right text-[10px] text-gray-400"></i>
+          </div>
+          <div class="py-1.5 px-2 bg-gray-50 rounded flex items-center justify-between suggestion-item cursor-pointer hover:bg-orange-50">
+            <span class="text-gray-700">Search "<strong>${val}</strong>" in Men Fashion</span>
+            <i class="fa-solid fa-arrow-right text-[10px] text-gray-400"></i>
+          </div>
+        `;
+
+        if (matchedProducts.length > 0) {
+          html += `<div class="pt-2 border-t border-gray-100"><div class="text-[11px] font-bold text-gray-500 uppercase tracking-wide mb-2">Products</div><div class="space-y-1.5">`;
+          matchedProducts.slice(0, 3).forEach(prod => {
+            html += `
+              <div class="product-suggestion flex items-center gap-2.5 p-1.5 hover:bg-gray-50 rounded cursor-pointer transition">
+                <img src="${prod.img}" alt="${prod.title}" class="w-10 h-10 object-contain rounded border border-gray-200 bg-white p-0.5 shrink-0" />
+                <div class="flex-1 min-w-0">
+                  <div class="font-medium text-gray-800 truncate">${prod.title}</div>
+                  <div class="text-xs font-bold text-[#f85606]">${prod.price}</div>
+                </div>
+              </div>
+            `;
+          });
+          html += `</div></div>`;
+        }
+
+        html += '</div>';
+        dropdownContent.innerHTML = html;
+      }
+
+      searchDropdown.classList.remove('hidden');
+
+      dropdownContent.querySelectorAll('.suggestion-chip, .suggestion-item, .product-suggestion').forEach(el => {
+        el.addEventListener('click', () => {
+          const text = el.querySelector('span, .truncate') ? el.querySelector('span, .truncate').innerText : el.innerText;
+          searchInput.value = text.replace('🔥', '').trim();
+          searchDropdown.classList.add('hidden');
+        });
+      });
+
+      const clearBtn = document.getElementById('clear-history');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          recentSearches.length = 0;
+          renderSuggestions('');
+        });
+      }
+    }
+
+    searchInput.addEventListener('focus', () => renderSuggestions(searchInput.value));
+    searchInput.addEventListener('input', () => renderSuggestions(searchInput.value));
+
+    document.addEventListener('click', (e) => {
+      if (!searchWrapper.contains(e.target)) {
+        searchDropdown.classList.add('hidden');
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        searchDropdown.classList.add('hidden');
+      }
+    });
+  })();
+</script></body></html>

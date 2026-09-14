@@ -7,3 +7,7 @@ verify_jwt = false
 [functions.cloudinary-media]
 # The function validates the bearer token with auth.getUser() itself.
 verify_jwt = false
+
+[functions.stripe-payment-intent]
+# The function validates the bearer token with auth.getUser() itself.
+verify_jwt = false

@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>Daraz Nepal Ops Central</title><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"outline":"#8f7065","on-tertiary-fixed":"#001f26","on-tertiary-container":"#f9fdff","on-tertiary-fixed-variant":"#004e5d","tertiary":"#006578","on-primary-fixed-variant":"#822800","tertiary-fixed-dim":"#68d5f1","surface-dim":"#dcd9d9","secondary-container":"#fccc19","primary-container":"#cf4500","surface-tint":"#aa3700","error-container":"#ffdad6","secondary-fixed":"#ffe088","on-secondary-container":"#6e5700","outline-variant":"#e4beb2","primary":"#a63600","on-primary-fixed":"#380d00","secondary":"#735c00","primary-fixed-dim":"#ffb59b","surface-container-highest":"#e5e2e1","secondary-fixed-dim":"#f0c100","background":"#fcf9f8","inverse-surface":"#303030","on-error-container":"#93000a","tertiary-container":"#008097","inverse-primary":"#ffb59b","primary-fixed":"#ffdbcf","surface-container-lowest":"#ffffff","on-secondary-fixed":"#241a00","on-surface":"#1b1c1c","error":"#ba1a1a","on-secondary":"#ffffff","surface-bright":"#fcf9f8","surface-variant":"#e5e2e1","tertiary-fixed":"#aeecff","on-background":"#1b1c1c","on-secondary-fixed-variant":"#574500","on-primary":"#ffffff","surface-container":"#f0eded","inverse-on-surface":"#f3f0ef","on-tertiary":"#ffffff","on-primary-container":"#fffbff","surface-container-high":"#eae7e7","surface-container-low":"#f6f3f2","on-surface-variant":"#5b4137","on-error":"#ffffff","surface":"#fcf9f8"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"margin-desktop":"1.5rem","margin":"0.75rem","space-xs":"0.25rem","space-md":"0.75rem","space-lg":"1rem","gutter":"0.75rem","gutter-desktop":"1rem","space-xl":"1.5rem","space-sm":"0.5rem"},"fontFamily":{"body-sm":["Roboto Flex"],"headline-lg":["Roboto Flex"],"headline-xl-mobile":["Roboto Flex"],"badge-micro":["Roboto Flex"],"headline-lg-mobile":["Roboto Flex"],"headline-md":["Roboto Flex"],"headline-sm":["Roboto Flex"],"label-sm":["Roboto Flex"],"price-hero":["Roboto Flex"],"body-md":["Roboto Flex"],"price-strikethrough":["Roboto Flex"],"body-lg":["Roboto Flex"],"price-card":["Roboto Flex"],"headline-xl":["Roboto Flex"],"label-md":["Roboto Flex"]},"fontSize":{"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}],"headline-lg":["24px",{"lineHeight":"32px","fontWeight":"700"}],"headline-xl-mobile":["24px",{"lineHeight":"32px","fontWeight":"700"}],"badge-micro":["10px",{"lineHeight":"12px","fontWeight":"700"}],"headline-lg-mobile":["20px",{"lineHeight":"28px","fontWeight":"700"}],"headline-md":["18px",{"lineHeight":"24px","fontWeight":"600"}],"headline-sm":["16px",{"lineHeight":"22px","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","fontWeight":"600"}],"price-hero":["28px",{"lineHeight":"36px","fontWeight":"700"}],"body-md":["13px",{"lineHeight":"18px","fontWeight":"400"}],"price-strikethrough":["12px",{"lineHeight":"16px","fontWeight":"400"}],"body-lg":["15px",{"lineHeight":"22px","fontWeight":"400"}],"price-card":["18px",{"lineHeight":"24px","fontWeight":"700"}],"headline-xl":["32px",{"lineHeight":"40px","fontWeight":"700"}],"label-md":["13px",{"lineHeight":"16px","fontWeight":"500"}]}}}}</script></head><body class="bg-surface-container-low font-body-md text-on-surface antialiased"><div class="fixed top-0 left-0 right-0 z-50 flex flex-col"><div class="h-8 w-full bg-inverse-surface text-inverse-on-surface px-space-md flex items-center justify-between text-label-sm font-label-sm shadow-[0_1px_8px_rgba(0,0,0,0.08)]"><div class="flex items-center gap-space-md"><span class="flex items-center gap-space-xs font-headline-sm text-label-sm text-primary-fixed"><span class="material-symbols-outlined text-[14px]">terminal</span>Daraz Nepal Ops Central v5.2</span><span class="h-3 w-px bg-outline/40"></span><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-tertiary-fixed">domain</span>Kathmandu HQ (77 District Hubs Active)</span><span class="h-3 w-px bg-outline/40"></span><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-secondary-container">speed</span>DEX SLA: 99.4%</span></div><div class="flex items-center gap-space-md"><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-tertiary-fixed">account_balance_wallet</span>eSewa/Khalti: 100% OK</span><span class="h-3 w-px bg-outline/40"></span><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-tertiary-fixed">chevron_forward</span>NCHL-IPS Synced</span><span class="h-3 w-px bg-outline/40"></span><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-tertiary-fixed">receipt_long</span>IRD CBMS Live</span><span class="h-3 w-px bg-outline/40"></span><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-on-surface-variant">schedule</span>NPT +05:45</span><span class="h-3 w-px bg-outline/40"></span><span class="text-primary-fixed-dim font-label-sm">Amrit Raj (Head of Ops)</span></div></div><header class="h-16 w-full bg-surface-container-lowest text-on-surface px-space-xl flex items-center justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-xl"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[20px]">local_shipping</span></div><div class="flex flex-col"><span class="text-headline-sm font-headline-sm text-primary tracking-tight leading-none">daraz</span><span class="text-badge-micro font-badge-micro uppercase tracking-wider text-tertiary leading-tight">Express Logistics</span></div></div><div class="relative w-96"><span class="material-symbols-outlined absolute left-space-md top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span><input class="w-full h-10 pl-10 pr-16 bg-surface-container-low text-on-surface placeholder:text-on-surface-variant text-body-md rounded-lg focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Search AWB, Seller ID, Rider Name, 77 Hubs (Ctrl+K)..." type="text"/><kbd class="absolute right-space-md top-1/2 -translate-y-1/2 text-badge-micro font-badge-micro bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded">Ctrl+K</kbd></div></div><div class="flex items-center gap-space-md"><button class="h-9 px-space-md bg-primary hover:bg-primary-container text-on-primary text-label-md font-label-md rounded-lg flex items-center gap-space-xs transition-colors shadow-[0_1px_4px_rgba(0,0,0,0.08)]" type="button"><span class="material-symbols-outlined text-[18px]">add_circle</span>+ Dispatch Run</button><button class="h-9 px-space-md bg-surface-container text-on-surface hover:bg-surface-container-high text-label-md font-label-md rounded-lg flex items-center gap-space-xs transition-colors" type="button"><span class="material-symbols-outlined text-[18px] text-tertiary">share_location</span>Rider Fleet GPS</button><button class="h-9 px-space-md bg-surface-container text-on-surface hover:bg-surface-container-high text-label-md font-label-md rounded-lg flex items-center gap-space-xs transition-colors" type="button"><span class="material-symbols-outlined text-[18px] text-secondary">satellite_alt</span>Weather Radar</button><div class="h-6 w-px bg-surface-container-highest mx-space-xs"></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header></div><aside class="fixed left-0 top-24 bottom-0 w-72 bg-surface-container-lowest overflow-y-auto z-40 py-space-md flex flex-col justify-between shadow-[1px_0_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col gap-space-sm px-space-md"><div class="text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant px-space-md pt-space-xs">Command &amp; Oversight</div><nav class="flex flex-col gap-0.5" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm"><a class="flex items-center gap-space-md px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="dashboard-and-live-analytics" href="#"><span class="material-symbols-outlined text-[18px]">analytics</span>Dashboard &amp; Live Analytics</a></nav><div class="text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant px-space-md pt-space-sm">Retail Engine</div><nav class="flex flex-col gap-0.5" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm"><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="orders-management" href="#"><span class="material-symbols-outlined text-[18px]">inventory_2</span>Orders Management</a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="catalog-and-assortment" href="#"><span class="material-symbols-outlined text-[18px]">view_list</span>Catalog Assortment</a></nav><div class="text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant px-space-md pt-space-sm">Vendors &amp; Compliance</div><nav class="flex flex-col gap-0.5" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm"><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="verified-sellers-and-onboarding" href="#"><span class="material-symbols-outlined text-[18px]">store</span>Verified Sellers</a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="kyc-maker-checker" href="#"><span class="material-symbols-outlined text-[18px]">verified_user</span>KYC Maker-Checker</a></nav><div class="text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant px-space-md pt-space-sm">Logistics Network (DEX)</div><nav class="flex flex-col gap-0.5" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm"><a aria-current="page" class="flex items-center justify-between px-space-md py-2 rounded-lg transition-colors bg-primary-container text-on-primary-container font-headline-sm" data-path="77-district-hub-matrix" href="#"><span class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[18px]">hub</span>77 District Hub Matrix</span><span class="px-1.5 py-0.5 rounded bg-tertiary-container text-on-tertiary-container font-badge-micro text-badge-micro">LIVE</span></a><a class="flex items-center justify-between px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="dex-last-mile-fleet" href="#"><span class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[18px]">two_wheeler</span>DEX Last-Mile Fleet</span><span class="font-badge-micro text-badge-micro text-on-surface-variant">1,240</span></a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="3pl-couriers-dispatch" href="#"><span class="material-symbols-outlined text-[18px]">alt_route</span>3PL Couriers (Pathao/NCM)</a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="reverse-logistics-qc-lab" href="#"><span class="material-symbols-outlined text-[18px]">assignment_return</span>Reverse Logistics QC Lab</a></nav><div class="text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant px-space-md pt-space-sm">Governance &amp; Core</div><nav class="flex flex-col gap-0.5" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm"><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="finance-ird-and-nchl-recon" href="#"><span class="material-symbols-outlined text-[18px]">account_balance</span>Finance, IRD &amp; NCHL Recon</a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="trust-risk-and-bot-guard" href="#"><span class="material-symbols-outlined text-[18px]">security</span>Trust, Risk &amp; Bot Guard</a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="system-and-rbac-control" href="#"><span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>System &amp; RBAC Control</a></nav></div><div class="px-space-md pt-space-md"><div class="bg-surface-container p-space-md rounded-lg flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="text-label-sm font-label-sm text-on-surface">Kathmandu Sort Hub</span><span class="text-badge-micro font-badge-micro text-tertiary font-bold">98.6% CAP</span></div><div class="w-full bg-surface-container-high rounded-full h-1.5 overflow-hidden"><div class="bg-primary h-1.5 rounded-full w-11/12"></div></div><span class="text-badge-micro font-badge-micro text-on-surface-variant">Peak festive dispatch load active</span></div></div></aside><div class="pl-72"><main class="relative pt-24 min-h-[calc(100vh-140px)] w-full px-space-xl py-space-lg bg-surface-container-low"><div class="flex flex-col w-full gap-space-lg">
+<!-- Festive Wave Super-Header & Strategic Telemetry -->
+<div class="relative overflow-hidden bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+<div class="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-gradient-to-br from-primary-fixed/30 to-secondary-fixed/20 blur-3xl pointer-events-none"></div>
+<div class="relative flex flex-col xl:flex-row xl:items-center justify-between gap-space-lg">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="px-2 py-0.5 rounded bg-primary text-on-primary font-badge-micro text-badge-micro tracking-wider uppercase flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+            ACTIVE CAMPAIGN
+          </span>
+<span class="px-2 py-0.5 rounded bg-secondary-container text-on-secondary-container font-badge-micro text-badge-micro">
+            PHASE 3 OF 5 LIVE
+          </span>
+<span class="text-label-sm font-label-sm text-tertiary flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">sensors</span>
+            LIVE TRAFFIC BURST MODE (AUTO-SCALE ENABLED)
+          </span>
+</div>
+<h1 class="text-headline-xl font-headline-xl text-on-surface tracking-tight">
+          Dashain Mega 11.11 &amp; 9.9 Grand Festive Orchestrator
+        </h1>
+<p class="text-body-md font-body-md text-on-surface-variant flex items-center gap-space-md">
+<span>Kathmandu Central NOC • 77-District Fleet Pre-Positioned</span>
+<span class="h-3 w-px bg-surface-container-highest"></span>
+<span>Dual-Engine Redis Cache: <strong class="text-tertiary">99.98% Hit Rate</strong></span>
+<span class="h-3 w-px bg-surface-container-highest"></span>
+<span>Sentinel Bot Blockers: <strong class="text-primary">14,820 Throttled</strong></span>
+</p>
+</div>
+<!-- Live Countdowns & Tactical Triggers -->
+<div class="flex items-center gap-space-md flex-wrap">
+<div class="flex flex-col bg-surface-container-low px-space-md py-space-sm rounded-lg">
+<span class="text-badge-micro font-badge-micro uppercase text-on-surface-variant">Wave 4 Midnight Cutoff</span>
+<div class="flex items-center gap-1 text-headline-sm font-headline-sm text-primary font-mono tracking-tight" id="flash-countdown">
+<span class="bg-surface-container px-1.5 py-0.5 rounded">04</span>:
+            <span class="bg-surface-container px-1.5 py-0.5 rounded">18</span>:
+            <span class="bg-surface-container px-1.5 py-0.5 rounded" id="timer-sec">36</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-sans ml-1">NPT Rem.</span>
+</div>
+</div>
+<button class="h-10 px-space-md bg-primary hover:bg-primary-container text-on-primary text-label-md font-label-md rounded-lg flex items-center gap-space-xs transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">rocket_launch</span>
+          + Launch Campaign Wave
+        </button>
+<button class="h-10 px-space-md bg-error-container hover:bg-error hover:text-on-error text-on-error-container text-label-md font-label-md rounded-lg flex items-center gap-space-xs transition-colors" onclick="confirmEmergencyFreeze()" type="button">
+<span class="material-symbols-outlined text-[18px]">gavel</span>
+          Price Kill-Switch
+        </button>
+<button class="h-10 px-space-md bg-surface-container hover:bg-surface-container-high text-on-surface text-label-md font-label-md rounded-lg flex items-center gap-space-xs transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+          Export Manifest
+        </button>
+</div>
+</div>
+</div>
+<!-- Key Performance Indicators Ribbon (6 High-Density Cards) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-space-md">
+<!-- Card 1: GMV Surge Velocity -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-badge-micro font-badge-micro uppercase text-on-surface-variant tracking-wider">Gross GMV Surge</span>
+<span class="material-symbols-outlined text-primary text-[18px]">trending_up</span>
+</div>
+<div class="my-space-xs">
+<div class="text-price-hero font-price-hero text-primary leading-tight">Rs. 142.85M</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant mt-1">
+<span>Target: Rs. 180M</span>
+<span class="text-tertiary font-bold">+248% vs D-1</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[79%]"></div>
+</div>
+</div>
+<!-- Card 2: Concurrent Live Shoppers -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-badge-micro font-badge-micro uppercase text-on-surface-variant tracking-wider">Concurrent Live</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]">groups</span>
+</div>
+<div class="my-space-xs">
+<div class="text-headline-xl font-headline-xl text-on-surface leading-tight">342,800</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant mt-1">
+<span>Redis Latency: <strong>3.2ms</strong></span>
+<span class="text-tertiary font-bold">98.6% CDN</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full w-[94%]"></div>
+</div>
+</div>
+<!-- Card 3: Flash SKUs Enrolled -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-badge-micro font-badge-micro uppercase text-on-surface-variant tracking-wider">Approved SKUs</span>
+<span class="material-symbols-outlined text-secondary text-[18px]">category</span>
+</div>
+<div class="my-space-xs">
+<div class="text-headline-xl font-headline-xl text-on-surface leading-tight">2,450 <span class="text-body-md font-body-md text-on-surface-variant">/ 5,800</span></div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant mt-1">
+<span>Rejected: 3,350</span>
+<span class="text-primary font-bold">42.2% Passed</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full w-[42%]"></div>
+</div>
+</div>
+<!-- Card 4: Subsidy Pool Spent -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-badge-micro font-badge-micro uppercase text-on-surface-variant tracking-wider">Subsidy Pool Burn</span>
+<span class="material-symbols-outlined text-primary text-[18px]">payments</span>
+</div>
+<div class="my-space-xs">
+<div class="text-headline-xl font-headline-xl text-on-surface leading-tight">Rs. 18.40M</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant mt-1">
+<span>Daraz: 60%</span>
+<span class="text-on-surface-variant">Sellers: 40%</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full w-[73%]"></div>
+</div>
+</div>
+<!-- Card 5: Order Creation Velocity -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-badge-micro font-badge-micro uppercase text-on-surface-variant tracking-wider">Order Creation Rate</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]">speed</span>
+</div>
+<div class="my-space-xs">
+<div class="text-headline-xl font-headline-xl text-on-surface leading-tight">1,420 <span class="text-body-md font-body-md text-on-surface-variant">/min</span></div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant mt-1">
+<span>Checkout Queue: 0.8s</span>
+<span class="text-tertiary font-bold">Peak Peak</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full w-[88%]"></div>
+</div>
+</div>
+<!-- Card 6: Sentinel Bot Shield -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-badge-micro font-badge-micro uppercase text-on-surface-variant tracking-wider">Bot Hijack Intercept</span>
+<span class="material-symbols-outlined text-error text-[18px]">security</span>
+</div>
+<div class="my-space-xs">
+<div class="text-headline-xl font-headline-xl text-error leading-tight">14,820</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant mt-1">
+<span>Fingerprint Snipe</span>
+<span class="text-tertiary font-bold">0% False Pos</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-error h-full rounded-full w-[65%]"></div>
+</div>
+</div>
+</div>
+<!-- Festive Wave Slot Timeline & Switcher -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">view_timeline</span>
+<span class="text-headline-sm font-headline-sm text-on-surface">Dynamic Flash Wave Timeline &amp; Slot Matrix (5 Waves Today)</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Server Time: Nepal Standard Time (NPT UTC+5:45)</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-5 gap-space-sm">
+<!-- Slot 1 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col justify-between opacity-80">
+<div class="flex items-center justify-between">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant uppercase">00:00 - 06:00</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-badge-micro text-badge-micro">COMPLETED</span>
+</div>
+<div class="my-space-xs">
+<p class="text-label-md font-label-md text-on-surface font-bold">Midnight Madness</p>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Rs. 38.2M GMV • 100% Sold</p>
+</div>
+<div class="w-full bg-surface-container h-1 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full w-full"></div>
+</div>
+</div>
+<!-- Slot 2 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col justify-between opacity-80">
+<div class="flex items-center justify-between">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant uppercase">06:00 - 12:00</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-badge-micro text-badge-micro">COMPLETED</span>
+</div>
+<div class="my-space-xs">
+<p class="text-label-md font-label-md text-on-surface font-bold">Morning Grocery Rush</p>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Rs. 41.5M GMV • 97% Sold</p>
+</div>
+<div class="w-full bg-surface-container h-1 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full w-[97%]"></div>
+</div>
+</div>
+<!-- Slot 3: ACTIVE NOW -->
+<div class="p-space-sm rounded-lg bg-primary/5 flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 w-2 h-2 rounded-full bg-primary animate-ping m-2"></div>
+<div class="flex items-center justify-between">
+<span class="text-badge-micro font-badge-micro text-primary uppercase font-bold">12:00 - 18:00</span>
+<span class="px-1.5 py-0.5 rounded bg-primary text-on-primary font-badge-micro text-badge-micro">ACTIVE NOW</span>
+</div>
+<div class="my-space-xs">
+<p class="text-label-md font-label-md text-primary font-bold">Midday Electronics Surge</p>
+<p class="text-body-sm font-body-sm text-on-surface">Rs. 63.15M GMV • 84% Depleted</p>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[84%]"></div>
+</div>
+</div>
+<!-- Slot 4 -->
+<div class="p-space-sm rounded-lg bg-surface-container flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant uppercase">18:00 - 21:00</span>
+<span class="px-1.5 py-0.5 rounded bg-secondary text-on-secondary font-badge-micro text-badge-micro">STAGED</span>
+</div>
+<div class="my-space-xs">
+<p class="text-label-md font-label-md text-on-surface font-bold">Evening FMCG Bonanza</p>
+<p class="text-body-sm font-body-sm text-on-surface-variant">1,800 SKUs Enrolled • Ready</p>
+</div>
+<div class="w-full bg-surface-container-high h-1 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-0"></div>
+</div>
+</div>
+<!-- Slot 5 -->
+<div class="p-space-sm rounded-lg bg-surface-container flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant uppercase">21:00 - 23:59</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-dim text-on-surface-variant font-badge-micro text-badge-micro">LOCKED (2FA)</span>
+</div>
+<div class="my-space-xs">
+<p class="text-label-md font-label-md text-on-surface font-bold">Finale Golden Hour</p>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Needs Super Admin Key</p>
+</div>
+<div class="w-full bg-surface-container-high h-1 rounded-full overflow-hidden">
+<div class="bg-outline h-full w-0"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Operational Grid: Left Table (7 cols equivalent) & Right Telemetry Drawers (5 cols equivalent) -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT PANE: Flash Sale SKU Nomination & Stock Burn Ledger (8/12) -->
+<div class="xl:col-span-8 flex flex-col gap-space-md">
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md">
+<!-- Table Control Toolbar -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-xs flex-wrap">
+<button class="px-space-md py-1.5 rounded bg-primary text-on-primary font-label-sm text-label-sm" type="button">
+              All Wave 3 SKUs (2,450)
+            </button>
+<button class="px-space-md py-1.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm" type="button">
+              Rapid Burn (&gt;80%) [384]
+            </button>
+<button class="px-space-md py-1.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm" type="button">
+              Critical Stock (&lt;50 Left) [42]
+            </button>
+<button class="px-space-md py-1.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm" type="button">
+              Price-Gouging Flagged [3]
+            </button>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Sort By:</span>
+<select class="h-8 px-space-sm bg-surface-container text-on-surface text-body-sm rounded focus:outline-none focus:ring-1 focus:ring-primary">
+<option>Highest Burn Velocity (Units/Min)</option>
+<option>Deepest Discount %</option>
+<option>Highest Daraz Co-Fund Rs.</option>
+<option>Available Stock: Low to High</option>
+</select>
+</div>
+</div>
+<!-- High-Density Interactive Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant text-label-sm font-label-sm">
+<th class="p-space-sm rounded-l">Product &amp; Seller</th>
+<th class="p-space-sm">Price Economics (NPR)</th>
+<th class="p-space-sm">Subsidy Split</th>
+<th class="p-space-sm">Flash Stock Burn</th>
+<th class="p-space-sm">Velocity</th>
+<th class="p-space-sm">Abuse Guard</th>
+<th class="p-space-sm rounded-r text-right">Intervention</th>
+</tr>
+</thead>
+<tbody class="text-body-md font-body-md">
+<!-- Item 1: Ultima Boom -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-space-sm">
+<div class="flex items-center gap-space-sm">
+<img class="w-10 h-10 rounded object-cover bg-surface-container" data-alt="Close up photography of matte black wireless gaming earbuds with neon LED accents on modern product display stand" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJW358I9t0TVmIT_c6uNuoWcNdrVgadAsFroShOMM7uV8yfP_qKSihkgCpfOtpdU-n8BVInZI-_ShXWP_qwd6SaD1RjV8pd-qzLWAqZzsjHzRG6Puv2M10wbRw9YlHyjNp8tZK7lOc8VhUzzWfZbm1CGJ1yhglPAmEUqIQZ9Ag4ww9-8q6_I-u3JimK7j2FReKEAQWAdw7vnBLKb54Vzbk2Eq6qMn7XHusbHHAQzrEcQogB6yOoDuy"/>
+<div class="flex flex-col">
+<div class="flex items-center gap-1">
+<span class="px-1 py-0.2 rounded bg-tertiary text-on-tertiary font-badge-micro text-badge-micro">DarazMall</span>
+<span class="font-headline-sm text-label-md text-on-surface font-semibold truncate max-w-[200px]">Ultima Boom 141 ANC</span>
+</div>
+<span class="text-body-sm font-body-sm text-on-surface-variant truncate max-w-[210px]">Ultima Lifestyle Nepal (Official)</span>
+</div>
+</div>
+</td>
+<td class="p-space-sm">
+<div class="flex flex-col">
+<span class="text-price-card font-price-card text-primary leading-tight">Rs. 1,699</span>
+<div class="flex items-center gap-1 text-body-sm font-body-sm">
+<span class="line-through text-on-surface-variant">Rs. 3,499</span>
+<span class="text-primary font-bold">-51.4%</span>
+</div>
+</div>
+</td>
+<td class="p-space-sm">
+<div class="flex flex-col text-body-sm font-body-sm">
+<span class="text-on-surface">Daraz Co: <strong class="text-tertiary">Rs. 300</strong></span>
+<span class="text-on-surface-variant">Seller Margin: Rs. 1,399</span>
+</div>
+</td>
+<td class="p-space-sm min-w-[140px]">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-bold text-primary">1,200 / 1,500</span>
+<span class="text-badge-micro font-badge-micro text-primary">80% SOLD</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full w-4/5"></div>
+</div>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">300 units remaining</span>
+</div>
+</td>
+<td class="p-space-sm">
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-primary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+                      48 u/min
+                    </span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">Ext. Sellout: ~6.2m</span>
+</div>
+</td>
+<td class="p-space-sm">
+<span class="px-1.5 py-0.5 rounded bg-tertiary/10 text-tertiary font-badge-micro text-badge-micro flex items-center gap-0.5 w-fit">
+<span class="material-symbols-outlined text-[12px]">verified</span>
+                    90D Floor OK
+                  </span>
+</td>
+<td class="p-space-sm text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface text-label-sm" title="Replenish Allocation" type="button">
+<span class="material-symbols-outlined text-[16px]">add_box</span>
+</button>
+<button class="p-1 rounded bg-surface-container hover:bg-surface-container-high text-tertiary text-label-sm" title="Throttle Traffic Rate" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+<button class="p-1 rounded bg-error-container hover:bg-error hover:text-on-error text-on-error-container text-label-sm" title="Freeze Item" type="button">
+<span class="material-symbols-outlined text-[16px]">pause_circle</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Item 2: Samsung Galaxy S24 Ultra -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-space-sm">
+<div class="flex items-center gap-space-sm">
+<img class="w-10 h-10 rounded object-cover bg-surface-container" data-alt="Premium flagship titanium smartphone angled on sleek reflective marble pedestal showing triple camera layout with sharp studio highlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmGRHz28GetBRZb5MI6H5RmnqSwvG5fnEiym4KcbzSZB5PEw46pfI8rdI8IQDCjZ5N8xHrNyb4sIltrifZcgJuosoJekA5CRA4HyRfy99fJ6EnkX1K7x4wxeGNyUQNA7d4LIWyr9egWFlIiM2QglJtwx0pIGh7qfM_GYj-ClSce62rQ5K6sTUIw6HMra2QzrT8jNuDY_ldBF3AOW3PXt_f-YWbZ5ENCI_OL_ivgInfX6J3aJeUlawy"/>
+<div class="flex flex-col">
+<div class="flex items-center gap-1">
+<span class="px-1 py-0.2 rounded bg-tertiary text-on-tertiary font-badge-micro text-badge-micro">DarazMall</span>
+<span class="font-headline-sm text-label-md text-on-surface font-semibold truncate max-w-[200px]">Galaxy S24 Ultra 256GB</span>
+</div>
+<span class="text-body-sm font-body-sm text-on-surface-variant truncate max-w-[210px]">Samsung Nepal Flagship</span>
+</div>
+</div>
+</td>
+<td class="p-space-sm">
+<div class="flex flex-col">
+<span class="text-price-card font-price-card text-primary leading-tight">Rs. 164,999</span>
+<div class="flex items-center gap-1 text-body-sm font-body-sm">
+<span class="line-through text-on-surface-variant">Rs. 184,999</span>
+<span class="text-primary font-bold">-10.8%</span>
+</div>
+</div>
+</td>
+<td class="p-space-sm">
+<div class="flex flex-col text-body-sm font-body-sm">
+<span class="text-on-surface">Daraz Co: <strong class="text-tertiary">Rs. 5,000</strong></span>
+<span class="text-on-surface-variant">Seller Margin: Rs. 159,999</span>
+</div>
+</td>
+<td class="p-space-sm min-w-[140px]">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-bold text-error">280 / 300</span>
+<span class="text-badge-micro font-badge-micro text-error">93% CRITICAL</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-error h-full rounded-full w-[93%]"></div>
+</div>
+<span class="text-badge-micro font-badge-micro text-error font-bold">Only 20 units left!</span>
+</div>
+</td>
+<td class="p-space-sm">
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-primary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">local_fire_department</span>
+                      12 u/min
+                    </span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">High Value Rail</span>
+</div>
+</td>
+<td class="p-space-sm">
+<span class="px-1.5 py-0.5 rounded bg-primary-container/20 text-primary font-badge-micro text-badge-micro flex items-center gap-0.5 w-fit">
+<span class="material-symbols-outlined text-[12px]">fingerprint</span>
+                    1 Unit / KYC
+                  </span>
+</td>
+<td class="p-space-sm text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface text-label-sm" title="Replenish Allocation" type="button">
+<span class="material-symbols-outlined text-[16px]">add_box</span>
+</button>
+<button class="p-1 rounded bg-surface-container hover:bg-surface-container-high text-tertiary text-label-sm" title="Throttle Traffic Rate" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+<button class="p-1 rounded bg-error-container hover:bg-error hover:text-on-error text-on-error-container text-label-sm" title="Freeze Item" type="button">
+<span class="material-symbols-outlined text-[16px]">pause_circle</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Item 3: Palpali Dhaka Topi -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-space-sm">
+<div class="flex items-center gap-space-sm">
+<img class="w-10 h-10 rounded object-cover bg-surface-container" data-alt="Traditional handmade Nepali Palpali Dhaka Topi hat featuring authentic geometric cultural weave pattern in vivid crimson and gold embroidery" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4vnz0PTVYDp0GBWGIZWW9u8fjUlh9LuB91M9KU-AZe-fM73KcwkN4R7xPXFl3Ib9_cnV88SmTXDXHL_tjHDAMJRd8x3-yq7Xi-6Ge43bIvOIiAe0tay63IOGm5_6Ah4NpVtH08X9i5I6-uuWKoydG1adMBkseAta9OwnUQs9obPHb9-q67Bl3qbGKUkkk0UEEIOJ8_fpAN0drDFEMzkJt3vTViFQyQjFc4LwcjUXGWaHXiLDisZIS"/>
+<div class="flex flex-col">
+<div class="flex items-center gap-1">
+<span class="px-1 py-0.2 rounded bg-secondary text-on-secondary font-badge-micro text-badge-micro">Proudly Nepali</span>
+<span class="font-headline-sm text-label-md text-on-surface font-semibold truncate max-w-[200px]">Palpali Handwoven Topi</span>
+</div>
+<span class="text-body-sm font-body-sm text-on-surface-variant truncate max-w-[210px]">Palpa Heritage Crafts Co-op</span>
+</div>
+</div>
+</td>
+<td class="p-space-sm">
+<div class="flex flex-col">
+<span class="text-price-card font-price-card text-primary leading-tight">Rs. 499</span>
+<div class="flex items-center gap-1 text-body-sm font-body-sm">
+<span class="line-through text-on-surface-variant">Rs. 950</span>
+<span class="text-primary font-bold">-47.5%</span>
+</div>
+</div>
+</td>
+<td class="p-space-sm">
+<div class="flex flex-col text-body-sm font-body-sm">
+<span class="text-on-surface">Daraz Co: <strong class="text-tertiary">Rs. 120</strong></span>
+<span class="text-on-surface-variant">Seller Margin: Rs. 379</span>
+</div>
+</td>
+<td class="p-space-sm min-w-[140px]">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-bold text-on-surface">450 / 1,000</span>
+<span class="text-badge-micro font-badge-micro text-tertiary">45% SOLD</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full w-[45%]"></div>
+</div>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">550 units remaining</span>
+</div>
+</td>
+<td class="p-space-sm">
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-on-surface font-bold">18 u/min</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">Festive Cultural Push</span>
+</div>
+</td>
+<td class="p-space-sm">
+<span class="px-1.5 py-0.5 rounded bg-tertiary/10 text-tertiary font-badge-micro text-badge-micro flex items-center gap-0.5 w-fit">
+<span class="material-symbols-outlined text-[12px]">verified</span>
+                    Heritage Verified
+                  </span>
+</td>
+<td class="p-space-sm text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface text-label-sm" title="Replenish Allocation" type="button">
+<span class="material-symbols-outlined text-[16px]">add_box</span>
+</button>
+<button class="p-1 rounded bg-surface-container hover:bg-surface-container-high text-tertiary text-label-sm" title="Throttle Traffic Rate" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+<button class="p-1 rounded bg-error-container hover:bg-error hover:text-on-error text-on-error-container text-label-sm" title="Freeze Item" type="button">
+<span class="material-symbols-outlined text-[16px]">pause_circle</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Item 4: MuscleBlaze Whey Protein 2kg -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-space-sm">
+<div class="flex items-center gap-space-sm">
+<img class="w-10 h-10 rounded object-cover bg-surface-container" data-alt="Large black sports nutrition whey protein jar with metallic embossed typography resting in clean high-contrast product studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzTIF9R-KeZNOt_5u7jWxI43BNmMGPSmzR0vtikf9YBQZUc9pJl3ZLGQeDNwfDmH7PyGZt0c0tlppwqn74FkCMriGjqEsxsDLZiOUiZSsqxpegMMmwdlV9TAiIpj2yjEKOR-PZlti0zQitDyl4hF2Exnq8QolFeY3k4Lb79sJme7uRZNknwbI4J0MgWD3VRRuKQUiR7aK3XMh1VTs62Dc9kug-KvgXEAJFdyGudCOJCsUMTrdU_2Me"/>
+<div class="flex flex-col">
+<div class="flex items-center gap-1">
+<span class="px-1 py-0.2 rounded bg-tertiary text-on-tertiary font-badge-micro text-badge-micro">Authentic Import</span>
+<span class="font-headline-sm text-label-md text-on-surface font-semibold truncate max-w-[200px]">MuscleBlaze Biozyme 2kg</span>
+</div>
+<span class="text-body-sm font-body-sm text-on-surface-variant truncate max-w-[210px]">HealthNepal Direct Mall</span>
+</div>
+</div>
+</td>
+<td class="p-space-sm">
+<div class="flex flex-col">
+<span class="text-price-card font-price-card text-primary leading-tight">Rs. 8,250</span>
+<div class="flex items-center gap-1 text-body-sm font-body-sm">
+<span class="line-through text-on-surface-variant">Rs. 12,500</span>
+<span class="text-primary font-bold">-34.0%</span>
+</div>
+</div>
+</td>
+<td class="p-space-sm">
+<div class="flex flex-col text-body-sm font-body-sm">
+<span class="text-on-surface">Daraz Co: <strong class="text-tertiary">Rs. 750</strong></span>
+<span class="text-on-surface-variant">Seller Margin: Rs. 7,500</span>
+</div>
+</td>
+<td class="p-space-sm min-w-[140px]">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-bold text-primary">620 / 700</span>
+<span class="text-badge-micro font-badge-micro text-primary">88% HIGH BURN</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[88%]"></div>
+</div>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">80 units remaining</span>
+</div>
+</td>
+<td class="p-space-sm">
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-primary font-bold">22 u/min</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">High Ticket Fast Mover</span>
+</div>
+</td>
+<td class="p-space-sm">
+<span class="px-1.5 py-0.5 rounded bg-secondary-container text-on-secondary-container font-badge-micro text-badge-micro flex items-center gap-0.5 w-fit">
+<span class="material-symbols-outlined text-[12px]">flag</span>
+                    Margin Monitored
+                  </span>
+</td>
+<td class="p-space-sm text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface text-label-sm" title="Replenish Allocation" type="button">
+<span class="material-symbols-outlined text-[16px]">add_box</span>
+</button>
+<button class="p-1 rounded bg-surface-container hover:bg-surface-container-high text-tertiary text-label-sm" title="Throttle Traffic Rate" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+<button class="p-1 rounded bg-error-container hover:bg-error hover:text-on-error text-on-error-container text-label-sm" title="Freeze Item" type="button">
+<span class="material-symbols-outlined text-[16px]">pause_circle</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Micro Footer -->
+<div class="flex items-center justify-between pt-space-xs text-body-sm font-body-sm text-on-surface-variant">
+<span>Showing 4 of 2,450 Live Flash Nominations • Realtime WebSocket Connected</span>
+<div class="flex items-center gap-space-xs">
+<button class="px-2 py-1 bg-surface-container rounded hover:bg-surface-container-high text-label-sm">Previous</button>
+<span class="px-2 font-bold text-on-surface">Page 1 of 612</span>
+<button class="px-2 py-1 bg-surface-container rounded hover:bg-surface-container-high text-label-sm">Next</button>
+</div>
+</div>
+</div>
+<!-- Quick SKU Surge Action / Fast Injection Bar -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col md:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">flash_on</span>
+</div>
+<div>
+<h4 class="text-headline-sm font-headline-sm text-on-surface leading-none">Instant Inventory Injection &amp; Restock Surge</h4>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Instantly bump allocated flash units without requiring seller merchant re-signature.</p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm w-full md:w-auto">
+<input class="h-9 px-space-sm bg-surface-container text-on-surface text-body-sm rounded focus:outline-none focus:ring-1 focus:ring-primary w-full md:w-56" placeholder="Enter SKU ID (e.g. UL-141-BLK)..." type="text"/>
+<button class="h-9 px-space-md bg-primary hover:bg-primary-container text-on-primary text-label-sm font-label-sm rounded whitespace-nowrap" type="button">
+            + Inject 500 Units
+          </button>
+</div>
+</div>
+</div>
+<!-- RIGHT PANE: Control Drawers & Strategic Safeguards (4/12) -->
+<div class="xl:col-span-4 flex flex-col gap-space-md">
+<!-- Panel A: Live Subsidy & Voucher Burn Engine -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">confirmation_number</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Live Voucher Burn Engine</h3>
+</div>
+<span class="px-2 py-0.5 rounded bg-secondary-container text-on-secondary-container font-badge-micro text-badge-micro">
+            Rs. 25M CAP
+          </span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+          Payment partner instantaneous co-funded cashbacks live tracking.
+        </p>
+<!-- Voucher Rail 1: Digital Wallets -->
+<div class="flex flex-col gap-space-xs p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1">
+<span class="font-label-md text-label-md text-on-surface font-bold">eSewa &amp; Khalti Instant Cashback</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary font-bold">78% Exhausted</span>
+</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant">Rs. 500 Flat OFF on Min Cart Rs. 3,000</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden my-0.5">
+<div class="bg-primary h-full rounded-full w-[78%]"></div>
+</div>
+<div class="flex items-center justify-between text-badge-micro font-badge-micro text-on-surface-variant">
+<span>Spent: Rs. 7.8M / 10.0M</span>
+<button class="text-tertiary hover:underline uppercase font-bold">+ Increase Rs. 2M</button>
+</div>
+</div>
+<!-- Voucher Rail 2: Bank Cards -->
+<div class="flex flex-col gap-space-xs p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1">
+<span class="font-label-md text-label-md text-on-surface font-bold">Nabil &amp; Global IME Card Rails</span>
+</div>
+<span class="text-label-sm font-label-sm text-tertiary font-bold">64% Exhausted</span>
+</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant">10% Instant Discount (Max Rs. 1,500)</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden my-0.5">
+<div class="bg-tertiary h-full rounded-full w-[64%]"></div>
+</div>
+<div class="flex items-center justify-between text-badge-micro font-badge-micro text-on-surface-variant">
+<span>Spent: Rs. 6.4M / 10.0M</span>
+<button class="text-tertiary hover:underline uppercase font-bold">+ Boost Card Pool</button>
+</div>
+</div>
+<!-- Voucher Rail 3: Daraz Coins Gamification Burn -->
+<div class="flex flex-col gap-space-xs p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1">
+<span class="font-label-md text-label-md text-on-surface font-bold">Daraz Coins Redemptions</span>
+</div>
+<span class="text-label-sm font-label-sm text-secondary font-bold">4.2M Coins</span>
+</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant">Burned past 4h (1 Coin = NPR 1 equivalent value)</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden my-0.5">
+<div class="bg-secondary h-full rounded-full w-[84%]"></div>
+</div>
+<div class="flex items-center justify-between text-badge-micro font-badge-micro text-on-surface-variant">
+<span>Rate: 17,500 Coins/Min</span>
+<span class="text-secondary font-bold">Gamification Peak</span>
+</div>
+</div>
+<!-- Global Subsidy Throttle Slider -->
+<div class="pt-space-xs flex flex-col gap-space-xs">
+<div class="flex items-center justify-between text-label-sm font-label-sm text-on-surface">
+<span>Dynamic Discount Burn Throttle:</span>
+<span class="font-bold text-primary" id="throttle-val">Normal (1.0x)</span>
+</div>
+<input class="w-full accent-primary h-2 bg-surface-container rounded-lg cursor-pointer" max="1.5" min="0.5" oninput="document.getElementById('throttle-val').innerText = this.value + 'x Traffic Pacing'" step="0.1" type="range" value="1.0"/>
+</div>
+</div>
+<!-- Panel B: Traffic Surge & Anti-Sniper Bot Sentinel -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-error text-[20px]">shield_with_heart</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Surge Sentinel &amp; Bot Guard</h3>
+</div>
+<span class="px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-badge-micro text-badge-micro">
+            EDGE ACTIVE
+          </span>
+</div>
+<!-- Inline SVG Sparkline for QPS Edge -->
+<div class="bg-surface-container-low p-space-sm rounded-lg flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Cloudflare &amp; Nepal Telecom Edge QPS</span>
+<span class="font-mono text-label-md font-label-md text-primary font-bold">48,500 req/s</span>
+</div>
+<div class="h-16 w-full relative">
+<svg class="w-full h-full text-primary" fill="none" preserveaspectratio="none" viewbox="0 0 300 60">
+<path d="M0,45 Q25,48 50,38 T100,42 T150,22 T200,28 T250,12 T300,8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
+<path class="opacity-10" d="M0,45 Q25,48 50,38 T100,42 T150,22 T200,28 T250,12 T300,8 L300,60 L0,60 Z" fill="currentColor"></path>
+</svg>
+</div>
+<div class="flex items-center justify-between text-badge-micro font-badge-micro text-on-surface-variant">
+<span>Buffer Headroom: 71,500 QPS</span>
+<span class="text-tertiary font-bold">Zero Dropped Packets</span>
+</div>
+</div>
+<!-- Bot Defense Indicators -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between p-space-sm rounded bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">verified_user</span>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface font-semibold">Virtual Waiting Room</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">Triggers when Queue &gt; 25,000</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant text-badge-micro font-badge-micro">STANDBY (0 In Queue)</span>
+</div>
+<div class="flex items-center justify-between p-space-sm rounded bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-[18px]">block</span>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface font-semibold">Cluster Address Filter</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">New Road &amp; Kalanki bulk delivery drops</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-error-container text-on-error-container text-badge-micro font-badge-micro font-bold">418 CANCELLED</span>
+</div>
+<div class="flex items-center justify-between p-space-sm rounded bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">phonelink_lock</span>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface font-semibold">Device IMEI Anti-Cloning</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">1 App Instance per Physical Chipset</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container text-badge-micro font-badge-micro">100% ENFORCED</span>
+</div>
+</div>
+<!-- Critical Platform Lockdown -->
+<div class="p-space-sm rounded-lg bg-error-container/40 flex flex-col gap-space-xs">
+<div class="flex items-center gap-1.5 text-error font-bold text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]">warning</span>
+            Dual-Control Operational Protocol
+          </div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+            Initiating platform price freezing requires Head of Ops 2FA and halts cart checkout nationwide in 180ms.
+          </p>
+<button class="w-full h-8 mt-1 rounded bg-error hover:bg-error/90 text-on-error text-label-sm font-label-sm flex items-center justify-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">lock_reset</span>
+            Authorize Master Kill-Switch
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Festive Operations Bottom Live Matrix -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col md:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[26px]">two_wheeler</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-sm">
+<span class="text-headline-sm font-headline-sm text-on-surface font-bold">DEX 77-District Festive Fleet Alert</span>
+<span class="px-2 py-0.5 rounded bg-tertiary-container text-on-tertiary-container font-badge-micro text-badge-micro">CAPACITY PEAK</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+          1,240 DEX Riders mobilized with festive delivery incentives (+Rs. 35/delivered package). Pokhara, Biratnagar, &amp; Butwal sort hubs on 24/7 rotating night shift.
+        </p>
+</div>
+</div>
+<div class="flex items-center gap-space-md flex-wrap">
+<div class="flex items-center gap-2 bg-surface-container px-space-md py-space-xs rounded-lg">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-label-sm font-label-sm text-on-surface font-mono">IRD CBMS Realtime Sync: OK</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container px-space-md py-space-xs rounded-lg">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-label-sm font-label-sm text-on-surface font-mono">NCHL-IPS Pre-Fund: Rs. 50M</span>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple micro-interaction for the live countdown timer
+  (function() {
+    var secSpan = document.getElementById('timer-sec');
+    if (secSpan) {
+      var s = 36;
+      setInterval(function() {
+        s--;
+        if (s < 0) s = 59;
+        secSpan.innerText = s < 10 ? '0' + s : s;
+      }, 1000);
+    }
+  })();
+
+  function confirmEmergencyFreeze() {
+    var confirmed = window.confirm("CRITICAL OPS ALERT: Are you sure you want to engage the Festive Price Lock Kill-Switch? This will immediately lock SKU prices at their MSRP baselines to prevent vendor mispricing.");
+    if (confirmed) {
+      alert("Emergency freeze command queued. Sent 2FA push token to Amrit Raj (Head of Ops).");
+    }
+  }
+</script></main><footer class="w-full bg-surface-container-lowest mt-space-xl shadow-[0_-1px_8px_rgba(0,0,0,0.04)]"><div class="bg-primary-container text-on-primary-container px-space-xl py-space-md"><div class="flex items-center justify-between"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-on-primary-container text-[22px]">local_shipping</span><span class="text-label-md font-label-md">Daraz Express (DEX) Deliveries Operating Across All 77 Districts of Nepal</span></div><div class="flex items-center gap-space-lg text-label-sm font-label-sm"><span class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[16px]">verified</span>100% Buyer Protection</span><span class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[16px]">lock_reset</span>COD &amp; Instant Refunds</span><span class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[16px]">headset_mic</span>24/7 Ops Emergency Desk</span></div></div></div><div class="px-space-xl py-space-lg flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant"><div class="flex items-center gap-space-lg"><span>© 2025 Daraz Kaymu Pvt. Ltd. (Operations &amp; Logistics Directorate)</span><a class="hover:text-primary transition-colors" href="#">DEX Policy &amp; SLA Guidelines</a><a class="hover:text-primary transition-colors" href="#">Nepal Customs &amp; IRD CBMS Sync</a><a class="hover:text-primary transition-colors" href="#">Kathmandu NOC Hotline</a></div><div class="flex items-center gap-space-sm"><span class="w-2 h-2 rounded-full bg-tertiary"></span><span class="font-label-sm text-on-surface">All Systems Operational • Nepal Telecom CDN v4.9</span></div></div></footer></div></body></html>

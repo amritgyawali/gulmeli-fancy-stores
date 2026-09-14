@@ -1,4 +1,10 @@
-import { useEffect, useState, type ReactNode } from "react";
+import {
+  Suspense,
+  lazy,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -13,14 +19,22 @@ import {
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { Button, Row, T, Tap } from "@/components/ui";
+import CameraCapture from "@/components/CameraCapture";
 import { ProductVisual } from "@/components/ProductVisual";
 import { ProductCard } from "@/components/ProductCard";
 import { useShop, useCatalog } from "@/store/ShopProvider";
 import { openDestination } from "@/services/navigation";
 import { voucherDiscount } from "@/store/commerce";
 import { uploadAvatar } from "@/services/cloudinary";
+import { paymentsAvailable } from "@/services/payments";
+import { usePrefs } from "@/store/prefs";
 import { currentBrand } from "@/utils/branding";
 import type { Product } from "@/types/shop";
+
+// The Stripe SDK only enters the bundle on native builds that are configured.
+const StripePayButtonLazy = lazy(
+  () => import("@/components/StripePayButton"),
+);
 
 const money = (n: number) => `Rs. ${n.toLocaleString("en-US")}`;
 const categories = [
@@ -150,9 +164,39 @@ function FeatureContent({
   const [text, setText] = useState("");
   const [rating, setRating] = useState(5);
   const [photo, setPhoto] = useState("");
+  const [showCamera, setShowCamera] = useState(false);
   const [faq, setFaq] = useState(-1);
   const [game, setGame] = useState(0);
   const [answer, setAnswer] = useState(0);
+  const biometricsEnabled = usePrefs((s) => s.biometricsEnabled);
+  const toggleBiometrics = async (value: boolean) => {
+    if (!value) {
+      usePrefs.getState().setBiometricsEnabled(false);
+      setNotice("Biometric lock turned off.");
+      return;
+    }
+    try {
+      const LocalAuthentication = await import("expo-local-authentication");
+      const compatible = await LocalAuthentication.hasHardwareAsync();
+      const enrolled = await LocalAuthentication.isEnrolledAsync();
+      if (!compatible || !enrolled) {
+        setNotice(
+          "No fingerprint or face unlock is enrolled on this device. Set one up in system settings first.",
+        );
+        return;
+      }
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: "Confirm biometrics to enable the app lock",
+      });
+      if (result.success) {
+        usePrefs.getState().setBiometricsEnabled(true);
+        setNotice("Biometric lock enabled. It applies on next launch.");
+      } else
+        setNotice("Biometric verification failed. The lock stays off.");
+    } catch {
+      setNotice("Biometrics are unavailable on this device.");
+    }
+  };
   const product = params.id ? productById[params.id] : undefined;
   const isProduct = mode === "product details";
   const isCheckout = mode.startsWith("checkout");
@@ -412,6 +456,18 @@ function FeatureContent({
                 Payment preference: Cash on delivery. No payment is collected
                 here.
               </T>
+              {paymentsAvailable && (
+                <Suspense
+                  fallback={<T size={11} color="#6b7280">Loading secure payment…</T>}
+                >
+                  <StripePayButtonLazy
+                    total={subtotal - discount}
+                    onBusy={setBusy}
+                    onError={setNotice}
+                    onPaid={() => setNotice("Card payment approved.")}
+                  />
+                </Suspense>
+              )}
               <Button
                 title={
                   busy
@@ -537,6 +593,16 @@ function FeatureContent({
             }
           />
         </Row>
+        {Platform.OS !== "web" && (
+          <Row style={{ justifyContent: "space-between" }}>
+            <T>Lock app with biometrics</T>
+            <Switch
+              accessibilityLabel="Biometric app lock"
+              value={biometricsEnabled}
+              onValueChange={(value) => void toggleBiometrics(value)}
+            />
+          </Row>
+        )}
         {live && session && (
           <>
             <T>Signed in as {session.user.email}</T>
@@ -1139,6 +1205,24 @@ function FeatureContent({
               outline
               onPress={() => void pickPhoto(true, false)}
             />
+            {Platform.OS !== "web" && (
+              <Button
+                title={showCamera ? "Close live camera" : "Open live camera"}
+                outline
+                onPress={() => setShowCamera(!showCamera)}
+              />
+            )}
+            {showCamera && Platform.OS !== "web" && (
+              <View style={{ height: 380 }}>
+                <CameraCapture
+                  onCapture={(uri) => {
+                    setPhoto(uri);
+                    setShowCamera(false);
+                  }}
+                  onClose={() => setShowCamera(false)}
+                />
+              </View>
+            )}
             {photo && <Image source={{ uri: photo }} style={styles.hero} />}
           </Card>
         )}

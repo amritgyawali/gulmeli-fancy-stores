@@ -1,0 +1,12 @@
+import { chromium } from "file:///C:/Users/amrit/Downloads/stitch_daraz_app_home_clone/gulmeli fancy store/mobile/node_modules/playwright/index.mjs";
+const b = await chromium.launch();
+const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+const errs = [];
+p.on('pageerror', e => errs.push('PAGE ' + e.message));
+p.on('console', m => { if (m.type() === 'error') errs.push('CON ' + m.text().slice(0, 200)); });
+await p.goto('http://localhost:4173/#/admin/ops', { waitUntil: 'networkidle' });
+await p.waitForTimeout(4000);
+const text = await p.evaluate(() => document.body.innerText);
+console.log('TEXT-START>>', JSON.stringify(text.slice(0, 400)), '<<END');
+console.log('ERRS', errs.slice(0, 6));
+await b.close();

@@ -1,0 +1,891 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><title>Daraz Nepal - Orders Management &amp; Dispatch Matrix</title><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@100..900&amp;display=swap" rel="stylesheet"><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-tertiary": "#ffffff", "surface-dim": "#dcd9d9", "surface-bright": "#fcf9f8", "secondary": "#735c00", "on-primary": "#ffffff", "on-secondary": "#ffffff", "tertiary": "#006578", "surface-container-highest": "#e5e2e1", "primary-fixed-dim": "#ffb59b", "surface-container-high": "#eae7e7", "surface": "#fcf9f8", "on-error": "#ffffff", "surface-variant": "#e5e2e1", "primary-container": "#cf4500", "primary-fixed": "#ffdbcf", "inverse-on-surface": "#f3f0ef", "on-primary-fixed-variant": "#822800", "outline-variant": "#e4beb2", "on-tertiary-container": "#f9fdff", "on-error-container": "#93000a", "on-primary-container": "#fffbff", "on-secondary-fixed": "#241a00", "surface-tint": "#aa3700", "on-secondary-container": "#6e5700", "outline": "#8f7065", "secondary-fixed": "#ffe088", "on-surface": "#1b1c1c", "on-background": "#1b1c1c", "inverse-primary": "#ffb59b", "surface-container-low": "#f6f3f2", "surface-container": "#f0eded", "primary": "#a63600", "on-tertiary-fixed-variant": "#004e5d", "on-secondary-fixed-variant": "#574500", "tertiary-fixed-dim": "#68d5f1", "tertiary-fixed": "#aeecff", "on-primary-fixed": "#380d00", "secondary-fixed-dim": "#f0c100", "on-tertiary-fixed": "#001f26", "on-surface-variant": "#5b4137", "background": "#fcf9f8", "inverse-surface": "#303030", "surface-container-lowest": "#ffffff", "tertiary-container": "#008097", "error": "#ba1a1a", "secondary-container": "#fccc19", "error-container": "#ffdad6" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "gutter-desktop": "1rem", "space-xl": "1.5rem", "margin-desktop": "1.5rem", "margin": "0.75rem", "space-sm": "0.5rem", "space-md": "0.75rem", "gutter": "0.75rem", "space-lg": "1rem", "space-xs": "0.25rem" }, "fontFamily": { "headline-lg-mobile": ["Roboto Flex"], "headline-xl-mobile": ["Roboto Flex"], "body-sm": ["Roboto Flex"], "body-lg": ["Roboto Flex"], "headline-lg": ["Roboto Flex"], "headline-sm": ["Roboto Flex"], "label-md": ["Roboto Flex"], "badge-micro": ["Roboto Flex"], "price-strikethrough": ["Roboto Flex"], "price-card": ["Roboto Flex"], "price-hero": ["Roboto Flex"], "headline-md": ["Roboto Flex"], "headline-xl": ["Roboto Flex"], "label-sm": ["Roboto Flex"], "body-md": ["Roboto Flex"] }, "fontSize": { "headline-lg-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "700" }], "headline-xl-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "body-lg": ["15px", { "lineHeight": "22px", "fontWeight": "400" }], "headline-lg": ["24px", { "lineHeight": "32px", "fontWeight": "700" }], "headline-sm": ["16px", { "lineHeight": "22px", "fontWeight": "600" }], "label-md": ["13px", { "lineHeight": "16px", "fontWeight": "500" }], "badge-micro": ["10px", { "lineHeight": "12px", "fontWeight": "700" }], "price-strikethrough": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "price-card": ["18px", { "lineHeight": "24px", "fontWeight": "700" }], "price-hero": ["28px", { "lineHeight": "36px", "fontWeight": "700" }], "headline-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-xl": ["32px", { "lineHeight": "40px", "fontWeight": "700" }], "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "600" }], "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "400" }] } } } };</script></head><body class="bg-background font-body-md text-body-md text-on-surface"><header class="fixed top-0 left-0 w-full z-50 bg-surface shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-36"><div class="bg-surface-container-low"><div class="max-w-[1200px] mx-auto px-margin-desktop h-7 flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm"><div class="flex items-center gap-space-lg"><a class="hover:text-primary transition-colors uppercase" data-path="app-download" href="#">SAVE MORE ON APP</a><a class="hover:text-primary transition-colors uppercase" data-path="sell-on-daraz" href="#">BECOME A SELLER</a><a class="hover:text-primary transition-colors uppercase" data-path="help-support" href="#">HELP &amp; SUPPORT</a></div><div class="flex items-center gap-space-lg"><a class="hover:text-primary transition-colors uppercase font-label-sm text-label-sm" data-path="my-account" href="#">AMRIT'S ACCOUNT</a><a class="hover:text-primary transition-colors font-label-sm text-label-sm" data-path="language" href="#">भाषा परिवर्तन</a></div></div></div><div class="bg-surface"><div class="max-w-[1200px] mx-auto px-margin-desktop h-20 flex items-center justify-between gap-space-lg"><a class="flex items-center gap-space-xs shrink-0 select-none group" data-path="home" href="#"><div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center"><span class="text-on-primary font-headline-lg text-headline-lg">d</span></div><div class="flex flex-col"><span class="font-headline-lg text-headline-lg tracking-tight text-primary leading-none">daraz</span><span class="font-badge-micro text-badge-micro tracking-widest uppercase text-tertiary font-bold">Nepal</span></div></a><div class="flex-1 max-w-2xl"><form action="#" class="flex items-center bg-surface-container-lowest rounded-lg overflow-hidden shadow-[0_1px_4px_rgba(0,0,0,0.06)]"><input class="w-full px-space-md py-space-sm bg-transparent outline-none font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" placeholder="Search in Daraz" type="text"><button aria-label="Search" class="bg-primary hover:bg-primary-container px-space-lg py-space-sm flex items-center justify-center transition-colors shrink-0" type="submit"><span class="material-symbols-outlined text-on-primary text-[20px]">search</span></button></form></div><div class="flex items-center gap-space-lg shrink-0"><a aria-label="Shopping Cart" class="relative p-space-xs text-on-surface hover:text-primary transition-colors" data-path="cart" href="#"><span class="material-symbols-outlined text-[28px]">shopping_cart</span><span class="absolute -top-1 -right-1 bg-primary text-on-primary font-badge-micro text-badge-micro px-1.5 py-0.5 rounded-full min-w-[18px] text-center">0</span></a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div><div class="bg-surface-container-lowest shadow-[0_1px_4px_rgba(0,0,0,0.02)]"><div class="max-w-[1200px] mx-auto px-margin-desktop"><nav class="flex items-center gap-space-lg overflow-x-auto whitespace-nowrap py-space-xs" data-active-classes="text-primary font-bold"><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-1" data-path="electronic-devices" href="#">Electronic Devices</a><a aria-current="page" class="transition-colors py-1 text-primary font-bold" data-path="electronic-accessories" href="#">Electronic Accessories</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-1" data-path="tv-home-appliances" href="#">TV &amp; Home Appliances</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-1" data-path="health-beauty" href="#">Health &amp; Beauty</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-1" data-path="babies-toys" href="#">Babies &amp; Toys</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-1" data-path="groceries-pets" href="#">Groceries &amp; Pets</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-1" data-path="home-lifestyle" href="#">Home &amp; Lifestyle</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-1" data-path="womens-fashion" href="#">Women's Fashion</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-1" data-path="mens-fashion" href="#">Men's Fashion</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-1" data-path="watches-accessories" href="#">Watches &amp; Accessories</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-1" data-path="sports-outdoor" href="#">Sports &amp; Outdoor</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-1" data-path="automotive-motorbike" href="#">Automotive &amp; Motorbike</a></nav></div></div></div></header><main class="w-full pt-36 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- TOP COMMAND & SYSTEM HEALTH BAR -->
+<header class="w-full bg-inverse-surface text-inverse-on-surface text-body-sm font-body-sm shadow-md sticky top-36 z-40"><div class="max-w-[1200px] mx-auto px-margin-desktop py-space-xs flex flex-wrap items-center justify-between gap-space-sm"><div class="flex items-center gap-space-md flex-wrap"><div class="flex items-center gap-space-xs"><span class="relative flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-container opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary-container"></span></span><span class="font-headline-sm text-headline-sm tracking-tight text-surface-container-lowest">Nepal Ops Central <span class="text-secondary-container text-body-sm font-body-sm font-bold">v5.2</span></span></div><span class="bg-surface-container-highest/20 px-2 py-0.5 rounded text-badge-micro font-badge-micro uppercase tracking-wider text-surface-dim">Kathmandu HQ (77 District Hubs Active)</span><span class="flex items-center gap-1 text-surface-dim"><span class="material-symbols-outlined text-[14px] text-tertiary-fixed-dim">local_shipping</span> DEX SLA: <strong class="text-surface-container-lowest font-headline-sm text-label-sm">99.4%</strong></span><span class="flex items-center gap-1 text-surface-dim"><span class="material-symbols-outlined text-[14px] text-secondary-container">account_balance_wallet</span> eSewa / Khalti: <strong class="text-surface-container-lowest font-headline-sm text-label-sm">100% OK</strong></span><span class="flex items-center gap-1 text-surface-dim"><span class="material-symbols-outlined text-[14px] text-tertiary-fixed-dim">sync</span> NCHL-IPS Synced</span><span class="flex items-center gap-1 text-surface-dim"><span class="material-symbols-outlined text-[14px] text-secondary-container">receipt_long</span> IRD CBMS Live</span></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs bg-surface-container-highest/20 px-2 py-0.5 rounded"><span class="material-symbols-outlined text-[14px] text-secondary-container">schedule</span><span class="font-mono text-label-sm font-label-sm text-surface-container-lowest" id="npt-clock">NPT 15:42:19</span></div><span class="bg-primary/40 text-primary-fixed text-badge-micro font-badge-micro px-2 py-0.5 rounded uppercase font-bold tracking-widest">PROD-PRIMARY</span><button class="text-surface-dim hover:text-surface-bright transition-colors text-label-sm font-label-sm flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">translate</span> नेपाली / EN</button></div></div><div class="bg-inverse-surface/90 py-space-xs border-t border-surface-container-highest/15"><div class="max-w-[1200px] mx-auto px-margin-desktop flex items-center justify-between gap-space-md"><div class="relative flex-1 max-w-xl"><div class="flex items-center bg-surface-container-highest/15 rounded px-space-md py-1 text-surface-dim focus-within:text-surface-bright focus-within:bg-surface-container-highest/25 transition-all"><span class="material-symbols-outlined text-[18px] mr-2 text-surface-dim">search</span><input class="bg-transparent text-body-sm font-body-sm text-surface-bright placeholder:text-surface-dim outline-none w-full" placeholder="Search orders, SKU, merchant name, DEX waybill, IRD PAN... (Ctrl + K)" type="text"><kbd class="bg-surface-container-highest/30 px-1.5 py-0.5 text-badge-micro font-badge-micro text-surface-bright rounded shadow-sm">⌘K</kbd></div></div><div class="flex items-center gap-space-sm"><button class="flex items-center gap-1 bg-surface-container-highest/30 hover:bg-surface-container-highest/40 text-surface-bright px-space-md py-1.5 rounded text-label-sm font-label-sm transition-colors"><span class="material-symbols-outlined text-[16px]">add_circle</span><span class="hidden sm:inline">Create Order</span></button><button class="flex items-center gap-1 bg-surface-container-highest/30 hover:bg-surface-container-highest/40 text-surface-bright px-space-md py-1.5 rounded text-label-sm font-label-sm transition-colors"><span class="material-symbols-outlined text-[16px]">inventory_2</span><span class="hidden sm:inline">Add SKU</span></button><button class="flex items-center gap-1 bg-primary text-on-primary hover:bg-primary-container px-space-md py-1.5 rounded text-label-sm font-label-sm font-bold transition-colors shadow-sm"><span class="material-symbols-outlined text-[16px]">bolt</span><span class="">9.9 / 11.11 Flash Orchestrator</span></button><div class="flex items-center gap-space-xs pl-space-sm"><button class="relative p-1.5 text-surface-dim hover:text-surface-bright transition-colors rounded"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-0 right-0 bg-primary text-on-primary text-badge-micro font-badge-micro rounded-full w-4 h-4 flex items-center justify-center font-bold">3</span></button><div class="flex items-center gap-2 pl-space-xs"><div class="w-7 h-7 rounded bg-primary-container text-on-primary flex items-center justify-center font-bold text-label-sm">AR</div><div class="hidden lg:flex flex-col text-left leading-tight"><span class="font-label-sm text-label-sm text-surface-bright font-bold">Amrit Raj</span><span class="text-badge-micro font-badge-micro text-secondary-fixed">Super Admin / Head of Ops</span></div></div></div></div></div></div></header>
+<!-- WORKSPACE CONTAINER: Sidebar + Main Content -->
+<div class="max-w-[1200px] mx-auto px-margin-desktop py-space-md w-full flex gap-space-md">
+<!-- PERSISTENT 85-MODULE HIERARCHICAL SIDEBAR -->
+<aside class="w-[250px] shrink-0 hidden lg:flex flex-col gap-space-xs select-none bg-surface-container-lowest p-space-sm rounded-lg shadow-sm border border-surface-container-high"><div class="p-space-xs pb-space-sm border-b border-surface-container flex items-center justify-between"><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface font-bold leading-tight">Admin Modules</span><span class="text-body-sm font-body-sm text-on-surface-variant">Enterprise Ops Core</span></div><span class="text-badge-micro font-badge-micro px-1.5 py-0.5 rounded bg-primary/10 text-primary font-bold">85 Active</span></div><nav class="flex flex-col gap-space-xs overflow-y-auto max-h-[calc(100vh-250px)] pr-1"><div class="pt-1"><div class="px-space-xs py-1 text-badge-micro font-badge-micro text-on-surface-variant uppercase font-bold tracking-wider">COMMAND &amp; OVERSIGHT</div><div class="flex flex-col gap-0.5"><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">visibility</span>Executive 360° Live View</span></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">query_stats</span>Real-time GMV Telemetry</span></a></div></div><div class="pt-1 border-t border-surface-container"><div class="px-space-xs py-1 text-badge-micro font-badge-micro text-on-surface-variant uppercase font-bold tracking-wider">COMMERCE &amp; CATALOG</div><div class="flex flex-col gap-0.5"><a class="flex items-center justify-between px-space-sm py-1.5 rounded bg-primary text-on-primary font-label-sm text-label-sm font-bold shadow-xs" href="#"><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-on-primary"></span>Orders &amp; 21-Stage Fulfillment</span><span class="text-badge-micro font-badge-micro px-1.5 py-0.2 rounded bg-surface-container-lowest text-primary font-bold">8,429</span></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">inventory_2</span>Catalog Assortment &amp; Stock</span></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">verified</span>Brand &amp; DarazMall Approvals</span></a></div></div><div class="pt-1 border-t border-surface-container"><div class="px-space-xs py-1 text-badge-micro font-badge-micro text-on-surface-variant uppercase font-bold tracking-wider">VENDORS &amp; COMPLIANCE</div><div class="flex flex-col gap-0.5"><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">group</span>Verified Sellers Hub</span><span class="text-badge-micro font-badge-micro text-on-surface">48,912</span></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">how_to_reg</span>Seller Approval &amp; KYC Maker-Checker</span><span class="text-badge-micro font-badge-micro px-1 rounded bg-secondary-container text-on-secondary-container font-bold">142</span></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">percent</span>Seller Commission Tiers</span></a></div></div><div class="pt-1 border-t border-surface-container"><div class="px-space-xs py-1 text-badge-micro font-badge-micro text-on-surface-variant uppercase font-bold tracking-wider">LOGISTICS NETWORK (DEX)</div><div class="flex flex-col gap-0.5"><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">hub</span>77 District Hub Routing Matrix</span><span class="text-badge-micro font-badge-micro px-1 rounded bg-tertiary-fixed text-on-tertiary-fixed font-bold">Live</span></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">rv_hookup</span>3PL Couriers (Pathao &amp; NCM)</span></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">two_wheeler</span>DEX Last-Mile Fleet</span><span class="text-badge-micro font-badge-micro text-on-surface">1,240</span></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">restart_alt</span>Reverse Logistics &amp; QC Lab</span></a></div></div><div class="pt-1 border-t border-surface-container"><div class="px-space-xs py-1 text-badge-micro font-badge-micro text-on-surface-variant uppercase font-bold tracking-wider">PROMOTIONS &amp; CAMPAIGNS</div><div class="flex flex-col gap-0.5"><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">campaign</span>9.9 &amp; 11.11 Flash Sale Orchestrator</span><span class="text-badge-micro font-badge-micro px-1 rounded bg-primary text-on-primary font-bold">Active</span></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">savings</span>Voucher &amp; Coin Burn Pool</span><span class="text-badge-micro font-badge-micro text-on-surface-variant">14 Live</span></a></div></div><div class="pt-1 border-t border-surface-container"><div class="px-space-xs py-1 text-badge-micro font-badge-micro text-on-surface-variant uppercase font-bold tracking-wider">GOVERNANCE, FINANCES &amp; AUDIT</div><div class="flex flex-col gap-0.5"><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">account_balance</span>Commission Engine &amp; NCHL-IPS Payouts</span><span class="text-badge-micro font-badge-micro text-tertiary font-bold">Rs. 42.8M</span></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">receipt</span>IRD CBMS 13% VAT Invoicing</span><span class="text-badge-micro font-badge-micro text-secondary font-bold">Sync 100%</span></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">shield</span>Trust, Risk &amp; Bot Guard Sentinel</span><span class="text-badge-micro font-badge-micro px-1 rounded bg-error text-on-error font-bold">142 Blk</span></a><a class="flex items-center justify-between px-space-sm py-1.5 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">tune</span>System RBAC &amp; Audit Logs</span></a></div></div></nav></aside>
+<!-- MAIN DASHBOARD CONTENT AREA: PRODUCTION 21-STAGE ORDERS MANAGEMENT WORKBENCH -->
+<div class="flex-1 min-w-0 flex flex-col gap-space-md">
+<!-- 1. HEADER & QUICK METRICS BAR FOR ORDERS -->
+<div class="flex flex-col gap-space-xs">
+<!-- Breadcrumbs & Date Selector -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-2 text-on-surface-variant text-label-md font-label-md">
+<span class="">Daraz Nepal Admin</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="">Commerce &amp; Catalog</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-bold">Orders Management</span>
+</div>
+<div class="flex items-center gap-1 bg-surface-container-lowest p-1 rounded-lg shadow-sm">
+<button class="px-2.5 py-1 rounded bg-primary text-on-primary text-label-sm font-label-sm font-bold shadow-xs">Today</button>
+<button class="px-2.5 py-1 rounded text-on-surface-variant hover:bg-surface-container text-label-sm font-label-sm transition-colors">Yesterday</button>
+<button class="px-2.5 py-1 rounded text-on-surface-variant hover:bg-surface-container text-label-sm font-label-sm transition-colors">7D</button>
+<button class="px-2.5 py-1 rounded text-on-surface-variant hover:bg-surface-container text-label-sm font-label-sm transition-colors">30D</button>
+<button class="px-2.5 py-1 rounded text-on-surface-variant hover:bg-surface-container text-label-sm font-label-sm transition-colors">Custom</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="Refresh Feed">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+</button>
+</div>
+</div>
+<!-- Title Bar with Enterprise Batch Actions -->
+<div class="bg-surface-container-lowest p-space-md rounded-lg shadow-sm flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">local_shipping</span>
+</div>
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-bold leading-tight">Orders Management &amp; Dispatch Matrix</h1>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Real-time marketplace order fulfillment orchestration across all 77 districts of Nepal</p>
+</div>
+</div>
+<div class="flex items-center gap-space-xs flex-wrap">
+<button class="bg-surface-container px-3 py-1.5 rounded text-label-sm font-label-sm text-on-surface hover:bg-surface-container-high flex items-center gap-1.5 transition-colors font-medium">
+<span class="material-symbols-outlined text-[16px] text-tertiary">file_download</span>
+<span class="">Export CSV / XLSX</span>
+</button>
+<button class="bg-surface-container px-3 py-1.5 rounded text-label-sm font-label-sm text-on-surface hover:bg-surface-container-high flex items-center gap-1.5 transition-colors font-medium">
+<span class="material-symbols-outlined text-[16px] text-primary">print</span>
+<span class="">Batch Print 450 Waybills</span>
+</button>
+<button class="bg-surface-container px-3 py-1.5 rounded text-label-sm font-label-sm text-on-surface hover:bg-surface-container-high flex items-center gap-1.5 transition-colors font-medium">
+<span class="material-symbols-outlined text-[16px] text-secondary">merge</span>
+<span class="">Merge Shipments</span>
+</button>
+<button class="bg-surface-container px-3 py-1.5 rounded text-label-sm font-label-sm text-on-surface hover:bg-surface-container-high flex items-center gap-1.5 transition-colors font-medium">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">call_split</span>
+<span class="">Split Order Tool</span>
+</button>
+<button class="bg-primary text-on-primary hover:bg-primary-container px-3.5 py-1.5 rounded text-label-sm font-label-sm font-bold flex items-center gap-1.5 transition-colors shadow-xs">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span class="">+ Create Manual Order</span>
+</button>
+</div>
+</div>
+<!-- Order Counter Telemetry Strip -->
+<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+<div class="bg-surface-container-lowest p-space-sm rounded-lg shadow-sm flex flex-col">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant uppercase font-semibold">Total Orders</span>
+<span class="font-headline-md text-headline-md text-on-surface font-bold mt-0.5">8,429</span>
+<span class="text-badge-micro font-badge-micro text-secondary font-semibold">+18.4% vs yday</span>
+</div>
+<div class="bg-surface-container-lowest p-space-sm rounded-lg shadow-sm flex flex-col border-l-2 border-secondary">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant uppercase font-semibold">Pending Dispatch</span>
+<span class="font-headline-md text-headline-md text-secondary font-bold mt-0.5">412</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">Needs Seller Action</span>
+</div>
+<div class="bg-surface-container-lowest p-space-sm rounded-lg shadow-sm flex flex-col border-l-2 border-tertiary">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant uppercase font-semibold">In-Transit DEX</span>
+<span class="font-headline-md text-headline-md text-tertiary font-bold mt-0.5">3,920</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">77 District Hubs</span>
+</div>
+<div class="bg-surface-container-lowest p-space-sm rounded-lg shadow-sm flex flex-col border-l-2 border-primary">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant uppercase font-semibold">Out for Delivery</span>
+<span class="font-headline-md text-headline-md text-primary font-bold mt-0.5">1,480</span>
+<span class="text-badge-micro font-badge-micro text-primary font-semibold">1,240 DEX Riders</span>
+</div>
+<div class="bg-surface-container-lowest p-space-sm rounded-lg shadow-sm flex flex-col border-l-2 border-secondary-container">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant uppercase font-semibold">Delivered</span>
+<span class="font-headline-md text-headline-md text-on-surface font-bold mt-0.5">2,110</span>
+<span class="text-badge-micro font-badge-micro text-secondary font-semibold">99.4% SLA Pass</span>
+</div>
+<div class="bg-surface-container-lowest p-space-sm rounded-lg shadow-sm flex flex-col border-l-2 border-error">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant uppercase font-semibold">Returns / Disputed</span>
+<span class="font-headline-md text-headline-md text-error font-bold mt-0.5">67</span>
+<span class="text-badge-micro font-badge-micro text-error font-semibold">0.79% Reverse QC</span>
+</div>
+<div class="bg-surface-container-lowest p-space-sm rounded-lg shadow-sm flex flex-col border-l-2 border-primary-container">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant uppercase font-semibold">COD Uncollected</span>
+<span class="font-headline-md text-headline-md text-primary font-bold mt-0.5">Rs. 6.12M</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">In DEX Fleet Transit</span>
+</div>
+</div>
+</div>
+<!-- 2. 21-STAGE HORIZONTAL STATUS FILTER TABS -->
+<div class="bg-surface-container-lowest rounded-lg shadow-sm p-space-xs overflow-x-auto select-none border-b border-surface-container">
+<div class="flex items-center gap-1 whitespace-nowrap min-w-max pb-1">
+<!-- 1. All Orders -->
+<button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary font-bold text-label-sm font-label-sm flex items-center gap-1.5 shadow-xs">
+<span class="">All Orders</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-lowest text-primary text-badge-micro font-badge-micro font-bold">8,429</span>
+</button>
+<!-- 2. New Orders -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">New Orders</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant text-badge-micro font-badge-micro">124</span>
+</button>
+<!-- 3. Pending -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Pending</span>
+<span class="px-1.5 py-0.2 rounded-full bg-secondary-fixed text-on-secondary-fixed text-badge-micro font-badge-micro font-bold">412</span>
+</button>
+<!-- 4. Confirmed -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Confirmed</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant text-badge-micro font-badge-micro">630</span>
+</button>
+<!-- 5. Processing -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Processing</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant text-badge-micro font-badge-micro">890</span>
+</button>
+<!-- 6. Ready to Ship -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Ready to Ship</span>
+<span class="px-1.5 py-0.2 rounded-full bg-tertiary-fixed text-on-tertiary-fixed text-badge-micro font-badge-micro font-bold">540</span>
+</button>
+<!-- 7. Packed -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Packed</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant text-badge-micro font-badge-micro">310</span>
+</button>
+<!-- 8. Shipped -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Shipped</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant text-badge-micro font-badge-micro">1,240</span>
+</button>
+<!-- 9. Out for Delivery -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Out for Delivery</span>
+<span class="px-1.5 py-0.2 rounded-full bg-primary/20 text-primary text-badge-micro font-badge-micro font-bold">1,480</span>
+</button>
+<!-- 10. Delivered -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Delivered</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant text-badge-micro font-badge-micro">2,110</span>
+</button>
+<!-- 11. Failed Delivery -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Failed Delivery</span>
+<span class="px-1.5 py-0.2 rounded-full bg-error-container text-error text-badge-micro font-badge-micro font-bold">42</span>
+</button>
+<!-- 12. Cancelled -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Cancelled</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant text-badge-micro font-badge-micro">84</span>
+</button>
+<!-- 13. Return Requested -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Return Requested</span>
+<span class="px-1.5 py-0.2 rounded-full bg-error-container text-error text-badge-micro font-badge-micro">38</span>
+</button>
+<!-- 14. Returned -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Returned</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant text-badge-micro font-badge-micro">29</span>
+</button>
+<!-- 15. Refund Requested -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Refund Requested</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant text-badge-micro font-badge-micro">18</span>
+</button>
+<!-- 16. Refunded -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Refunded</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant text-badge-micro font-badge-micro">15</span>
+</button>
+<!-- 17. Disputed Orders -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Disputed Orders</span>
+<span class="px-1.5 py-0.2 rounded-full bg-error text-on-error text-badge-micro font-badge-micro font-bold">12</span>
+</button>
+<!-- 18. COD Orders -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">COD Orders</span>
+<span class="px-1.5 py-0.2 rounded-full bg-secondary-fixed text-on-secondary-fixed text-badge-micro font-badge-micro">3,140</span>
+</button>
+<!-- 19. Prepaid Orders -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Prepaid Orders</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant text-badge-micro font-badge-micro">5,289</span>
+</button>
+<!-- 20. International Orders -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">International</span>
+<span class="px-1.5 py-0.2 rounded-full bg-tertiary-fixed text-on-tertiary-fixed text-badge-micro font-badge-micro">145</span>
+</button>
+<!-- 21. Archived Orders -->
+<button class="px-3 py-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-label-sm font-label-sm flex items-center gap-1.5 transition-colors">
+<span class="">Archived</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container text-on-surface-variant text-badge-micro font-badge-micro">9,820</span>
+</button>
+</div>
+</div>
+<!-- 3. ADVANCED SEARCH & FILTER CONTROLS -->
+<div class="bg-surface-container-lowest p-space-md rounded-lg shadow-sm flex flex-col gap-space-sm">
+<!-- Filter Row 1: Search & Dropdowns -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-space-sm">
+<div class="md:col-span-5 relative">
+<div class="flex items-center bg-surface-container-low rounded-lg px-3 py-2 text-on-surface border border-surface-container-high focus-within:border-primary focus-within:bg-surface-container-lowest transition-colors">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant mr-2">search</span>
+<input class="w-full bg-transparent outline-none text-body-sm font-body-sm text-on-surface placeholder:text-on-surface-variant" placeholder="Search by Order ID, Customer Name, Mobile (98...), SKU, Seller Name, DEX Tracking #..." type="text">
+</div>
+</div>
+<div class="md:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-2">
+<!-- District Hub -->
+<select class="bg-surface-container-low border border-surface-container-high rounded-lg px-2.5 py-2 text-body-sm font-body-sm text-on-surface outline-none focus:border-primary">
+<option value="">Hub/District (All 77)</option>
+<option selected="" value="ktm">Kathmandu Central Hub</option>
+<option value="pokhara">Pokhara Central Hub</option>
+<option value="biratnagar">Biratnagar Main Hub</option>
+<option value="dhangadhi">Dhangadhi Hub</option>
+<option value="butwal">Butwal-Bhairahawa Hub</option>
+</select>
+<!-- Payment Method -->
+<select class="bg-surface-container-low border border-surface-container-high rounded-lg px-2.5 py-2 text-body-sm font-body-sm text-on-surface outline-none focus:border-primary">
+<option value="">Payment (All Types)</option>
+<option value="esewa">eSewa Digital Wallet</option>
+<option value="khalti">Khalti Digital Wallet</option>
+<option value="cod">Cash on Delivery (COD)</option>
+<option value="ips">ConnectIPS / NCHL</option>
+<option value="card">Visa / Mastercard</option>
+</select>
+<!-- Courier Partner -->
+<select class="bg-surface-container-low border border-surface-container-high rounded-lg px-2.5 py-2 text-body-sm font-body-sm text-on-surface outline-none focus:border-primary">
+<option value="">Courier Partner</option>
+<option selected="" value="dex">DEX Express (Own Fleet)</option>
+<option value="pathao">Pathao Courier</option>
+<option value="ncm">Nepal Can Move (NCM)</option>
+<option value="sundar">Sundar Yatayat Cargo</option>
+</select>
+<!-- Fraud Risk Level -->
+<select class="bg-surface-container-low border border-surface-container-high rounded-lg px-2.5 py-2 text-body-sm font-body-sm text-on-surface outline-none focus:border-primary">
+<option value="">Fraud Risk Level</option>
+<option value="low">Low Risk (&lt; 0.20)</option>
+<option value="medium">Medium Risk (0.20 - 0.70)</option>
+<option value="critical">Critical Risk (&gt; 0.70)</option>
+</select>
+</div>
+</div>
+<!-- Filter Row 2: Bulk Action Toolbar -->
+<div class="pt-space-xs border-t border-surface-container flex flex-wrap items-center justify-between gap-space-sm text-label-sm font-label-sm">
+<div class="flex items-center gap-space-md">
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="w-4 h-4 rounded border-outline text-primary focus:ring-primary" type="checkbox">
+<span class="font-bold text-on-surface">Select All Visible (25)</span>
+</label>
+<span class="text-on-surface-variant text-badge-micro font-badge-micro">3 Selected</span>
+<div class="h-4 w-px bg-surface-container hidden sm:block"></div>
+<!-- Bulk Operation Buttons -->
+<div class="flex items-center gap-1.5 flex-wrap">
+<button class="bg-surface-container px-2.5 py-1 rounded hover:bg-surface-container-high text-on-surface transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-tertiary">two_wheeler</span>
+<span class="">Assign Courier</span>
+</button>
+<button class="bg-surface-container px-2.5 py-1 rounded hover:bg-surface-container-high text-on-surface transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-primary">alt_route</span>
+<span class="">Assign Hub</span>
+</button>
+<button class="bg-surface-container px-2.5 py-1 rounded hover:bg-surface-container-high text-on-surface transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-secondary">published_with_changes</span>
+<span class="">Bulk Status Change</span>
+</button>
+<button class="bg-surface-container px-2.5 py-1 rounded hover:bg-surface-container-high text-on-surface transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">receipt_long</span>
+<span class="">Print Packing Slips</span>
+</button>
+<button class="bg-surface-container px-2.5 py-1 rounded hover:bg-surface-container-high text-on-surface transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-secondary">money_off</span>
+<span class="">Waive Shipping Fee</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="">Sorted by: <strong class="text-on-surface">Creation Time (Newest)</strong></span>
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors" title="Customize Columns">
+<span class="material-symbols-outlined text-[18px]">view_column</span>
+</button>
+</div>
+</div>
+</div>
+<!-- 4. DEEP ORDER RECORDS TABLE WITH MARKETPLACE SUB-ORDERS BREAKDOWN -->
+<div class="bg-surface-container-lowest rounded-lg shadow-sm overflow-hidden flex flex-col">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-body-sm font-body-sm">
+<thead class="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider border-b border-surface-container">
+<tr>
+<th class="p-space-sm pl-space-md w-8">
+<input class="w-4 h-4 rounded border-outline text-primary focus:ring-primary" type="checkbox">
+</th>
+<th class="p-space-sm">Order ID &amp; Timestamp</th>
+<th class="p-space-sm">Customer Details &amp; Address</th>
+<th class="p-space-sm min-w-[280px]">Marketplace Multi-Seller &amp; Item Breakdown</th>
+<th class="p-space-sm">Payment &amp; Total</th>
+<th class="p-space-sm">Fulfillment &amp; DEX Stage</th>
+<th class="p-space-sm">Courier &amp; Tracking</th>
+<th class="p-space-sm">Fraud Risk</th>
+<th class="p-space-sm pr-space-md text-right">Admin Controls</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<!-- ORDER 1 (Highlighted Selected Order for Detail Drawer below) -->
+<tr class="bg-primary/5 hover:bg-primary/10 transition-colors">
+<td class="p-space-sm pl-space-md align-top pt-3">
+<input checked="" class="w-4 h-4 rounded border-outline text-primary focus:ring-primary" type="checkbox">
+</td>
+<td class="p-space-sm align-top">
+<div class="font-bold text-primary font-mono text-body-md flex items-center gap-1">
+<span class="">#NP-9948210</span>
+<span class="text-badge-micro font-badge-micro px-1 py-0.2 rounded bg-primary text-on-primary">Active</span>
+</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant mt-0.5">2 mins ago (15:40:12)</div>
+<div class="flex items-center gap-1 mt-1">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-badge-micro font-badge-micro text-on-surface font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[11px]">apple</span> iOS App
+                    </span>
+<span class="px-1.5 py-0.5 rounded bg-tertiary-fixed/40 text-badge-micro font-badge-micro text-tertiary font-bold">Standard</span>
+</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="font-bold text-on-surface flex items-center gap-1">
+<span class="">Bibek Shrestha</span>
+<span class="material-symbols-outlined text-[13px] text-tertiary" title="KYC Phone Verified">verified</span>
+</div>
+<div class="text-badge-micro font-badge-micro font-mono text-on-surface-variant">+977 9841920192</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant mt-1 leading-snug">
+                    Ward 4, Jhamsikhel, Patan<br>
+<strong class="text-on-surface">Lalitpur, Bagmati Province</strong>
+</div>
+</td>
+<!-- Marketplace Multi-Seller breakdown -->
+<td class="p-space-sm align-top">
+<div class="flex flex-col gap-1.5">
+<!-- Sub-Order A -->
+<div class="p-1.5 rounded bg-surface-container-lowest border border-surface-container-high flex items-center gap-2">
+<img class="w-8 h-8 rounded object-cover shrink-0" data-alt="High quality studio shot of modern wireless noise-canceling headphones in sleek matte black on neutral backdrop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvswFf6rU_IOgD1njVF40DhOD6KRkMsQkXQlaiswiVYBN2WW3_a1NklXoY2hU0A7Le5Ecqxd1CeqtT2jx6dvDqXIqPsH1oArp0Iiq_QGuEfxJjllVBVJlKBkyCTE3jP5dt6xVPP5zH5fPobdiBYMTBdxJ9qMHKSoq02RhPeKO3HlHJn8V2kpn0w6eKjKKD6XQ0YaJHbkCroj_nEvKOuOzDaQkobmAZEywAt_ruZraXYVGraahbMrqf">
+<div class="min-w-0 flex-1 leading-tight">
+<div class="text-badge-micro font-badge-micro text-primary font-bold">Sub-Order #NP-9948210-A</div>
+<div class="font-bold text-on-surface truncate text-label-sm font-label-sm">Ultima Boom 141 ANC Earbuds</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Ultima Lifestyle Official • Qty: 1 • Rs. 2,279</div>
+</div>
+<span class="text-badge-micro font-badge-micro px-1 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-bold shrink-0">Packed</span>
+</div>
+<!-- Sub-Order B -->
+<div class="p-1.5 rounded bg-surface-container-lowest border border-surface-container-high flex items-center gap-2">
+<img class="w-8 h-8 rounded object-cover shrink-0" data-alt="Traditional handmade Nepali Dhaka Topi with vibrant geometric red and gold embroidery" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeoLJTaW2G23flzxkIS4FJlwrpbVACXoouCEDVfz1S-UJVop17Z0V8LkOE6Cwdw8dVdoeG84o9hxeAJFH9lMUeVILkbUpMeuejstFZyiC5g7k0AcD5AlfkbL65QhQxtOi9eTgp7-0_4tpBRJlrh23eTfQuwERkGURbFUA19aODQoDz4I-kGVIEZs6UAJ1OkfzsY66YgKJNnF5MH-R4bOV_VzSiXBBGMUZo87ZGDpn3DyfvhSCgXYIO">
+<div class="min-w-0 flex-1 leading-tight">
+<div class="text-badge-micro font-badge-micro text-secondary font-bold">Sub-Order #NP-9948210-B</div>
+<div class="font-bold text-on-surface truncate text-label-sm font-label-sm">Handwoven Palpali Dhaka Topi</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Palpa Heritage Crafts • Qty: 1 • Rs. 850</div>
+</div>
+<span class="text-badge-micro font-badge-micro px-1 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-bold shrink-0">Dispatch Ready</span>
+</div>
+</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="font-headline-sm text-headline-sm text-primary font-bold">Rs. 3,129</div>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-container text-badge-micro font-badge-micro text-on-surface font-bold mt-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> eSewa Paid
+                  </span>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant mt-0.5">Txn: ESW-84920194</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="flex flex-col gap-1">
+<span class="px-2 py-0.5 rounded bg-primary text-on-primary text-badge-micro font-badge-micro font-bold inline-block w-fit">
+                    Out for Delivery (Rider: DB-41)
+                  </span>
+<span class="text-badge-micro font-badge-micro text-on-surface font-semibold">Hub: Thapathali Central Hub</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">Estimated Delivery: Today 17:30</span>
+</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="font-mono text-label-sm font-label-sm font-bold text-on-surface flex items-center gap-1">
+<span class="">DEX-KTM-882190</span>
+<button class="text-on-surface-variant hover:text-primary transition-colors" title="Copy Tracking Number"><span class="material-symbols-outlined text-[14px]">content_copy</span></button>
+</div>
+<div class="text-badge-micro font-badge-micro text-tertiary font-bold mt-0.5">Daraz Express (DEX)</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Rider: Deepak Basnet</div>
+</td>
+<td class="p-space-sm align-top">
+<span class="text-badge-micro font-badge-micro px-2 py-0.5 rounded bg-surface-container text-secondary font-bold inline-block">
+                    0.02 (Low Risk)
+                  </span>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant mt-1">14 Prior Orders • 0% Return</div>
+</td>
+<td class="p-space-sm pr-space-md align-top text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="px-2 py-1 rounded bg-primary text-on-primary text-badge-micro font-badge-micro font-bold shadow-xs hover:bg-primary-container transition-colors" title="Inspect Order Details">Inspect</button>
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors" title="Print Shipping Label"><span class="material-symbols-outlined text-[18px]">print</span></button>
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors" title="Order Admin Menu"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</div>
+</td>
+</tr>
+<!-- ORDER 2: Standard Single-Seller Order -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="p-space-sm pl-space-md align-top pt-3">
+<input class="w-4 h-4 rounded border-outline text-primary focus:ring-primary" type="checkbox">
+</td>
+<td class="p-space-sm align-top">
+<div class="font-bold text-on-surface font-mono text-body-md">#NP-9948209</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant mt-0.5">6 mins ago (15:36:04)</div>
+<div class="flex items-center gap-1 mt-1">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-badge-micro font-badge-micro text-on-surface font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[11px]">android</span> Android
+                    </span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-badge-micro font-badge-micro text-on-surface-variant">Economy</span>
+</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="font-bold text-on-surface flex items-center gap-1">
+<span class="">Ramesh Poudel</span>
+<span class="material-symbols-outlined text-[13px] text-tertiary">verified</span>
+</div>
+<div class="text-badge-micro font-badge-micro font-mono text-on-surface-variant">+977 9812498210</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant mt-1 leading-snug">
+                    Ward 11, Tintoliya<br>
+<strong class="text-on-surface">Biratnagar, Koshi Province</strong>
+</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="p-1.5 rounded bg-surface-container-low border border-surface-container flex items-center gap-2">
+<img class="w-8 h-8 rounded object-cover shrink-0" data-alt="Traditional aromatic organic Himalayan herbal tea leaves packed in eco-friendly kraft bag" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJwikgci1O6wcAnBFzLOTH9c8geLWm9aP5Kk9pebj5whkRbeE5uqRnv5BWVyVR7rizsZ9Dlzlnx1no5RnHjLR2_od_bfmq0dKoEnEgo7LX95Xsac-F_wUNsvMMYKi8qS9rhoZ3xA4PHZjJoRoqqZxhQ8Oefa9rzuU1LJTG815Yxriw2ozeHHusIzLzwIV7XK6NNekBQ8LSDKCOLxlvccJavtpsG6-RUywE6do1qJ-OpiahkmLs42kp">
+<div class="min-w-0 flex-1 leading-tight">
+<div class="font-bold text-on-surface truncate text-label-sm font-label-sm">Ilam CTC Premium Black Tea 1kg</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Ilam Tea Farmers Co-Op • Qty: 1 • Rs. 850</div>
+</div>
+</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="font-headline-sm text-headline-sm text-on-surface font-bold">Rs. 850</div>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-container text-badge-micro font-badge-micro text-tertiary font-bold mt-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Khalti Paid
+                  </span>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant mt-0.5">Txn: KHL-39182910</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="flex flex-col gap-1">
+<span class="px-2 py-0.5 rounded bg-tertiary-fixed/30 text-tertiary text-badge-micro font-badge-micro font-bold inline-block w-fit">
+                    DEX In-Transit (Bagmati-Koshi)
+                  </span>
+<span class="text-badge-micro font-badge-micro text-on-surface font-semibold">Biratnagar Main Hub</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">SLA: Due Tomorrow 11:00</span>
+</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="font-mono text-label-sm font-label-sm font-bold text-on-surface flex items-center gap-1">
+<span class="">DEX-BRT-109284</span>
+<button class="text-on-surface-variant hover:text-primary transition-colors" title="Copy"><span class="material-symbols-outlined text-[14px]">content_copy</span></button>
+</div>
+<div class="text-badge-micro font-badge-micro text-tertiary font-bold mt-0.5">DEX Express Inter-Hub</div>
+</td>
+<td class="p-space-sm align-top">
+<span class="text-badge-micro font-badge-micro px-2 py-0.5 rounded bg-surface-container text-secondary font-bold inline-block">
+                    0.05 (Low Risk)
+                  </span>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant mt-1">First-time Verified</div>
+</td>
+<td class="p-space-sm pr-space-md align-top text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors" title="View"><span class="material-symbols-outlined text-[18px]">visibility</span></button>
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors" title="Print"><span class="material-symbols-outlined text-[18px]">print</span></button>
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors" title="More"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</div>
+</td>
+</tr>
+<!-- ORDER 3: CRITICAL HIGH FRAUD ORDER (BOT INTERCEPT) -->
+<tr class="bg-error-container/20 hover:bg-error-container/30 transition-colors">
+<td class="p-space-sm pl-space-md align-top pt-3">
+<input class="w-4 h-4 rounded border-outline text-error focus:ring-error" type="checkbox">
+</td>
+<td class="p-space-sm align-top">
+<div class="font-bold text-error font-mono text-body-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">warning</span> #NP-9948208
+                  </div>
+<div class="text-badge-micro font-badge-micro text-error font-bold mt-0.5">11 mins ago (15:31:19)</div>
+<div class="flex items-center gap-1 mt-1">
+<span class="px-1.5 py-0.5 rounded bg-error/10 text-badge-micro font-badge-micro text-error font-bold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[11px]">language</span> Web Bot Fingerprint
+                    </span>
+</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="font-bold text-error flex items-center gap-1">
+<span class="">"Suraj Maharjan" (Dummy)</span>
+<span class="material-symbols-outlined text-[13px] text-error" title="Unverified Phone">gpp_bad</span>
+</div>
+<div class="text-badge-micro font-badge-micro font-mono text-error font-bold">+977 9800000000 (Burner)</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant mt-1 leading-snug">
+                    Kalanki Chowk near Bridge<br>
+<strong class="text-error">Kathmandu South (Flagged Subnet)</strong>
+</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="p-1.5 rounded bg-surface-container-lowest border border-error/30 flex items-center gap-2">
+<img class="w-8 h-8 rounded object-cover shrink-0" data-alt="Close-up luxury smartphone packaging box showcasing brand new flagship smartphone with titanium rim" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtMSwtKzk7d2WDGnkjGmlTZWSVy5BJC3KfQuexuyxk3QwRoC7yeZFq740HSWcRKW-G_eiZD6bKd19V3HWBLxYLRIKZeHd8d27iJn0WB56_ed5JWlhvyjiM29jBNaAH_zVsHLmdouuJ0ZAD3n1ZAq962t5KkYiWWsJf87X9QtGMlEB_a7WO-xDatf3V9QWrCmonM0tcLS1H1EZ47R4jVRoQKxKqwZWFG_Glw8KcKF5yDDOmEVXLCb_W">
+<div class="min-w-0 flex-1 leading-tight">
+<div class="font-bold text-on-surface truncate text-label-sm font-label-sm">iPhone 16 Pro Max 256GB Titanium</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">TechNepal Mega Store • Qty: 1 • Rs. 224,900</div>
+</div>
+</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="font-headline-sm text-headline-sm text-error font-bold">Rs. 224,900</div>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-error-container text-badge-micro font-badge-micro text-error font-bold mt-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> COD (Unverified High Value)
+                  </span>
+</td>
+<td class="p-space-sm align-top">
+<div class="flex flex-col gap-1">
+<span class="px-2 py-0.5 rounded bg-error text-on-error text-badge-micro font-badge-micro font-bold inline-block w-fit">
+                    Held: High Fraud Score 0.96
+                  </span>
+<span class="text-badge-micro font-badge-micro text-error font-bold">Dispatch Intercepted</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">IP: 103.240.180.12 Velocity Loop</span>
+</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="font-mono text-label-sm font-label-sm text-error font-bold">UNASSIGNED</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Courier Halted by Sentinel</div>
+</td>
+<td class="p-space-sm align-top">
+<span class="text-badge-micro font-badge-micro px-2 py-0.5 rounded bg-error text-on-error font-bold inline-block">
+                    0.96 (CRITICAL)
+                  </span>
+<div class="text-badge-micro font-badge-micro text-error font-bold mt-1">Bot Pattern • 14 Orders/3m</div>
+</td>
+<td class="p-space-sm pr-space-md align-top text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="px-2.5 py-1 bg-error text-on-error text-badge-micro font-badge-micro rounded font-bold hover:bg-on-error-container transition-colors">Arbitrate</button>
+<button class="p-1 text-error hover:bg-error-container/50 rounded transition-colors" title="Lock &amp; Ban IP"><span class="material-symbols-outlined text-[18px]">block</span></button>
+</div>
+</td>
+</tr>
+<!-- ORDER 4: Disputed Order -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="p-space-sm pl-space-md align-top pt-3">
+<input class="w-4 h-4 rounded border-outline text-primary focus:ring-primary" type="checkbox">
+</td>
+<td class="p-space-sm align-top">
+<div class="font-bold text-on-surface font-mono text-body-md">#NP-9948206</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant mt-0.5">28 mins ago (15:14:22)</div>
+<div class="flex items-center gap-1 mt-1">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-badge-micro font-badge-micro text-on-surface font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[11px]">android</span> Android
+                    </span>
+</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="font-bold text-on-surface flex items-center gap-1">
+<span class="">Anita Gurung</span>
+<span class="material-symbols-outlined text-[13px] text-tertiary">verified</span>
+</div>
+<div class="text-badge-micro font-badge-micro font-mono text-on-surface-variant">+977 9856018273</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant mt-1 leading-snug">
+                    Ward 8, Simalchaur<br>
+<strong class="text-on-surface">Pokhara, Gandaki Province</strong>
+</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="p-1.5 rounded bg-surface-container-low border border-surface-container flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-primary font-bold text-badge-micro font-badge-micro shrink-0">
+                    S24
+                  </div>
+<div class="min-w-0 flex-1 leading-tight">
+<div class="font-bold text-on-surface truncate text-label-sm font-label-sm">Samsung Galaxy S24 Ultra Silicone Case</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">CaseNepal Official • Qty: 1 • Rs. 1,499</div>
+</div>
+</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="font-headline-sm text-headline-sm text-on-surface font-bold">Rs. 1,499</div>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-container text-badge-micro font-badge-micro text-on-surface font-bold mt-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> eSewa Paid
+                  </span>
+</td>
+<td class="p-space-sm align-top">
+<div class="flex flex-col gap-1">
+<span class="px-2 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed text-badge-micro font-badge-micro font-bold inline-block w-fit">
+                    Disputed: Seal Broken (QC Lab)
+                  </span>
+<span class="text-badge-micro font-badge-micro text-error font-semibold">Customer claimed wrong color</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">Pokhara QC Station #2</span>
+</div>
+</td>
+<td class="p-space-sm align-top">
+<div class="font-mono text-label-sm font-label-sm font-bold text-on-surface flex items-center gap-1">
+<span class="">DEX-PKR-449102</span>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[14px]">content_copy</span></button>
+</div>
+<div class="text-badge-micro font-badge-micro text-tertiary font-bold mt-0.5">DEX Reverse Logistics</div>
+</td>
+<td class="p-space-sm align-top">
+<span class="text-badge-micro font-badge-micro px-2 py-0.5 rounded bg-surface-container text-secondary font-bold inline-block">
+                    0.08 (Low)
+                  </span>
+</td>
+<td class="p-space-sm pr-space-md align-top text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="px-2 py-1 bg-surface-container hover:bg-surface-container-high rounded text-badge-micro font-badge-micro font-bold transition-colors">QC Report</button>
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors" title="Action Menu"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Pagination & Selection Summary -->
+<div class="p-space-sm bg-surface-container-low flex flex-wrap items-center justify-between gap-space-sm text-body-sm font-body-sm text-on-surface-variant border-t border-surface-container">
+<div class="flex items-center gap-2">
+<span class="">Showing <strong class="text-on-surface">1 - 4</strong> of <strong class="text-on-surface">8,429</strong> orders</span>
+<span class="text-badge-micro font-badge-micro px-2 py-0.5 rounded bg-surface-container text-on-surface font-semibold">1 Selected for Inspection</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high transition-colors font-bold text-label-sm font-label-sm text-on-surface">« First</button>
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high transition-colors font-bold text-label-sm font-label-sm text-on-surface">‹ Prev</button>
+<span class="px-3 py-1 font-bold text-primary text-label-sm font-label-sm">Page 1 of 338</span>
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high transition-colors font-bold text-label-sm font-label-sm text-on-surface">Next ›</button>
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high transition-colors font-bold text-label-sm font-label-sm text-on-surface">Last »</button>
+</div>
+</div>
+</div>
+<!-- 5. QUICK INSPECTION DRAWER / ORDER DETAIL PREVIEW FOR #NP-9948210 -->
+<div class="bg-surface-container-lowest rounded-lg shadow-sm border border-primary/20 overflow-hidden flex flex-col">
+<!-- Drawer Header -->
+<div class="p-space-md bg-surface-container-low flex flex-wrap items-center justify-between gap-space-sm border-b border-surface-container">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[18px]">receipt</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">Inspection Preview: Order #NP-9948210</span>
+<span class="px-2 py-0.5 rounded-full bg-primary text-on-primary text-badge-micro font-badge-micro font-bold uppercase">Out for Delivery</span>
+<span class="text-badge-micro font-badge-micro text-secondary font-bold">DEX SLA On-Track</span>
+</div>
+<p class="text-badge-micro font-badge-micro text-on-surface-variant">Customer: Bibek Shrestha (+977 9841920192) • Jhamsikhel, Lalitpur • Channel: iOS App v14.2</p>
+</div>
+</div>
+<!-- Drawer Actions Menu -->
+<div class="flex items-center gap-1.5">
+<button class="px-2.5 py-1.5 rounded bg-surface-container hover:bg-surface-container-high text-label-sm font-label-sm font-bold text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span class="">Edit Order</span>
+</button>
+<button class="px-2.5 py-1.5 rounded bg-surface-container hover:bg-surface-container-high text-label-sm font-label-sm font-bold text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">two_wheeler</span>
+<span class="">Re-assign Courier</span>
+</button>
+<button class="px-2.5 py-1.5 rounded bg-surface-container hover:bg-surface-container-high text-label-sm font-label-sm font-bold text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">replay</span>
+<span class="">Reship / Partial Refund</span>
+</button>
+<button class="px-2.5 py-1.5 rounded bg-surface-container hover:bg-surface-container-high text-label-sm font-label-sm font-bold text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">note_add</span>
+<span class="">+ Note</span>
+</button>
+<button class="bg-primary text-on-primary hover:bg-primary-container px-3 py-1.5 rounded text-label-sm font-label-sm font-bold flex items-center gap-1 shadow-xs">
+<span class="material-symbols-outlined text-[16px]">print</span>
+<span class="">Print Label &amp; IRD Tax Invoice</span>
+</button>
+</div>
+</div>
+<!-- Drawer Body: 3-Column Detailed Insight -->
+<div class="p-space-md grid grid-cols-1 lg:grid-cols-12 gap-space-md">
+<!-- Column 1: Chronological 6-Stage Timeline (5 cols) -->
+<div class="lg:col-span-5 bg-surface-container-low/50 p-space-md rounded-lg border border-surface-container flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-space-xs mb-space-sm border-b border-surface-container">
+<span class="font-headline-sm text-label-md font-bold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary">timeline</span>
+                    Fulfillment Lifecycle Timeline
+                  </span>
+<span class="text-badge-micro font-badge-micro text-tertiary font-bold">Real-time GPS Active</span>
+</div>
+<div class="relative pl-6 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-primary">
+<!-- Step 1 -->
+<div class="relative">
+<div class="absolute -left-[23px] top-0.5 w-3.5 h-3.5 rounded-full bg-primary ring-4 ring-surface-container-lowest"></div>
+<div class="text-label-sm font-label-sm font-bold text-on-surface">1. Order Placed by Customer</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Today 15:40:12 • Cart validated, stock reserved in Kathmandu FC</div>
+</div>
+<!-- Step 2 -->
+<div class="relative">
+<div class="absolute -left-[23px] top-0.5 w-3.5 h-3.5 rounded-full bg-primary ring-4 ring-surface-container-lowest"></div>
+<div class="text-label-sm font-label-sm font-bold text-on-surface">2. Payment Verified (eSewa Instant)</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Today 15:40:19 • Txn ID #ESW-84920194 • Rs. 3,129 captured</div>
+</div>
+<!-- Step 3 -->
+<div class="relative">
+<div class="absolute -left-[23px] top-0.5 w-3.5 h-3.5 rounded-full bg-primary ring-4 ring-surface-container-lowest"></div>
+<div class="text-label-sm font-label-sm font-bold text-on-surface">3. Split into 2 Seller Sub-Orders</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Today 15:40:22 • Sub-Order A (Ultima Mall), Sub-Order B (Palpa Heritage)</div>
+</div>
+<!-- Step 4 -->
+<div class="relative">
+<div class="absolute -left-[23px] top-0.5 w-3.5 h-3.5 rounded-full bg-primary ring-4 ring-surface-container-lowest"></div>
+<div class="text-label-sm font-label-sm font-bold text-on-surface">4. Packed &amp; QC Verified by Sellers</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Today 15:41:00 • Barcode scan: DEX-KTM-882190 verified</div>
+</div>
+<!-- Step 5 -->
+<div class="relative">
+<div class="absolute -left-[23px] top-0.5 w-3.5 h-3.5 rounded-full bg-primary ring-4 ring-surface-container-lowest"></div>
+<div class="text-label-sm font-label-sm font-bold text-on-surface">5. Arrived at Thapathali DEX Hub</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Today 15:41:45 • Hub Inbound Sorcer Station #4, Bin L-12</div>
+</div>
+<!-- Step 6 (Active Current) -->
+<div class="relative">
+<div class="absolute -left-[23px] top-0.5 w-3.5 h-3.5 rounded-full bg-secondary-container ring-4 ring-primary animate-pulse"></div>
+<div class="text-label-sm font-label-sm font-bold text-primary">6. Out for Delivery (Rider: Deepak Basnet)</div>
+<div class="text-badge-micro font-badge-micro text-on-surface font-semibold">Today 15:42:00 • Bagmati Fleet Bike #BA-2-PA-8821 • ETA 17:30</div>
+</div>
+</div>
+</div>
+<div class="pt-space-xs mt-space-sm bg-surface-container p-2 rounded text-badge-micro font-badge-micro text-on-surface-variant flex items-center justify-between">
+<span class="">DEX Target SLA: <strong class="text-on-surface">Same-Day Rush</strong></span>
+<span class="text-primary font-bold">Rider Call: +977 9841880011</span>
+</div>
+</div>
+<!-- Column 2: Financial Breakdown & IRD CBMS Tax (4 cols) -->
+<div class="lg:col-span-4 bg-surface-container-low/50 p-space-md rounded-lg border border-surface-container flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-space-xs mb-space-sm border-b border-surface-container">
+<span class="font-headline-sm text-label-md font-bold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-secondary">receipt_long</span>
+                    Financial Ledger &amp; VAT Split
+                  </span>
+<span class="text-badge-micro font-badge-micro px-1.5 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-bold">IRD Synced</span>
+</div>
+<div class="space-y-1.5 text-body-sm font-body-sm">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Item Gross (2 Items):</span>
+<span class="font-bold text-on-surface">Rs. 3,129.00</span>
+</div>
+<div class="flex justify-between text-badge-micro font-badge-micro">
+<span class="text-on-surface-variant pl-2">• Sub-Order A (Ultima Earbuds):</span>
+<span class="">Rs. 2,279.00</span>
+</div>
+<div class="flex justify-between text-badge-micro font-badge-micro">
+<span class="text-on-surface-variant pl-2">• Sub-Order B (Dhaka Topi):</span>
+<span class="">Rs. 850.00</span>
+</div>
+<div class="flex justify-between pt-1 border-t border-surface-container">
+<span class="text-on-surface-variant">Seller Payable (Wed Settlement):</span>
+<span class="font-bold text-on-surface">Rs. 2,650.00</span>
+</div>
+<div class="flex justify-between text-badge-micro font-badge-micro text-tertiary font-bold">
+<span class="pl-2">Platform Take-Rate (10.0%):</span>
+<span class="">Rs. 312.90</span>
+</div>
+<div class="flex justify-between text-badge-micro font-badge-micro">
+<span class="text-on-surface-variant pl-2">Nepal 13% VAT (IRD CBMS #48201):</span>
+<span class="">Rs. 166.10</span>
+</div>
+<div class="flex justify-between text-badge-micro font-badge-micro">
+<span class="text-on-surface-variant pl-2">DEX Standard Shipping Fee:</span>
+<span class="line-through text-on-surface-variant">Rs. 100.00</span>
+</div>
+<div class="flex justify-between text-badge-micro font-badge-micro text-primary font-bold">
+<span class="pl-2">Campaign Shipping Subsidy (9.9):</span>
+<span class="">FREE (-Rs. 100.00)</span>
+</div>
+<div class="flex justify-between pt-2 border-t border-surface-container font-bold text-body-md text-primary">
+<span class="">Customer Paid Total:</span>
+<span class="">Rs. 3,129.00</span>
+</div>
+</div>
+</div>
+<div class="pt-space-xs mt-space-sm bg-surface-container p-2 rounded text-badge-micro font-badge-micro text-on-surface-variant flex items-center justify-between">
+<span class="">Settlement Rail: <strong class="text-on-surface">NCHL-IPS Direct</strong></span>
+<span class="text-secondary font-bold">Auto-Reconciled</span>
+</div>
+</div>
+<!-- Column 3: Customer Activity Log & Device Fingerprint (3 cols) -->
+<div class="lg:col-span-3 bg-surface-container-low/50 p-space-md rounded-lg border border-surface-container flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-space-xs mb-space-sm border-b border-surface-container">
+<span class="font-headline-sm text-label-md font-bold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-tertiary">fingerprint</span>
+                    Buyer Security &amp; Risk
+                  </span>
+<span class="text-badge-micro font-badge-micro px-1.5 py-0.5 rounded bg-surface-container text-secondary font-bold">Verified Gold</span>
+</div>
+<div class="space-y-2 text-badge-micro font-badge-micro">
+<div>
+<span class="text-on-surface-variant">Device Hardware Fingerprint:</span>
+<div class="font-mono font-bold text-on-surface">iPhone 15 Pro (iOS 17.5.1)</div>
+</div>
+<div>
+<span class="text-on-surface-variant">IP &amp; ISP Telemetry:</span>
+<div class="font-mono text-on-surface">27.34.42.18 (WorldLink Comms KTM)</div>
+</div>
+<div>
+<span class="text-on-surface-variant">Lifetime Buyer Trust Profile:</span>
+<div class="font-bold text-on-surface mt-0.5">14 Successful Orders • 0 Returns</div>
+<div class="text-secondary font-bold">100% On-Time Acceptance • No COD Refusals</div>
+</div>
+<div class="p-1.5 rounded bg-surface-container-lowest border border-surface-container">
+<span class="text-on-surface-variant">Internal Staff Note:</span>
+<p class="text-on-surface font-semibold mt-0.5">"VIP Customer - regular electronics shopper in Jhamsikhel. Prioritize rapid DEX delivery."</p>
+</div>
+</div>
+</div>
+<div class="pt-space-xs mt-space-sm">
+<button class="w-full py-1.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-label-sm font-label-sm transition-colors text-center">
+                    View Complete 360° Customer Profile →
+                  </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- DARAZ OPS ENTERPRISE FOOTER -->
+<footer class="w-full bg-surface-container-low mt-space-xl">
+<div class="bg-surface-container py-space-sm">
+<div class="max-w-[1200px] mx-auto px-margin-desktop flex flex-wrap items-center justify-between font-label-md text-label-md">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined text-[20px]">verified_user</span>
+<span class="">Daraz Express (DEX) 77 Districts Enterprise Fulfillment Engine</span>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant text-label-sm font-label-sm">
+<span class="">IRD CBMS Compliant</span>
+<span class="">•</span>
+<span class="">NCHL-IPS Direct Settlement</span>
+<span class="">•</span>
+<span class="">PCI-DSS Certified 2024</span>
+</div>
+</div>
+</div>
+<div class="max-w-[1200px] mx-auto px-margin-desktop py-space-md flex flex-wrap items-center justify-between gap-space-sm text-on-surface-variant text-label-sm font-label-sm">
+<div class="flex items-center gap-2">
+<span class="font-bold text-on-surface">Daraz South Asia Operations:</span>
+<span class="text-primary font-bold">Nepal (Kathmandu Hub)</span>
+<span class="">|</span>
+<span class="">Pakistan (Karachi HQ)</span>
+<span class="">|</span>
+<span class="">Bangladesh (Dhaka HQ)</span>
+<span class="">|</span>
+<span class="">Sri Lanka (Colombo HQ)</span>
+</div>
+<div>
+<span class="">Session Authenticated: <strong>Amrit Raj (ID #882190)</strong> • IP: 103.112.44.18 (Encrypted VPC)</span>
+</div>
+</div>
+</footer>
+<!-- CLIENT-SIDE SCRIPT FOR CLOCK & INTERACTION -->
+<script>
+    (function () {
+      function updateNPT() {
+        var now = new Date();
+        // Nepal Time is UTC + 5:45
+        var utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+        var nptOffset = (5 * 60 + 45) * 60000;
+        var nptTime = new Date(utc + nptOffset);
+        var hours = String(nptTime.getHours()).padStart(2, '0');
+        var minutes = String(nptTime.getMinutes()).padStart(2, '0');
+        var seconds = String(nptTime.getSeconds()).padStart(2, '0');
+        var clockEl = document.getElementById('npt-clock');
+        if (clockEl) {
+          clockEl.textContent = 'NPT ' + hours + ':' + minutes + ':' + seconds;
+        }
+      }
+      setInterval(updateNPT, 1000);
+      updateNPT();
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-low mt-space-xl"><div class="bg-surface-container py-space-md"><div class="max-w-[1200px] mx-auto px-margin-desktop flex items-center justify-between font-label-md text-label-md"><div class="flex items-center gap-space-md text-primary font-bold"><span class="material-symbols-outlined text-[22px]">local_shipping</span><span class="">Free &amp; Fast Shipping Across 77 Districts</span></div><div class="flex items-center gap-space-md text-on-surface"><span class="material-symbols-outlined text-[22px] text-tertiary">verified</span><span class="">100% Authentic Products</span></div><div class="flex items-center gap-space-md text-on-surface"><span class="material-symbols-outlined text-[22px] text-primary">currency_exchange</span><span class="">Cash On Delivery &amp; Easy Returns</span></div></div></div><div class="max-w-[1200px] mx-auto px-margin-desktop py-space-xl grid grid-cols-1 md:grid-cols-4 gap-space-xl"><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm text-on-surface uppercase">Customer Care</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" data-path="help-support" href="#">Help Center</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" data-path="how-to-buy" href="#">How to Buy</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" data-path="returns-refunds" href="#">Returns &amp; Refunds</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" data-path="contact-us" href="#">Contact Us</a></div><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm text-on-surface uppercase">Daraz</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" data-path="about-daraz" href="#">About Daraz</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" data-path="careers" href="#">Careers</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" data-path="daraz-university" href="#">Daraz University</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" data-path="sell-on-daraz" href="#">Sell on Daraz</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" data-path="terms-conditions" href="#">Terms &amp; Conditions</a></div><div class="flex flex-col gap-space-md"><span class="font-headline-sm text-headline-sm text-on-surface uppercase">Download App</span><div class="flex items-center gap-space-md bg-surface-container-lowest p-space-sm rounded-lg"><div class="w-16 h-16 bg-surface-container flex items-center justify-center rounded-DEFAULT"><span class="material-symbols-outlined text-[36px] text-on-surface-variant">qr_code_2</span></div><div class="flex flex-col justify-center font-label-sm text-label-sm text-on-surface-variant"><span class="">Scan QR Code</span><span class="">To Download App</span></div></div><div class="flex flex-col gap-space-xs"><div class="px-space-md py-space-xs bg-surface-container-lowest rounded text-center font-label-sm text-label-sm text-on-surface">App Store</div><div class="px-space-md py-space-xs bg-surface-container-lowest rounded text-center font-label-sm text-label-sm text-on-surface">Google Play</div><div class="px-space-md py-space-xs bg-surface-container-lowest rounded text-center font-label-sm text-label-sm text-on-surface">AppGallery</div></div></div><div class="flex flex-col gap-space-md"><span class="font-headline-sm text-headline-sm text-on-surface uppercase">Payment Methods</span><div class="flex flex-wrap gap-space-xs"><span class="px-2 py-1 bg-surface-container-lowest rounded font-label-sm text-label-sm text-on-surface font-semibold">Visa</span><span class="px-2 py-1 bg-surface-container-lowest rounded font-label-sm text-label-sm text-on-surface font-semibold">Mastercard</span><span class="px-2 py-1 bg-surface-container-lowest rounded font-label-sm text-label-sm text-primary font-bold">eSewa</span><span class="px-2 py-1 bg-surface-container-lowest rounded font-label-sm text-label-sm text-tertiary font-bold">Khalti</span><span class="px-2 py-1 bg-surface-container-lowest rounded font-label-sm text-label-sm text-secondary font-semibold">COD</span></div><div class="pt-space-sm flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm"><span class="material-symbols-outlined text-[20px] text-tertiary">verified_user</span><span class="">PCI-DSS Compliant Secure Checkout</span></div></div></div><div class="bg-surface-container-high py-space-md"><div class="max-w-[1200px] mx-auto px-margin-desktop flex flex-col md:flex-row items-center justify-between gap-space-md text-on-surface-variant font-label-sm text-label-sm"><div class="flex items-center gap-space-md flex-wrap"><span class="">Daraz International:</span><a class="hover:text-primary transition-colors" data-path="pakistan" href="#">Pakistan</a><a class="hover:text-primary transition-colors" data-path="bangladesh" href="#">Bangladesh</a><a class="hover:text-primary transition-colors" data-path="sri-lanka" href="#">Sri Lanka</a><a class="hover:text-primary transition-colors" data-path="myanmar" href="#">Myanmar</a><span class="text-primary font-bold">Nepal</span></div><div class="text-right">© 2024 Daraz Kaymu Pvt. Ltd. All Rights Reserved.</div></div></div></footer>
+
+</body></html>

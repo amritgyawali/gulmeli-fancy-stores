@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   FlatList,
   Keyboard,
@@ -7,6 +7,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { Swipeable } from "react-native-gesture-handler";
 import { Button, CheckBox, Row, T, Tap } from "@/components/ui";
 import { FontIcon } from "@/components/FontIcon";
 import { ProductVisual } from "@/components/ProductVisual";
@@ -16,12 +17,46 @@ import { openDestination } from "@/services/navigation";
 import { colors, fontFamily } from "@/theme/tokens";
 import type { CartItem } from "@/types/shop";
 
+function SwipeToDelete({
+  onDelete,
+  label,
+  children,
+}: {
+  onDelete: () => void;
+  label: string;
+  children: ReactNode;
+}) {
+  if (Platform.OS === "web") return <>{children}</>;
+  return (
+    <Swipeable
+      renderRightActions={() => (
+        <Tap
+          label={`Remove ${label}`}
+          onPress={onDelete}
+          style={{
+            backgroundColor: "#fee2e2",
+            justifyContent: "center",
+            paddingHorizontal: 18,
+          }}
+        >
+          <T color="#b91c1c" bold>
+            Delete
+          </T>
+        </Tap>
+      )}
+    >
+      {children}
+    </Swipeable>
+  );
+}
+
 function CartRow({ item }: { item: CartItem }) {
   const { productById } = useCatalog();
-  const { quantity, toggle } = useShop();
+  const { quantity, toggle, remove } = useShop();
   const p = productById[item.productId];
   if (!p) return null;
   return (
+    <SwipeToDelete label={p.name} onDelete={() => remove(p.id)}>
     <Row
       style={{
         alignItems: "flex-start",
@@ -152,6 +187,7 @@ function CartRow({ item }: { item: CartItem }) {
         </Tap>
       </View>
     </Row>
+    </SwipeToDelete>
   );
 }
 export default function CartScreen() {

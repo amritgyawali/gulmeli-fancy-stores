@@ -1,6 +1,8 @@
 import { Stack, usePathname, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import * as SplashScreen from "expo-splash-screen";
@@ -9,9 +11,15 @@ import { useEffect } from "react";
 import { ShopProvider, useShop } from "@/store/ShopProvider";
 import { StorefrontProvider, useStorefront } from "@/store/StorefrontProvider";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { AppLock } from "@/components/AppLock";
 import { Button, Row, T } from "@/components/ui";
+import { ClerkAuth } from "@/services/clerk-auth";
+import { initTelemetry, withErrorReporting } from "@/services/telemetry";
+import { queryClient } from "@/services/queries";
+import { registerForPushNotifications } from "@/services/notifications";
 
 void SplashScreen.preventAutoHideAsync().catch(() => undefined);
+initTelemetry();
 function AppFrame() {
   const path = usePathname();
   const {
@@ -32,6 +40,11 @@ function AppFrame() {
   useEffect(() => {
     if (hydrated && (loaded || error)) void SplashScreen.hideAsync();
   }, [hydrated, loaded, error]);
+  useEffect(() => {
+    // Ask for push permission once, after the first frame is up.
+    if (!hydrated) return;
+    void registerForPushNotifications();
+  }, [hydrated]);
   if (!hydrated || (!loaded && !error)) return null;
   // One navigator, rendered either inside the storefront frame or full-bleed
   // for the dashboard, so navigation state survives moving between the two.
@@ -166,14 +179,22 @@ function AppFrame() {
     </View>
   );
 }
-export default function RootLayout() {
+export default withErrorReporting(function RootLayout() {
   return (
-    <SafeAreaProvider>
-      <StorefrontProvider>
-        <ShopProvider>
-          <AppFrame />
-        </ShopProvider>
-      </StorefrontProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <QueryClientProvider client={queryClient}>
+          <ClerkAuth>
+            <StorefrontProvider>
+              <ShopProvider>
+                <AppLock>
+                  <AppFrame />
+                </AppLock>
+              </ShopProvider>
+            </StorefrontProvider>
+          </ClerkAuth>
+        </QueryClientProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
-}
+});

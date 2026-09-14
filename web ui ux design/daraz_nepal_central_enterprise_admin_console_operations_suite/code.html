@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Daraz Nepal - Enterprise Central Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+    }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-thumb { background: rgba(160, 160, 160, 0.4); border-radius: 9999px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    .sidebar-collapsed .sidebar-label,
+    .sidebar-collapsed .sidebar-badge,
+    .sidebar-collapsed .sidebar-profile-info,
+    .sidebar-collapsed .sidebar-header-text,
+    .sidebar-collapsed .sidebar-search-container {
+      display: none !important;
+    }
+    .sidebar-collapsed {
+      width: 4.75rem !important;
+    }
+    .sidebar-collapsed .nav-item-inner {
+      justify-content: center !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#f85606",
+            "primary-dark": "#d94700",
+            "primary-container": "#cf4500",
+            "primary-fixed": "#ffdbcf",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#fffbff",
+            "secondary": "#735c00",
+            "secondary-container": "#fccc19",
+            "tertiary": "#006578",
+            "tertiary-container": "#008097",
+            "surface": "#fcf9f8",
+            "background": "#f8f9fa",
+            "sidebar-bg": "#0f172a",
+            "sidebar-border": "#1e293b",
+            "sidebar-hover": "#1e293b",
+            "sidebar-active": "#f85606",
+            "on-surface": "#1b1c1c",
+            "on-surface-variant": "#5b4137",
+            "surface-container": "#f0eded",
+            "surface-container-low": "#f6f3f2",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-high": "#eae7e7",
+            "surface-container-highest": "#e5e2e1",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a",
+            "badge-green": "#10b981",
+            "badge-green-bg": "#d1fae5"
+          },
+          fontFamily: {
+            "headline-lg": ["Roboto Flex"],
+            "headline-md": ["Roboto Flex"],
+            "headline-sm": ["Roboto Flex"],
+            "body-lg": ["Roboto Flex"],
+            "body-md": ["Roboto Flex"],
+            "body-sm": ["Roboto Flex"],
+            "label-md": ["Roboto Flex"],
+            "label-sm": ["Roboto Flex"],
+            "badge-micro": ["Roboto Flex"],
+            "price-card": ["Roboto Flex"],
+            "price-hero": ["Roboto Flex"]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-background font-body-md text-body-md text-on-surface flex h-screen overflow-hidden antialiased">
+<!-- Enterprise Dual/Collapsible Persistent Sidebar -->
+<aside class="w-72 bg-sidebar-bg text-slate-200 border-r border-sidebar-border flex flex-col shrink-0 transition-all duration-300 z-50 h-full select-none" id="mainSidebar">
+<!-- Brand Header -->
+<div class="h-16 flex items-center justify-between px-4 border-b border-sidebar-border/80">
+<div class="flex items-center gap-3 overflow-hidden">
+<div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center shrink-0 shadow-md">
+<span class="text-white font-black text-xl leading-none">d</span>
+</div>
+<div class="sidebar-header-text flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm font-bold text-white tracking-tight">daraz</span>
+<span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-primary/20 text-primary border border-primary/30">OPS</span>
+</div>
+<span class="text-[10px] text-slate-400 font-medium tracking-wide">Central Admin Console</span>
+</div>
+</div>
+<button class="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-md transition-colors" id="collapseBtn" title="Toggle Sidebar">
+<span class="material-symbols-outlined text-[20px]">dock_to_left</span>
+</button>
+</div>
+<!-- Live Environment Status Tag -->
+<div class="px-3 pt-3 pb-2 sidebar-header-text">
+<div class="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+<div class="flex flex-col">
+<span class="text-[11px] font-semibold text-white">Nepal Core v4.8</span>
+<span class="text-[9px] text-slate-400">77 Districts Online</span>
+</div>
+</div>
+<span class="text-[9px] bg-slate-800 text-emerald-400 font-mono px-1.5 py-0.5 rounded border border-slate-700">DEX 99.4%</span>
+</div>
+</div>
+<!-- Navigation Search -->
+<div class="px-3 pb-2 sidebar-search-container">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-2 text-slate-400 text-[18px]">search</span>
+<input class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-900 border border-slate-800 rounded-md text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary transition-colors" id="navSearchInput" onkeyup="filterNavItems()" placeholder="Search apps, DEX, tools..." type="text"/>
+</div>
+</div>
+<!-- Core Nav Items Scrollable List -->
+<nav class="flex-1 overflow-y-auto px-2 space-y-1 py-1" id="navMenuList">
+<div class="sidebar-header-text px-2 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">Core Operations</div>
+<!-- 1. Overview -->
+<a class="nav-item group flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-white bg-primary shadow-sm transition-colors" href="javascript:void(0)" id="nav-overview" onclick="switchTab('tab-overview')">
+<div class="flex items-center gap-2.5 nav-item-inner">
+<span class="material-symbols-outlined text-[19px] shrink-0">dashboard</span>
+<span class="sidebar-label">1. Overview &amp; Analytics</span>
+</div>
+<span class="sidebar-badge text-[10px] bg-black/20 text-white px-1.5 py-0.5 rounded-full font-mono">Live</span>
+</a>
+<!-- 2. Order Management & DEX Logistics -->
+<a class="nav-item group flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-sidebar-hover transition-colors" href="javascript:void(0)" id="nav-orders" onclick="switchTab('tab-orders')">
+<div class="flex items-center gap-2.5 nav-item-inner">
+<span class="material-symbols-outlined text-[19px] shrink-0 text-amber-400">local_shipping</span>
+<span class="sidebar-label">2. Orders &amp; DEX Logistics</span>
+</div>
+<span class="sidebar-badge text-[10px] bg-primary/20 text-primary px-1.5 py-0.5 rounded-full font-bold">8.4k</span>
+</a>
+<!-- 3. Catalog & Inventory -->
+<a class="nav-item group flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-sidebar-hover transition-colors" href="javascript:void(0)" id="nav-catalog" onclick="switchTab('tab-catalog')">
+<div class="flex items-center gap-2.5 nav-item-inner">
+<span class="material-symbols-outlined text-[19px] shrink-0 text-sky-400">inventory_2</span>
+<span class="sidebar-label">3. Catalog &amp; Commission</span>
+</div>
+<span class="sidebar-badge text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded-full">Sliders</span>
+</a>
+<!-- 4. Seller Center & KYC -->
+<a class="nav-item group flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-sidebar-hover transition-colors" href="javascript:void(0)" id="nav-sellers" onclick="switchTab('tab-sellers')">
+<div class="flex items-center gap-2.5 nav-item-inner">
+<span class="material-symbols-outlined text-[19px] shrink-0 text-yellow-400">verified_user</span>
+<span class="sidebar-label">4. Seller KYC &amp; Center</span>
+</div>
+<span class="sidebar-badge text-[10px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded-full font-bold">142</span>
+</a>
+<div class="sidebar-header-text px-2 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">Growth &amp; Finance</div>
+<!-- 5. Marketing, CMS & Flash Sales -->
+<a class="nav-item group flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-sidebar-hover transition-colors" href="javascript:void(0)" id="nav-campaigns" onclick="switchTab('tab-campaigns')">
+<div class="flex items-center gap-2.5 nav-item-inner">
+<span class="material-symbols-outlined text-[19px] shrink-0 text-rose-400">campaign</span>
+<span class="sidebar-label">5. Flash Sales &amp; CMS</span>
+</div>
+<span class="sidebar-badge text-[10px] bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded font-bold">9.9 Active</span>
+</a>
+<!-- 6. Financial Settlement & Payouts -->
+<a class="nav-item group flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-sidebar-hover transition-colors" href="javascript:void(0)" id="nav-finance" onclick="switchTab('tab-finance')">
+<div class="flex items-center gap-2.5 nav-item-inner">
+<span class="material-symbols-outlined text-[19px] shrink-0 text-emerald-400">account_balance_wallet</span>
+<span class="sidebar-label">6. Finance &amp; Settlements</span>
+</div>
+<span class="sidebar-badge text-[10px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded font-bold">NCHL</span>
+</a>
+<!-- 7. Disputes, Returns & Support -->
+<a class="nav-item group flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-sidebar-hover transition-colors" href="javascript:void(0)" id="nav-disputes" onclick="switchTab('tab-disputes')">
+<div class="flex items-center gap-2.5 nav-item-inner">
+<span class="material-symbols-outlined text-[19px] shrink-0 text-red-400">security</span>
+<span class="sidebar-label">7. Disputes &amp; Fraud Guard</span>
+</div>
+<span class="sidebar-badge text-[10px] bg-red-500/20 text-red-300 px-1.5 py-0.5 rounded font-bold">2 Alert</span>
+</a>
+<!-- 8. System Settings & Audit Logs -->
+<a class="nav-item group flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-sidebar-hover transition-colors" href="javascript:void(0)" id="nav-settings" onclick="switchTab('tab-settings')">
+<div class="flex items-center gap-2.5 nav-item-inner">
+<span class="material-symbols-outlined text-[19px] shrink-0 text-slate-400">settings</span>
+<span class="sidebar-label">8. System &amp; Audit Logs</span>
+</div>
+</a>
+</nav>
+<!-- Super Admin Profile Footer Snapshot -->
+<div class="p-3 border-t border-sidebar-border bg-slate-950/60 flex items-center justify-between">
+<div class="flex items-center gap-2.5 overflow-hidden">
+<div class="w-8 h-8 rounded-full bg-primary text-white font-bold text-xs flex items-center justify-center shrink-0 ring-2 ring-primary/40">
+          AR
+        </div>
+<div class="sidebar-profile-info flex flex-col truncate">
+<span class="text-xs font-bold text-white truncate">Amrit Raj</span>
+<span class="text-[10px] text-slate-400 truncate">Head of Ops &amp; Integrity</span>
+</div>
+</div>
+<button class="p-1 text-slate-400 hover:text-white hover:bg-slate-800 rounded transition-colors" onclick="alert('Session audit authenticated. 2FA Validated.')" title="Audit Footprint">
+<span class="material-symbols-outlined text-[18px]">fingerprint</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Layout -->
+<div class="flex-1 flex flex-col h-full overflow-hidden bg-surface-container-low">
+<!-- Top Admin Header Bar with Quick Global Actions -->
+<header class="h-16 bg-surface-container-lowest border-b border-surface-container-high px-6 flex items-center justify-between shrink-0 shadow-sm z-30">
+<!-- Breadcrumb and Active View Title -->
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 text-on-surface-variant text-xs">
+<a class="hover:text-primary transition-colors flex items-center gap-1 font-medium" href="#">
+<span class="material-symbols-outlined text-[16px]">home</span> Daraz Central
+          </a>
+<span>/</span>
+<span class="text-on-surface font-semibold" id="breadcrumbCurrent">Overview &amp; Realtime</span>
+</div>
+<span class="px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-primary/10 text-primary border border-primary/20">Production Mainnet</span>
+</div>
+<!-- Quick Fast Action Bar -->
+<div class="flex items-center gap-2.5">
+<div class="hidden xl:flex items-center gap-2 text-xs text-on-surface-variant mr-3 pr-3 border-r border-surface-container-high">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> eSewa OK</span>
+<span class="flex items-center gap-1 ml-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Khalti OK</span>
+<span class="flex items-center gap-1 ml-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> NCHL 100%</span>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-primary hover:bg-primary-dark text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-all" onclick="openModal('quickCampaignModal')">
+<span class="material-symbols-outlined text-[16px]">bolt</span>
+<span>+ Flash Sale 9.9</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-medium flex items-center gap-1.5 transition-colors" onclick="openModal('sellerOnboardModal')">
+<span class="material-symbols-outlined text-[16px]">person_add</span>
+<span>Onboard Merchant</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-medium flex items-center gap-1.5 transition-colors" onclick="openModal('couponModal')">
+<span class="material-symbols-outlined text-[16px]">confirmation_number</span>
+<span>+ Coupon Drop</span>
+</button>
+<!-- Notification Trigger -->
+<button class="relative p-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors" onclick="alert('3 High Priority System Alerts: 142 KYC pending, Koshi hub monsoon rain delay, 1 Bot lockout.')" title="System Notifications">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-primary ring-2 ring-white"></span>
+</button>
+</div>
+</header>
+<!-- Scrollable Workspace Views Container -->
+<main class="flex-1 overflow-y-auto p-6 space-y-6">
+<!-- ========================================================================= -->
+<!-- PAGE 1: OVERVIEW & REAL-TIME COMMAND CENTER -->
+<!-- ========================================================================= -->
+<section class="page-view space-y-6" id="tab-overview">
+<!-- Live Alert Banner -->
+<div class="bg-surface-container-lowest border border-surface-container-high rounded-xl p-3.5 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<span class="px-2.5 py-1 rounded-md bg-primary-fixed text-primary font-bold text-xs uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">campaign</span> LIVE BROADCAST
+            </span>
+<span class="text-xs text-on-surface font-medium" id="activeTickerText">
+              Festival Rush Active: 0% Commission on New Local Handicrafts &amp; 5% eSewa Wallet Instant Rebate across all 77 districts!
+            </span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<button class="text-tertiary hover:text-tertiary-container text-xs font-bold flex items-center gap-1" onclick="editTicker()">
+<span class="material-symbols-outlined text-[15px]">edit</span> Edit Banner
+            </button>
+<span class="text-slate-300">|</span>
+<label class="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-on-surface-variant">
+<input checked="" class="accent-primary rounded" type="checkbox"/>
+<span>Broadcasting Live</span>
+</label>
+</div>
+</div>
+<!-- 5 High-Density Executive Metric Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+<!-- GMV Today -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant text-xs font-semibold">
+<span>GMV Today (NPR)</span>
+<span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold text-[11px]">+18.4%</span>
+</div>
+<div class="mt-2">
+<div class="text-xl font-bold font-price-card text-on-surface">Rs. 14,842,950</div>
+<div class="flex items-center justify-between mt-1 text-[11px] text-on-surface-variant">
+<span>vs Yest: Rs. 12.53M</span>
+<span class="text-primary font-bold">Kathmandu 64%</span>
+</div>
+</div>
+</div>
+<!-- Total Orders Today -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant text-xs font-semibold">
+<span>Total Orders Today</span>
+<span class="material-symbols-outlined text-[18px] text-tertiary">local_mall</span>
+</div>
+<div class="mt-2">
+<div class="text-xl font-bold font-price-card text-on-surface">8,429</div>
+<div class="text-[11px] text-on-surface-variant mt-1">
+<span class="text-primary font-bold">6,120</span> DEX • 1,840 Prep • 469 Ret
+              </div>
+</div>
+</div>
+<!-- Active Merchants -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant text-xs font-semibold">
+<span>Active Merchants</span>
+<span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold">142 KYC</span>
+</div>
+<div class="mt-2">
+<div class="text-xl font-bold font-price-card text-on-surface">48,912</div>
+<div class="text-[11px] text-on-surface-variant mt-1">Across 77 administrative districts</div>
+</div>
+</div>
+<!-- Take Revenue -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant text-xs font-semibold">
+<span>Net Platform Take</span>
+<span class="material-symbols-outlined text-[18px] text-primary">percent</span>
+</div>
+<div class="mt-2">
+<div class="text-xl font-bold font-price-card text-primary">Rs. 1,484,295</div>
+<div class="text-[11px] text-on-surface-variant mt-1">Blended rate: 10.0% take</div>
+</div>
+</div>
+<!-- Concurrent Shoppers -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant text-xs font-semibold">
+<span>Live Concurrent Traffic</span>
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+</div>
+<div class="mt-2">
+<div class="text-xl font-bold font-price-card text-on-surface">42,890 Online</div>
+<div class="flex items-center justify-between text-[11px] text-on-surface-variant mt-1">
+<span>App 78%</span>
+<span>Web 22%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 2-Column Command Grid: Live Flow & Hub Realtime -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<div class="lg:col-span-8 space-y-6">
+<!-- Quick Summary Order Pipeline Table -->
+<div class="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm overflow-hidden">
+<div class="p-4 bg-surface flex items-center justify-between border-b border-surface-container-high">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]">bolt</span>
+<div>
+<h3 class="font-headline-sm font-bold text-on-surface text-sm">Real-time Order Flow Pipeline</h3>
+<p class="text-xs text-on-surface-variant">Live dispatches occurring every second across Kathmandu Valley &amp; hubs</p>
+</div>
+</div>
+<button class="text-xs text-primary hover:underline font-bold flex items-center gap-1" onclick="switchTab('tab-orders')">
+                  Full Logistics Matrix →
+                </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-xs">
+<thead class="bg-surface-container-low text-on-surface-variant font-semibold border-b border-surface-container-high">
+<tr>
+<th class="p-3">Order &amp; Customer</th>
+<th class="p-3">Item / Category</th>
+<th class="p-3">Payment</th>
+<th class="p-3">DEX Status</th>
+<th class="p-3 text-right">Quick Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-3">
+<div class="font-bold text-primary">#71298412093</div>
+<div class="font-medium text-on-surface">Amrit Sharma (Kathmandu)</div>
+</td>
+<td class="p-3">
+<div class="text-on-surface font-medium truncate max-w-[180px]">Ultima Aura ANC Earbuds</div>
+<div class="text-[11px] text-on-surface-variant">Electronics</div>
+</td>
+<td class="p-3">
+<span class="px-2 py-0.5 rounded bg-orange-100 text-primary font-bold text-[11px]">eSewa • Rs. 3,129</span>
+</td>
+<td class="p-3">
+<span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 text-[11px] font-semibold">Preparing: Thapathali Hub</span>
+</td>
+<td class="p-3 text-right">
+<button class="px-2 py-1 rounded bg-primary text-white text-[11px] font-bold" onclick="alert('Manifest dispatched to Thapathali DEX')">Dispatch</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-3">
+<div class="font-bold text-primary">#71298412094</div>
+<div class="font-medium text-on-surface">Sunita Gurung (Pokhara)</div>
+</td>
+<td class="p-3">
+<div class="text-on-surface font-medium truncate max-w-[180px]">Xiaomi Smart Band 8 Active</div>
+<div class="text-[11px] text-on-surface-variant">Wearables</div>
+</td>
+<td class="p-3">
+<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-semibold text-[11px]">COD • Rs. 2,999</span>
+</td>
+<td class="p-3">
+<span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[11px] font-semibold">In Transit (Rider: DB-41)</span>
+</td>
+<td class="p-3 text-right">
+<button class="px-2 py-1 rounded bg-surface-container hover:bg-surface-container-high text-[11px] font-semibold" onclick="alert('Waybill printed for Rider DB-41')">Waybill</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Regional Gateway & Performance Telemetry -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-bold text-on-surface">DEX Logistics Health</span>
+<span class="text-emerald-600 font-bold text-xs">99.4% SLA</span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-emerald-500 h-2 rounded-full" style="width: 99.4%"></div>
+</div>
+<div class="mt-2 text-[11px] text-on-surface-variant flex justify-between">
+<span>6,120 Routed</span>
+<span>14 Delayed (Rain)</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-bold text-on-surface">Digital Payment Share</span>
+<span class="text-primary font-bold text-xs">68.2% Prepaid</span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-2 rounded-full" style="width: 68.2%"></div>
+</div>
+<div class="mt-2 text-[11px] text-on-surface-variant flex justify-between">
+<span>eSewa / Khalti / Cards</span>
+<span>31.8% Cash on Del.</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-bold text-on-surface">Server Cluster Load</span>
+<span class="text-sky-600 font-bold text-xs">24% Normal</span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-sky-500 h-2 rounded-full" style="width: 24%"></div>
+</div>
+<div class="mt-2 text-[11px] text-on-surface-variant flex justify-between">
+<span>Kathmandu DC Nodes</span>
+<span>0 Packet Drops</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Action & Verification Snapshot Sidebar -->
+<div class="lg:col-span-4 space-y-6">
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm font-bold text-sm text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-amber-500 text-[20px]">verified</span> Urgent Seller KYC
+                </h3>
+<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">142 Pending</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg space-y-1.5">
+<div class="flex justify-between items-center">
+<span class="font-bold text-xs text-on-surface">Patan Crafts Pvt Ltd</span>
+<span class="text-[10px] bg-white px-1.5 py-0.2 rounded border font-mono">PAN: 602403687</span>
+</div>
+<p class="text-[11px] text-on-surface-variant">Lalitpur • Category: Handicrafts • Nabil Cheque Verified</p>
+<div class="flex gap-2 pt-1">
+<button class="flex-1 py-1 rounded bg-primary text-white font-bold text-xs" onclick="approveSeller('Patan Crafts Pvt Ltd')">Approve</button>
+<button class="px-3 py-1 rounded bg-surface-container text-xs font-semibold" onclick="switchTab('tab-sellers')">Inspect</button>
+</div>
+</div>
+<button class="w-full text-center text-xs text-primary font-bold hover:underline py-1" onclick="switchTab('tab-sellers')">Open Seller Verification Console →</button>
+</div>
+<!-- Fraud Alert Block -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm space-y-2 border-l-4 border-l-red-500">
+<div class="flex justify-between items-center text-xs text-red-600 font-bold">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">warning</span> BOT THREAT DETECTED</span>
+<span class="text-[10px] bg-red-100 px-1.5 py-0.5 rounded">High Risk</span>
+</div>
+<p class="text-xs text-on-surface">IP 103.24.xxx generated 14 COD iPhone orders to Kalanki address in 3 minutes.</p>
+<div class="flex gap-2 pt-1">
+<button class="flex-1 py-1 bg-red-600 text-white rounded text-xs font-bold" onclick="alert('IP 103.24.xxx blocked. Orders frozen.')">Freeze &amp; Ban IP</button>
+<button class="px-2.5 py-1 bg-surface-container text-xs font-semibold rounded" onclick="switchTab('tab-disputes')">Review</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================================================= -->
+<!-- PAGE 2: ORDER MANAGEMENT & DEX LOGISTICS SUITE -->
+<!-- ========================================================================= -->
+<section class="page-view hidden space-y-6" id="tab-orders">
+<!-- Controls Toolbar -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+<div>
+<h2 class="font-headline-sm font-bold text-base text-on-surface">Order Management &amp; DEX Routing Engine</h2>
+<p class="text-xs text-on-surface-variant">Control parcel dispatch, real-time rider assignments, and 77-district logistics flow</p>
+</div>
+<div class="flex items-center gap-2 flex-wrap">
+<button class="px-3 py-1.5 rounded-lg bg-primary hover:bg-primary-dark text-white text-xs font-bold flex items-center gap-1.5 shadow-sm" onclick="batchDispatchDEX()">
+<span class="material-symbols-outlined text-[16px]">local_shipping</span> Batch Dispatch (450 DEX)
+            </button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-medium flex items-center gap-1.5" onclick="openModal('printWaybillModal')">
+<span class="material-symbols-outlined text-[16px]">print</span> Print Waybill Batch
+            </button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-medium flex items-center gap-1.5" onclick="alert('Exporting full CSV manifest for DEX Kathmandu and Pokhara...')">
+<span class="material-symbols-outlined text-[16px]">download</span> Export CSV
+            </button>
+</div>
+</div>
+<!-- Filter Chips Bar -->
+<div class="bg-surface-container-lowest p-3 rounded-xl border border-surface-container-high shadow-sm flex items-center gap-2 overflow-x-auto text-xs">
+<span class="font-bold text-on-surface mr-2">Status:</span>
+<button class="px-3 py-1 rounded-full bg-primary text-white font-bold text-xs">All Orders (8,429)</button>
+<button class="px-3 py-1 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-medium">Preparing at Hub (1,840)</button>
+<button class="px-3 py-1 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-medium">DEX In-Transit (6,120)</button>
+<button class="px-3 py-1 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-medium">COD Verification (210)</button>
+<button class="px-3 py-1 rounded-full bg-red-100 text-red-700 font-bold">Disputed / Damaged (469)</button>
+</div>
+<!-- Full Order Table -->
+<div class="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-xs">
+<thead class="bg-surface-container-low text-on-surface-variant font-bold uppercase tracking-wider text-[11px] border-b border-surface-container-high">
+<tr>
+<th class="p-3.5">Consignment ID / Customer</th>
+<th class="p-3.5">SKU &amp; Merchant</th>
+<th class="p-3.5">Payment Rail</th>
+<th class="p-3.5">DEX Stage &amp; Rider</th>
+<th class="p-3.5 text-right">Actions &amp; Routing</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high">
+<!-- Order Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-3.5">
+<div class="font-bold text-primary text-sm">#71298412093</div>
+<div class="font-semibold text-on-surface">Amrit Sharma</div>
+<div class="text-[11px] text-on-surface-variant">Kathmandu (Baneshwor Hub)</div>
+</td>
+<td class="p-3.5">
+<div class="font-medium text-on-surface max-w-[220px] truncate">Ultima Aura ANC Earbuds</div>
+<div class="text-[11px] text-on-surface-variant">Merchant: Ultima Official Store • Qty: 1</div>
+</td>
+<td class="p-3.5">
+<div class="font-bold text-on-surface">Rs. 3,129</div>
+<span class="px-2 py-0.5 rounded bg-orange-100 text-primary font-bold text-[10px]">eSewa Prepaid</span>
+</td>
+<td class="p-3.5">
+<span class="px-2.5 py-1 rounded bg-sky-100 text-sky-800 font-bold text-xs flex items-center gap-1.5 w-max">
+<span class="w-2 h-2 rounded-full bg-sky-600 animate-pulse"></span> Preparing: Thapathali Hub
+                    </span>
+</td>
+<td class="p-3.5 text-right space-x-1">
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high text-xs font-semibold" onclick="openModal('assignRiderModal')">Assign Rider</button>
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high text-xs font-semibold text-tertiary" onclick="alert('Consignment #71298412093 rerouted to Koteshwor sub-hub')">Reroute</button>
+</td>
+</tr>
+<!-- Order Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-3.5">
+<div class="font-bold text-primary text-sm">#71298412094</div>
+<div class="font-semibold text-on-surface">Sunita Gurung</div>
+<div class="text-[11px] text-on-surface-variant">Pokhara (Prithvi Chowk Hub)</div>
+</td>
+<td class="p-3.5">
+<div class="font-medium text-on-surface max-w-[220px] truncate">Xiaomi Smart Band 8 Active</div>
+<div class="text-[11px] text-on-surface-variant">Merchant: Mi Authorized Nepal • Qty: 1</div>
+</td>
+<td class="p-3.5">
+<div class="font-bold text-on-surface">Rs. 2,999</div>
+<span class="px-2 py-0.5 rounded bg-slate-200 text-slate-800 font-bold text-[10px]">Cash on Delivery</span>
+</td>
+<td class="p-3.5">
+<span class="px-2.5 py-1 rounded bg-amber-100 text-amber-800 font-bold text-xs flex items-center gap-1.5 w-max">
+<span class="material-symbols-outlined text-[14px]">two_wheeler</span> In Transit: Rider DB-41
+                    </span>
+</td>
+<td class="p-3.5 text-right space-x-1">
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high text-xs font-semibold" onclick="alert('Calling Rider DB-41 (+977 9801234567)...')">Call Rider</button>
+<button class="px-2.5 py-1 rounded bg-primary text-white text-xs font-bold" onclick="alert('Printing waybill for #71298412094')">Print Waybill</button>
+</td>
+</tr>
+<!-- Order Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-3.5">
+<div class="font-bold text-primary text-sm">#71298412095</div>
+<div class="font-semibold text-on-surface">Bikash Thapa</div>
+<div class="text-[11px] text-on-surface-variant">Biratnagar (Main Road Hub)</div>
+</td>
+<td class="p-3.5">
+<div class="font-medium text-on-surface max-w-[220px] truncate">Goldstar Shoes Black Classic 42</div>
+<div class="text-[11px] text-on-surface-variant">Merchant: Goldstar Official Store • Qty: 1</div>
+</td>
+<td class="p-3.5">
+<div class="font-bold text-on-surface">Rs. 1,450</div>
+<span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 font-bold text-[10px]">Khalti Digital</span>
+</td>
+<td class="p-3.5">
+<span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-bold text-xs flex items-center gap-1.5 w-max">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Delivered (POD Signed)
+                    </span>
+</td>
+<td class="p-3.5 text-right space-x-1">
+<button class="px-2.5 py-1 rounded bg-emerald-600 text-white text-xs font-bold" onclick="alert('Settlement queued for Goldstar Store in next NCHL batch')">Settle Payout</button>
+</td>
+</tr>
+<!-- Order Row 4 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-3.5">
+<div class="font-bold text-primary text-sm">#71298412096</div>
+<div class="font-semibold text-on-surface">Pooja Joshi</div>
+<div class="text-[11px] text-on-surface-variant">Butwal (Traffic Chowk Hub)</div>
+</td>
+<td class="p-3.5">
+<div class="font-medium text-on-surface max-w-[220px] truncate">Baltra Cordless Kettle 1.8L</div>
+<div class="text-[11px] text-on-surface-variant">Merchant: Baltra Nepal Home • Qty: 1</div>
+</td>
+<td class="p-3.5">
+<div class="font-bold text-on-surface">Rs. 1,150</div>
+<span class="px-2 py-0.5 rounded bg-red-100 text-red-700 font-bold text-[10px]">COD Disputed</span>
+</td>
+<td class="p-3.5">
+<span class="px-2.5 py-1 rounded bg-red-100 text-red-800 font-bold text-xs flex items-center gap-1.5 w-max">
+<span class="material-symbols-outlined text-[14px]">assignment_return</span> Return: Seal Broken
+                    </span>
+</td>
+<td class="p-3.5 text-right space-x-1">
+<button class="px-2.5 py-1 rounded bg-red-600 text-white text-xs font-bold" onclick="switchTab('tab-disputes')">Arbitrate Claim</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-3.5 bg-surface-container-low border-t border-surface-container-high flex items-center justify-between text-xs text-on-surface-variant">
+<span>Showing 4 of 8,429 Realtime Marketplace Consignments</span>
+<div class="flex items-center gap-1">
+<button class="px-2.5 py-1 rounded bg-white font-bold border border-surface-container-high shadow-sm">1</button>
+<button class="px-2.5 py-1 rounded hover:bg-surface-container">2</button>
+<button class="px-2.5 py-1 rounded hover:bg-surface-container">3</button>
+<span>...</span>
+<button class="px-2.5 py-1 rounded hover:bg-surface-container">421</button>
+</div>
+</div>
+</div>
+<!-- 77 Districts Hub Monitor -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-surface-container-high shadow-sm space-y-4">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-headline-sm font-bold text-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">hub</span>
+                77 Districts DEX Hub Status &amp; Monsoon Road Slips
+              </h3>
+<p class="text-xs text-on-surface-variant">Automated delay dispatch SLAs and delivery rerouting matrix</p>
+</div>
+<button class="px-3 py-1 rounded bg-surface-container text-xs font-bold text-primary" onclick="alert('All 77 hub telemetry re-synchronized.')">Sync All Hubs</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+<div class="p-3 bg-surface-container-low rounded-lg border border-surface-container-high flex justify-between items-center">
+<div>
+<div class="font-bold text-on-surface">Kathmandu Valley (3 Hubs)</div>
+<div class="text-[11px] text-on-surface-variant">100% On Time • 4,820 orders today</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">NORMAL</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg border border-surface-container-high flex justify-between items-center">
+<div>
+<div class="font-bold text-on-surface">Pokhara (Gandaki Hub)</div>
+<div class="text-[11px] text-on-surface-variant">DEX Express Fleet Normal</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">NORMAL</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg border border-surface-container-high flex justify-between items-center">
+<div>
+<div class="font-bold text-on-surface">Biratnagar / Koshi Hub</div>
+<div class="text-[11px] text-on-surface-variant">Monsoon Route Block (+24h SLA)</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-[10px]">RAIN DELAY</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================================================= -->
+<!-- PAGE 3: CATALOG & INVENTORY MANAGEMENT SUITE -->
+<!-- ========================================================================= -->
+<section class="page-view hidden space-y-6" id="tab-catalog">
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+<div>
+<h2 class="font-headline-sm font-bold text-base text-on-surface">Catalog &amp; Category Commission Engine</h2>
+<p class="text-xs text-on-surface-variant">Configure take rates per vertical, audit SKU price spikes, and tag campaign deals</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-semibold" onclick="alert('Bulk SKU price override modal opened.')">Bulk Price Edit</button>
+<button class="px-3 py-1.5 rounded-lg bg-primary hover:bg-primary-dark text-white text-xs font-bold" onclick="saveCommissions()">Apply Commission Ruleset</button>
+</div>
+</div>
+<!-- Dynamic Category Commission Sliders -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-surface-container-high shadow-sm space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">devices</span> Electronics &amp; Mobile
+              </span>
+<span class="text-primary font-bold text-sm" id="elecVal">8.0%</span>
+</div>
+<input class="w-full accent-primary cursor-pointer" max="15" min="4" oninput="document.getElementById('elecVal').innerText = this.value + '%'" step="0.5" type="range" value="8.0"/>
+<div class="flex justify-between text-[11px] text-on-surface-variant">
+<span>Min: 4%</span>
+<span>Current: 8%</span>
+<span>Max: 15%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-surface-container-high shadow-sm space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-pink-600 text-[18px]">checkroom</span> Fashion &amp; Apparel
+              </span>
+<span class="text-primary font-bold text-sm" id="fashVal">12.5%</span>
+</div>
+<input class="w-full accent-primary cursor-pointer" max="22" min="8" oninput="document.getElementById('fashVal').innerText = this.value + '%'" step="0.5" type="range" value="12.5"/>
+<div class="flex justify-between text-[11px] text-on-surface-variant">
+<span>Min: 8%</span>
+<span>Current: 12.5%</span>
+<span>Max: 22%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-surface-container-high shadow-sm space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-emerald-600 text-[18px]">shopping_basket</span> Daraz Mart FMCG
+              </span>
+<span class="text-primary font-bold text-sm" id="martVal">5.0%</span>
+</div>
+<input class="w-full accent-primary cursor-pointer" max="10" min="2" oninput="document.getElementById('martVal').innerText = this.value + '%'" step="0.5" type="range" value="5.0"/>
+<div class="flex justify-between text-[11px] text-on-surface-variant">
+<span>Min: 2%</span>
+<span>Current: 5%</span>
+<span>Max: 10%</span>
+</div>
+</div>
+</div>
+<!-- SKU Approvals and Pricing Audit Table -->
+<div class="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm overflow-hidden">
+<div class="p-4 bg-surface flex items-center justify-between border-b border-surface-container-high">
+<h3 class="font-headline-sm font-bold text-sm text-on-surface">Pending SKU Moderation &amp; Stock Audits</h3>
+<span class="text-xs text-on-surface-variant">28 items waiting content compliance</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-xs">
+<thead class="bg-surface-container-low text-on-surface-variant font-bold">
+<tr>
+<th class="p-3">Product Name &amp; SKU</th>
+<th class="p-3">Merchant</th>
+<th class="p-3">Listed Price</th>
+<th class="p-3">Compliance Status</th>
+<th class="p-3 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high">
+<tr class="hover:bg-surface-container-low">
+<td class="p-3">
+<div class="font-bold text-on-surface">Sony WH-1000XM5 Wireless Headphones</div>
+<div class="text-[11px] text-on-surface-variant">SKU: SNY-XM5-SLV • Stock: 45</div>
+</td>
+<td class="p-3">Everest Gadgets Nepal</td>
+<td class="p-3 font-bold text-on-surface">Rs. 44,999</td>
+<td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-semibold text-[11px]">Authorized Distributor Cert</span></td>
+<td class="p-3 text-right">
+<button class="px-2.5 py-1 rounded bg-primary text-white font-bold text-xs" onclick="alert('Product approved and live on Daraz Nepal marketplace')">Approve SKU</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low">
+<td class="p-3">
+<div class="font-bold text-on-surface">Handcrafted Himalayan Cashmere Shawl</div>
+<div class="text-[11px] text-on-surface-variant">SKU: HML-CSH-RED • Stock: 120</div>
+</td>
+<td class="p-3">Patan Crafts Pvt Ltd</td>
+<td class="p-3 font-bold text-on-surface">Rs. 6,800</td>
+<td class="p-3"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold text-[11px]">Handicraft Cert Attached</span></td>
+<td class="p-3 text-right">
+<button class="px-2.5 py-1 rounded bg-primary text-white font-bold text-xs" onclick="alert('Product approved and tagged for 0% commission local incentive')">Approve SKU</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- ========================================================================= -->
+<!-- PAGE 4: SELLER CENTER & KYC VERIFICATION SUITE -->
+<!-- ========================================================================= -->
+<section class="page-view hidden space-y-6" id="tab-sellers">
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+<div>
+<h2 class="font-headline-sm font-bold text-base text-on-surface">Seller Onboarding &amp; Legal KYC Verification</h2>
+<p class="text-xs text-on-surface-variant">Inland Revenue Department (IRD) PAN/VAT validation and banking settlement verification</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold">142 In Verification Queue</span>
+<button class="px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-bold" onclick="openModal('sellerOnboardModal')">+ Manual Merchant Intake</button>
+</div>
+</div>
+<!-- Verification Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Merchant Card 1 -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-surface-container-high shadow-sm space-y-4">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-bold text-sm text-on-surface">Patan Crafts Pvt Ltd</h3>
+<span class="text-xs text-on-surface-variant">Registered: Patan Industrial Area, Lalitpur</span>
+</div>
+<span class="px-2.5 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-xs">PAN Verification</span>
+</div>
+<div class="bg-surface-container-low p-3 rounded-lg space-y-2 text-xs">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">PAN / VAT Number:</span>
+<span class="font-mono font-bold text-on-surface">602403687 (Valid IRD Match)</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Bank Account Rail:</span>
+<span class="font-semibold text-on-surface">Nabil Bank - Pulchowk Br.</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Documents Uploaded:</span>
+<span class="text-emerald-700 font-medium">Citizenship + Cheque Leaf (Clean)</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex-1 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white font-bold text-xs transition-colors" onclick="approveSeller('Patan Crafts Pvt Ltd')">
+                Approve &amp; Activate Store
+              </button>
+<button class="px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-semibold text-red-600" onclick="rejectSeller('Patan Crafts Pvt Ltd')">
+                Reject / Re-scan
+              </button>
+</div>
+</div>
+<!-- Merchant Card 2 -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-surface-container-high shadow-sm space-y-4">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-bold text-sm text-on-surface">Everest Gadgets Nepal</h3>
+<span class="text-xs text-on-surface-variant">Registered: New Road, Kathmandu</span>
+</div>
+<span class="px-2.5 py-0.5 rounded bg-sky-100 text-sky-800 font-bold text-xs">Physical DEX Audit</span>
+</div>
+<div class="bg-surface-container-low p-3 rounded-lg space-y-2 text-xs">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">PAN Number:</span>
+<span class="font-mono font-bold text-on-surface">301984211 (Active)</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Bank Account Rail:</span>
+<span class="font-semibold text-on-surface">NIC Asia Bank - New Road</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Audit Checklist:</span>
+<span class="text-amber-700 font-medium">Warehouse Inspection Scheduled</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex-1 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-semibold text-xs" onclick="alert('DEX Inspector dispatched for physical New Road audit.')">
+                Dispatch Warehouse Auditor
+              </button>
+<button class="px-4 py-2 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 text-xs font-bold" onclick="flagSuspiciousSeller('Everest Gadgets Nepal')">
+                Flag Seller
+              </button>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================================================= -->
+<!-- PAGE 5: MARKETING, CMS & FLASH SALES SUITE -->
+<!-- ========================================================================= -->
+<section class="page-view hidden space-y-6" id="tab-campaigns">
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+<div>
+<h2 class="font-headline-sm font-bold text-base text-on-surface">Homepage CMS &amp; Flash Sales Orchestrator</h2>
+<p class="text-xs text-on-surface-variant">Manage 9.9 Mega Festival banners, flash deals, voucher drops, and countdown widgets</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded bg-primary text-white font-bold text-xs uppercase">Campaign: 9.9 Mega Deal</span>
+<button class="px-3 py-1.5 rounded-lg bg-primary hover:bg-primary-dark text-white text-xs font-bold" onclick="openModal('couponModal')">+ Create Voucher Drop</button>
+</div>
+</div>
+<!-- Hero Banners Live Switcher -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-bold text-xs text-on-surface">Hero Carousel Slot 1</span>
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+</div>
+<div class="h-28 bg-gradient-to-r from-orange-600 to-amber-500 rounded-lg p-3 text-white flex flex-col justify-end">
+<span class="font-black text-sm">9.9 MEGA FESTIVAL</span>
+<span class="text-[10px] text-white/90">Up to 70% Off Electronics &amp; Appliances</span>
+</div>
+<div class="flex items-center justify-between text-xs text-on-surface-variant">
+<span>Clicks: 142.9k (CTR 8.4%)</span>
+<button class="text-primary font-bold hover:underline" onclick="alert('Asset swap dialog opened for Hero Slot 1')">Change Media</button>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-bold text-xs text-on-surface">Flash Sale Batch Countdown</span>
+<span class="px-1.5 py-0.5 rounded bg-primary text-white text-[10px] font-mono font-bold">04:12:38</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg space-y-1.5 text-xs">
+<div class="flex justify-between font-medium">
+<span>Active Flash SKUs:</span>
+<span class="font-bold text-primary">64 SKUs Live</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Generated GMV:</span>
+<span class="font-bold text-on-surface">Rs. 1,842,100</span>
+</div>
+<div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden mt-1">
+<div class="bg-primary h-1.5 rounded-full" style="width: 74%"></div>
+</div>
+</div>
+<button class="w-full py-1.5 rounded bg-surface-container hover:bg-surface-container-high text-xs font-semibold text-on-surface" onclick="alert('Flash sale SKU selector opened.')">
+              Manage Flash Sale SKUs
+            </button>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-bold text-xs text-on-surface">Platform Voucher Drop</span>
+<span class="text-emerald-600 font-bold text-xs">Active Pool</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg space-y-1.5 text-xs">
+<div class="flex justify-between font-medium">
+<span>Code: <strong>DARAZ99ESEWA</strong></span>
+<span class="text-primary font-bold">Rs. 500 Off</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Claimed: 8,200 / 10,000</span>
+<span class="font-bold text-on-surface">82% Claimed</span>
+</div>
+<div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden mt-1">
+<div class="bg-emerald-500 h-1.5 rounded-full" style="width: 82%"></div>
+</div>
+</div>
+<button class="w-full py-1.5 rounded bg-primary text-white text-xs font-bold" onclick="alert('Added 5,000 voucher quota units to pool.')">
+              + Top Up Voucher Pool (5,000)
+            </button>
+</div>
+</div>
+</section>
+<!-- ========================================================================= -->
+<!-- PAGE 6: FINANCIAL SETTLEMENT & PAYOUTS ENGINE -->
+<!-- ========================================================================= -->
+<section class="page-view hidden space-y-6" id="tab-finance">
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+<div>
+<h2 class="font-headline-sm font-bold text-base text-on-surface">Financial Settlement &amp; NCHL-IPS Payout Engine</h2>
+<p class="text-xs text-on-surface-variant">Direct automated ACH payouts to partner banks (Nabil, NIC Asia, Global IME, Everest)</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm" onclick="executeDisbursement()">
+<span class="material-symbols-outlined text-[18px]">send</span> Execute NCHL-IPS Batch (Rs. 42.85M)
+            </button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-surface-container-high shadow-sm space-y-2">
+<span class="text-xs font-bold text-on-surface-variant">Scheduled Payout Pool</span>
+<div class="text-2xl font-bold font-price-card text-on-surface">Rs. 42,852,190</div>
+<p class="text-xs text-on-surface-variant">To 12,400 verified merchant accounts on Wednesday settlement run</p>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-surface-container-high shadow-sm space-y-2">
+<span class="text-xs font-bold text-on-surface-variant">eSewa &amp; Khalti Reconciled</span>
+<div class="text-2xl font-bold font-price-card text-emerald-600">100% Match</div>
+<p class="text-xs text-on-surface-variant">Gateway fees: 1.25% settled with 0 reconciliation disputes</p>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-surface-container-high shadow-sm space-y-2">
+<span class="text-xs font-bold text-on-surface-variant">DEX COD Cash Handed Over</span>
+<div class="text-2xl font-bold font-price-card text-amber-700">Rs. 9,140,500</div>
+<p class="text-xs text-on-surface-variant">Physical cash vaulted at DEX Kathmandu &amp; Pokhara regional centers</p>
+</div>
+</div>
+<!-- Recent Settlements History -->
+<div class="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm overflow-hidden">
+<div class="p-4 bg-surface flex justify-between items-center border-b border-surface-container-high">
+<h3 class="font-headline-sm font-bold text-sm text-on-surface">NCHL Automated Batch History</h3>
+<span class="text-xs text-on-surface-variant">Cleared via Nepal Clearing House</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-xs">
+<thead class="bg-surface-container-low text-on-surface-variant font-bold">
+<tr>
+<th class="p-3">Batch ID</th>
+<th class="p-3">Beneficiaries</th>
+<th class="p-3">Total Amount</th>
+<th class="p-3">Bank Clearing Channel</th>
+<th class="p-3 text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high">
+<tr class="hover:bg-surface-container-low">
+<td class="p-3 font-mono font-bold text-primary">#NCHL-202409-8812</td>
+<td class="p-3 font-medium">4,210 Merchants</td>
+<td class="p-3 font-bold">Rs. 18,450,200</td>
+<td class="p-3">Nabil Bank ACH Rail</td>
+<td class="p-3 text-right"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">CLEARED</span></td>
+</tr>
+<tr class="hover:bg-surface-container-low">
+<td class="p-3 font-mono font-bold text-primary">#NCHL-202409-8811</td>
+<td class="p-3 font-medium">3,980 Merchants</td>
+<td class="p-3 font-bold">Rs. 14,210,950</td>
+<td class="p-3">NIC Asia Direct Transfer</td>
+<td class="p-3 text-right"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">CLEARED</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- ========================================================================= -->
+<!-- PAGE 7: DISPUTES, RETURNS & CUSTOMER CARE CONSOLE -->
+<!-- ========================================================================= -->
+<section class="page-view hidden space-y-6" id="tab-disputes">
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+<div>
+<h2 class="font-headline-sm font-bold text-base text-on-surface">Buyer Protection, Returns Arbitration &amp; Bot Guard</h2>
+<p class="text-xs text-on-surface-variant">Resolve broken seal claims, issue instant refunds, and neutralize bot scalpers</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded bg-red-600 text-white font-bold text-xs flex items-center gap-1" onclick="alert('IP blacklisting rules reloaded.')">
+<span class="material-symbols-outlined text-[16px]">block</span> Sync Blacklist
+            </button>
+</div>
+</div>
+<!-- Dispute Review Card -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-surface-container-high shadow-sm space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-red-600 text-[22px]">assignment_return</span>
+<div>
+<h3 class="font-bold text-sm text-on-surface">Dispute #DIS-9921: Baltra Cordless Kettle 1.8L</h3>
+<span class="text-xs text-on-surface-variant">Buyer: Pooja Joshi (Butwal) vs. Baltra Official Nepal</span>
+</div>
+</div>
+<span class="px-2.5 py-0.5 rounded bg-red-100 text-red-800 font-bold text-xs">Return: Damaged Seal</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-surface-container-low p-4 rounded-lg text-xs">
+<div>
+<span class="text-on-surface-variant font-semibold">Customer Statement:</span>
+<p class="text-on-surface mt-1">"The courier handed me the box with the seal torn open and the kettle heating element base missing."</p>
+<div class="mt-3 flex items-center gap-2">
+<button class="text-primary font-bold hover:underline flex items-center gap-1" onclick="alert('Displaying high-resolution photo photo_seal_broken.jpg uploaded by buyer')">
+<span class="material-symbols-outlined text-[16px]">image</span> View Evidence Photo (1)
+                </button>
+</div>
+</div>
+<div>
+<span class="text-on-surface-variant font-semibold">DEX Courier Handover Log:</span>
+<p class="text-on-surface mt-1">Rider confirmed box showed exterior pressure marks at Butwal Traffic Chowk sub-hub.</p>
+<div class="mt-3">
+<span class="text-on-surface-variant">Order Amount: <strong>Rs. 1,150</strong> (COD)</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3 pt-1">
+<button class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-colors" onclick="resolveRefund('Pooja Joshi', 1150)">
+              Authorize Instant eSewa/Wallet Refund (Rs. 1,150)
+            </button>
+<button class="px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-semibold text-on-surface" onclick="alert('Seller instructed to dispatch brand new sealed replacement via DEX express')">
+              Order Merchant Replacement
+            </button>
+<button class="px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-semibold text-red-600" onclick="alert('Dispute dismissed due to verified customer fraud history')">
+              Reject Claim
+            </button>
+</div>
+</div>
+</section>
+<!-- ========================================================================= -->
+<!-- PAGE 8: SYSTEM SETTINGS & AUDIT LOGS -->
+<!-- ========================================================================= -->
+<section class="page-view hidden space-y-6" id="tab-settings">
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-surface-container-high shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+<div>
+<h2 class="font-headline-sm font-bold text-base text-on-surface">System Architecture &amp; Security Audit</h2>
+<p class="text-xs text-on-surface-variant">RBAC admin privileges, DEX Webhook endpoints, and security compliance logs</p>
+</div>
+<button class="px-4 py-2 rounded-lg bg-primary text-white text-xs font-bold" onclick="alert('Configuration saved to cloud repository.')">Save System State</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-surface-container-high shadow-sm space-y-3">
+<h3 class="font-bold text-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">webhook</span> Logistics &amp; Payment Webhooks
+            </h3>
+<div class="space-y-2 text-xs">
+<div class="p-2.5 bg-surface-container-low rounded flex justify-between items-center">
+<div>
+<div class="font-mono font-semibold">https://api.daraz.com.np/dex/webhook/v2</div>
+<div class="text-on-surface-variant text-[11px]">DEX Rider GPS &amp; POD Ping</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">HEALTHY</span>
+</div>
+<div class="p-2.5 bg-surface-container-low rounded flex justify-between items-center">
+<div>
+<div class="font-mono font-semibold">https://epay.esewa.com.np/daraz/ipn</div>
+<div class="text-on-surface-variant text-[11px]">eSewa Instant Payment Notification</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">HEALTHY</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-surface-container-high shadow-sm space-y-3">
+<h3 class="font-bold text-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[20px]">badge</span> Current Admin Session
+            </h3>
+<div class="p-3 bg-surface-container-low rounded-lg text-xs space-y-1.5">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Administrator:</span>
+<span class="font-bold text-on-surface">Amrit Raj (Super-Admin)</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Hardware 2FA:</span>
+<span class="text-emerald-700 font-semibold">YubiKey Hardware OTP Validated</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Last Audit Trace:</span>
+<span class="font-mono text-on-surface">2024-09-09 14:22:01 NPT</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- ========================================================================= -->
+<!-- MODAL: QUICK FLASH SALE 9.9 CAMPAIGN CREATOR -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4" id="quickCampaignModal">
+<div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+<div class="flex justify-between items-center">
+<h3 class="font-bold text-base text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">bolt</span> 9.9 Mega Flash Sale Wizard
+        </h3>
+<button class="p-1 text-slate-400 hover:text-slate-700" onclick="closeModal('quickCampaignModal')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="space-y-3 text-xs">
+<div>
+<label class="block font-semibold mb-1 text-on-surface">Campaign Name</label>
+<input class="w-full p-2 border rounded-lg" type="text" value="9.9 Mega Shopping Festival - Flash Rush 1"/>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block font-semibold mb-1 text-on-surface">Max Discount Cap</label>
+<input class="w-full p-2 border rounded-lg" type="text" value="70% OFF"/>
+</div>
+<div>
+<label class="block font-semibold mb-1 text-on-surface">Slot Duration</label>
+<input class="w-full p-2 border rounded-lg" type="text" value="4 Hours"/>
+</div>
+</div>
+</div>
+<div class="flex justify-end gap-2 pt-2">
+<button class="px-4 py-2 rounded-lg bg-slate-100 text-xs font-semibold" onclick="closeModal('quickCampaignModal')">Cancel</button>
+<button class="px-4 py-2 rounded-lg bg-primary text-white text-xs font-bold" onclick="alert('Flash Sale 9.9 slot successfully published live!'); closeModal('quickCampaignModal')">Publish to Homepage</button>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- MODAL: PLATFORM COUPON DROP GENERATOR -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4" id="couponModal">
+<div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+<div class="flex justify-between items-center">
+<h3 class="font-bold text-base text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">confirmation_number</span> Create Platform Voucher
+        </h3>
+<button class="p-1 text-slate-400 hover:text-slate-700" onclick="closeModal('couponModal')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="space-y-3 text-xs">
+<div>
+<label class="block font-semibold mb-1 text-on-surface">Voucher Promo Code</label>
+<input class="w-full p-2 border rounded-lg uppercase font-mono font-bold" type="text" value="DARAZFEST2024"/>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block font-semibold mb-1 text-on-surface">Discount Value (NPR)</label>
+<input class="w-full p-2 border rounded-lg" type="number" value="500"/>
+</div>
+<div>
+<label class="block font-semibold mb-1 text-on-surface">Min. Cart Spend (NPR)</label>
+<input class="w-full p-2 border rounded-lg" type="number" value="2500"/>
+</div>
+</div>
+<div>
+<label class="block font-semibold mb-1 text-on-surface">Total Available Quota</label>
+<input class="w-full p-2 border rounded-lg" type="number" value="10000"/>
+</div>
+</div>
+<div class="flex justify-end gap-2 pt-2">
+<button class="px-4 py-2 rounded-lg bg-slate-100 text-xs font-semibold" onclick="closeModal('couponModal')">Cancel</button>
+<button class="px-4 py-2 rounded-lg bg-primary text-white text-xs font-bold" onclick="alert('Coupon DARAZFEST2024 successfully generated and added to wallet drops!'); closeModal('couponModal')">Generate Voucher</button>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- MODAL: MANUAL SELLER ONBOARDING -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4" id="sellerOnboardModal">
+<div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+<div class="flex justify-between items-center">
+<h3 class="font-bold text-base text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">person_add</span> Fast Merchant Intake
+        </h3>
+<button class="p-1 text-slate-400 hover:text-slate-700" onclick="closeModal('sellerOnboardModal')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="space-y-3 text-xs">
+<div>
+<label class="block font-semibold mb-1 text-on-surface">Store / Business Name</label>
+<input class="w-full p-2 border rounded-lg" placeholder="e.g. Kathmandu Handicrafts Emporium" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block font-semibold mb-1 text-on-surface">9-Digit PAN / VAT</label>
+<input class="w-full p-2 border rounded-lg font-mono" placeholder="602984112" type="text"/>
+</div>
+<div>
+<label class="block font-semibold mb-1 text-on-surface">District Hub</label>
+<select class="w-full p-2 border rounded-lg bg-white">
+<option>Kathmandu (Valley)</option>
+<option>Lalitpur</option>
+<option>Pokhara (Gandaki)</option>
+<option>Biratnagar (Koshi)</option>
+<option>Other 73 Districts</option>
+</select>
+</div>
+</div>
+</div>
+<div class="flex justify-end gap-2 pt-2">
+<button class="px-4 py-2 rounded-lg bg-slate-100 text-xs font-semibold" onclick="closeModal('sellerOnboardModal')">Cancel</button>
+<button class="px-4 py-2 rounded-lg bg-primary text-white text-xs font-bold" onclick="alert('Seller registered and welcome kit sent to merchant email!'); closeModal('sellerOnboardModal')">Register Merchant</button>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- MODAL: ASSIGN RIDER -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4" id="assignRiderModal">
+<div class="bg-white rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+<div class="flex justify-between items-center">
+<h3 class="font-bold text-sm text-on-surface">Assign DEX Rider</h3>
+<button class="p-1 text-slate-400" onclick="closeModal('assignRiderModal')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="space-y-2 text-xs">
+<label class="block font-semibold text-on-surface">Select Available Hub Courier</label>
+<select class="w-full p-2 border rounded-lg bg-white">
+<option>Rider DB-41 (Dipesh B. - Baneshwor)</option>
+<option>Rider DB-18 (Sunil M. - Thapathali)</option>
+<option>Rider DB-99 (Kiran S. - Koteshwor)</option>
+</select>
+</div>
+<div class="flex justify-end gap-2 pt-2">
+<button class="w-full py-2 rounded-lg bg-primary text-white font-bold text-xs" onclick="alert('Rider DB-41 successfully assigned. Push notification triggered on rider handset.'); closeModal('assignRiderModal')">Confirm Rider Assignment</button>
+</div>
+</div>
+</div>
+<!-- JAVASCRIPT APP LOGIC -->
+<script>
+    // Tab switching system
+    function switchTab(tabId) {
+      // Hide all pages
+      document.querySelectorAll('.page-view').forEach(el => {
+        el.classList.add('hidden');
+      });
+
+      // Show selected page
+      const targetPage = document.getElementById(tabId);
+      if (targetPage) {
+        targetPage.classList.remove('hidden');
+      }
+
+      // Update Nav active style
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.remove('bg-primary', 'text-white');
+        el.classList.add('text-slate-300', 'hover:bg-sidebar-hover');
+      });
+
+      const activeNavId = 'nav-' + tabId.replace('tab-', '');
+      const activeNav = document.getElementById(activeNavId);
+      if (activeNav) {
+        activeNav.classList.remove('text-slate-300', 'hover:bg-sidebar-hover');
+        activeNav.classList.add('bg-primary', 'text-white');
+      }
+
+      // Update breadcrumb
+      const titles = {
+        'tab-overview': 'Overview & Realtime Command Center',
+        'tab-orders': 'Order Management & DEX Logistics',
+        'tab-catalog': 'Catalog & Category Commission Engine',
+        'tab-sellers': 'Seller Center & Legal KYC Verification',
+        'tab-campaigns': 'Marketing, CMS & Flash Sales Orchestrator',
+        'tab-finance': 'Financial Settlements & NCHL-IPS Payouts',
+        'tab-disputes': 'Buyer Protection, Returns & Fraud Guard',
+        'tab-settings': 'System Architecture & Audit Logs'
+      };
+      if (titles[tabId]) {
+        document.getElementById('breadcrumbCurrent').innerText = titles[tabId];
+      }
+    }
+
+    // Sidebar Collapsible Toggle
+    const sidebar = document.getElementById('mainSidebar');
+    const collapseBtn = document.getElementById('collapseBtn');
+    collapseBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('sidebar-collapsed');
+    });
+
+    // Navigation Search Filter
+    function filterNavItems() {
+      const q = document.getElementById('navSearchInput').value.toLowerCase();
+      document.querySelectorAll('#navMenuList .nav-item').forEach(item => {
+        const text = item.innerText.toLowerCase();
+        if (text.includes(q)) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    // Modal Helpers
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    // Actions & Handlers
+    function editTicker() {
+      const current = document.getElementById('activeTickerText').innerText;
+      const updated = prompt('Edit Live Broadcast Banner for all Nepal users:', current);
+      if (updated && updated.trim() !== '') {
+        document.getElementById('activeTickerText').innerText = updated;
+      }
+    }
+
+    function approveSeller(sellerName) {
+      alert('Approved ' + sellerName + '! PAN/VAT and Bank validated. Store status set to LIVE.');
+    }
+
+    function rejectSeller(sellerName) {
+      const reason = prompt('Specify rejection reason for ' + sellerName + ':', 'Scanned PAN document image is blurry or expired.');
+      if (reason) {
+        alert('Rejection notice and upload re-request link dispatched to ' + sellerName + '.');
+      }
+    }
+
+    function flagSuspiciousSeller(sellerName) {
+      alert('Flagged ' + sellerName + ' for compliance physical check. DEX inspection team assigned.');
+    }
+
+    function batchDispatchDEX() {
+      alert('Success! 450 packages in Kathmandu and Pokhara have been marked as Batch DEX Dispatched.');
+    }
+
+    function saveCommissions() {
+      const elec = document.getElementById('elecVal').innerText;
+      const fash = document.getElementById('fashVal').innerText;
+      const mart = document.getElementById('martVal').innerText;
+      alert('Rates updated: Electronics ' + elec + ', Fashion ' + fash + ', FMCG ' + mart + '. Live on marketplace.');
+    }
+
+    function executeDisbursement() {
+      const confirmPayout = confirm('Confirm disbursement of Rs. 42.85M via NCHL-IPS to 12,400 Nepal merchant accounts?');
+      if (confirmPayout) {
+        alert('Disbursement transaction batch dispatched to NCHL banking gateway.');
+      }
+    }
+
+    function resolveRefund(customerName, amount) {
+      alert('Instant refund of Rs. ' + amount + ' initiated to ' + customerName + ' via original payment rail.');
+    }
+  </script>
+</body></html>

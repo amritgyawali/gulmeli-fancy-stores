@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>Daraz Nepal Ops Central</title><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"outline":"#8f7065","on-tertiary-fixed":"#001f26","on-tertiary-container":"#f9fdff","on-tertiary-fixed-variant":"#004e5d","tertiary":"#006578","on-primary-fixed-variant":"#822800","tertiary-fixed-dim":"#68d5f1","surface-dim":"#dcd9d9","secondary-container":"#fccc19","primary-container":"#cf4500","surface-tint":"#aa3700","error-container":"#ffdad6","secondary-fixed":"#ffe088","on-secondary-container":"#6e5700","outline-variant":"#e4beb2","primary":"#a63600","on-primary-fixed":"#380d00","secondary":"#735c00","primary-fixed-dim":"#ffb59b","surface-container-highest":"#e5e2e1","secondary-fixed-dim":"#f0c100","background":"#fcf9f8","inverse-surface":"#303030","on-error-container":"#93000a","tertiary-container":"#008097","inverse-primary":"#ffb59b","primary-fixed":"#ffdbcf","surface-container-lowest":"#ffffff","on-secondary-fixed":"#241a00","on-surface":"#1b1c1c","error":"#ba1a1a","on-secondary":"#ffffff","surface-bright":"#fcf9f8","surface-variant":"#e5e2e1","tertiary-fixed":"#aeecff","on-background":"#1b1c1c","on-secondary-fixed-variant":"#574500","on-primary":"#ffffff","surface-container":"#f0eded","inverse-on-surface":"#f3f0ef","on-tertiary":"#ffffff","on-primary-container":"#fffbff","surface-container-high":"#eae7e7","surface-container-low":"#f6f3f2","on-surface-variant":"#5b4137","on-error":"#ffffff","surface":"#fcf9f8"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"margin-desktop":"1.5rem","margin":"0.75rem","space-xs":"0.25rem","space-md":"0.75rem","space-lg":"1rem","gutter":"0.75rem","gutter-desktop":"1rem","space-xl":"1.5rem","space-sm":"0.5rem"},"fontFamily":{"body-sm":["Roboto Flex"],"headline-lg":["Roboto Flex"],"headline-xl-mobile":["Roboto Flex"],"badge-micro":["Roboto Flex"],"headline-lg-mobile":["Roboto Flex"],"headline-md":["Roboto Flex"],"headline-sm":["Roboto Flex"],"label-sm":["Roboto Flex"],"price-hero":["Roboto Flex"],"body-md":["Roboto Flex"],"price-strikethrough":["Roboto Flex"],"body-lg":["Roboto Flex"],"price-card":["Roboto Flex"],"headline-xl":["Roboto Flex"],"label-md":["Roboto Flex"]},"fontSize":{"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}],"headline-lg":["24px",{"lineHeight":"32px","fontWeight":"700"}],"headline-xl-mobile":["24px",{"lineHeight":"32px","fontWeight":"700"}],"badge-micro":["10px",{"lineHeight":"12px","fontWeight":"700"}],"headline-lg-mobile":["20px",{"lineHeight":"28px","fontWeight":"700"}],"headline-md":["18px",{"lineHeight":"24px","fontWeight":"600"}],"headline-sm":["16px",{"lineHeight":"22px","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","fontWeight":"600"}],"price-hero":["28px",{"lineHeight":"36px","fontWeight":"700"}],"body-md":["13px",{"lineHeight":"18px","fontWeight":"400"}],"price-strikethrough":["12px",{"lineHeight":"16px","fontWeight":"400"}],"body-lg":["15px",{"lineHeight":"22px","fontWeight":"400"}],"price-card":["18px",{"lineHeight":"24px","fontWeight":"700"}],"headline-xl":["32px",{"lineHeight":"40px","fontWeight":"700"}],"label-md":["13px",{"lineHeight":"16px","fontWeight":"500"}]}}}}</script></head><body class="bg-surface-container-low font-body-md text-on-surface antialiased"><div class="fixed top-0 left-0 right-0 z-50 flex flex-col"><div class="h-8 w-full bg-inverse-surface text-inverse-on-surface px-space-md flex items-center justify-between text-label-sm font-label-sm shadow-[0_1px_8px_rgba(0,0,0,0.08)]"><div class="flex items-center gap-space-md"><span class="flex items-center gap-space-xs font-headline-sm text-label-sm text-primary-fixed"><span class="material-symbols-outlined text-[14px]">terminal</span>Daraz Nepal Ops Central v5.2</span><span class="h-3 w-px bg-outline/40"></span><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-tertiary-fixed">domain</span>Kathmandu HQ (77 District Hubs Active)</span><span class="h-3 w-px bg-outline/40"></span><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-secondary-container">speed</span>DEX SLA: 99.4%</span></div><div class="flex items-center gap-space-md"><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-tertiary-fixed">account_balance_wallet</span>eSewa/Khalti: 100% OK</span><span class="h-3 w-px bg-outline/40"></span><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-tertiary-fixed">chevron_forward</span>NCHL-IPS Synced</span><span class="h-3 w-px bg-outline/40"></span><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-tertiary-fixed">receipt_long</span>IRD CBMS Live</span><span class="h-3 w-px bg-outline/40"></span><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-on-surface-variant">schedule</span>NPT +05:45</span><span class="h-3 w-px bg-outline/40"></span><span class="text-primary-fixed-dim font-label-sm">Amrit Raj (Head of Ops)</span></div></div><header class="h-16 w-full bg-surface-container-lowest text-on-surface px-space-xl flex items-center justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-xl"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[20px]">local_shipping</span></div><div class="flex flex-col"><span class="text-headline-sm font-headline-sm text-primary tracking-tight leading-none">daraz</span><span class="text-badge-micro font-badge-micro uppercase tracking-wider text-tertiary leading-tight">Express Logistics</span></div></div><div class="relative w-96"><span class="material-symbols-outlined absolute left-space-md top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span><input class="w-full h-10 pl-10 pr-16 bg-surface-container-low text-on-surface placeholder:text-on-surface-variant text-body-md rounded-lg focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Search AWB, Seller ID, Rider Name, 77 Hubs (Ctrl+K)..." type="text"/><kbd class="absolute right-space-md top-1/2 -translate-y-1/2 text-badge-micro font-badge-micro bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded">Ctrl+K</kbd></div></div><div class="flex items-center gap-space-md"><button class="h-9 px-space-md bg-primary hover:bg-primary-container text-on-primary text-label-md font-label-md rounded-lg flex items-center gap-space-xs transition-colors shadow-[0_1px_4px_rgba(0,0,0,0.08)]" type="button"><span class="material-symbols-outlined text-[18px]">add_circle</span>+ Dispatch Run</button><button class="h-9 px-space-md bg-surface-container text-on-surface hover:bg-surface-container-high text-label-md font-label-md rounded-lg flex items-center gap-space-xs transition-colors" type="button"><span class="material-symbols-outlined text-[18px] text-tertiary">share_location</span>Rider Fleet GPS</button><button class="h-9 px-space-md bg-surface-container text-on-surface hover:bg-surface-container-high text-label-md font-label-md rounded-lg flex items-center gap-space-xs transition-colors" type="button"><span class="material-symbols-outlined text-[18px] text-secondary">satellite_alt</span>Weather Radar</button><div class="h-6 w-px bg-surface-container-highest mx-space-xs"></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header></div><aside class="fixed left-0 top-24 bottom-0 w-72 bg-surface-container-lowest overflow-y-auto z-40 py-space-md flex flex-col justify-between shadow-[1px_0_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col gap-space-sm px-space-md"><div class="text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant px-space-md pt-space-xs">Command &amp; Oversight</div><nav class="flex flex-col gap-0.5" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm"><a class="flex items-center gap-space-md px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="dashboard-and-live-analytics" href="#"><span class="material-symbols-outlined text-[18px]">analytics</span>Dashboard &amp; Live Analytics</a></nav><div class="text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant px-space-md pt-space-sm">Retail Engine</div><nav class="flex flex-col gap-0.5" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm"><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="orders-management" href="#"><span class="material-symbols-outlined text-[18px]">inventory_2</span>Orders Management</a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="catalog-and-assortment" href="#"><span class="material-symbols-outlined text-[18px]">view_list</span>Catalog Assortment</a></nav><div class="text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant px-space-md pt-space-sm">Vendors &amp; Compliance</div><nav class="flex flex-col gap-0.5" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm"><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="verified-sellers-and-onboarding" href="#"><span class="material-symbols-outlined text-[18px]">store</span>Verified Sellers</a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="kyc-maker-checker" href="#"><span class="material-symbols-outlined text-[18px]">verified_user</span>KYC Maker-Checker</a></nav><div class="text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant px-space-md pt-space-sm">Logistics Network (DEX)</div><nav class="flex flex-col gap-0.5" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm"><a aria-current="page" class="flex items-center justify-between px-space-md py-2 rounded-lg transition-colors bg-primary-container text-on-primary-container font-headline-sm" data-path="77-district-hub-matrix" href="#"><span class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[18px]">hub</span>77 District Hub Matrix</span><span class="px-1.5 py-0.5 rounded bg-tertiary-container text-on-tertiary-container font-badge-micro text-badge-micro">LIVE</span></a><a class="flex items-center justify-between px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="dex-last-mile-fleet" href="#"><span class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[18px]">two_wheeler</span>DEX Last-Mile Fleet</span><span class="font-badge-micro text-badge-micro text-on-surface-variant">1,240</span></a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="3pl-couriers-dispatch" href="#"><span class="material-symbols-outlined text-[18px]">alt_route</span>3PL Couriers (Pathao/NCM)</a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="reverse-logistics-qc-lab" href="#"><span class="material-symbols-outlined text-[18px]">assignment_return</span>Reverse Logistics QC Lab</a></nav><div class="text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant px-space-md pt-space-sm">Governance &amp; Core</div><nav class="flex flex-col gap-0.5" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm"><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="finance-ird-and-nchl-recon" href="#"><span class="material-symbols-outlined text-[18px]">account_balance</span>Finance, IRD &amp; NCHL Recon</a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="trust-risk-and-bot-guard" href="#"><span class="material-symbols-outlined text-[18px]">security</span>Trust, Risk &amp; Bot Guard</a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="system-and-rbac-control" href="#"><span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>System &amp; RBAC Control</a></nav></div><div class="px-space-md pt-space-md"><div class="bg-surface-container p-space-md rounded-lg flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="text-label-sm font-label-sm text-on-surface">Kathmandu Sort Hub</span><span class="text-badge-micro font-badge-micro text-tertiary font-bold">98.6% CAP</span></div><div class="w-full bg-surface-container-high rounded-full h-1.5 overflow-hidden"><div class="bg-primary h-1.5 rounded-full w-11/12"></div></div><span class="text-badge-micro font-badge-micro text-on-surface-variant">Peak festive dispatch load active</span></div></div></aside><div class="pl-72"><main class="relative pt-24 min-h-[calc(100vh-140px)] w-full px-space-xl py-space-lg bg-surface-container-low"><div class="flex flex-col w-full space-y-space-lg">
+<!-- Top Context & Navigation Bar -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant">
+<span class="hover:text-primary transition-colors cursor-pointer">Daraz Nepal Admin</span>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<span class="hover:text-primary transition-colors cursor-pointer">Operations &amp; Logistics (DEX)</span>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<span class="text-primary font-bold">77 District Hub Matrix &amp; Routing Engine</span>
+</div>
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-md pt-space-xs">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-sm flex-wrap">
+<h1 class="text-headline-lg font-headline-lg text-on-surface tracking-tight">DEX 77-District Hub Routing Matrix &amp; Inter-Hub Transit Engine</h1>
+<span class="px-2 py-0.5 rounded-full bg-primary-container text-on-primary-container text-badge-micro font-badge-micro tracking-wider uppercase">Festive 2024 Peak Load</span>
+<span class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed text-badge-micro font-badge-micro">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-ping"></span>
+            Live Telemetry Active
+          </span>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant mt-0.5">
+          Real-time hub telemetry, automated monsoon highway detour switching, rider capacity balancing across all 7 provinces, and live waybill routing rules.
+        </p>
+</div>
+<div class="flex items-center gap-space-sm flex-wrap">
+<button class="h-9 px-space-md rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-tertiary text-label-md font-label-md flex items-center gap-space-xs shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">satellite_alt</span>
+          Weather Radar: <span class="font-bold text-tertiary-container">ACTIVE</span>
+</button>
+<button class="h-9 px-space-md rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface text-label-md font-label-md flex items-center gap-space-xs shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">add_location_alt</span>
+          + Provision New Hub Node
+        </button>
+<button class="h-9 px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary text-label-md font-label-md flex items-center gap-space-xs shadow-md transition-all active:scale-95" id="btn-recalc" type="button">
+<span class="material-symbols-outlined text-[18px] animate-spin-slow">bolt</span>
+          Recalculate AI Routing Matrix
+        </button>
+<button class="h-9 px-space-md rounded-lg bg-surface-container-lowest text-on-surface-variant hover:text-on-surface text-label-md font-label-md flex items-center gap-space-xs shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+          Export Manifest
+        </button>
+</div>
+</div>
+<!-- Province Presets Bar -->
+<div class="flex items-center gap-space-xs overflow-x-auto py-1 mt-1">
+<span class="text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant pr-space-xs shrink-0">Filter Province:</span>
+<button class="province-btn active-tab px-space-md py-1.5 rounded-lg text-label-sm font-label-sm bg-primary text-on-primary shadow-sm whitespace-nowrap transition-all" data-filter="all">All 7 Provinces (77 Hubs)</button>
+<button class="province-btn px-space-md py-1.5 rounded-lg text-label-sm font-label-sm bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant whitespace-nowrap transition-all" data-filter="bagmati">Bagmati (32 Hubs)</button>
+<button class="province-btn px-space-md py-1.5 rounded-lg text-label-sm font-label-sm bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant whitespace-nowrap transition-all" data-filter="koshi">Koshi (14 Hubs)</button>
+<button class="province-btn px-space-md py-1.5 rounded-lg text-label-sm font-label-sm bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant whitespace-nowrap transition-all" data-filter="gandaki">Gandaki (11 Hubs)</button>
+<button class="province-btn px-space-md py-1.5 rounded-lg text-label-sm font-label-sm bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant whitespace-nowrap transition-all" data-filter="lumbini">Lumbini (12 Hubs)</button>
+<button class="province-btn px-space-md py-1.5 rounded-lg text-label-sm font-label-sm bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant whitespace-nowrap transition-all" data-filter="remote">Karnali / Sudurpashchim (8 Hubs)</button>
+</div>
+</div>
+<!-- Executive Logistics KPI Metric Ribbon (6 Metric Bento Grid) -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-space-md">
+<!-- KPI 1 -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col justify-between group hover:shadow-md transition-all">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="text-badge-micro font-badge-micro uppercase tracking-wider">Active Hub Nodes</span>
+<span class="material-symbols-outlined text-[20px] text-tertiary">hub</span>
+</div>
+<div class="mt-space-sm">
+<div class="flex items-baseline gap-1.5">
+<span class="text-price-hero font-price-hero text-on-surface leading-tight">77</span>
+<span class="text-body-md font-body-md text-on-surface-variant">/ 77 Online</span>
+</div>
+<div class="flex items-center justify-between mt-1 text-label-sm font-label-sm text-tertiary">
+<span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-[14px]">check_circle</span>99.4% SLA</span>
+<span class="text-on-surface-variant font-normal">Target &gt; 98.5%</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1 rounded-full overflow-hidden mt-space-sm">
+<div class="bg-tertiary h-full rounded-full" style="width: 99.4%;"></div>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col justify-between group hover:shadow-md transition-all">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="text-badge-micro font-badge-micro uppercase tracking-wider">In-Transit Linehauls</span>
+<span class="material-symbols-outlined text-[20px] text-primary">local_shipping</span>
+</div>
+<div class="mt-space-sm">
+<div class="flex items-baseline gap-1.5">
+<span class="text-price-hero font-price-hero text-primary leading-tight">142</span>
+<span class="text-body-md font-body-md text-on-surface-variant">Heavy Trucks</span>
+</div>
+<div class="flex items-center gap-1 mt-1 text-label-sm font-label-sm text-on-surface-variant truncate">
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+<span>Mugling–Narayanghat Monitored</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1 rounded-full overflow-hidden mt-space-sm">
+<div class="bg-primary h-full rounded-full" style="width: 82%;"></div>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col justify-between group hover:shadow-md transition-all">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="text-badge-micro font-badge-micro uppercase tracking-wider">Last-Mile DEX Fleet</span>
+<span class="material-symbols-outlined text-[20px] text-tertiary-container">two_wheeler</span>
+</div>
+<div class="mt-space-sm">
+<div class="flex items-baseline gap-1.5">
+<span class="text-price-hero font-price-hero text-on-surface leading-tight">1,240</span>
+<span class="text-badge-micro font-badge-micro px-1.5 py-0.5 rounded bg-surface-container-high text-tertiary">84% Utilized</span>
+</div>
+<div class="flex items-center gap-1 mt-1 text-label-sm font-label-sm text-on-surface-variant truncate">
+<span class="material-symbols-outlined text-[14px] text-tertiary">electric_moped</span>
+<span>182 EV 2-Wheelers KTM</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1 rounded-full overflow-hidden mt-space-sm">
+<div class="bg-tertiary-container h-full rounded-full" style="width: 84%;"></div>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col justify-between group hover:shadow-md transition-all">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="text-badge-micro font-badge-micro uppercase tracking-wider">Monsoon Road Alerts</span>
+<span class="material-symbols-outlined text-[20px] text-error">warning</span>
+</div>
+<div class="mt-space-sm">
+<div class="flex items-baseline gap-1.5">
+<span class="text-price-hero font-price-hero text-error leading-tight">3</span>
+<span class="text-body-md font-body-md text-error">Active Detours</span>
+</div>
+<div class="flex items-center gap-1 mt-1 text-label-sm font-label-sm text-on-surface-variant truncate">
+<span class="material-symbols-outlined text-[14px] text-error">landslide</span>
+<span>BP Highway: +24h SLA Buffer</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1 rounded-full overflow-hidden mt-space-sm">
+<div class="bg-error h-full rounded-full" style="width: 38%;"></div>
+</div>
+</div>
+<!-- KPI 5 -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col justify-between group hover:shadow-md transition-all">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="text-badge-micro font-badge-micro uppercase tracking-wider">Avg Last-Mile Speed</span>
+<span class="material-symbols-outlined text-[20px] text-tertiary">schedule</span>
+</div>
+<div class="mt-space-sm">
+<div class="flex items-baseline gap-1.5">
+<span class="text-price-hero font-price-hero text-on-surface leading-tight">18.4</span>
+<span class="text-body-md font-body-md text-on-surface-variant">hours avg</span>
+</div>
+<div class="flex items-center gap-1 mt-1 text-label-sm font-label-sm text-tertiary truncate">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+<span>Valley Same-Day: 94.8%</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1 rounded-full overflow-hidden mt-space-sm">
+<div class="bg-secondary-fixed-dim h-full rounded-full" style="width: 76%;"></div>
+</div>
+</div>
+<!-- KPI 6 -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col justify-between group hover:shadow-md transition-all">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="text-badge-micro font-badge-micro uppercase tracking-wider">3PL Overflow Rate</span>
+<span class="material-symbols-outlined text-[20px] text-secondary">alt_route</span>
+</div>
+<div class="mt-space-sm">
+<div class="flex items-baseline gap-1.5">
+<span class="text-price-hero font-price-hero text-secondary leading-tight">14.2%</span>
+<span class="text-body-md font-body-md text-on-surface-variant">Delegated</span>
+</div>
+<div class="flex items-center gap-1 mt-1 text-label-sm font-label-sm text-on-surface-variant truncate">
+<span class="material-symbols-outlined text-[14px] text-tertiary">swap_horiz</span>
+<span>Pathao (8.4%) • NCM (4.6%)</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1 rounded-full overflow-hidden mt-space-sm">
+<div class="bg-secondary-container h-full rounded-full" style="width: 14.2%;"></div>
+</div>
+</div>
+</section>
+<!-- Main Split Console Grid (Left 65% / Right 35%) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT COLUMN (65% -> col-span-8) -->
+<div class="lg:col-span-8 flex flex-col space-y-space-md">
+<!-- Monsoon Contingency Callout Banner -->
+<div class="rounded-xl bg-error-container text-on-error-container p-space-md shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-error text-on-error flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+<span class="material-symbols-outlined text-[22px]">flood</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="text-headline-sm font-headline-sm tracking-tight text-on-error-container">Prithvi Highway &amp; BP Highway Monsoon Contingency Active</span>
+<span class="px-2 py-0.5 rounded bg-error text-on-error text-badge-micro font-badge-micro uppercase">Level-3 Detour</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5 leading-relaxed">
+              Automated reroute through Postal Highway (<span class="font-semibold text-on-error-container">Hulaki Rajmarg</span>) engaged for Koshi &amp; Madhesh linehauls. Automated +18h SLA buffer injected on buyer-facing app waybills to safeguard seller penalty metrics.
+            </p>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0 self-end md:self-center">
+<button class="h-8 px-space-md rounded-lg bg-surface-container-lowest text-error hover:bg-surface-container text-label-sm font-label-sm shadow-sm transition-colors" type="button">
+            View Live Hydro Log
+          </button>
+<button class="h-8 px-space-md rounded-lg bg-error hover:bg-error/90 text-on-error text-label-sm font-label-sm shadow-sm transition-colors flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+            Adjust SLA Buffers
+          </button>
+</div>
+</div>
+<!-- 77-District Hub Operations Matrix Card -->
+<div class="rounded-xl bg-surface-container-lowest shadow-sm overflow-hidden flex flex-col">
+<!-- Table Header Bar & Filter Tabs -->
+<div class="p-space-md bg-surface-container-lowest flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded bg-primary-fixed flex items-center justify-center text-on-primary-fixed">
+<span class="material-symbols-outlined text-[18px]">dns</span>
+</div>
+<div>
+<h2 class="text-headline-md font-headline-md text-on-surface leading-tight">District Hub Operational Matrix</h2>
+<span class="text-badge-micro font-badge-micro uppercase text-on-surface-variant tracking-wider">77 Nodes Real-time Mesh • NPT 14:48:22</span>
+</div>
+</div>
+<!-- Status Pill Tabs -->
+<div class="flex items-center gap-1 bg-surface-container p-1 rounded-lg">
+<button class="hub-tab active px-space-sm py-1 rounded text-label-sm font-label-sm bg-surface-container-lowest text-on-surface shadow-xs transition-all" data-status="all">All 77 (77)</button>
+<button class="hub-tab px-space-sm py-1 rounded text-label-sm font-label-sm text-on-surface-variant hover:text-on-surface transition-all" data-status="optimal">Optimal (64)</button>
+<button class="hub-tab px-space-sm py-1 rounded text-label-sm font-label-sm text-on-surface-variant hover:text-on-surface transition-all" data-status="warning">Capacity (8)</button>
+<button class="hub-tab px-space-sm py-1 rounded text-label-sm font-label-sm text-on-surface-variant hover:text-on-surface transition-all" data-status="detour">Weather Detour (5)</button>
+</div>
+</div>
+<!-- Table Responsive Container -->
+<div class="overflow-x-auto">
+<table class="w-full text-left text-body-md font-body-md">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant text-label-sm font-label-sm uppercase tracking-wider">
+<th class="py-space-sm px-space-md">Hub Name &amp; Code</th>
+<th class="py-space-sm px-space-md">Province</th>
+<th class="py-space-sm px-space-md">Category</th>
+<th class="py-space-sm px-space-md">Inbound / Outbound</th>
+<th class="py-space-sm px-space-md">Fleet &amp; SLA</th>
+<th class="py-space-sm px-space-md">COD Vault Cache</th>
+<th class="py-space-sm px-space-md">Status &amp; Action</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 text-on-surface">
+<!-- Hub 1: Kathmandu Central -->
+<tr class="hub-row hover:bg-surface-container-low/70 transition-colors cursor-pointer bg-surface-container-lowest group" onclick="selectHub('Kathmandu Central Sortation (KTM-HQ-01)', 'Bagmati', 'Tier-1 Mother Hub', '18,420', '12,140', '340 Riders (99.6% SLA)', 'Rs. 4,850,200', 'Suman Shrestha', '4,800/hr', 'Wave 3')">
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-2 h-8 rounded bg-primary"></div>
+<div>
+<div class="font-headline-sm text-label-md text-on-surface flex items-center gap-1.5">
+                        Kathmandu Central Sortation
+                        <span class="px-1.5 py-0.2 rounded bg-surface-container text-tertiary text-badge-micro font-badge-micro">HQ</span>
+</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Thapathali KTM-HQ-01</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm">Bagmati</span>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-label-sm text-label-sm text-primary">Mother Hub</span>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface">18,420 <span class="text-tertiary text-badge-micro">↓ IN</span></span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">12,140 <span class="text-primary text-badge-micro">↑ OUT</span></span>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm">340 Riders</span>
+<span class="text-badge-micro font-badge-micro text-tertiary font-bold">99.6% SLA (Peak)</span>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Rs. 4,850,200</span>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Armored pickup 17:30</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed text-badge-micro font-badge-micro uppercase flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>Optimal
+                    </span>
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface text-label-sm font-label-sm transition-colors shadow-xs" type="button">
+                      Manage
+                    </button>
+</div>
+</td>
+</tr>
+<!-- Hub 2: Pokhara Western Hub -->
+<tr class="hub-row hover:bg-surface-container-low/70 transition-colors cursor-pointer bg-surface-container-low/30 group" onclick="selectHub('Pokhara Western Hub (PKR-01)', 'Gandaki', 'Primary Regional Hub', '4,210', '3,890', '145 Riders (98.9% SLA)', 'Rs. 1,420,900', 'Bikash Gurung', '1,650/hr', 'Wave 2')">
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-2 h-8 rounded bg-tertiary"></div>
+<div>
+<div class="font-headline-sm text-label-md text-on-surface">Pokhara Western Hub</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Prithvi Chowk PKR-01</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm">Gandaki</span>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-label-sm text-label-sm text-on-surface">Primary Regional</span>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface">4,210 <span class="text-tertiary text-badge-micro">↓ IN</span></span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">3,890 <span class="text-primary text-badge-micro">↑ OUT</span></span>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm">145 Riders</span>
+<span class="text-badge-micro font-badge-micro text-tertiary font-bold">98.9% SLA</span>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Rs. 1,420,900</span>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Vault Verified</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed text-badge-micro font-badge-micro uppercase flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>Optimal
+                    </span>
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface text-label-sm font-label-sm transition-colors shadow-xs" type="button">
+                      Manage
+                    </button>
+</div>
+</td>
+</tr>
+<!-- Hub 3: Biratnagar Eastern Hub (Severe Weather / Detour) -->
+<tr class="hub-row hover:bg-surface-container-low/70 transition-colors cursor-pointer bg-error-container/20 group" onclick="selectHub('Biratnagar Eastern Hub (BRT-01)', 'Koshi', 'Primary Regional Hub', '3,840', '3,110', '110 Riders (91.2% SLA)', 'Rs. 859,440', 'Ramesh Chaudhary', '1,200/hr', 'Wave 2 (Detoured)')">
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-2 h-8 rounded bg-error"></div>
+<div>
+<div class="font-headline-sm text-label-md text-on-surface flex items-center gap-1">
+                        Biratnagar Eastern Hub
+                        <span class="material-symbols-outlined text-[16px] text-error">thunderstorm</span>
+</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Main Road BRT-01</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm">Koshi</span>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-label-sm text-label-sm text-on-surface">Primary Regional</span>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface">3,840 <span class="text-tertiary text-badge-micro">↓ IN</span></span>
+<span class="text-body-sm font-body-sm text-error">3,110 <span class="text-badge-micro">Delayed</span></span>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm">110 Riders</span>
+<span class="text-badge-micro font-badge-micro text-error font-bold">91.2% (Weather Alert)</span>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Rs. 859,440</span>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">eSewa Recon Done</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-error-container text-on-error-container text-badge-micro font-badge-micro uppercase flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span>Detour Active
+                    </span>
+<button class="px-2.5 py-1 rounded bg-error hover:bg-error/90 text-on-error text-label-sm font-label-sm transition-colors shadow-xs" type="button">
+                      Detour Route
+                    </button>
+</div>
+</td>
+</tr>
+<!-- Hub 4: Butwal Lumbini Gateway -->
+<tr class="hub-row hover:bg-surface-container-low/70 transition-colors cursor-pointer bg-surface-container-lowest group" onclick="selectHub('Butwal Lumbini Gateway (BTW-01)', 'Lumbini', 'Secondary Sort Hub', '2,450', '2,120', '78 Riders (97.8% SLA)', 'Rs. 620,100', 'Prakash Thapa', '920/hr', 'Wave 3')">
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-2 h-8 rounded bg-secondary"></div>
+<div>
+<div class="font-headline-sm text-label-md text-on-surface">Butwal Lumbini Gateway</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Traffic Chowk BTW-01</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm">Lumbini</span>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-label-sm text-label-sm text-on-surface">Secondary Sort</span>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface">2,450 <span class="text-tertiary text-badge-micro">↓ IN</span></span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">2,120 <span class="text-primary text-badge-micro">↑ OUT</span></span>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm">78 Riders</span>
+<span class="text-badge-micro font-badge-micro text-tertiary font-bold">97.8% SLA</span>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Rs. 620,100</span>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Bank Transfer Pending</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed text-badge-micro font-badge-micro uppercase flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>Optimal
+                    </span>
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface text-label-sm font-label-sm transition-colors shadow-xs" type="button">
+                      Manage
+                    </button>
+</div>
+</td>
+</tr>
+<!-- Hub 5: Jumla High-Altitude Hub (Remote Feeder) -->
+<tr class="hub-row hover:bg-surface-container-low/70 transition-colors cursor-pointer bg-surface-container-low/20 group" onclick="selectHub('Jumla High-Altitude Hub (JML-01)', 'Karnali', 'Remote Feeder Hub', '240', '210', '14 Mountain Couriers (88.4% SLA)', 'Rs. 48,200', 'Dorje Lama', 'Manual Scan', 'Air Wave 1')">
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-2 h-8 rounded bg-outline"></div>
+<div>
+<div class="font-headline-sm text-label-md text-on-surface flex items-center gap-1">
+                        Jumla High-Altitude Hub
+                        <span class="material-symbols-outlined text-[16px] text-tertiary-container">flight_takeoff</span>
+</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Chandannath JML-01</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm">Karnali</span>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Remote Feeder</span>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface">240 <span class="text-tertiary text-badge-micro">↓ AIR</span></span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">210 <span class="text-primary text-badge-micro">↑ OUT</span></span>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm">14 Couriers</span>
+<span class="text-badge-micro font-badge-micro text-secondary-container bg-inverse-surface px-1 rounded font-bold">88.4% SLA</span>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Rs. 48,200</span>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Weekly Post Recon</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface text-badge-micro font-badge-micro uppercase flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>Air Linked
+                    </span>
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-tertiary hover:text-on-tertiary text-on-surface text-label-sm font-label-sm transition-colors shadow-xs" type="button">
+                      Flight Track
+                    </button>
+</div>
+</td>
+</tr>
+<!-- Hub 6: Dhangadhi Sudurpashchim Hub -->
+<tr class="hub-row hover:bg-surface-container-low/70 transition-colors cursor-pointer bg-surface-container-lowest group" onclick="selectHub('Dhangadhi Sudurpashchim Hub (DHG-01)', 'Sudurpashchim', 'Secondary Sort Hub', '1,890', '1,650', '52 Riders (96.5% SLA)', 'Rs. 410,000', 'Ganesh Bhatta', '750/hr', 'Wave 2')">
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-2 h-8 rounded bg-tertiary-container"></div>
+<div>
+<div class="font-headline-sm text-label-md text-on-surface">Dhangadhi Sudurpashchim Hub</div>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Main Chauraha DHG-01</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm">Sudurpashchim</span>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-label-sm text-label-sm text-on-surface">Secondary Sort</span>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface">1,890 <span class="text-tertiary text-badge-micro">↓ IN</span></span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">1,650 <span class="text-primary text-badge-micro">↑ OUT</span></span>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm">52 Riders</span>
+<span class="text-badge-micro font-badge-micro text-tertiary font-bold">96.5% SLA</span>
+</div>
+</td>
+<td class="py-3 px-space-md">
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Rs. 410,000</span>
+<div class="text-badge-micro font-badge-micro text-on-surface-variant">Branch Deposit Done</div>
+</td>
+<td class="py-3 px-space-md">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed text-badge-micro font-badge-micro uppercase flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>Optimal
+                    </span>
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface text-label-sm font-label-sm transition-colors shadow-xs" type="button">
+                      Manage
+                    </button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer / Micro Summary -->
+<div class="p-space-md bg-surface-container-low flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm text-body-sm font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-space-md">
+<span>Displaying 6 of 77 Hub Nodes</span>
+<span class="w-1 h-1 rounded-full bg-outline"></span>
+<span>Total Real-time COD under Transit: <strong class="text-on-surface">Rs. 8,208,640</strong></span>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-7 h-7 rounded bg-surface-container-lowest text-on-surface flex items-center justify-center hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[16px]">chevron_left</span></button>
+<span class="px-2 text-label-sm font-label-sm font-bold text-on-surface">Page 1 / 13</span>
+<button class="w-7 h-7 rounded bg-surface-container-lowest text-on-surface flex items-center justify-center hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[16px]">chevron_right</span></button>
+</div>
+</div>
+</div>
+<!-- Hub Operational Visual Card & Real-time Dispatch Wave Progress -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Live Hub Sorter Floor Visual -->
+<div class="rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="text-headline-sm font-headline-sm text-on-surface">Thapathali Central Automated Sorter</span>
+<span class="px-2 py-0.5 rounded bg-tertiary text-on-tertiary text-badge-micro font-badge-micro uppercase font-bold">Live Visual</span>
+</div>
+<div class="relative w-full h-44 rounded-lg overflow-hidden bg-surface-container flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="High angle shot of modern high-velocity e-commerce logistics sortation facility in Kathmandu Nepal with orange conveyor belts automated barcode scanning gantries packages moving rapidly under bright industrial lights workers with handheld scanners" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNUaVkfsfG4CSioUvEdzFdeZ_V3uGenRwdsf_wPoClLMKEdDqhHy9Wh_gtInVhBimvJ3l6nO6DZbVZzeiXLcTj4LwSOyCJhJmFjYW5P2PAS0IoiOir6nFrW-bmNJxGuxy8sv3i75e9lVqLzlXGry2nq2OA5E9HipIaoAzzY_gGaLw5YTZA0DFuc8BUfhMO7sb7hM2NjowmtYxtNvovtULdwVebExAGrVFNAr1nvqQvfmjRoZsUh_ML"/>
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/80 via-transparent to-transparent flex items-end p-space-md">
+<div class="flex items-center justify-between w-full text-inverse-on-surface text-label-sm font-label-sm">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>Gantry Scan Accuracy: 99.98%</span>
+<span class="text-secondary-fixed">Belt 04 • 4,800 pkgs/hr</span>
+</div>
+</div>
+</div>
+<div class="mt-space-sm grid grid-cols-3 gap-space-xs text-center text-label-sm font-label-sm">
+<div class="p-1.5 rounded bg-surface-container-low">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant block">SCAN TIME</span>
+<strong class="text-on-surface">140 ms</strong>
+</div>
+<div class="p-1.5 rounded bg-surface-container-low">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant block">MISROUTE RATE</span>
+<strong class="text-tertiary">0.02%</strong>
+</div>
+<div class="p-1.5 rounded bg-surface-container-low">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant block">JAM SENSORS</span>
+<strong class="text-on-surface">ALL CLEAR</strong>
+</div>
+</div>
+</div>
+<!-- Wave Dispatch Fleet Balance -->
+<div class="rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="text-headline-sm font-headline-sm text-on-surface">Valley Wave Dispatch Status</span>
+<span class="text-badge-micro font-badge-micro uppercase tracking-wider text-primary font-bold">Wave 3 / 4 In-Flight</span>
+</div>
+<div class="flex flex-col space-y-space-sm">
+<div>
+<div class="flex items-center justify-between text-label-sm font-label-sm mb-1">
+<span class="text-on-surface">Wave 1: Morning Rush (07:00 - 11:00)</span>
+<span class="font-bold text-tertiary">100% Completed</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between text-label-sm font-label-sm mb-1">
+<span class="text-on-surface">Wave 2: Midday Commercial (11:00 - 14:00)</span>
+<span class="font-bold text-tertiary">98.4% Delivered</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 98.4%;"></div>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between text-label-sm font-label-sm mb-1">
+<span class="text-on-surface font-semibold">Wave 3: Prime Residential (14:00 - 18:00)</span>
+<span class="font-bold text-primary animate-pulse">62.8% Active</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 62.8%;"></div>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between text-label-sm font-label-sm mb-1">
+<span class="text-on-surface-variant">Wave 4: Night Owl Express (18:00 - 21:00)</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">Queued (1,420 Parcels)</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-surface-container-highest h-full rounded-full" style="width: 0%;"></div>
+</div>
+</div>
+</div>
+<div class="mt-space-sm p-2 rounded bg-surface-container-low flex items-center justify-between text-label-sm font-label-sm">
+<span class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-tertiary">battery_charging_full</span>
+              182 EV Battery Swap Stations
+            </span>
+<span class="font-semibold text-tertiary">94% Fleet Charged</span>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN (35% -> col-span-4) -->
+<div class="lg:col-span-4 flex flex-col space-y-space-md">
+<!-- Nepal Inter-Hub Linehaul Radar & Topology -->
+<div class="rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[20px] text-primary">route</span>
+<h2 class="text-headline-sm font-headline-sm text-on-surface">Nepal Inter-Hub Linehaul Radar</h2>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container text-tertiary font-badge-micro text-badge-micro font-bold uppercase">Corridors Live</span>
+</div>
+<!-- Arterial Corridor Status Cards -->
+<div class="space-y-space-sm">
+<!-- Corridor 1: Central Bagmati Spine -->
+<div class="p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between mb-1">
+<span class="text-label-md font-label-md text-on-surface font-semibold">Central Bagmati Spine</span>
+<span class="px-2 py-0.2 rounded bg-tertiary-fixed text-on-tertiary-fixed text-badge-micro font-badge-micro font-bold">GREEN CLEAR</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+              Kathmandu → Narayanghat → Hetauda • 44 Linehauls Active
+            </p>
+<div class="mt-2 flex items-center justify-between text-badge-micro font-badge-micro text-on-surface-variant">
+<span>Avg Speed: 48 km/h</span>
+<span class="text-tertiary font-bold">Clear of Monsoon Slides</span>
+</div>
+</div>
+<!-- Corridor 2: Western Gandaki/Lumbini -->
+<div class="p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between mb-1">
+<span class="text-label-md font-label-md text-on-surface font-semibold">Western Gandaki/Lumbini</span>
+<span class="px-2 py-0.2 rounded bg-secondary-fixed text-on-secondary-fixed text-badge-micro font-badge-micro font-bold">CONGESTION</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+              Mugling → Pokhara → Butwal → Nepalgunj • 58 Trucks
+            </p>
+<div class="mt-2 flex items-center justify-between text-badge-micro font-badge-micro text-on-surface-variant">
+<span>Mugling Km 32: Light Drizzle</span>
+<span class="text-secondary font-bold">Pacing: 24 km/h</span>
+</div>
+</div>
+<!-- Corridor 3: Eastern Koshi/Madhesh -->
+<div class="p-space-sm rounded-lg bg-error-container/30 hover:bg-error-container/40 transition-all">
+<div class="flex items-center justify-between mb-1">
+<span class="text-label-md font-label-md text-on-surface font-semibold">Eastern Koshi/Madhesh Transit</span>
+<span class="px-2 py-0.2 rounded bg-error text-on-error text-badge-micro font-badge-micro font-bold">DETOUR ACTIVE</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-error-container">
+              BP Highway Closed → Diverted via Postal Highway • 40 Trucks
+            </p>
+<div class="mt-2 flex items-center justify-between text-badge-micro font-badge-micro text-on-error-container">
+<span>SLA Buffer: +18h Injected</span>
+<span class="font-bold text-error">Hulaki Rajmarg Route</span>
+</div>
+</div>
+</div>
+<!-- Live Sensor Feeds Pill -->
+<div class="p-space-sm rounded-lg bg-inverse-surface text-inverse-on-surface flex items-center justify-between text-label-sm font-label-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-secondary-container animate-pulse">videocam</span>
+<span>Mugling Point Km 32 Sensor</span>
+</div>
+<span class="text-badge-micro font-badge-micro text-tertiary-fixed">Flow: 38 km/h • Road Clear</span>
+</div>
+<!-- Nepal Highway Static Map Location Representation -->
+<div class="w-full h-32 rounded-lg bg-cover bg-center relative overflow-hidden shadow-xs" data-location="Kathmandu, Mugling, Pokhara, Nepal" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDXYejzKfMhIKWBLTZoTmZa3SL-qj8qnpcJ00Qq-k3aAWwjjxCcN-ZnkS_1BYSSIDPLURJtBsGPies1eNgcAlG7Ly8W8ijDhJjHdgNW99sv4H9YagdETQKMpc8PVjrOz-gKehjlyUz0VSIuXYYvQPj-LI7CQnSHdHns48K0QvqaQMT-MhJp55ABY_BMVLjvg0l1x9rm6sShST-KWV0kv3Sj1zPHu5-q2rc2MRxvqrraoI2s-cBtl_IG')">
+<div class="absolute inset-0 bg-inverse-surface/40 flex items-center justify-center">
+<div class="px-3 py-1.5 rounded-lg bg-surface-container-lowest/90 backdrop-blur-xs text-on-surface text-badge-micro font-badge-micro font-bold flex items-center gap-1.5 shadow-md">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+              Live GPS Fleet Telemetry Radar
+            </div>
+</div>
+</div>
+</div>
+<!-- Dynamic 3PL Courier Overflow Balancer -->
+<div class="rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[20px] text-tertiary">balance</span>
+<h2 class="text-headline-sm font-headline-sm text-on-surface">3PL Overflow Balancer</h2>
+</div>
+<span class="text-badge-micro font-badge-micro text-tertiary font-bold">DEX Target: &gt;85%</span>
+</div>
+<!-- Split Progress Stack -->
+<div class="space-y-space-xs">
+<div class="w-full h-4 bg-surface-container rounded-full overflow-hidden flex">
+<div class="bg-primary h-full transition-all" style="width: 85.8%;" title="DEX Express: 85.8%"></div>
+<div class="bg-tertiary-container h-full transition-all" style="width: 8.4%;" title="Pathao: 8.4%"></div>
+<div class="bg-secondary h-full transition-all" style="width: 4.6%;" title="Nepal Can Move: 4.6%"></div>
+<div class="bg-outline h-full transition-all" style="width: 1.2%;" title="Sundar/Nepal Post: 1.2%"></div>
+</div>
+<div class="flex items-center justify-between text-badge-micro font-badge-micro text-on-surface-variant pt-1">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary"></span>DEX 85.8%</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-tertiary-container"></span>Pathao 8.4%</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary"></span>NCM 4.6%</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-outline"></span>Post 1.2%</span>
+</div>
+</div>
+<!-- Partner Connectivity Matrix -->
+<div class="space-y-space-xs text-body-sm font-body-sm">
+<div class="p-2 rounded bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-tertiary">sports_motorsports</span>
+<div>
+<span class="font-semibold text-on-surface">Pathao Logistics API</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant block">Intra-Valley Bike Burst</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed text-badge-micro font-badge-micro font-bold">API CONNECTED</span>
+</div>
+<div class="p-2 rounded bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary">local_shipping</span>
+<div>
+<span class="font-semibold text-on-surface">Nepal Can Move (NCM)</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant block">Remote Karnali Trunk Lines</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface text-badge-micro font-badge-micro font-bold">READY</span>
+</div>
+</div>
+<!-- Failover Trigger Rule Box -->
+<div class="p-space-sm rounded-lg bg-surface-container-low text-on-surface-variant text-label-sm font-label-sm leading-tight flex items-start gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary shrink-0 mt-0.5">smart_toy</span>
+<div>
+<strong class="text-on-surface">Auto-Failover Rule:</strong> IF Hub Inbound Backlog &gt; 140% Capacity → Auto-offload 25% parcel volume to Pathao 3PL with standardized DEX waybill barcode.
+          </div>
+</div>
+</div>
+<!-- Selected Hub Deep-Dive Drawer / Panel (Dynamic State) -->
+<div class="rounded-xl bg-surface-container-lowest p-space-md shadow-md flex flex-col space-y-space-md border-l-4 border-primary" id="hub-drawer">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-badge-micro font-badge-micro uppercase tracking-wider text-primary font-bold">Hub Deep Dive Telemetry</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface" id="drawer-hub-name">Kathmandu Central Sortation (Thapathali)</h3>
+</div>
+<span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed text-badge-micro font-badge-micro uppercase font-bold" id="drawer-hub-badge">Mother Hub</span>
+</div>
+<!-- Key Hub Detail Metrics -->
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="p-space-sm rounded-lg bg-surface-container-low">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant block uppercase">Hub In-Charge</span>
+<strong class="text-label-md font-label-md text-on-surface" id="drawer-hub-lead">Suman Shrestha</strong>
+<span class="text-badge-micro font-badge-micro text-tertiary block">DEX Senior Dispatch Lead</span>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container-low">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant block uppercase">Sorter Capacity</span>
+<strong class="text-label-md font-label-md text-on-surface" id="drawer-hub-speed">4,800 parcels/hr</strong>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant block">Auto Conveyor #4</span>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container-low">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant block uppercase">Active Dispatch Wave</span>
+<strong class="text-label-md font-label-md text-primary" id="drawer-hub-wave">Wave 3 (14:00 - 18:00)</strong>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant block">84% Riders Dispatched</span>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container-low">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant block uppercase">CIT Armored Pickup</span>
+<strong class="text-label-md font-label-md text-on-surface">17:30 NPT Scheduled</strong>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant block">Nabil Bank Vault Courier</span>
+</div>
+</div>
+<!-- Cod Cash Vault Micro Bar -->
+<div class="p-space-sm rounded-lg bg-secondary-fixed/30 text-on-surface flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-secondary">payments</span>
+<div>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant block">PHYSICAL COD IN HUB VAULT</span>
+<strong class="text-headline-sm font-headline-sm text-secondary" id="drawer-hub-cod">Rs. 4,850,200</strong>
+</div>
+</div>
+<button class="px-2.5 py-1 rounded bg-secondary-container hover:bg-secondary-fixed text-on-secondary-container text-label-sm font-label-sm font-semibold transition-colors" type="button">
+            Verify Cache
+          </button>
+</div>
+<!-- Fleet Broadcast Actions -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<button class="w-full h-9 rounded-lg bg-primary hover:bg-primary-container text-on-primary text-label-md font-label-md flex items-center justify-center gap-space-xs transition-colors shadow-sm" onclick="broadcastAlert()" type="button">
+<span class="material-symbols-outlined text-[18px]">cell_tower</span>
+            Send SMS Alert to 340 Valley Riders
+          </button>
+<button class="w-full h-9 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface text-label-md font-label-md flex items-center justify-center gap-space-xs transition-colors shadow-xs" onclick="rebalanceLoads()" type="button">
+<span class="material-symbols-outlined text-[18px]">balance</span>
+            Rebalance Hub Feeder Loads
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Notification Toast Container -->
+<div class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 rounded-xl bg-inverse-surface text-inverse-on-surface p-space-md shadow-2xl flex items-center gap-space-md" id="toast-notify">
+<span class="material-symbols-outlined text-secondary-fixed text-[24px]">task_alt</span>
+<div class="flex flex-col">
+<strong class="text-label-md font-label-md text-inverse-on-surface" id="toast-title">Action Triggered</strong>
+<span class="text-body-sm font-body-sm text-inverse-on-surface/80" id="toast-msg">Updating live matrix across 77 hubs...</span>
+</div>
+</div>
+</div>
+<script>
+  function selectHub(name, province, category, inPkg, outPkg, fleet, cod, lead, speed, wave) {
+    document.getElementById('drawer-hub-name').innerText = name;
+    document.getElementById('drawer-hub-badge').innerText = category;
+    document.getElementById('drawer-hub-lead').innerText = lead;
+    document.getElementById('drawer-hub-speed').innerText = speed;
+    document.getElementById('drawer-hub-wave').innerText = wave;
+    document.getElementById('drawer-hub-cod').innerText = cod;
+
+    const drawer = document.getElementById('hub-drawer');
+    drawer.classList.add('scale-[1.01]');
+    setTimeout(() => drawer.classList.remove('scale-[1.01]'), 200);
+    showToast('Hub Selected: ' + name, 'Telemetry synchronizing with Kathmandu HQ.');
+  }
+
+  function showToast(title, msg) {
+    const toast = document.getElementById('toast-notify');
+    document.getElementById('toast-title').innerText = title;
+    document.getElementById('toast-msg').innerText = msg;
+    toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+    setTimeout(() => {
+      toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+    }, 3500);
+  }
+
+  function broadcastAlert() {
+    showToast('Valley Fleet SMS Broadcast Sent', 'Push notification triggered to all on-duty DEX Kathmandu riders.');
+  }
+
+  function rebalanceLoads() {
+    showToast('AI Load Balancing Engaged', 'Offloaded 12% outbound freight from Thapathali to Lalitpur Feeder 02.');
+  }
+
+  document.getElementById('btn-recalc').addEventListener('click', function() {
+    const btn = this;
+    btn.classList.add('opacity-75');
+    showToast('Recalculating AI Routing Matrix...', 'Evaluating 77 nodes, monsoon road obstructions & carrier SLAs.');
+    setTimeout(() => {
+      btn.classList.remove('opacity-75');
+      showToast('AI Matrix Synced (0.84s)', 'Optimal routes updated for all 142 linehauls.');
+    }, 1200);
+  });
+
+  // Province Preset Filter Mocking
+  const provinceBtns = document.querySelectorAll('.province-btn');
+  provinceBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      provinceBtns.forEach(b => {
+        b.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+        b.classList.add('bg-surface-container-lowest', 'text-on-surface-variant');
+      });
+      btn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+      btn.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant');
+      showToast('Province Filter: ' + btn.innerText, 'Filtered matrix view updated.');
+    });
+  });
+
+  // Hub Tab Filter Mocking
+  const hubTabs = document.querySelectorAll('.hub-tab');
+  hubTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      hubTabs.forEach(t => {
+        t.classList.remove('bg-surface-container-lowest', 'text-on-surface', 'shadow-xs');
+        t.classList.add('text-on-surface-variant');
+      });
+      tab.classList.add('bg-surface-container-lowest', 'text-on-surface', 'shadow-xs');
+      tab.classList.remove('text-on-surface-variant');
+      showToast('Hub Status View: ' + tab.innerText, 'Sorting matrix entries.');
+    });
+  });
+</script></main><footer class="w-full bg-surface-container-lowest mt-space-xl shadow-[0_-1px_8px_rgba(0,0,0,0.04)]"><div class="bg-primary-container text-on-primary-container px-space-xl py-space-md"><div class="flex items-center justify-between"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-on-primary-container text-[22px]">local_shipping</span><span class="text-label-md font-label-md">Daraz Express (DEX) Deliveries Operating Across All 77 Districts of Nepal</span></div><div class="flex items-center gap-space-lg text-label-sm font-label-sm"><span class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[16px]">verified</span>100% Buyer Protection</span><span class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[16px]">lock_reset</span>COD &amp; Instant Refunds</span><span class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[16px]">headset_mic</span>24/7 Ops Emergency Desk</span></div></div></div><div class="px-space-xl py-space-lg flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant"><div class="flex items-center gap-space-lg"><span>© 2025 Daraz Kaymu Pvt. Ltd. (Operations &amp; Logistics Directorate)</span><a class="hover:text-primary transition-colors" href="#">DEX Policy &amp; SLA Guidelines</a><a class="hover:text-primary transition-colors" href="#">Nepal Customs &amp; IRD CBMS Sync</a><a class="hover:text-primary transition-colors" href="#">Kathmandu NOC Hotline</a></div><div class="flex items-center gap-space-sm"><span class="w-2 h-2 rounded-full bg-tertiary"></span><span class="font-label-sm text-on-surface">All Systems Operational • Nepal Telecom CDN v4.9</span></div></div></footer></div></body></html>

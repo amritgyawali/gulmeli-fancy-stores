@@ -5,6 +5,7 @@ import { metaFor } from "./resources";
 
 const PRIMARY = [
   { to: "/admin", label: "Overview", icon: "chart", end: true },
+  { to: "/admin/ops", label: "Ops Central", icon: "gauge" },
   { to: "/admin/products", label: "Products", icon: "grid" },
   { to: "/admin/orders", label: "Orders board", icon: "box" },
   { to: "/admin/media", label: "Media (Cloudinary)", icon: "image" },

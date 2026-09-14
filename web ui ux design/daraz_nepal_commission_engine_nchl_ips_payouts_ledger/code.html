@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Daraz Nepal - Commission Engine &amp; NCHL-IPS Payouts Ledger</title>
+<!-- Tailwind CSS v3 with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Roboto Flex & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Roboto+Flex:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script data-purpose="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            daraz: {
+              orange: '#f85606',
+              darkorange: '#d94700',
+              lightorange: '#fff2eb',
+              navy: '#0f172a',
+              card: '#ffffff',
+              border: '#e2e8f0',
+              subtle: '#f8fafc',
+            },
+            nchl: {
+              blue: '#0284c7',
+              dark: '#0369a1',
+            }
+          },
+          fontFamily: {
+            sans: ['Roboto Flex', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="base-typography">
+    body {
+      font-family: 'Roboto Flex', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .font-mono-nums {
+      font-family: 'JetBrains Mono', monospace;
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+<style data-purpose="custom-scrollbars">
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-[#f1f5f9] text-slate-800 min-h-screen flex flex-col antialiased">
+<!-- BEGIN: GlobalDarazTopNav -->
+<!-- Top Utility Mini-bar -->
+<header class="w-full bg-[#f85606] text-white text-[11px] font-medium tracking-wide">
+<div class="max-w-[1920px] mx-auto px-6 h-7 flex items-center justify-between">
+<div class="flex items-center space-x-6">
+<span class="hover:underline cursor-pointer flex items-center gap-1">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          SAVE MORE ON APP
+        </span>
+<span class="text-white/40">|</span>
+<span class="hover:underline cursor-pointer">BECOME A SELLER</span>
+<span class="text-white/40">|</span>
+<span class="hover:underline cursor-pointer">DARAZ LOGISTICS (DEX) 77 DISTRICTS</span>
+<span class="text-white/40">|</span>
+<span class="hover:underline cursor-pointer">HELP &amp; SUPPORT</span>
+</div>
+<div class="flex items-center space-x-5">
+<div class="flex items-center space-x-1.5 bg-black/15 px-2.5 py-0.5 rounded text-[11px]">
+<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+<span class="font-mono-nums font-semibold">NPT 15:35:10</span>
+<span class="text-white/70 text-[10px]">(Kathmandu IRD Sync)</span>
+</div>
+<span class="hover:underline cursor-pointer font-medium">भाषा परिवर्तन: नेपाली (नेपा) / EN</span>
+<span class="text-white/40">|</span>
+<span class="font-semibold flex items-center gap-1.5 cursor-pointer bg-white/10 hover:bg-white/20 px-2 py-0.5 rounded">
+<span class="w-4 h-4 rounded-full bg-white text-[#f85606] flex items-center justify-center font-bold text-[10px]">A</span>
+          AMRIT RAJ (Head of Ops &amp; FinRecon)
+        </span>
+</div>
+</div>
+</header>
+<!-- Daraz Ops Central Enterprise Header -->
+<div class="w-full bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
+<div class="max-w-[1920px] mx-auto px-6 h-16 flex items-center justify-between gap-6">
+<!-- Brand & Versioning -->
+<div class="flex items-center gap-4 shrink-0">
+<div class="flex items-center gap-2.5">
+<div class="bg-[#f85606] text-white font-extrabold text-xl px-2.5 py-1 rounded shadow-sm tracking-tight flex items-center gap-1">
+<span>daraz</span>
+<span class="text-[10px] uppercase font-bold tracking-widest bg-white/20 px-1 py-0.5 rounded">Ops 5.2</span>
+</div>
+<div class="border-l border-slate-200 pl-3">
+<h1 class="text-sm font-bold text-slate-900 tracking-tight leading-none">Nepal Marketplace Ops &amp; IRD Engine</h1>
+<p class="text-[11px] text-slate-500 font-medium mt-0.5">Automated Double-Entry &amp; NCHL-IPS Gateway</p>
+</div>
+</div>
+</div>
+<!-- Quick Command Global Search Bar -->
+<div class="flex-1 max-w-2xl relative">
+<div class="relative">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+<input class="w-full pl-10 pr-20 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f85606]/30 focus:border-[#f85606] text-slate-800 placeholder-slate-400 font-medium" placeholder="Search Seller PAN (e.g. 602403687), Store ID, NCHL Batch Ref, DEX Waybill, Bank A/C..." type="text"/>
+<div class="absolute inset-y-0 right-0 flex items-center pr-2">
+<kbd class="px-2 py-0.5 text-[10px] font-mono text-slate-400 bg-slate-200/70 border border-slate-300 rounded shadow-2xs">Ctrl + K</kbd>
+</div>
+</div>
+</div>
+<!-- Quick Action Buttons & Operational Status -->
+<div class="flex items-center gap-2.5 shrink-0">
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:border-slate-300 text-slate-700 rounded-md text-xs font-semibold shadow-2xs hover:bg-slate-50 transition-colors">
+<svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          + New Commission Rule
+        </button>
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#f85606] hover:bg-[#d94700] text-white rounded-md text-xs font-semibold shadow-xs transition-colors">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          ⚡ Execute NCHL-IPS Batch (Wed)
+        </button>
+<div class="h-6 w-px bg-slate-200 mx-1"></div>
+<!-- Alerts -->
+<button aria-label="System Alerts" class="relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white"></span>
+</button>
+<!-- Admin Profile -->
+<div class="flex items-center gap-2 pl-1">
+<div class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-xs ring-2 ring-[#f85606]/30">
+            AR
+          </div>
+<div class="text-left hidden xl:block">
+<div class="text-xs font-bold text-slate-800 leading-none">Amrit Raj</div>
+<div class="text-[10px] text-emerald-600 font-semibold mt-0.5">Maker-Checker Authorized</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Live Telemetry Health Bar -->
+<div class="bg-slate-900 text-slate-300 text-[11px] px-6 py-1 border-t border-slate-800 flex items-center justify-between font-mono-nums">
+<div class="flex items-center gap-6 overflow-x-auto py-0.5">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span class="text-slate-400">DEX Logistics 77 SLA:</span>
+<span class="text-emerald-300 font-bold">99.4% OTP Verified</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span class="text-slate-400">eSewa &amp; Khalti Gateways:</span>
+<span class="text-white font-bold">100% OK (0.01% fail)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-blue-400"></span>
+<span class="text-slate-400">NCHL-IPS Rail:</span>
+<span class="text-blue-300 font-bold">DISBURSAL READY (Wed 18:00 Cycle)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span class="text-slate-400">IRD CBMS Real-time Invoicing:</span>
+<span class="text-white font-bold">CONNECTED (13% VAT Stream)</span>
+</div>
+</div>
+<div class="flex items-center gap-3 shrink-0 text-slate-400">
+<span>Cycle Period: <strong>Sep 03 - Sep 09 (Post 9.9 Mega Flash)</strong></span>
+<span class="text-slate-600">|</span>
+<span class="text-amber-300 font-medium">Pending Maker Approval: <strong>2 Rulesets</strong></span>
+</div>
+</div>
+</div>
+<!-- END: GlobalDarazTopNav -->
+<!-- BEGIN: MainEnterpriseLayout -->
+<div class="flex-1 flex max-w-[1920px] w-full mx-auto overflow-hidden">
+<!-- BEGIN: LeftSidebarMenu -->
+<aside class="w-64 bg-[#0f172a] text-slate-300 shrink-0 border-r border-slate-800 flex flex-col justify-between select-none">
+<div class="py-4 overflow-y-auto max-h-[calc(100vh-140px)]">
+<!-- Navigation Section: Core Dashboard -->
+<div class="px-4 pb-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">Core Platform</div>
+<nav class="space-y-0.5 px-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            Dashboard &amp; Live Analytics
+          </a>
+<a class="flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" href="#">
+<span class="flex items-center gap-3">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Orders &amp; Fulfillment
+            </span>
+<span class="px-1.5 py-0.5 bg-slate-700 text-slate-300 rounded text-[10px] font-mono-nums">8,429</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" href="#">
+<span class="flex items-center gap-3">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Sellers &amp; Merchants
+            </span>
+<span class="px-1.5 py-0.5 bg-slate-800 text-slate-400 rounded text-[10px] font-mono-nums">48,912</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            DEX Logistics (77 Hubs)
+          </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            9.9 Flash Campaign Orchestrator
+          </a>
+</nav>
+<!-- Navigation Section: Finance (ACTIVE) -->
+<div class="mt-6 px-4 pb-2 text-[10px] font-bold uppercase tracking-wider text-orange-400 flex items-center justify-between">
+<span>Finance &amp; NCHL Recon</span>
+<span class="w-2 h-2 rounded-full bg-[#f85606]"></span>
+</div>
+<nav class="space-y-0.5 px-2">
+<!-- Active Highlighted Sub-menu -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md text-xs font-semibold bg-[#f85606] text-white shadow-md shadow-[#f85606]/20" href="#">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            Commission &amp; NCHL Payouts
+          </a>
+<a class="flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors" href="#">
+<span class="flex items-center gap-3">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              NCHL-IPS Scheduled Batches
+            </span>
+<span class="px-1.5 py-0.2 bg-emerald-950 text-emerald-300 border border-emerald-800 rounded text-[10px] font-mono-nums">Rs. 42.8M</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            Merchant Double-Entry Ledger
+          </a>
+<a class="flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors" href="#">
+<span class="flex items-center gap-3">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              IRD CBMS 13% VAT Sync
+            </span>
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors" href="#">
+<span class="flex items-center gap-3">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              COD In-Flight Escrows
+            </span>
+<span class="text-[10px] font-mono-nums text-slate-400">Rs. 6.12M</span>
+</a>
+</nav>
+<!-- Navigation Section: Governance & Audit -->
+<div class="mt-6 px-4 pb-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">Security &amp; Audit</div>
+<nav class="space-y-0.5 px-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            KYC Maker-Checker (142 Pending)
+          </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            RBAC &amp; Financial Authority
+          </a>
+</nav>
+</div>
+<!-- Left Sidebar Bottom Card: NCHL Connection Status -->
+<div class="p-3.5 m-2.5 bg-slate-950/80 rounded-lg border border-slate-800">
+<div class="flex items-center justify-between text-[11px] mb-1.5">
+<span class="text-slate-400 font-semibold flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            NCHL Node #NP-01
+          </span>
+<span class="text-emerald-400 font-mono text-[10px]">142ms</span>
+</div>
+<div class="text-[11px] text-slate-300 font-medium">Nabil Disbursal Node</div>
+<div class="w-full bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-blue-500 h-full rounded-full" style="width: 42.8%"></div>
+</div>
+<div class="flex justify-between text-[10px] text-slate-400 mt-1 font-mono-nums">
+<span>Quota: 42.8%</span>
+<span>Max: NPR 100M/day</span>
+</div>
+</div>
+</aside>
+<!-- END: LeftSidebarMenu -->
+<!-- BEGIN: MainContentArea -->
+<main class="flex-1 overflow-y-auto px-7 py-6">
+<!-- Breadcrumb & Page Title Area -->
+<section class="mb-6">
+<div class="flex items-center justify-between flex-wrap gap-4">
+<div>
+<nav class="flex items-center space-x-2 text-xs text-slate-500 mb-1.5">
+<span>Daraz Nepal Admin</span>
+<svg class="w-3.5 h-3.5 text-slate-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg>
+<span>Finance &amp; Settlements</span>
+<svg class="w-3.5 h-3.5 text-slate-400" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg>
+<span class="text-[#f85606] font-semibold">Commission Engine &amp; NCHL-IPS Payouts</span>
+</nav>
+<h2 class="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
+              Commission Rules Engine &amp; NCHL-IPS Automated Settlement Matrix
+              <span class="bg-blue-100 text-blue-800 text-xs px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider border border-blue-200">
+                Cycle: Festive 2024 (Post 9.9)
+              </span>
+</h2>
+<p class="text-xs text-slate-500 mt-1 max-w-4xl">
+              Configure multi-tier category/seller take-rates, manage automated Wednesday NCHL-IPS interbank clearing to 12,400+ verified Nepal merchants, and audit double-entry ledger streams integrated with Inland Revenue Department (IRD) CBMS.
+            </p>
+</div>
+<!-- Date Filter & Quick Utility Actions -->
+<div class="flex items-center gap-2">
+<div class="inline-flex rounded-md shadow-2xs bg-white border border-slate-200 p-0.5">
+<button class="px-3 py-1.5 text-xs font-semibold rounded text-slate-600 hover:text-slate-900">Today</button>
+<button class="px-3 py-1.5 text-xs font-semibold rounded text-slate-600 hover:text-slate-900">Yesterday</button>
+<button class="px-3 py-1.5 text-xs font-semibold rounded bg-[#f85606] text-white shadow-2xs">Past 7D (9.9 Cycle)</button>
+<button class="px-3 py-1.5 text-xs font-semibold rounded text-slate-600 hover:text-slate-900">Monthly Recon</button>
+</div>
+<button class="inline-flex items-center gap-1.5 px-3 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold shadow-2xs">
+<svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              NCHL Batch (.enc)
+            </button>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-900 hover:bg-black text-white rounded-lg text-xs font-bold shadow-xs transition-colors">
+<svg class="w-4 h-4 text-[#f85606]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              IRD Tax Report (PDF)
+            </button>
+</div>
+</div>
+</section>
+<!-- BEGIN: HighImpactFinancialKPIRibbon -->
+<!-- Financial KPI Cards Ribbon -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3.5 mb-6" data-purpose="financial-kpi-ribbon">
+<!-- KPI 1: Scheduled Payable Pool -->
+<div class="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs relative overflow-hidden">
+<div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full -mr-8 -mt-8 pointer-events-none"></div>
+<div class="flex items-center justify-between text-slate-500 text-xs font-semibold mb-1">
+<span>Payable to Sellers (Wed)</span>
+<span class="p-1 bg-blue-50 rounded text-blue-600">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+</div>
+<div class="text-xl font-extrabold text-slate-900 font-mono-nums tracking-tight">Rs. 42,850,240</div>
+<div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-100 text-[11px]">
+<span class="text-slate-500">12,400 Merchants</span>
+<span class="text-blue-600 font-semibold">NCHL Ready</span>
+</div>
+</div>
+<!-- KPI 2: Daraz Blended Take-Rate Commission -->
+<div class="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs relative overflow-hidden">
+<div class="absolute top-0 right-0 w-24 h-24 bg-orange-500/5 rounded-full -mr-8 -mt-8 pointer-events-none"></div>
+<div class="flex items-center justify-between text-slate-500 text-xs font-semibold mb-1">
+<span>Daraz Gross Take-Rate</span>
+<span class="p-1 bg-orange-50 rounded text-[#f85606]">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+</div>
+<div class="text-xl font-extrabold text-[#f85606] font-mono-nums tracking-tight">Rs. 4,892,110</div>
+<div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-100 text-[11px]">
+<span class="text-slate-500">Avg Take: <strong>10.24%</strong></span>
+<span class="text-emerald-600 font-semibold">+1.2% (9.9 Promo)</span>
+</div>
+</div>
+<!-- KPI 3: NCHL-IPS Gateway Health -->
+<div class="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+<div class="flex items-center justify-between text-slate-500 text-xs font-semibold mb-1">
+<span>NCHL-IPS Clearing Rail</span>
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100"></span>
+</div>
+<div class="text-xl font-extrabold text-slate-900 font-mono-nums tracking-tight">100% Synced</div>
+<div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-100 text-[11px]">
+<span class="text-slate-500">Nabil / NCHL Gateway</span>
+<span class="text-emerald-600 font-semibold">0 Batch Fails</span>
+</div>
+</div>
+<!-- KPI 4: IRD CBMS 13% VAT Invoicing -->
+<div class="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+<div class="flex items-center justify-between text-slate-500 text-xs font-semibold mb-1">
+<span>IRD 13% VAT Withheld</span>
+<span class="p-1 bg-emerald-50 rounded text-emerald-600">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+</div>
+<div class="text-xl font-extrabold text-slate-900 font-mono-nums tracking-tight">Rs. 635,974</div>
+<div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-100 text-[11px]">
+<span class="text-slate-500">CBMS Sync #NP-994</span>
+<span class="text-slate-700 font-medium">Real-time Push</span>
+</div>
+</div>
+<!-- KPI 5: COD In-Transit Float -->
+<div class="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+<div class="flex items-center justify-between text-slate-500 text-xs font-semibold mb-1">
+<span>COD Transit Escrow Float</span>
+<span class="p-1 bg-amber-50 rounded text-amber-600">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+</div>
+<div class="text-xl font-extrabold text-slate-900 font-mono-nums tracking-tight">Rs. 6,120,450</div>
+<div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-100 text-[11px]">
+<span class="text-slate-500">77 District Riders</span>
+<span class="text-amber-700 font-semibold">Under Recon</span>
+</div>
+</div>
+<!-- KPI 6: Disputed / Fraud Reserves Hold -->
+<div class="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+<div class="flex items-center justify-between text-slate-500 text-xs font-semibold mb-1">
+<span>Disputed Escrow Reserve</span>
+<span class="p-1 bg-red-50 rounded text-red-600">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+</div>
+<div class="text-xl font-extrabold text-red-600 font-mono-nums tracking-tight">Rs. 842,500</div>
+<div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-100 text-[11px]">
+<span class="text-slate-500">18 Suspended PANs</span>
+<span class="text-red-600 font-semibold">Under Investigation</span>
+</div>
+</div>
+</section>
+<!-- END: HighImpactFinancialKPIRibbon -->
+<!-- BEGIN: TwoColumnWorkbench -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- LEFT COLUMN: 60% Width (7 of 12 cols in grid) - Settlement Queue & Payout Batches -->
+<section class="lg:col-span-7 space-y-6">
+<div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+<!-- Workbench Tab Navigation Header -->
+<div class="border-b border-slate-200 px-5 pt-3.5 bg-slate-50/70 flex items-center justify-between flex-wrap gap-3">
+<div class="flex space-x-2">
+<button class="px-4 py-2.5 text-xs font-bold border-b-2 border-[#f85606] text-[#f85606] flex items-center gap-2">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  NCHL-IPS Payout Batches (Wed #B42)
+                  <span class="bg-[#f85606]/10 text-[#f85606] px-1.5 py-0.5 rounded text-[10px] font-mono-nums">12,400</span>
+</button>
+<button class="px-4 py-2.5 text-xs font-semibold text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition-colors">
+                  Commission Rules Matrix
+                </button>
+<button class="px-4 py-2.5 text-xs font-semibold text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition-colors">
+                  Double-Entry Ledger
+                </button>
+<button class="px-4 py-2.5 text-xs font-semibold text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition-colors">
+                  IRD 13% Tax Recon
+                </button>
+</div>
+<div class="text-[11px] text-slate-500 pb-2">
+                Next Batch Auto-Release: <span class="font-bold text-slate-800 font-mono-nums">Tomorrow 18:00 NPT</span>
+</div>
+</div>
+<!-- Queue Filter Pill Bar -->
+<div class="p-4 border-b border-slate-100 flex items-center justify-between flex-wrap gap-3 bg-white">
+<div class="flex items-center gap-1.5 overflow-x-auto text-xs">
+<button class="px-3 py-1 rounded-full bg-slate-900 text-white font-medium">All Merchants (12,400)</button>
+<button class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-medium hover:bg-emerald-100 border border-emerald-200">Ready for IPS (11,850)</button>
+<button class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-medium hover:bg-blue-100 border border-blue-200">Processing NCHL (420)</button>
+<button class="px-3 py-1 rounded-full bg-amber-50 text-amber-700 font-medium hover:bg-amber-100 border border-amber-200">KYC / PAN Audit (130)</button>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs text-slate-400">Sort By:</span>
+<select class="text-xs bg-slate-50 border border-slate-200 rounded py-1 pl-2 pr-6 text-slate-700 font-medium">
+<option>Highest Net Payable (NPR)</option>
+<option>Order Volume Descending</option>
+<option>Store Category</option>
+</select>
+</div>
+</div>
+<!-- Settlement Queue Interactive Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="bg-slate-50/80 border-b border-slate-200 text-slate-500 uppercase font-semibold text-[10px] tracking-wider">
+<th class="py-3 px-4 w-8">
+<input checked="" class="rounded border-slate-300 text-[#f85606] focus:ring-[#f85606]" type="checkbox"/>
+</th>
+<th class="py-3 px-3">Merchant / PAN / Store</th>
+<th class="py-3 px-3">Beneficiary Bank &amp; A/C</th>
+<th class="py-3 px-3 text-right">Gross Sales</th>
+<th class="py-3 px-3 text-right">Deductions Breakdown</th>
+<th class="py-3 px-3 text-right">Net Payable (NPR)</th>
+<th class="py-3 px-3 text-center">Batch Status</th>
+<th class="py-3 px-4 text-center">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 font-normal text-slate-700">
+<!-- Row 1: Ultima Lifestyle -->
+<tr class="hover:bg-slate-50/80 transition-colors">
+<td class="py-3.5 px-4">
+<input checked="" class="rounded border-slate-300 text-[#f85606] focus:ring-[#f85606]" type="checkbox"/>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded bg-blue-100 text-blue-800 flex items-center justify-center font-bold text-[10px]">UL</div>
+<div>
+<div class="font-bold text-slate-900 flex items-center gap-1.5">
+                            Ultima Lifestyle Official
+                            <span class="bg-amber-100 text-amber-800 text-[9px] px-1.5 py-0.2 rounded font-semibold">DarazMall</span>
+</div>
+<div class="text-[10px] text-slate-400 font-mono">PAN: 602403687 | ID: DZ-NP-8821</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-medium text-slate-800">Nabil Bank Ltd.</div>
+<div class="text-[10px] text-slate-500 font-mono">A/C: 0101017502982</div>
+<span class="inline-flex items-center text-[9px] text-emerald-600 font-semibold gap-0.5">
+<svg class="w-3 h-3" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+                        NCHL Validated
+                      </span>
+</td>
+<td class="py-3.5 px-3 text-right font-mono-nums font-semibold text-slate-800">
+                      Rs. 1,420,000
+                      <div class="text-[10px] text-slate-400 font-normal">412 orders</div>
+</td>
+<td class="py-3.5 px-3 text-right font-mono-nums text-[11px]">
+<div class="text-red-600">- Rs. 78,100 <span class="text-slate-400 text-[9px]">(5.5% Comm)</span></div>
+<div class="text-slate-500">- Rs. 10,153 <span class="text-slate-400 text-[9px]">(13% IRD VAT)</span></div>
+<div class="text-slate-400 text-[10px]">- Rs. 106,267 (DEX Subsidy)</div>
+</td>
+<td class="py-3.5 px-3 text-right font-mono-nums">
+<span class="text-sm font-extrabold text-emerald-600">Rs. 1,225,480</span>
+<div class="text-[10px] text-emerald-700/80">Batch Eligible</div>
+</td>
+<td class="py-3.5 px-3 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        NCHL-Ready
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<div class="flex items-center justify-center gap-1.5">
+<button class="p-1 hover:bg-slate-100 text-blue-600 rounded" title="Audit Double Entry Ledger">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button class="p-1 hover:bg-slate-100 text-[#f85606] rounded" title="Instant IPS Clearance">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: TechNepal Mega Store -->
+<tr class="hover:bg-slate-50/80 transition-colors">
+<td class="py-3.5 px-4">
+<input checked="" class="rounded border-slate-300 text-[#f85606] focus:ring-[#f85606]" type="checkbox"/>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded bg-indigo-100 text-indigo-800 flex items-center justify-center font-bold text-[10px]">TN</div>
+<div>
+<div class="font-bold text-slate-900 flex items-center gap-1.5">
+                            TechNepal Mega Store
+                            <span class="bg-blue-100 text-blue-800 text-[9px] px-1.5 py-0.2 rounded font-semibold">Verified</span>
+</div>
+<div class="text-[10px] text-slate-400 font-mono">PAN: 609812401 | ID: DZ-NP-4109</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-medium text-slate-800">Global IME Bank</div>
+<div class="text-[10px] text-slate-500 font-mono">A/C: 2901010041214</div>
+<span class="inline-flex items-center text-[9px] text-emerald-600 font-semibold gap-0.5">
+<svg class="w-3 h-3" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+                        NCHL Validated
+                      </span>
+</td>
+<td class="py-3.5 px-3 text-right font-mono-nums font-semibold text-slate-800">
+                      Rs. 248,500
+                      <div class="text-[10px] text-slate-400 font-normal">89 orders</div>
+</td>
+<td class="py-3.5 px-3 text-right font-mono-nums text-[11px]">
+<div class="text-red-600">- Rs. 16,152 <span class="text-slate-400 text-[9px]">(6.5% Comm)</span></div>
+<div class="text-slate-500">- Rs. 2,100 <span class="text-slate-400 text-[9px]">(13% IRD VAT)</span></div>
+<div class="text-slate-400 text-[10px]">- Rs. 15,298 (Returns/DEX)</div>
+</td>
+<td class="py-3.5 px-3 text-right font-mono-nums">
+<span class="text-sm font-extrabold text-slate-900">Rs. 214,950</span>
+<div class="text-[10px] text-slate-500">Auto Disburse</div>
+</td>
+<td class="py-3.5 px-3 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
+                        Batch Queued
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<div class="flex items-center justify-center gap-1.5">
+<button class="p-1 hover:bg-slate-100 text-blue-600 rounded" title="View Statement">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button class="p-1 hover:bg-slate-100 text-red-500 rounded" title="Reserve Hold">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Palpa Heritage Crafts -->
+<tr class="hover:bg-slate-50/80 transition-colors">
+<td class="py-3.5 px-4">
+<input checked="" class="rounded border-slate-300 text-[#f85606] focus:ring-[#f85606]" type="checkbox"/>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-[10px]">PH</div>
+<div>
+<div class="font-bold text-slate-900 flex items-center gap-1.5">
+                            Palpa Heritage Crafts
+                            <span class="bg-emerald-100 text-emerald-800 text-[9px] px-1.5 py-0.2 rounded font-semibold">Proudly Nepali</span>
+</div>
+<div class="text-[10px] text-slate-400 font-mono">PAN: 301298412 | ID: DZ-NP-1290</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-medium text-slate-800">NIC Asia Bank</div>
+<div class="text-[10px] text-slate-500 font-mono">A/C: 4410982390123</div>
+<span class="inline-flex items-center text-[9px] text-emerald-600 font-semibold gap-0.5">
+<svg class="w-3 h-3" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+                        NCHL Validated
+                      </span>
+</td>
+<td class="py-3.5 px-3 text-right font-mono-nums font-semibold text-slate-800">
+                      Rs. 84,200
+                      <div class="text-[10px] text-slate-400 font-normal">63 orders</div>
+</td>
+<td class="py-3.5 px-3 text-right font-mono-nums text-[11px]">
+<div class="text-red-600">- Rs. 8,420 <span class="text-slate-400 text-[9px]">(10.0% Promo)</span></div>
+<div class="text-slate-500">- Rs. 1,095 <span class="text-slate-400 text-[9px]">(13% IRD VAT)</span></div>
+<div class="text-slate-400 text-[10px]">- Rs. 1,035 (Packaging fee)</div>
+</td>
+<td class="py-3.5 px-3 text-right font-mono-nums">
+<span class="text-sm font-extrabold text-slate-900">Rs. 73,650</span>
+<div class="text-[10px] text-emerald-600 font-medium">Reconciled</div>
+</td>
+<td class="py-3.5 px-3 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        NCHL-Ready
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<div class="flex items-center justify-center gap-1.5">
+<button class="p-1 hover:bg-slate-100 text-blue-600 rounded" title="View Statement">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button class="p-1 hover:bg-slate-100 text-[#f85606] rounded" title="Instant IPS Transfer">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Himalayan Organic Tea (On Hold Alert) -->
+<tr class="hover:bg-slate-50/80 transition-colors bg-red-50/30">
+<td class="py-3.5 px-4">
+<input class="rounded border-slate-300 text-red-500 focus:ring-red-500" type="checkbox"/>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-[10px]">HT</div>
+<div>
+<div class="font-bold text-slate-900 flex items-center gap-1.5">
+                            Himalayan Organic Tea Co-Op
+                            <span class="bg-red-100 text-red-700 text-[9px] px-1.5 py-0.2 rounded font-semibold">Flagged</span>
+</div>
+<div class="text-[10px] text-red-600 font-mono">PAN: 304859182 | KYC Incomplete</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-medium text-slate-800">Himalayan Bank</div>
+<div class="text-[10px] text-slate-500 font-mono">A/C: 0020199281001</div>
+<span class="inline-flex items-center text-[9px] text-red-600 font-semibold gap-0.5">
+<svg class="w-3 h-3" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" fill-rule="evenodd"></path></svg>
+                        Name Discrepancy
+                      </span>
+</td>
+<td class="py-3.5 px-3 text-right font-mono-nums font-semibold text-slate-800">
+                      Rs. 38,900
+                      <div class="text-[10px] text-slate-400 font-normal">24 orders</div>
+</td>
+<td class="py-3.5 px-3 text-right font-mono-nums text-[11px]">
+<div class="text-red-600">- Rs. 3,890 <span class="text-slate-400 text-[9px]">(10%)</span></div>
+<div class="text-slate-500">- Rs. 505 <span class="text-slate-400 text-[9px]">(13% IRD VAT)</span></div>
+<div class="text-slate-400 text-[10px]">- Rs. 385 (DEX Shipping)</div>
+</td>
+<td class="py-3.5 px-3 text-right font-mono-nums">
+<span class="text-sm font-extrabold text-red-700">Rs. 34,120</span>
+<div class="text-[10px] text-red-600 font-semibold">Reserve Escrow</div>
+</td>
+<td class="py-3.5 px-3 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-800 border border-red-200">
+                        Blocked: KYC
+                      </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<div class="flex items-center justify-center gap-1.5">
+<button class="px-2 py-1 bg-white border border-red-200 hover:bg-red-50 text-red-600 text-[10px] font-bold rounded shadow-2xs">
+                          Resolve
+                        </button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Pagination & Bulk Disbursal Bar -->
+<div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between flex-wrap gap-3">
+<div class="flex items-center gap-3">
+<span class="text-xs text-slate-500 font-medium">
+                  Showing <strong>1-4</strong> of <strong>12,400</strong> merchants in batch <code class="font-mono text-slate-700 bg-slate-200 px-1 rounded">NCHL-202409-B42</code>
+</span>
+<span class="text-slate-300">|</span>
+<span class="text-xs text-slate-700 font-bold">
+                  Selected for Execution: <span class="text-emerald-600 font-mono-nums">3 Merchants (Rs. 1,514,080)</span>
+</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 text-xs font-semibold bg-white border border-slate-200 rounded text-slate-600 hover:bg-slate-100 disabled:opacity-50">Previous</button>
+<div class="flex space-x-1">
+<button class="px-3 py-1 text-xs font-bold rounded bg-[#f85606] text-white">1</button>
+<button class="px-3 py-1 text-xs font-semibold rounded bg-white text-slate-700 border border-slate-200 hover:bg-slate-100">2</button>
+<button class="px-3 py-1 text-xs font-semibold rounded bg-white text-slate-700 border border-slate-200 hover:bg-slate-100">3</button>
+<span class="px-2 py-1 text-xs text-slate-400">...</span>
+<button class="px-3 py-1 text-xs font-semibold rounded bg-white text-slate-700 border border-slate-200 hover:bg-slate-100">310</button>
+</div>
+<button class="px-3 py-1.5 text-xs font-semibold bg-white border border-slate-200 rounded text-slate-600 hover:bg-slate-100">Next</button>
+</div>
+</div>
+</div>
+<!-- Bottom Micro-Card: COD Logistics Settlement Reconciler (DEX Float) -->
+<div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="p-2 bg-amber-100 text-amber-800 rounded-lg">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<h4 class="text-sm font-bold text-slate-900">77 Districts DEX Cash-on-Delivery (COD) Reconciliation Rail</h4>
+<p class="text-xs text-slate-500">Riders cash collections vs. Hub deposit vs. Seller Settlement clearance</p>
+</div>
+</div>
+<span class="text-xs font-mono font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded">
+                DEX SLA: 99.4% Reconciled
+              </span>
+</div>
+<!-- Hub Reconciliation Progress Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 font-mono-nums">
+<div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+<div class="text-[11px] text-slate-500">Kathmandu Central Hub (Tripureshwor)</div>
+<div class="text-sm font-bold text-slate-800 mt-1">Rs. 3,840,110 Deposited</div>
+<div class="text-[10px] text-emerald-600 mt-0.5">100% Cleared to Settlement Pool</div>
+</div>
+<div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+<div class="text-[11px] text-slate-500">Pokhara Western Hub (Prithvi Chowk)</div>
+<div class="text-sm font-bold text-slate-800 mt-1">Rs. 1,420,900 Deposited</div>
+<div class="text-[10px] text-emerald-600 mt-0.5">NIC Asia Virtual A/C Verified</div>
+</div>
+<div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+<div class="text-[11px] text-slate-500">Biratnagar Eastern Regional Hub</div>
+<div class="text-sm font-bold text-slate-800 mt-1">Rs. 859,440 Deposited</div>
+<div class="text-[10px] text-amber-600 mt-0.5">Night Dispatch Rider Verification</div>
+</div>
+</div>
+</div>
+</section>
+<!-- RIGHT COLUMN: 40% Width (5 of 12 cols in grid) - Rules Engine, Ledger Preview, NCHL Telemetry -->
+<section class="lg:col-span-5 space-y-6">
+<!-- Card 1: Active Marketplace Commission Ruleset Engine -->
+<div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden" data-purpose="commission-rules-engine">
+<div class="p-4 bg-slate-900 text-white flex items-center justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<h3 class="text-sm font-bold">Commission Rules Engine</h3>
+<span class="bg-[#f85606] text-[10px] px-2 py-0.5 rounded font-mono font-bold uppercase">Ruleset #09</span>
+</div>
+<p class="text-[11px] text-slate-400 mt-0.5">Festive 2024 Base Multi-Tier Rates Matrix</p>
+</div>
+<button class="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded transition-colors">
+                + Add Rule
+              </button>
+</div>
+<!-- Rules List -->
+<div class="p-5 space-y-4">
+<!-- Rule 1: Electronics -->
+<div class="space-y-1.5">
+<div class="flex justify-between text-xs">
+<span class="font-bold text-slate-800">Consumer Electronics &amp; Mobiles</span>
+<span class="font-mono font-bold text-[#f85606]">6.5% <span class="text-slate-400 text-[10px] font-normal">(Cap: Rs. 2,500)</span></span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-blue-600 h-full rounded-full" style="width: 45%"></div>
+</div>
+<div class="flex justify-between text-[10px] text-slate-400">
+<span>Min Fee: Rs. 50</span>
+<span>Volume Rebate Applied</span>
+</div>
+</div>
+<!-- Rule 2: Fashion & Dhaka Local -->
+<div class="space-y-1.5">
+<div class="flex justify-between text-xs">
+<span class="font-bold text-slate-800">Fashion, Apparels &amp; Footwear</span>
+<span class="font-mono font-bold text-[#f85606]">12.0% <span class="text-emerald-600 text-[10px] font-semibold">(-2% Nepali Dhaka Subsidy)</span></span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-purple-600 h-full rounded-full" style="width: 75%"></div>
+</div>
+<div class="flex justify-between text-[10px] text-slate-400">
+<span>Min Fee: Rs. 30</span>
+<span>Standard Category Rate</span>
+</div>
+</div>
+<!-- Rule 3: Daraz Mart & FMCG -->
+<div class="space-y-1.5">
+<div class="flex justify-between text-xs">
+<span class="font-bold text-slate-800">Daraz Mart (Groceries, Dairy &amp; FMCG)</span>
+<span class="font-mono font-bold text-[#f85606]">5.0% <span class="text-slate-400 text-[10px] font-normal">(Flat Rate)</span></span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-emerald-600 h-full rounded-full" style="width: 35%"></div>
+</div>
+<div class="flex justify-between text-[10px] text-slate-400">
+<span>Zero Cap</span>
+<span>High frequency everyday goods</span>
+</div>
+</div>
+<!-- Rule 4: Home & TV -->
+<div class="space-y-1.5">
+<div class="flex justify-between text-xs">
+<span class="font-bold text-slate-800">Home Appliances, Smart TV &amp; Furniture</span>
+<span class="font-mono font-bold text-[#f85606]">7.0% <span class="text-slate-400 text-[10px] font-normal">(Heavy Bulky Dex Rate)</span></span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-amber-600 h-full rounded-full" style="width: 50%"></div>
+</div>
+<div class="flex justify-between text-[10px] text-slate-400">
+<span>Cap: Rs. 3,500</span>
+<span>Logistics Weight Surcharge: Nil</span>
+</div>
+</div>
+<!-- Custom Merchant Overrides -->
+<div class="mt-4 pt-4 border-t border-slate-100">
+<div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                  Special Negotiated SLA Overrides
+                </div>
+<div class="space-y-2">
+<div class="p-2.5 bg-slate-50 rounded-lg flex items-center justify-between text-xs border border-slate-200">
+<div>
+<div class="font-bold text-slate-800">Ultima Lifestyle Official</div>
+<div class="text-[10px] text-slate-500">Tier 1 Audio Brand | Fulfillment SLA &gt; 98%</div>
+</div>
+<div class="text-right">
+<span class="font-mono font-extrabold text-[#f85606] text-xs">5.5% Override</span>
+<div class="text-[10px] text-emerald-600 font-semibold">Active Approved</div>
+</div>
+</div>
+<div class="p-2.5 bg-slate-50 rounded-lg flex items-center justify-between text-xs border border-slate-200">
+<div>
+<div class="font-bold text-slate-800">TechNepal Mega Store</div>
+<div class="text-[10px] text-slate-500">9.9 Festival Partner SLA</div>
+</div>
+<div class="text-right">
+<span class="font-mono font-extrabold text-blue-600 text-xs">6.0% Rebate</span>
+<div class="text-[10px] text-slate-500">Expires 15 Sep</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Maker-Checker Pin Authorization Notice -->
+<div class="p-3 bg-amber-50 rounded-lg border border-amber-200 text-amber-900 text-xs flex items-start gap-2.5">
+<svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<div>
+<span class="font-bold">Dual-Control Maker-Checker Enforced:</span> Any baseline take-rate modifications require secondary signature approval from Finance Director / Head of Legal before ledger activation.
+                </div>
+</div>
+<!-- Rule Buttons -->
+<div class="flex items-center gap-2 pt-1">
+<button class="flex-1 py-2 bg-slate-900 hover:bg-black text-white text-xs font-bold rounded-lg transition-colors">
+                  Apply Ruleset to Live Catalog
+                </button>
+<button class="px-3 py-2 border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-lg">
+                  Simulate Impact
+                </button>
+</div>
+</div>
+</div>
+<!-- Card 2: Immutable Double-Entry Ledger Preview -->
+<div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden" data-purpose="double-entry-ledger-card">
+<div class="p-4 border-b border-slate-200 flex items-center justify-between">
+<div>
+<h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+<svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  Immutable Double-Entry Ledger
+                </h3>
+<p class="text-[11px] text-slate-500">Live transaction stream with IRD CBMS tax signature</p>
+</div>
+<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold rounded">
+                SHA-256 Validated
+              </span>
+</div>
+<!-- Ledger Entry Item -->
+<div class="p-4 bg-slate-50 border-b border-slate-100 font-mono-nums text-xs">
+<div class="flex justify-between items-center text-[11px] text-slate-500 mb-2 font-mono">
+<span>ORDER: <strong>#NP-9948210</strong> (Ultima Earbuds)</span>
+<span class="text-slate-400">2024-09-09 14:10:02 NPT</span>
+</div>
+<div class="space-y-1.5 font-mono text-[11px]">
+<div class="flex justify-between items-center text-slate-700">
+<span class="text-emerald-700 font-semibold">DR Customer Payment (eSewa GW):</span>
+<span class="font-bold">+ NPR 3,129.00</span>
+</div>
+<div class="flex justify-between items-center text-slate-700">
+<span class="text-slate-600">CR Seller Payable (Ultima Lifestyle):</span>
+<span class="font-bold text-slate-900">- NPR 2,650.00</span>
+</div>
+<div class="flex justify-between items-center text-slate-700">
+<span class="text-[#f85606] font-semibold">CR Daraz Platform Take-Rate (10%):</span>
+<span class="font-bold text-[#f85606]">- NPR 312.90</span>
+</div>
+<div class="flex justify-between items-center text-slate-700">
+<span class="text-blue-700 font-semibold">CR IRD 13% VAT Withholding:</span>
+<span class="font-bold text-blue-700">- NPR 166.10</span>
+</div>
+</div>
+<!-- Reconciled Status Pill -->
+<div class="mt-3 pt-2.5 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500 font-mono">
+<span class="text-emerald-600 font-bold flex items-center gap-1">
+<svg class="w-3 h-3" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+                  CBMS Invoiced #INV-NP-89210
+                </span>
+<span>Hash: <code class="text-slate-700">e3b0c44298...</code></span>
+</div>
+</div>
+<!-- Card Footer -->
+<div class="p-3 bg-white text-center">
+<a class="text-xs font-bold text-blue-600 hover:text-blue-800 hover:underline" href="#">
+                View Full Audit Ledger Stream (148,910 Events Today) →
+              </a>
+</div>
+</div>
+<!-- Card 3: NCHL Direct Trigger & Bank Health -->
+<div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl p-5 text-white shadow-md border border-slate-700">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-blue-400 animate-ping"></div>
+<span class="text-xs uppercase font-bold tracking-widest text-blue-400">Nepal Clearing House</span>
+</div>
+<span class="text-xs text-slate-400 font-mono font-semibold">NCHL-IPS v4.2</span>
+</div>
+<h4 class="text-base font-extrabold text-white">Wednesday Batch Disbursal Rail</h4>
+<p class="text-xs text-slate-300 mt-1">
+              Authorizes direct automated electronic fund transfers across 48 Nepal Rastra Bank Category 'A', 'B', and 'C' licensed financial institutions.
+            </p>
+<div class="my-4 p-3 bg-white/5 rounded-lg border border-white/10 font-mono-nums space-y-1 text-xs">
+<div class="flex justify-between">
+<span class="text-slate-400">Total Merchants in Batch:</span>
+<span class="text-white font-bold">12,400 Accounts</span>
+</div>
+<div class="flex justify-between">
+<span class="text-slate-400">Total Net Liquidity:</span>
+<span class="text-emerald-400 font-extrabold text-sm">NPR 42,850,240.00</span>
+</div>
+<div class="flex justify-between">
+<span class="text-slate-400">Bank Gateway Sponsor:</span>
+<span class="text-white">Nabil Bank Disbursal Node</span>
+</div>
+</div>
+<button class="w-full py-3 bg-[#f85606] hover:bg-[#d94700] text-white rounded-lg text-xs font-bold tracking-wide shadow-lg shadow-[#f85606]/30 transition-all flex items-center justify-center gap-2">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Authorize &amp; Release Weekly Wednesday Batch (Rs. 42.85M)
+            </button>
+<div class="text-[10px] text-center text-slate-400 mt-2.5">
+              Requires Amrit Raj 2FA Hardware Security Token Confirmation
+            </div>
+</div>
+</section>
+</div>
+<!-- END: TwoColumnWorkbench -->
+</main>
+<!-- END: MainContentArea -->
+</div>
+<!-- END: MainEnterpriseLayout -->
+<!-- BEGIN: EnterpriseFooter -->
+<footer class="bg-white border-t border-slate-200 py-3 px-6 text-xs text-slate-500">
+<div class="max-w-[1920px] mx-auto flex items-center justify-between flex-wrap gap-4">
+<div class="flex items-center gap-4">
+<span class="font-bold text-slate-800">Daraz Nepal Marketplace Operations Console</span>
+<span class="text-slate-300">|</span>
+<span>Version: <strong class="text-slate-700">5.2.0-PROD-KTM</strong></span>
+<span class="text-slate-300">|</span>
+<span>Integrated with: <strong>NCHL-IPS, ConnectIPS, IRD CBMS, Nabil Bank CorporatePay</strong></span>
+</div>
+<div class="flex items-center gap-4 text-[11px]">
+<span class="text-emerald-600 font-semibold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          All 77 Districts DEX Operational
+        </span>
+<span class="text-slate-400">© 2024 Daraz Nepal (Alibaba Group). Confidential Financial System.</span>
+</div>
+</div>
+</footer>
+<!-- END: EnterpriseFooter -->
+</body></html>

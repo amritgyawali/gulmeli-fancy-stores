@@ -6,50 +6,74 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
-import { Button, T } from "@/components/ui";
+import { Button, Row, T } from "@/components/ui";
 import { requireSupabase } from "@/services/supabase";
 import { useShop } from "@/store/ShopProvider";
 import { go } from "@/admin/navigate";
+import { track } from "@/services/telemetry";
+import {
+  useSocialSignIn,
+  type SocialProvider,
+} from "@/services/clerk-auth";
+import {
+  credentialsSchema,
+  type Credentials,
+} from "@/lib/schemas";
+
+const inputStyle = {
+  backgroundColor: "white",
+  borderWidth: 1,
+  borderColor: "#d1d5db",
+  borderRadius: 8,
+  padding: 14,
+};
 
 export default function AuthScreen() {
   const router = useRouter();
   const { live, session } = useShop();
+  const social = useSocialSignIn();
   const [create, setCreate] = useState(false);
   const [admin, setAdmin] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
-  const submit = async (destination?: "/account" | "/admin") => {
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<Credentials>({
+    resolver: zodResolver(credentialsSchema),
+    defaultValues: { email: "", password: "" },
+  });
+  const email = useWatch({ control, name: "email" }) ?? "";
+  const password = useWatch({ control, name: "password" }) ?? "";
+  const submit = async (values: Credentials, destination?: "/admin") => {
     if (busy) return;
     if (destination === "/admin" && session) {
       go("/admin");
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setNotice("Enter a valid email address.");
-      return;
-    }
-    if (password.length < 8) {
-      setNotice("Use a password with at least 8 characters.");
       return;
     }
     setBusy(true);
     setNotice("");
     try {
       const client = requireSupabase();
-      const credentials = { email: email.trim(), password };
+      const credentials = { email: values.email.trim(), password: values.password };
       const { data, error } = create
         ? await client.auth.signUp(credentials)
         : await client.auth.signInWithPassword(credentials);
       if (error) throw error;
       if (data.session) {
+        track(create ? "account_created" : "signed_in", {
+          method: "password",
+        });
         if (destination === "/admin") go("/admin");
         else router.replace("/account");
       } else {
         setCreate(false);
-        setPassword("");
+        setValue("password", "");
         setNotice(
           "Check your email and confirm your account, then return here to sign in.",
         );
@@ -64,6 +88,26 @@ export default function AuthScreen() {
       setBusy(false);
     }
   };
+  const startSocial = async (provider: SocialProvider) => {
+    if (busy) return;
+    setBusy(true);
+    setNotice("");
+    try {
+      const done = await social.start(provider);
+      if (done) {
+        track("signed_in", { method: provider });
+        router.replace("/account");
+      }
+    } catch (error) {
+      setNotice(
+        error instanceof Error ? error.message : "Social sign-in failed.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  };
+  const onValid = (destination?: "/admin") =>
+    handleSubmit((values) => void submit(values, destination));
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -106,15 +150,14 @@ export default function AuthScreen() {
                 autoCorrect={false}
                 autoComplete="email"
                 value={email}
-                onChangeText={setEmail}
-                style={{
-                  backgroundColor: "white",
-                  borderWidth: 1,
-                  borderColor: "#d1d5db",
-                  borderRadius: 8,
-                  padding: 14,
-                }}
+                onChangeText={(value) => setValue("email", value)}
+                style={inputStyle}
               />
+              {!!errors.email && (
+                <T accessibilityRole="alert" color="#b91c1c" size={11}>
+                  {errors.email.message}
+                </T>
+              )}
             </View>
             <View style={{ gap: 6 }}>
               <T bold>Password</T>
@@ -124,15 +167,14 @@ export default function AuthScreen() {
                 autoCapitalize="none"
                 autoComplete={create ? "new-password" : "current-password"}
                 value={password}
-                onChangeText={setPassword}
-                style={{
-                  backgroundColor: "white",
-                  borderWidth: 1,
-                  borderColor: "#d1d5db",
-                  borderRadius: 8,
-                  padding: 14,
-                }}
+                onChangeText={(value) => setValue("password", value)}
+                style={inputStyle}
               />
+              {!!errors.password && (
+                <T accessibilityRole="alert" color="#b91c1c" size={11}>
+                  {errors.password.message}
+                </T>
+              )}
             </View>
             <Button
               title={
@@ -145,7 +187,7 @@ export default function AuthScreen() {
                       : "Sign in"
               }
               disabled={busy}
-              onPress={() => void submit(admin ? "/admin" : undefined)}
+              onPress={() => void onValid(admin ? "/admin" : undefined)()}
             />
             <Button
               title={
@@ -167,6 +209,31 @@ export default function AuthScreen() {
           <T accessibilityRole="alert" color="#9a3412">
             {notice}
           </T>
+        )}
+        {live && social.available && !session && (
+          <View style={{ gap: 8 }}>
+            <T size={11} color="#6b7280">
+              Or continue with
+            </T>
+            <Row style={{ gap: 8 }}>
+              <Button
+                title="Google"
+                outline
+                disabled={busy}
+                onPress={() => void startSocial("oauth_google")}
+                style={{ flex: 1 }}
+              />
+              {Platform.OS === "ios" && (
+                <Button
+                  title="Apple"
+                  outline
+                  disabled={busy}
+                  onPress={() => void startSocial("oauth_apple")}
+                  style={{ flex: 1 }}
+                />
+              )}
+            </Row>
+          </View>
         )}
         {live && (
           <Button

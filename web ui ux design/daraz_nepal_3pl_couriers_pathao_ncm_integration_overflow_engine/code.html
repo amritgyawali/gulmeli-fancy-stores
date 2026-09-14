@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>Daraz Nepal Ops Central</title><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"outline":"#8f7065","on-tertiary-fixed":"#001f26","on-tertiary-container":"#f9fdff","on-tertiary-fixed-variant":"#004e5d","tertiary":"#006578","on-primary-fixed-variant":"#822800","tertiary-fixed-dim":"#68d5f1","surface-dim":"#dcd9d9","secondary-container":"#fccc19","primary-container":"#cf4500","surface-tint":"#aa3700","error-container":"#ffdad6","secondary-fixed":"#ffe088","on-secondary-container":"#6e5700","outline-variant":"#e4beb2","primary":"#a63600","on-primary-fixed":"#380d00","secondary":"#735c00","primary-fixed-dim":"#ffb59b","surface-container-highest":"#e5e2e1","secondary-fixed-dim":"#f0c100","background":"#fcf9f8","inverse-surface":"#303030","on-error-container":"#93000a","tertiary-container":"#008097","inverse-primary":"#ffb59b","primary-fixed":"#ffdbcf","surface-container-lowest":"#ffffff","on-secondary-fixed":"#241a00","on-surface":"#1b1c1c","error":"#ba1a1a","on-secondary":"#ffffff","surface-bright":"#fcf9f8","surface-variant":"#e5e2e1","tertiary-fixed":"#aeecff","on-background":"#1b1c1c","on-secondary-fixed-variant":"#574500","on-primary":"#ffffff","surface-container":"#f0eded","inverse-on-surface":"#f3f0ef","on-tertiary":"#ffffff","on-primary-container":"#fffbff","surface-container-high":"#eae7e7","surface-container-low":"#f6f3f2","on-surface-variant":"#5b4137","on-error":"#ffffff","surface":"#fcf9f8"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"margin-desktop":"1.5rem","margin":"0.75rem","space-xs":"0.25rem","space-md":"0.75rem","space-lg":"1rem","gutter":"0.75rem","gutter-desktop":"1rem","space-xl":"1.5rem","space-sm":"0.5rem"},"fontFamily":{"body-sm":["Roboto Flex"],"headline-lg":["Roboto Flex"],"headline-xl-mobile":["Roboto Flex"],"badge-micro":["Roboto Flex"],"headline-lg-mobile":["Roboto Flex"],"headline-md":["Roboto Flex"],"headline-sm":["Roboto Flex"],"label-sm":["Roboto Flex"],"price-hero":["Roboto Flex"],"body-md":["Roboto Flex"],"price-strikethrough":["Roboto Flex"],"body-lg":["Roboto Flex"],"price-card":["Roboto Flex"],"headline-xl":["Roboto Flex"],"label-md":["Roboto Flex"]},"fontSize":{"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}],"headline-lg":["24px",{"lineHeight":"32px","fontWeight":"700"}],"headline-xl-mobile":["24px",{"lineHeight":"32px","fontWeight":"700"}],"badge-micro":["10px",{"lineHeight":"12px","fontWeight":"700"}],"headline-lg-mobile":["20px",{"lineHeight":"28px","fontWeight":"700"}],"headline-md":["18px",{"lineHeight":"24px","fontWeight":"600"}],"headline-sm":["16px",{"lineHeight":"22px","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","fontWeight":"600"}],"price-hero":["28px",{"lineHeight":"36px","fontWeight":"700"}],"body-md":["13px",{"lineHeight":"18px","fontWeight":"400"}],"price-strikethrough":["12px",{"lineHeight":"16px","fontWeight":"400"}],"body-lg":["15px",{"lineHeight":"22px","fontWeight":"400"}],"price-card":["18px",{"lineHeight":"24px","fontWeight":"700"}],"headline-xl":["32px",{"lineHeight":"40px","fontWeight":"700"}],"label-md":["13px",{"lineHeight":"16px","fontWeight":"500"}]}}}}</script></head><body class="bg-surface-container-low font-body-md text-on-surface antialiased"><div class="fixed top-0 left-0 right-0 z-50 flex flex-col"><div class="h-8 w-full bg-inverse-surface text-inverse-on-surface px-space-md flex items-center justify-between text-label-sm font-label-sm shadow-[0_1px_8px_rgba(0,0,0,0.08)]"><div class="flex items-center gap-space-md"><span class="flex items-center gap-space-xs font-headline-sm text-label-sm text-primary-fixed"><span class="material-symbols-outlined text-[14px]">terminal</span>Daraz Nepal Ops Central v5.2</span><span class="h-3 w-px bg-outline/40"></span><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-tertiary-fixed">domain</span>Kathmandu HQ (77 District Hubs Active)</span><span class="h-3 w-px bg-outline/40"></span><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-secondary-container">speed</span>DEX SLA: 99.4%</span></div><div class="flex items-center gap-space-md"><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-tertiary-fixed">account_balance_wallet</span>eSewa/Khalti: 100% OK</span><span class="h-3 w-px bg-outline/40"></span><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-tertiary-fixed">chevron_forward</span>NCHL-IPS Synced</span><span class="h-3 w-px bg-outline/40"></span><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-tertiary-fixed">receipt_long</span>IRD CBMS Live</span><span class="h-3 w-px bg-outline/40"></span><span class="flex items-center gap-space-xs text-inverse-on-surface"><span class="material-symbols-outlined text-[13px] text-on-surface-variant">schedule</span>NPT +05:45</span><span class="h-3 w-px bg-outline/40"></span><span class="text-primary-fixed-dim font-label-sm">Amrit Raj (Head of Ops)</span></div></div><header class="h-16 w-full bg-surface-container-lowest text-on-surface px-space-xl flex items-center justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-xl"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[20px]">local_shipping</span></div><div class="flex flex-col"><span class="text-headline-sm font-headline-sm text-primary tracking-tight leading-none">daraz</span><span class="text-badge-micro font-badge-micro uppercase tracking-wider text-tertiary leading-tight">Express Logistics</span></div></div><div class="relative w-96"><span class="material-symbols-outlined absolute left-space-md top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span><input class="w-full h-10 pl-10 pr-16 bg-surface-container-low text-on-surface placeholder:text-on-surface-variant text-body-md rounded-lg focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Search AWB, Seller ID, Rider Name, 77 Hubs (Ctrl+K)..." type="text"/><kbd class="absolute right-space-md top-1/2 -translate-y-1/2 text-badge-micro font-badge-micro bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded">Ctrl+K</kbd></div></div><div class="flex items-center gap-space-md"><button class="h-9 px-space-md bg-primary hover:bg-primary-container text-on-primary text-label-md font-label-md rounded-lg flex items-center gap-space-xs transition-colors shadow-[0_1px_4px_rgba(0,0,0,0.08)]" type="button"><span class="material-symbols-outlined text-[18px]">add_circle</span>+ Dispatch Run</button><button class="h-9 px-space-md bg-surface-container text-on-surface hover:bg-surface-container-high text-label-md font-label-md rounded-lg flex items-center gap-space-xs transition-colors" type="button"><span class="material-symbols-outlined text-[18px] text-tertiary">share_location</span>Rider Fleet GPS</button><button class="h-9 px-space-md bg-surface-container text-on-surface hover:bg-surface-container-high text-label-md font-label-md rounded-lg flex items-center gap-space-xs transition-colors" type="button"><span class="material-symbols-outlined text-[18px] text-secondary">satellite_alt</span>Weather Radar</button><div class="h-6 w-px bg-surface-container-highest mx-space-xs"></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header></div><aside class="fixed left-0 top-24 bottom-0 w-72 bg-surface-container-lowest overflow-y-auto z-40 py-space-md flex flex-col justify-between shadow-[1px_0_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col gap-space-sm px-space-md"><div class="text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant px-space-md pt-space-xs">Command &amp; Oversight</div><nav class="flex flex-col gap-0.5" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm"><a class="flex items-center gap-space-md px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="dashboard-and-live-analytics" href="#"><span class="material-symbols-outlined text-[18px]">analytics</span>Dashboard &amp; Live Analytics</a></nav><div class="text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant px-space-md pt-space-sm">Retail Engine</div><nav class="flex flex-col gap-0.5" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm"><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="orders-management" href="#"><span class="material-symbols-outlined text-[18px]">inventory_2</span>Orders Management</a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="catalog-and-assortment" href="#"><span class="material-symbols-outlined text-[18px]">view_list</span>Catalog Assortment</a></nav><div class="text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant px-space-md pt-space-sm">Vendors &amp; Compliance</div><nav class="flex flex-col gap-0.5" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm"><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="verified-sellers-and-onboarding" href="#"><span class="material-symbols-outlined text-[18px]">store</span>Verified Sellers</a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="kyc-maker-checker" href="#"><span class="material-symbols-outlined text-[18px]">verified_user</span>KYC Maker-Checker</a></nav><div class="text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant px-space-md pt-space-sm">Logistics Network (DEX)</div><nav class="flex flex-col gap-0.5" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm"><a aria-current="page" class="flex items-center justify-between px-space-md py-2 rounded-lg transition-colors bg-primary-container text-on-primary-container font-headline-sm" data-path="77-district-hub-matrix" href="#"><span class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[18px]">hub</span>77 District Hub Matrix</span><span class="px-1.5 py-0.5 rounded bg-tertiary-container text-on-tertiary-container font-badge-micro text-badge-micro">LIVE</span></a><a class="flex items-center justify-between px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="dex-last-mile-fleet" href="#"><span class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[18px]">two_wheeler</span>DEX Last-Mile Fleet</span><span class="font-badge-micro text-badge-micro text-on-surface-variant">1,240</span></a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="3pl-couriers-dispatch" href="#"><span class="material-symbols-outlined text-[18px]">alt_route</span>3PL Couriers (Pathao/NCM)</a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="reverse-logistics-qc-lab" href="#"><span class="material-symbols-outlined text-[18px]">assignment_return</span>Reverse Logistics QC Lab</a></nav><div class="text-badge-micro font-badge-micro uppercase tracking-wider text-on-surface-variant px-space-md pt-space-sm">Governance &amp; Core</div><nav class="flex flex-col gap-0.5" data-active-classes="bg-primary-container text-on-primary-container font-headline-sm"><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="finance-ird-and-nchl-recon" href="#"><span class="material-symbols-outlined text-[18px]">account_balance</span>Finance, IRD &amp; NCHL Recon</a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="trust-risk-and-bot-guard" href="#"><span class="material-symbols-outlined text-[18px]">security</span>Trust, Risk &amp; Bot Guard</a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-body-md font-body-md" data-path="system-and-rbac-control" href="#"><span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>System &amp; RBAC Control</a></nav></div><div class="px-space-md pt-space-md"><div class="bg-surface-container p-space-md rounded-lg flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="text-label-sm font-label-sm text-on-surface">Kathmandu Sort Hub</span><span class="text-badge-micro font-badge-micro text-tertiary font-bold">98.6% CAP</span></div><div class="w-full bg-surface-container-high rounded-full h-1.5 overflow-hidden"><div class="bg-primary h-1.5 rounded-full w-11/12"></div></div><span class="text-badge-micro font-badge-micro text-on-surface-variant">Peak festive dispatch load active</span></div></div></aside><div class="pl-72"><main class="relative pt-24 min-h-[calc(100vh-140px)] w-full px-space-xl py-space-lg bg-surface-container-low"><div class="flex flex-col w-full">
+<script>
+    (function() {
+      const activeSidebarItem = document.querySelector('aside a[data-path="3pl-couriers-dispatch"]');
+      if (activeSidebarItem) {
+        activeSidebarItem.className = "flex items-center justify-between px-space-md py-2 rounded-lg bg-primary-container text-on-primary-container font-headline-sm transition-colors";
+        const innerBadge = activeSidebarItem.querySelector('span:last-child');
+        if (innerBadge) {
+          innerBadge.outerHTML = '<span class="px-1.5 py-0.5 rounded bg-surface-container-lowest text-primary font-badge-micro text-badge-micro uppercase tracking-wider font-bold">API LIVE</span>';
+        }
+      }
+    })();
+  </script>
+<!-- Top Command & Header Zone -->
+<div class="flex flex-col gap-space-sm mb-space-xl">
+<!-- Breadcrumbs & Live Node Badge -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm text-body-sm font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-space-xs">
+<span class="hover:text-primary transition-colors cursor-pointer">Daraz Nepal Admin</span>
+<span class="text-outline/40">/</span>
+<span class="hover:text-primary transition-colors cursor-pointer">Operations &amp; Logistics (DEX)</span>
+<span class="text-outline/40">/</span>
+<span class="font-headline-sm text-label-sm text-primary">3PL Courier Gateways &amp; Overflow Manager</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-tertiary-container text-on-tertiary-container font-badge-micro text-badge-micro tracking-wider uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed animate-ping"></span>
+          Gateway Engine: Active (NPT 14:32:08)
+        </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px] text-tertiary">tune</span>
+          Circuit Breaker: 100% Armed
+        </span>
+</div>
+</div>
+<!-- Title and Action Bar -->
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-md bg-surface-container-lowest p-space-lg rounded-xl shadow-sm">
+<div class="flex flex-col gap-0.5 max-w-3xl">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">alt_route</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">
+            3PL Courier Gateways (Pathao, NCM &amp; Sundar) Integration Console
+          </h1>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant pl-10">
+          Real-time webhook telemetry, automated threshold overflow routing, API rate-limiting, SLA compliance metrics, and COD remittance ledger across external delivery partners.
+        </p>
+</div>
+<!-- Quick Action Buttons -->
+<div class="flex flex-wrap items-center gap-space-sm pl-10 lg:pl-0">
+<button class="h-9 px-space-md bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md rounded flex items-center gap-space-xs transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">add_link</span>
+<span>+ Add 3PL Partner API</span>
+</button>
+<button class="h-9 px-space-sm bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md rounded flex items-center gap-space-xs transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px] text-tertiary">sync</span>
+<span>Sync Webhooks</span>
+</button>
+<button class="h-9 px-space-sm bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md rounded flex items-center gap-space-xs transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px] text-secondary">wifi_protected_setup</span>
+<span>Ping All</span>
+</button>
+<button class="h-9 px-space-sm bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md rounded flex items-center gap-space-xs transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">balance</span>
+<span>Rebalance Ratio</span>
+</button>
+<button class="h-9 px-space-sm bg-surface-container-highest hover:bg-surface-container text-on-surface font-label-md text-label-md rounded flex items-center gap-space-xs transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px] text-primary">download</span>
+<span>Export Manifest</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Executive KPI Metric Ribbon (6 High-Density Cards) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-space-md mb-space-xl">
+<!-- Metric 1: Delegated Parcels -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-primary"></div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>3PL Delegated Parcels</span>
+<span class="material-symbols-outlined text-[16px] text-primary">local_shipping</span>
+</div>
+<div class="my-space-xs">
+<span class="font-headline-xl text-headline-xl text-on-surface tracking-tight">1,842</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant ml-1">pkgs</span>
+</div>
+<div class="flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant bg-surface-container-low px-2 py-1 rounded">
+<span>14.2% Total Vol</span>
+<span class="text-tertiary font-bold">DEX Absorbs 85.8%</span>
+</div>
+</div>
+<!-- Metric 2: Pathao Express Status -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-tertiary"></div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>Pathao Express API</span>
+<span class="flex items-center gap-1 font-badge-micro text-badge-micro uppercase px-1.5 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-bold">99.92% Up</span>
+</div>
+<div class="my-space-xs">
+<span class="font-headline-xl text-headline-xl text-on-surface tracking-tight">42<span class="text-body-md font-body-md text-on-surface-variant">ms</span></span>
+<span class="font-label-sm text-label-sm text-tertiary ml-2">REST v2.4</span>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-low px-2 py-1 rounded truncate">
+        1,120 Intra-City KTM Valley Rushes
+      </div>
+</div>
+<!-- Metric 3: NCM Status -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-secondary"></div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>Nepal Can Move (NCM)</span>
+<span class="font-badge-micro text-badge-micro uppercase px-1.5 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-bold">Active</span>
+</div>
+<div class="my-space-xs">
+<span class="font-headline-xl text-headline-xl text-on-surface tracking-tight">642</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant ml-1">remote</span>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-low px-2 py-1 rounded truncate">
+        Mountain Trunkline &amp; Far-West
+      </div>
+</div>
+<!-- Metric 4: 3PL On-Time SLA -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-tertiary-container"></div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>3PL On-Time SLA</span>
+<span class="material-symbols-outlined text-[16px] text-tertiary">check_circle</span>
+</div>
+<div class="my-space-xs flex items-baseline justify-between">
+<span class="font-headline-xl text-headline-xl text-on-surface tracking-tight">96.8%</span>
+<span class="font-badge-micro text-badge-micro text-on-surface-variant">Target &gt;95%</span>
+</div>
+<div class="flex items-center justify-between font-label-sm text-label-sm bg-surface-container-low px-2 py-1 rounded text-on-surface-variant">
+<span>Pathao: <b class="text-tertiary">98.4%</b></span>
+<span>NCM: <b class="text-secondary">94.6%</b></span>
+</div>
+</div>
+<!-- Metric 5: COD Escrow Remittance -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-secondary-container"></div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>COD Escrow in Transit</span>
+<span class="material-symbols-outlined text-[16px] text-secondary">payments</span>
+</div>
+<div class="my-space-xs">
+<span class="font-headline-sm text-headline-sm text-primary font-bold">Rs. 2,140,850</span>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-low px-2 py-1 rounded truncate">
+        Pathao Recon 20:00 NPT • NCM T+2
+      </div>
+</div>
+<!-- Metric 6: API Retries & Circuit Breaker -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-primary-container"></div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>Webhook Health</span>
+<span class="flex items-center gap-1 text-badge-micro font-badge-micro text-tertiary font-bold">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> NORMAL
+        </span>
+</div>
+<div class="my-space-xs">
+<span class="font-headline-xl text-headline-xl text-on-surface tracking-tight">4</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant ml-1">retries queue</span>
+</div>
+<div class="font-label-sm text-label-sm text-tertiary bg-surface-container-low px-2 py-1 rounded flex items-center justify-between">
+<span>0 Dropped Packets</span>
+<span class="material-symbols-outlined text-[14px]">format_image_left</span>
+</div>
+</div>
+</div>
+<!-- Navigation Segment Tabs -->
+<div class="flex items-center justify-between border-b-0 bg-surface-container-lowest px-space-md py-1 rounded-t-xl shadow-sm mb-space-md">
+<div class="flex items-center gap-space-xs overflow-x-auto">
+<button class="px-space-md py-2.5 font-headline-sm text-label-md text-primary bg-primary-fixed/20 rounded flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">hub</span>
+<span>All 3PL Partners</span>
+<span class="px-1.5 py-0.2 bg-primary text-on-primary rounded text-badge-micro font-badge-micro">3 Live</span>
+</button>
+<button class="px-space-md py-2.5 font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded flex items-center gap-2 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-tertiary">two_wheeler</span>
+<span>Pathao Logistics API</span>
+<span class="px-1.5 py-0.2 bg-surface-container text-on-surface-variant rounded text-badge-micro font-badge-micro">Intra-City</span>
+</button>
+<button class="px-space-md py-2.5 font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded flex items-center gap-2 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-secondary">terrain</span>
+<span>Nepal Can Move (NCM)</span>
+<span class="px-1.5 py-0.2 bg-surface-container text-on-surface-variant rounded text-badge-micro font-badge-micro">68 Districts</span>
+</button>
+<button class="px-space-md py-2.5 font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded flex items-center gap-2 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">airport_shuttle</span>
+<span>Sundar Courier</span>
+<span class="px-1.5 py-0.2 bg-surface-container-highest text-on-surface-variant rounded text-badge-micro font-badge-micro">Cold Standby</span>
+</button>
+<button class="px-space-md py-2.5 font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded flex items-center gap-2 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">dynamic_form</span>
+<span>Overflow Rules Engine</span>
+<span class="px-1.5 py-0.2 bg-secondary-fixed text-on-secondary-fixed rounded text-badge-micro font-badge-micro">3 Active</span>
+</button>
+<button class="px-space-md py-2.5 font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded flex items-center gap-2 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
+<span>COD Escrow &amp; Settlements</span>
+</button>
+</div>
+<div class="hidden sm:flex items-center gap-2 text-on-surface-variant text-body-sm font-body-sm pl-space-md">
+<span class="material-symbols-outlined text-[16px] text-tertiary">sensors</span>
+<span>Live Dispatch Sync: <b>Every 15s</b></span>
+</div>
+</div>
+<!-- SECTION 1: Live Partner Telemetry Cards (Pathao & NCM Split Grid) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-md mb-space-xl">
+<!-- Pathao Logistics Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
+<div class="flex flex-col gap-space-md">
+<!-- Card Header -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-primary-fixed flex items-center justify-center text-primary font-headline-lg font-bold">
+<span class="material-symbols-outlined text-[28px]">electric_moped</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-md text-headline-md text-on-surface">Pathao Logistics Nepal</span>
+<span class="px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-badge-micro text-badge-micro font-bold uppercase">
+                  Connected v2.4
+                </span>
+</div>
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-on-surface-variant">
+<span class="text-primary font-bold">Primary Intra-City Burst</span> • 
+                <span>Token Refreshed 4m ago</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-tertiary bg-surface-container-low px-2 py-1 rounded">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> 98.4% 2H SLA
+            </span>
+</div>
+</div>
+<!-- Metric Details Grid -->
+<div class="grid grid-cols-3 gap-space-sm bg-surface-container-low p-space-md rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Rate Structure</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Rs. 65 <span class="text-body-sm font-body-sm font-normal">/ 1st kg</span></span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">+ Rs. 25/addl kg</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Today's Inflow</span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold">1,120 waybills</span>
+<span class="text-badge-micro font-badge-micro text-tertiary">56% of Daily Cap</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Pickup Latency</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">24 mins</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">98.6% Acceptance</span>
+</div>
+</div>
+<!-- Coverage & Technical Parameters -->
+<div class="flex flex-col gap-space-xs text-body-sm font-body-sm">
+<div class="flex items-center justify-between py-1 bg-surface-container-lowest">
+<span class="text-on-surface-variant">Operational Radius</span>
+<span class="font-label-md text-label-md text-on-surface">Kathmandu Valley (KTM, Lalitpur, Bhaktapur) + Pokhara City Core</span>
+</div>
+<div class="flex items-center justify-between py-1 bg-surface-container-low px-2 rounded">
+<span class="text-on-surface-variant">Active Webhooks (REST 200 OK)</span>
+<div class="flex items-center gap-1 font-badge-micro text-badge-micro">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface">order.dispatched</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface">order.delivered</span>
+<span class="px-1.5 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed">cod.collected</span>
+</div>
+</div>
+<div class="flex items-center justify-between py-1 bg-surface-container-lowest">
+<span class="text-on-surface-variant">Universal DEX Barcode Sync</span>
+<span class="text-tertiary font-label-md text-label-md font-bold">100% Interleaved Code 128 Compliant</span>
+</div>
+</div>
+</div>
+<!-- Card Action Footer -->
+<div class="mt-space-md pt-space-md border-t-0 flex flex-wrap items-center justify-between gap-space-sm bg-surface-container-high/40 p-space-sm rounded-lg">
+<div class="flex items-center gap-2">
+<button class="px-space-sm py-1.5 bg-surface-container-lowest hover:bg-surface-container text-error font-label-sm text-label-sm rounded flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px]">pause_circle</span>
+<span>Pause Allocation</span>
+</button>
+<button class="px-space-sm py-1.5 bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-sm text-label-sm rounded flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px]">speed</span>
+<span>Throttle (Cap: 2k/day)</span>
+</button>
+</div>
+<button class="px-space-sm py-1.5 bg-primary hover:bg-primary-container text-on-primary font-label-sm text-label-sm rounded flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px]">key</span>
+<span>View API Key &amp; Secret</span>
+</button>
+</div>
+</div>
+<!-- Nepal Can Move (NCM) Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
+<div class="flex flex-col gap-space-md">
+<!-- Card Header -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed font-headline-lg font-bold">
+<span class="material-symbols-outlined text-[28px]">terrain</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-md text-headline-md text-on-surface">Nepal Can Move (NCM)</span>
+<span class="px-2 py-0.5 rounded bg-secondary-container text-on-secondary-container font-badge-micro text-badge-micro font-bold uppercase">
+                  EDI / REST v3.0
+                </span>
+</div>
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-on-surface-variant">
+<span class="text-secondary font-bold">Primary Remote &amp; High-Altitude Trunkline</span> • 
+                <span>Handover Terminal: Balkumari Ringroad</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-secondary bg-surface-container-low px-2 py-1 rounded">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> 94.6% SLA (48-72h)
+            </span>
+</div>
+</div>
+<!-- Metric Details Grid -->
+<div class="grid grid-cols-3 gap-space-sm bg-surface-container-low p-space-md rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Trunkline Rate</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Rs. 140 <span class="text-body-sm font-body-sm font-normal">base</span></span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">+ Rs. 45/kg mountain surcharge</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Current Load</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">642 waybills</span>
+<span class="text-badge-micro font-badge-micro text-tertiary">Linehaul Air/Truck Synced</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Coverage Perimeter</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">68 Districts</span>
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">Beyond DEX direct hubs</span>
+</div>
+</div>
+<!-- Coverage & Technical Parameters -->
+<div class="flex flex-col gap-space-xs text-body-sm font-body-sm">
+<div class="flex items-center justify-between py-1 bg-surface-container-lowest">
+<span class="text-on-surface-variant">Priority Feeder Sectors</span>
+<span class="font-label-md text-label-md text-on-surface">Mustang, Jumla, Solukhumbu, Bajura, Rolpa, Taplejung</span>
+</div>
+<div class="flex items-center justify-between py-1 bg-surface-container-low px-2 rounded">
+<span class="text-on-surface-variant">Batch EDI Handshake</span>
+<div class="flex items-center gap-1 font-badge-micro text-badge-micro">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface">ncm.bag_manifest</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface">ncm.checkpoint_scan</span>
+<span class="px-1.5 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed">ncm.payout_ready</span>
+</div>
+</div>
+<div class="flex items-center justify-between py-1 bg-surface-container-lowest">
+<span class="text-on-surface-variant">Kathmandu Consolidation Slot</span>
+<span class="text-on-surface font-label-md text-label-md font-bold">17:00 Daily Dispatch Run</span>
+</div>
+</div>
+</div>
+<!-- Card Action Footer -->
+<div class="mt-space-md pt-space-md border-t-0 flex flex-wrap items-center justify-between gap-space-sm bg-surface-container-high/40 p-space-sm rounded-lg">
+<div class="flex items-center gap-2">
+<button class="px-space-sm py-1.5 bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-sm text-label-sm rounded flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px] text-tertiary">flight_takeoff</span>
+<span>Configure Air Cargo</span>
+</button>
+<button class="px-space-sm py-1.5 bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-sm text-label-sm rounded flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px]">receipt</span>
+<span>Generate Manifest</span>
+</button>
+</div>
+<button class="px-space-sm py-1.5 bg-surface-container-highest hover:bg-surface-container text-on-surface font-label-sm text-label-sm rounded flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px]">settings</span>
+<span>NCM API Settings</span>
+</button>
+</div>
+</div>
+</div>
+<!-- SECTION 2: Dynamic Auto-Failover & Overflow Rule Builder (Ruleset #04) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm mb-space-xl">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-space-md border-b-0 mb-space-md gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold">
+<span class="material-symbols-outlined text-[20px]">smart_toy</span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">
+            Dynamic Auto-Failover &amp; Overflow Ruleset (#04-LIVE-ROUTING)
+          </h2>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+            Algorithmic packet re-direction when DEX sortation or mountain infrastructure meets physical capacity constraints.
+          </span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-low text-tertiary font-label-sm text-label-sm font-bold">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> Engine: Healthy
+        </span>
+<button class="h-8 px-3 bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm rounded flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span>Add Custom Rule</span>
+</button>
+</div>
+</div>
+<!-- 3 High-Impact Interactive Rules -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Rule 1 -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-start justify-between gap-space-xs mb-space-sm">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-badge-micro font-badge-micro">01</span>
+<span class="font-headline-sm text-label-md text-on-surface font-bold">Kathmandu Valley Surge Overflow</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-primary text-on-primary text-badge-micro font-badge-micro font-bold uppercase tracking-wider">
+            ARMED &amp; ACTIVE
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+          If DEX Thapathali Mother Hub inbound &gt; <b>15,000 parcels/day</b> OR sorting queue latency &gt; <b>45 mins</b> → Automatically divert next <b>25% intra-city flow</b> to Pathao Logistics API with unified barcode.
+        </p>
+<div class="bg-surface-container-lowest p-space-sm rounded-lg flex flex-col gap-1.5 font-label-sm text-label-sm mb-space-sm">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span>Current Mother Hub Load</span>
+<span class="font-bold text-on-surface">14,210 / 15,000 (94.7%)</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-1.5 rounded-full w-11/12"></div>
+</div>
+<div class="flex items-center justify-between text-badge-micro font-badge-micro text-on-surface-variant">
+<span>Divert Factor: 25%</span>
+<span class="text-tertiary">Buffer Trigger Ready</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">Auth: Amrit Raj (Head of Ops)</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:border-surface-container-lowest after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+<!-- Rule 2 -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-start justify-between gap-space-xs mb-space-sm">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-bold text-badge-micro font-badge-micro">02</span>
+<span class="font-headline-sm text-label-md text-on-surface font-bold">Monsoon Landslide High-Altitude Re-route</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-secondary-container text-on-secondary-container text-badge-micro font-badge-micro font-bold uppercase tracking-wider">
+            ACTIVE DETOUR
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+          If Narayanghat-Mugling highway Detour Level 3 active → Auto-divert Karnali and Sudurpashchim light parcels (&lt; 2kg) to <b>NCM air-chartered consolidation</b> at Nepalgunj Airport hub.
+        </p>
+<div class="bg-surface-container-lowest p-space-sm rounded-lg flex flex-col gap-1.5 font-label-sm text-label-sm mb-space-sm">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span>Corridor Status</span>
+<span class="font-bold text-secondary">Mugling Blocked (Detour L3)</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span>Air Cargo Sort Dispatch</span>
+<span class="font-bold text-tertiary">Nepalgunj Flight NP-204</span>
+</div>
+<div class="flex items-center justify-between text-badge-micro font-badge-micro text-on-surface-variant">
+<span>Parcels Consolidated: 284 pkgs</span>
+<span class="text-secondary font-bold">+Rs. 45 Surcharge Handled</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">Trigger: Dept of Roads API</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:border-surface-container-lowest after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+</div>
+<!-- Rule 3 -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-start justify-between gap-space-xs mb-space-sm">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center font-bold text-badge-micro font-badge-micro">03</span>
+<span class="font-headline-sm text-label-md text-on-surface font-bold">COD Risk Threshold Guard</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-tertiary-container text-on-tertiary-container text-badge-micro font-badge-micro font-bold uppercase tracking-wider">
+            ENFORCED
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+          Any 3PL order exceeding <b>COD Rs. 25,000</b> requires Amrit Raj OTP biometric release and high-value transit insurance rider tag before API manifest injection.
+        </p>
+<div class="bg-surface-container-lowest p-space-sm rounded-lg flex flex-col gap-1.5 font-label-sm text-label-sm mb-space-sm">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span>High-Value Parcels Today</span>
+<span class="font-bold text-on-surface">38 High-Tier Items</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span>Insurance Binder Provider</span>
+<span class="font-bold text-tertiary">Sagarmatha Lumbini Ins.</span>
+</div>
+<div class="flex items-center justify-between text-badge-micro font-badge-micro text-on-surface-variant">
+<span>Intercepted without OTP: 0</span>
+<span class="text-tertiary font-bold">100% Policy Clean</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="text-badge-micro font-badge-micro text-on-surface-variant">Compliance: IRD &amp; Internal Audit</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-container-lowest after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:border-surface-container-lowest after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION 3: Live 3PL Waybill Dispatch Ledger & Tracking Table -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm mb-space-xl">
+<!-- Table Toolbar -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md pb-space-md border-b-0 mb-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">
+            Live 3PL Waybill Dispatch Ledger &amp; Tracking Stream
+          </h2>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-badge-micro text-badge-micro">
+            Showing 5 of 1,842
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Live streaming telemetry across Pathao rider fleet and NCM mountain linehauls.
+        </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant">search</span>
+<input class="w-full h-8 pl-8 pr-3 bg-surface-container-low text-on-surface text-body-sm rounded focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Filter AWB, 3PL ID or City..." type="text"/>
+</div>
+<select class="h-8 px-2 bg-surface-container-low text-on-surface text-label-sm font-label-sm rounded focus:outline-none focus:ring-1 focus:ring-primary">
+<option>All Partners (Pathao + NCM)</option>
+<option>Pathao Express Only</option>
+<option>Nepal Can Move (NCM) Only</option>
+</select>
+<select class="h-8 px-2 bg-surface-container-low text-on-surface text-label-sm font-label-sm rounded focus:outline-none focus:ring-1 focus:ring-primary">
+<option>All Statuses</option>
+<option>Out for Delivery</option>
+<option>In Transit Linehaul</option>
+<option>Rider Assigned</option>
+<option>Delivered • COD Collected</option>
+</select>
+</div>
+</div>
+<!-- Table Container -->
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-2.5 px-3 rounded-l">Waybill IDs (Daraz / 3PL)</th>
+<th class="py-2.5 px-3">Partner Carrier</th>
+<th class="py-2.5 px-3">Origin Hub → Destination Node</th>
+<th class="py-2.5 px-3">Specs</th>
+<th class="py-2.5 px-3">Financials (Cost / COD)</th>
+<th class="py-2.5 px-3">Live Telemetry Status</th>
+<th class="py-2.5 px-3">SLA Timer &amp; Window</th>
+<th class="py-2.5 px-3 rounded-r text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y-0">
+<!-- Row 1: Pathao Kathmandu Intra-city -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="font-headline-sm text-label-sm text-primary font-bold">DX-KTM-9948210</span>
+<span class="font-badge-micro text-badge-micro text-on-surface-variant">PTH-NP-882194</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-primary-fixed/40 text-on-primary-fixed-variant font-badge-micro text-badge-micro font-bold">
+<span class="material-symbols-outlined text-[13px] text-primary">two_wheeler</span> Pathao Express
+              </span>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-on-surface font-label-sm text-label-sm">Thapathali KTM Sort → Jhamsikhel</span>
+<span class="text-on-surface-variant text-badge-micro">Lalitpur Metro Ward 4, Sanepa Gate</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-on-surface">0.85 kg</span>
+<span class="text-on-surface-variant text-badge-micro">18x12x6 cm</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-primary font-headline-sm text-label-sm font-bold">COD: Rs. 3,129</span>
+<span class="text-on-surface-variant text-badge-micro">DEX Cost: Rs. 65.00</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-secondary-fixed/40 text-on-secondary-fixed font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span> Out for Delivery (Rider Ramesh K.)
+              </span>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-primary font-bold font-label-sm">18m remaining</span>
+<span class="text-on-surface-variant text-badge-micro">2h Express Rush Commitment</span>
+</div>
+</td>
+<td class="py-3 px-3 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container text-tertiary" title="Track Live GPS" type="button">
+<span class="material-symbols-outlined text-[18px]">share_location</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-on-surface-variant" title="Ping API Telemetry" type="button">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-primary" title="Print Co-Branded Waybill" type="button">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: NCM Remote Mountain (Jumla) -->
+<tr class="bg-surface-container-low/30 hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="font-headline-sm text-label-sm text-primary font-bold">DX-JML-1102941</span>
+<span class="font-badge-micro text-badge-micro text-on-surface-variant">NCM-MNT-44019</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-badge-micro text-badge-micro font-bold">
+<span class="material-symbols-outlined text-[13px] text-secondary">terrain</span> NCM Remote Linehaul
+              </span>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-on-surface font-label-sm text-label-sm">Balaju KTM → Chandannath, Jumla</span>
+<span class="text-on-surface-variant text-badge-micro">Karnali Air Hub Transfer (Surkhet)</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-on-surface">1.40 kg</span>
+<span class="text-on-surface-variant text-badge-micro">Thermal Winter Goods</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-on-surface font-headline-sm text-label-sm font-bold">Prepaid (eSewa)</span>
+<span class="text-on-surface-variant text-badge-micro">DEX Cost: Rs. 185.00</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">flight_takeoff</span> Air-Cargo In Transit
+              </span>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-tertiary font-bold font-label-sm">24h / 48h elapsed</span>
+<span class="text-on-surface-variant text-badge-micro">On Track for Tomorrow 11:00</span>
+</div>
+</td>
+<td class="py-3 px-3 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container text-secondary" title="View Air Manifest" type="button">
+<span class="material-symbols-outlined text-[18px]">flight</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-on-surface-variant" title="Ping EDI" type="button">
+<span class="material-symbols-outlined text-[18px]">sync_alt</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-primary" title="Print Co-Branded Waybill" type="button">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Pathao Pokhara Valley -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="font-headline-sm text-label-sm text-primary font-bold">DX-PKR-3029188</span>
+<span class="font-badge-micro text-badge-micro text-on-surface-variant">PTH-PKR-90412</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-primary-fixed/40 text-on-primary-fixed-variant font-badge-micro text-badge-micro font-bold">
+<span class="material-symbols-outlined text-[13px] text-primary">two_wheeler</span> Pathao Express
+              </span>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-on-surface font-label-sm text-label-sm">Pokhara Prithvichowk → Lakeside 6</span>
+<span class="text-on-surface-variant text-badge-micro">Barahi Path Guest Zone</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-on-surface">0.45 kg</span>
+<span class="text-on-surface-variant text-badge-micro">Camera Accessories</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-primary font-headline-sm text-label-sm font-bold">COD: Rs. 1,890</span>
+<span class="text-on-surface-variant text-badge-micro">DEX Cost: Rs. 65.00</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Rider Assigned (Bibek G.)
+              </span>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-tertiary font-bold font-label-sm">41m remaining</span>
+<span class="text-on-surface-variant text-badge-micro">Pokhara Intra-City SLA</span>
+</div>
+</td>
+<td class="py-3 px-3 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container text-tertiary" title="Track Live GPS" type="button">
+<span class="material-symbols-outlined text-[18px]">share_location</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-error" title="Pull Back to DEX" type="button">
+<span class="material-symbols-outlined text-[18px]">undo</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-primary" title="Print Co-Branded Waybill" type="button">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: NCM Solukhumbu (High Elevation Everest Corridor) -->
+<tr class="bg-surface-container-low/30 hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="font-headline-sm text-label-sm text-primary font-bold">DX-SOL-7718290</span>
+<span class="font-badge-micro text-badge-micro text-on-surface-variant">NCM-MNT-55902</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-badge-micro text-badge-micro font-bold">
+<span class="material-symbols-outlined text-[13px] text-secondary">terrain</span> NCM Remote Linehaul
+              </span>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-on-surface font-label-sm text-label-sm">Balkumari Ringroad → Salleri, Solu</span>
+<span class="text-on-surface-variant text-badge-micro">Via Phaplu Air Cargo Feeder</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-on-surface">2.10 kg</span>
+<span class="text-on-surface-variant text-badge-micro">Solar Inverter Controller</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-primary font-headline-sm text-label-sm font-bold">COD: Rs. 14,500</span>
+<span class="text-on-surface-variant text-badge-micro">DEX Cost: Rs. 230.00</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">local_shipping</span> Mountain Linehaul 4x4
+              </span>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-secondary font-bold font-label-sm">38h into 72h window</span>
+<span class="text-on-surface-variant text-badge-micro">Mountain Pass Clear</span>
+</div>
+</td>
+<td class="py-3 px-3 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container text-tertiary" title="View Truck GPS" type="button">
+<span class="material-symbols-outlined text-[18px]">pin_drop</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-on-surface-variant" title="Call Remote Station" type="button">
+<span class="material-symbols-outlined text-[18px]">call</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-primary" title="Print Co-Branded Waybill" type="button">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5: Pathao Completed / COD Cleared -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="font-headline-sm text-label-sm text-on-surface font-bold">DX-BKT-5510293</span>
+<span class="font-badge-micro text-badge-micro text-on-surface-variant">PTH-NP-881900</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-primary-fixed/40 text-on-primary-fixed-variant font-badge-micro text-badge-micro font-bold">
+<span class="material-symbols-outlined text-[13px] text-primary">two_wheeler</span> Pathao Express
+              </span>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-on-surface font-label-sm text-label-sm">Thapathali KTM → Suryabinayak</span>
+<span class="text-on-surface-variant text-badge-micro">Bhaktapur Ward 2, Pilot Area</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-on-surface">1.10 kg</span>
+<span class="text-on-surface-variant text-badge-micro">Beauty &amp; Skincare Hamper</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-tertiary font-headline-sm text-label-sm font-bold">Rs. 4,250 Cleared</span>
+<span class="text-on-surface-variant text-badge-micro">eSewa Nightly Batch</span>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-tertiary-container text-on-tertiary-container font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">task_alt</span> Delivered &amp; Cash In Vault
+              </span>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col">
+<span class="text-tertiary font-bold font-label-sm">Delivered in 44m</span>
+<span class="text-on-surface-variant text-badge-micro">Beat SLA by 1h 16m</span>
+</div>
+</td>
+<td class="py-3 px-3 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container text-tertiary" title="View e-POD Signature" type="button">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-on-surface-variant" title="Audit Trail" type="button">
+<span class="material-symbols-outlined text-[18px]">history</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Pagination & Bulk Action Bar -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-sm pt-space-md border-t-0 mt-space-sm font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex items-center gap-space-sm">
+<span>Showing <b>1 - 5</b> of <b>1,842</b> live dispatched waybills</span>
+<span class="h-3 w-px bg-surface-container-highest"></span>
+<a class="text-primary hover:underline font-label-sm" href="#">View Full 3PL Real-Time Stream →</a>
+</div>
+<div class="flex items-center gap-1">
+<button class="px-2.5 py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high disabled:opacity-40" type="button">Previous</button>
+<button class="px-2.5 py-1 rounded bg-primary text-on-primary font-bold" type="button">1</button>
+<button class="px-2.5 py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high" type="button">2</button>
+<button class="px-2.5 py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high" type="button">3</button>
+<span class="px-1 text-on-surface-variant">...</span>
+<button class="px-2.5 py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high" type="button">369</button>
+<button class="px-2.5 py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high" type="button">Next</button>
+</div>
+</div>
+</div>
+<!-- SECTION 4: 3PL COD Reconciliation & NCHL Settlement Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-lg">
+<!-- Left: Settlement Summary -->
+<div class="flex flex-col gap-space-sm max-w-xl">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed">
+<span class="material-symbols-outlined text-[24px]">account_balance</span>
+</div>
+<div class="flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-surface">
+              3PL COD Reconciliation &amp; NCHL ConnectIPS Settlement
+            </h3>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+              Daily automated escrow reconciliation cycle matching Daraz seller payout obligations.
+            </span>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md mt-space-xs">
+<!-- Pathao Box -->
+<div class="p-space-md bg-surface-container-low rounded-lg flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Pathao COD Collected</span>
+<span class="px-1.5 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed text-badge-micro font-badge-micro font-bold">Nightly 20:00 NPT</span>
+</div>
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold">Rs. 1,480,200</span>
+<span class="text-badge-micro font-badge-micro text-tertiary mt-1">Direct eSewa / Nabil Corporate Pool</span>
+</div>
+<!-- NCM Box -->
+<div class="p-space-md bg-surface-container-low rounded-lg flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">NCM Mountain Collected</span>
+<span class="px-1.5 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed text-badge-micro font-badge-micro font-bold">T+2 Cycle</span>
+</div>
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold">Rs. 660,650</span>
+<span class="text-badge-micro font-badge-micro text-secondary mt-1">Reconciled via NCHL ConnectIPS</span>
+</div>
+</div>
+</div>
+<!-- Right: Verification & Actions -->
+<div class="flex flex-col gap-space-md lg:w-96 bg-surface-container-low p-space-md rounded-xl">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-label-sm text-on-surface">Quality &amp; Disputed Parcels</span>
+<span class="px-2 py-0.5 rounded bg-error-container text-on-error-container font-badge-micro text-badge-micro font-bold">12 Disputed</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          12 packages flagged for return verification or cash discrepancies redirected to DEX Reverse Logistics QC Lab in Kathmandu.
+        </p>
+<div class="flex flex-col gap-2">
+<button class="w-full h-10 bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md rounded flex items-center justify-center gap-2 transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span>Reconcile Today's 3PL COD Collections</span>
+</button>
+<div class="flex items-center justify-between px-1 text-badge-micro font-badge-micro text-on-surface-variant">
+<span>Authorizer: Amrit Raj (NOC 001)</span>
+<span class="text-tertiary flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">security</span> IRD CBMS Sync On
+            </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Micro-Interactivity Script for Mock Actions -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Small toast / alert helper
+      const notify = (msg) => {
+        const toast = document.createElement('div');
+        toast.className = "fixed bottom-5 right-5 z-50 bg-inverse-surface text-inverse-on-surface px-4 py-2.5 rounded shadow-xl text-label-md flex items-center gap-2 transition-all duration-300";
+        toast.innerHTML = `<span class="material-symbols-outlined text-primary text-[18px]">check_circle</span><span>${msg}</span>`;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          setTimeout(() => toast.remove(), 300);
+        }, 2600);
+      };
+
+      // Wire up buttons
+      const addPartnerBtn = document.querySelector('button:has(span.material-symbols-outlined:contains("add_link"))') || document.querySelector('button');
+      const allButtons = document.querySelectorAll('button');
+      allButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const text = btn.innerText.trim();
+          if (text.includes("Sync Webhooks")) {
+            notify("Webhook endpoints re-synchronized with Pathao v2.4 & NCM EDI.");
+          } else if (text.includes("Ping All")) {
+            notify("Ping sweep completed: Pathao (42ms), NCM (118ms), Sundar (89ms). All 200 OK.");
+          } else if (text.includes("Rebalance Ratio")) {
+            notify("Overflow ratio re-evaluated against live Kathmandu Sorting Queue.");
+          } else if (text.includes("Reconcile Today's 3PL")) {
+            notify("Initiated batch settlement: Rs. 2,140,850 staged to NCHL-IPS escrow.");
+          } else if (text.includes("Pause Allocation")) {
+            notify("Allocation paused for partner. Diverting volume back to DEX fleet.");
+          }
+        });
+      });
+    });
+  </script>
+</div></main><footer class="w-full bg-surface-container-lowest mt-space-xl shadow-[0_-1px_8px_rgba(0,0,0,0.04)]"><div class="bg-primary-container text-on-primary-container px-space-xl py-space-md"><div class="flex items-center justify-between"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-on-primary-container text-[22px]">local_shipping</span><span class="text-label-md font-label-md">Daraz Express (DEX) Deliveries Operating Across All 77 Districts of Nepal</span></div><div class="flex items-center gap-space-lg text-label-sm font-label-sm"><span class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[16px]">verified</span>100% Buyer Protection</span><span class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[16px]">lock_reset</span>COD &amp; Instant Refunds</span><span class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[16px]">headset_mic</span>24/7 Ops Emergency Desk</span></div></div></div><div class="px-space-xl py-space-lg flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant"><div class="flex items-center gap-space-lg"><span>© 2025 Daraz Kaymu Pvt. Ltd. (Operations &amp; Logistics Directorate)</span><a class="hover:text-primary transition-colors" href="#">DEX Policy &amp; SLA Guidelines</a><a class="hover:text-primary transition-colors" href="#">Nepal Customs &amp; IRD CBMS Sync</a><a class="hover:text-primary transition-colors" href="#">Kathmandu NOC Hotline</a></div><div class="flex items-center gap-space-sm"><span class="w-2 h-2 rounded-full bg-tertiary"></span><span class="font-label-sm text-on-surface">All Systems Operational • Nepal Telecom CDN v4.9</span></div></div></footer></div></body></html>

@@ -32,12 +32,21 @@ import {
   cancelRemoteOrder,
 } from "@/services/remote-shop";
 import {
+  queryClient,
+  CATALOG_QUERY_KEY,
+  fetchCatalogCached,
+  cachedCatalog,
+} from "@/services/queries";
+import { offlineDb } from "@/services/offline-db";
+import { identifyUser, track } from "@/services/telemetry";
+import { scheduleOrderUpdateReminder } from "@/services/notifications";
+import {
   accountService,
   initialAccount,
   persistence,
 } from "@/services/shop.service";
 import { addItem, restoreCart, setQuantity, totals } from "./cart";
-import { mergeCustomerCart } from "./customer-cart";
+import { mergeCustomerCart, restoreCustomerCart } from "./customer-cart";
 
 import {
   initialCommerce,
@@ -126,6 +135,10 @@ function useShopState() {
       }
       setSession(next);
       setSessionReady(true);
+      identifyUser(
+        next?.user.id || null,
+        next?.user.email ?? next?.user.phone ?? null,
+      );
     };
     const {
       data: { subscription },
@@ -163,7 +176,16 @@ function useShopState() {
 
   const refreshCatalog = useCallback(async () => {
     if (!backendConfig.live) return;
-    const catalog = await loadCatalog();
+    // Realtime/retry paths must bypass the query cache's staleness window.
+    const catalog = await queryClient.fetchQuery({
+      queryKey: CATALOG_QUERY_KEY,
+      staleTime: 0,
+      queryFn: async () => {
+        const fresh = await loadCatalog();
+        void offlineDb.saveCatalog("products", fresh);
+        return fresh;
+      },
+    });
     setProducts(catalog);
     setCatalogReady(true);
     const map = Object.fromEntries(catalog.map((p) => [p.id, p]));
@@ -188,7 +210,11 @@ function useShopState() {
   useEffect(() => {
     if (!supabase) return;
     let active = true;
-    void loadCatalog()
+    // Offline-first: show the SQLite-cached catalog immediately, then refresh.
+    void cachedCatalog().then((rows) => {
+      if (active && rows?.length) setProducts(rows);
+    });
+    void fetchCatalogCached()
       .then((catalog) => {
         if (active) {
           setProducts(catalog);
@@ -218,8 +244,21 @@ function useShopState() {
         }));
         setCustomerReady(true);
       })
-      .catch((error) => {
-        if (active) setBackendError(errorMessage(error));
+      .catch(async (error) => {
+        if (!active) return;
+        // Degrade to the last synced snapshot from SQLite.
+        const cached = await offlineDb.get<{ commerce: unknown; cart: unknown }>(
+          `customer:${userId}`,
+        );
+        if (cached?.commerce) {
+          setState((s) => ({
+            ...s,
+            commerce: restoreCommerce(cached.commerce as Commerce),
+            cart: restoreCustomerCart(cached.cart),
+          }));
+          setCustomerReady(true);
+        }
+        setBackendError(errorMessage(error));
       });
     return () => {
       active = false;
@@ -236,6 +275,7 @@ function useShopState() {
           if (activeUser.current !== owner || epoch !== remoteEpoch.current)
             return;
           await saveCustomer(owner, commerce, cart);
+          void offlineDb.put(`customer:${owner}`, customerSnapshot(commerce, cart));
           if (activeUser.current === owner && epoch === remoteEpoch.current) {
             savedSnapshot.current = snapshot;
             setSyncStatus(
@@ -350,8 +390,10 @@ function useShopState() {
       );
   }, [state, hydrated]);
   const add = useCallback(
-    (product: Product) =>
-      setState((s) => ({ ...s, cart: addItem(s.cart, product) })),
+    (product: Product) => {
+      track("add_to_cart", { product_id: product.id, price: product.price });
+      setState((s) => ({ ...s, cart: addItem(s.cart, product) }));
+    },
     [],
   );
   const quantity = useCallback(
@@ -381,6 +423,14 @@ function useShopState() {
   );
   const removeSelected = useCallback(
     () => setState((s) => ({ ...s, cart: s.cart.filter((i) => !i.selected) })),
+    [],
+  );
+  const remove = useCallback(
+    (id: string) =>
+      setState((s) => ({
+        ...s,
+        cart: s.cart.filter((i) => i.productId !== id),
+      })),
     [],
   );
   const collect = useCallback(
@@ -486,6 +536,11 @@ function useShopState() {
         void refreshCatalog().catch((error) =>
           setBackendError(errorMessage(error)),
         );
+      track("order_placed", {
+        order_id: order.id,
+        total: "total" in order ? Number(order.total) : undefined,
+      });
+      void scheduleOrderUpdateReminder(order.id);
       return order.id;
     } finally {
       checkoutLock.current = false;
@@ -544,6 +599,7 @@ function useShopState() {
     quantity,
     toggle,
     select,
+    remove,
     removeSelected,
     collect,
     markRead,

@@ -1,0 +1,64 @@
+import { OpsPageHead, OpsTable, StatusPill } from "../OpsLayout";
+import { kycQueue } from "@/lib/demo-data";
+
+/* Seller approval KYC maker-checker queue — from
+   ../web ui ux design/daraz_nepal_seller_approval_kyc_maker_checker_queue */
+export function KycQueue() {
+  const pending = kycQueue.filter((k) => k.maker === "Pending" || k.checker === "Pending").length;
+  return (
+    <div>
+      <OpsPageHead
+        title="Seller Approval & KYC Maker-Checker Queue"
+        subtitle="Dual-control verification: a maker reviews documents, a checker approves onboarding."
+        demo
+      >
+        <span className="rounded-full bg-amber-100 px-3 py-1 text-[11px] font-bold text-amber-800">
+          {pending} awaiting action
+        </span>
+      </OpsPageHead>
+
+      <OpsTable head={["Application", "Merchant Entity & Category", "Registration & Tax ID", "Location & DEX Hub", "Risk Metric", "Maker Review", "Checker Status", "Verification Action"]}>
+        {kycQueue.map((k) => (
+          <tr key={k.id} className="hover:bg-orange-50/30">
+            <td className="px-4 py-3 font-mono text-[10px] font-bold text-on-surface">{k.id}</td>
+            <td className="px-4 py-3">
+              <p className="font-bold text-on-surface">{k.merchant}</p>
+              <p className="text-[10px] text-on-surface-variant">{k.entity} · {k.category}</p>
+            </td>
+            <td className="px-4 py-3 font-mono text-[10px] text-on-surface-variant">
+              {k.registration}
+              <span className="block">PAN {k.pan}</span>
+            </td>
+            <td className="px-4 py-3 text-on-surface-variant">
+              {k.location}
+              <span className="block text-[10px]">hub {k.hub}</span>
+            </td>
+            <td className="px-4 py-3">
+              <span className={`text-sm font-black ${k.riskScore > 60 ? "text-rose-600" : k.riskScore > 25 ? "text-amber-600" : "text-emerald-600"}`}>
+                {k.riskScore}
+              </span>
+              <span className="block text-[9px] uppercase text-on-surface-variant">risk score</span>
+            </td>
+            <td className="px-4 py-3">
+              <StatusPill tone={k.maker === "Cleared" ? "live" : k.maker === "Rejected" ? "bad" : "warn"}>
+                {k.maker}
+              </StatusPill>
+            </td>
+            <td className="px-4 py-3">
+              <StatusPill tone={k.checker === "Cleared" ? "live" : k.checker === "Blocked" ? "bad" : "muted"}>
+                {k.checker}
+              </StatusPill>
+            </td>
+            <td className="whitespace-nowrap px-4 py-3 text-[11px] font-bold">
+              <button type="button" className="text-emerald-700 hover:underline">Approve</button>
+              <span className="text-gray-300"> · </span>
+              <button type="button" className="text-rose-600 hover:underline">Reject</button>
+              <span className="text-gray-300"> · </span>
+              <button type="button" className="text-[#0f828a] hover:underline">Docs</button>
+            </td>
+          </tr>
+        ))}
+      </OpsTable>
+    </div>
+  );
+}

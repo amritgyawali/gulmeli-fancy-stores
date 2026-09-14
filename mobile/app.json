@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "scheme": "gulmeli",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
@@ -47,8 +46,52 @@
           "cameraPermission": "Allow Gulmeli Fancy Stores to take a reference photo.",
           "microphonePermission": false
         }
-      ]
+      ],
+      "expo-sqlite",
+      "expo-secure-store",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Gulmeli Fancy Stores to take product photos for reviews and profile pictures."
+        }
+      ],
+      "expo-local-authentication",
+      [
+        "expo-notifications",
+        {
+          "color": "#f85606"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow Gulmeli Fancy Stores to show delivery areas and store locations near you.",
+          "locationAlwaysAndWhenInUsePermission": "Allow Gulmeli Fancy Stores to show delivery areas and store locations near you."
+        }
+      ],
+      [
+        "@stripe/stripe-react-native",
+        {
+          "enableGooglePay": false,
+          "merchantId": ""
+        }
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "gulmeli-fancy-store",
+          "organization": "your-sentry-organization"
+        }
+      ],
+      "expo-web-browser"
     ],
+    "extra": {
+      "mapboxAccessToken": "",
+      "eas": {
+        "projectId": "85a74ee9-4241-4e1e-a05b-3cf6511ca015"
+      }
+    },
     "experiments": {
       "typedRoutes": true
     }
