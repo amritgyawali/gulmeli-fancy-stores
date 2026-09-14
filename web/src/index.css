@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  background: #f4f4f4;
+  color: #212121;
+}
+
+/* Thin scrollbars for horizontal rails */
+.rail {
+  scrollbar-width: thin;
+}
+.rail::-webkit-scrollbar {
+  height: 6px;
+}
+.rail::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 99px;
+}
