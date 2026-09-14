@@ -6,12 +6,25 @@
     "orientation": "portrait",
     "scheme": "gulmeli",
     "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.gulmeli.fancystore"
+      "bundleIdentifier": "com.gulmeli.fancystore",
+      "buildNumber": "1",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.gulmeli.fancystore",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#f85606",
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "monochromeImage": "./assets/monochrome-icon.png"
+      },
+      "icon": "./assets/icon.png",
       "predictiveBackGestureEnabled": true
     },
     "web": {
@@ -22,7 +35,9 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#f4f4f4"
+          "backgroundColor": "#f4f4f4",
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 200
         }
       ],
       [
