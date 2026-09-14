@@ -20,7 +20,7 @@ import { useFormat } from "@/admin/ui/useFormat";
 import { go } from "@/admin/navigate";
 
 export function MediaScreen() {
-  const { theme, store, write, allowed, notify, revision } = useAdmin();
+  const { theme, store, write, allowed, notify, revision, live } = useAdmin();
   const layout = useLayout();
   const format = useFormat();
   const pickImage = useImagePicker();
@@ -28,6 +28,7 @@ export function MediaScreen() {
   const [folder, setFolder] = useState("all");
   const [selected, setSelected] = useState<string | null>(null);
   const [url, setUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const canEdit = allowed("media", "edit");
 
@@ -79,12 +80,28 @@ export function MediaScreen() {
         canEdit ? (
           <Row gap={6}>
             <Btn
-              title="Upload from this device"
-              icon="camera"
+              title={
+                live ? "Upload to Cloudinary" : "Upload from this device"
+              }
+              icon="cloud-upload"
               tone="primary"
               small
               theme={theme}
-              onPress={() => void pickImage()}
+              disabled={uploading}
+              onPress={() => {
+                setUploading(true);
+                void pickImage()
+                  .then((result) => {
+                    if (result)
+                      notify(
+                        live
+                          ? "File saved to Cloudinary and added to the library."
+                          : "Added to the media library.",
+                        "success",
+                      );
+                  })
+                  .finally(() => setUploading(false));
+              }}
             />
             <Btn
               title="All fields"
@@ -255,9 +272,34 @@ export function MediaScreen() {
                   tone="danger"
                   theme={theme}
                   onPress={() => {
-                    store.remove("media", record.id, write);
-                    setSelected(null);
-                    notify("File moved to trash.");
+                    const publicId = record.publicId;
+                    const remove = () => {
+                      store.remove("media", record.id, write);
+                      setSelected(null);
+                    };
+                    if (live && typeof publicId === "string" && publicId) {
+                      void import("@/services/cloudinary")
+                        .then(({ deleteMediaFile }) =>
+                          deleteMediaFile(publicId),
+                        )
+                        .then(remove)
+                        .then(() =>
+                          notify(
+                            "File deleted from Cloudinary and moved to trash.",
+                          ),
+                        )
+                        .catch((error) =>
+                          notify(
+                            error instanceof Error
+                              ? error.message
+                              : "The file could not be deleted from Cloudinary.",
+                            "danger",
+                          ),
+                        );
+                    } else {
+                      remove();
+                      notify("File moved to trash.");
+                    }
                   }}
                 />
               </Row>

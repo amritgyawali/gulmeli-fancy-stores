@@ -35,14 +35,26 @@ The checker reports missing settings without printing credential values. It does
 
 ## 2. Create the database
 
-In your Supabase project's **SQL Editor**, run the complete contents of `supabase/migrations/202609130001_store.sql` once. It creates:
+In your Supabase project's **SQL Editor**, run the complete contents of each file in `supabase/migrations/` once, in filename order:
+
+- `202609130001_store.sql` — customer tables, checkout functions, upload limits.
+- `202609140001_admin_config.sql` — admin membership, shared storefront config, admin catalogue/order access.
+- `202609140002_media_sync.sql` — the Cloudinary media index (`media`), the shared admin document store (`admin_data`), first-admin claim, and realtime publication for live sync.
+
+`202609140002` also raises the upload rate limit to 200/hour for dashboard media.
+
+It creates:
 
 - `products`: public reads of active products; writes restricted to store administration.
 - `customer_state`: each signed-in customer can read/write only their own profile, cart and preferences. Reviews are private account notes, not public reviews.
 - `orders`: customers can read only their own orders. Direct customer inserts/updates are blocked.
 - `place_order`: checks the user, delivery details, stock, quantities and voucher on the server. Locks inventory and creates the order in one transaction. Reusing a request ID returns the existing order.
 - `cancel_order`: only the owner may cancel an order in `Placed` status. Stock is restored once.
-- `reserve_image_upload`: limits each account to 10 upload attempts per hour.
+- `media`: URL + metadata index of every file stored in Cloudinary.
+- `admin_data`: one row per admin dashboard record; every admin device shares it.
+- `reserve_image_upload`: per-account upload limit (200/hour).
+
+**First admin**: the first signed-in user to open `/admin` claims super-admin membership automatically (after that, add rows to `admin_members` in the Table Editor).
 
 To populate the original 30 sample products, review and then run `supabase/seed.sql`. These are **sample prices and stock quantities**: correct them before accepting real orders. Rerunning the seed does not overwrite existing products. `npm run backend:seed` regenerates this file from the bundled catalog.
 
@@ -70,20 +82,37 @@ values ('YOUR-AUTH-USER-UUID', 'super_admin');
 Without a row here the dashboard still runs, but publishing configuration and
 catalogue writes are refused by the database.
 
-## 3. Deploy the Cloudinary upload function
+## 3. Deploy the Cloudinary media functions
 
 From `mobile/`, after authenticating the Supabase CLI:
 
 ```powershell
 npx supabase secrets set --env-file supabase/.env.local --project-ref YOUR_PROJECT_REF
 npx supabase functions deploy upload-image --project-ref YOUR_PROJECT_REF --no-verify-jwt
+npx supabase functions deploy cloudinary-media --project-ref YOUR_PROJECT_REF --no-verify-jwt
 ```
 
-`--no-verify-jwt` disables the gateway's legacy JWT check. The function itself requires a bearer access token and validates it with `auth.getUser()` before accepting any image. It applies a size limit and the database rate limit, then signs the Cloudinary request on the server. It does not use a service-role key.
+Or with a personal access token from <https://supabase.com/dashboard/account/tokens>:
 
-Dashboard alternative: add the three Cloudinary values under Edge Function secrets, create `upload-image` using `supabase/functions/upload-image/index.ts`, disable the gateway's legacy JWT verification toggle, and deploy. Keep the authentication checks in the supplied function intact.
+```powershell
+$env:SUPABASE_ACCESS_TOKEN="sbp_..."
+npm run backend:deploy
+```
 
-Profile images use `gulmeli/avatars/<user-id>` and are overwritten on subsequent uploads. Their delivery URLs are public. Removing a profile photo clears the profile reference; it does not delete the Cloudinary asset.
+Both functions validate the bearer token with `auth.getUser()` before accepting anything. `cloudinary-media` handles the dashboard media library: signed uploads (images, video, PDFs, documents — any file type routed to the right Cloudinary endpoint, 10 MB cap) and admin-only deletions. It applies the database rate limit and signs every Cloudinary request on the server. It does not use a service-role key, and the Cloudinary API secret never reaches the app.
+
+Profile images use `gulmeli/avatars/<user-id>`; dashboard uploads use `gulmeli/media/`. Removing a file from the dashboard deletes the Cloudinary asset too (only for files this app uploaded).
+
+## How sync works
+
+With Supabase configured, the admin dashboard and the customer app share one source of truth:
+
+- **Text/data → Supabase.** Every dashboard record (products, orders, customers, banners, coupons, pages, …) is mirrored to `admin_data`; each device pulls it on load and follows changes over realtime plus a 3-second safety poll. Customer carts, profiles, wishlists and orders live in `customer_state`/`orders` as before.
+- **Media → Cloudinary.** All uploaded files live in Cloudinary; `media` (Supabase) is the searchable index of URLs and metadata. Product records store Cloudinary URLs directly.
+- **Storefront catalog.** Published admin products are written to the public `products` table (stock changes are merged, never clobbered), and every open customer app reloads it through the realtime subscription.
+- **Customer orders** appear on the admin Orders board automatically; status changes made there sync back.
+
+Changes typically land on other devices within about a second over realtime (the poll only covers dropped connections).
 
 ## 4. Configure email authentication
 

@@ -3,3 +3,7 @@ project_id = "gulmeli-fancy-store"
 [functions.upload-image]
 # The function validates the bearer token with auth.getUser(), including new keys.
 verify_jwt = false
+
+[functions.cloudinary-media]
+# The function validates the bearer token with auth.getUser() itself.
+verify_jwt = false

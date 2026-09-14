@@ -169,6 +169,22 @@ function useShopState() {
     const map = Object.fromEntries(catalog.map((p) => [p.id, p]));
     setState((s) => ({ ...s, cart: restoreCart(s.cart, map) || [] }));
   }, []);
+  // Follow catalog changes made by the admin dashboard from any device.
+  useEffect(() => {
+    const client = supabase;
+    if (!client) return;
+    const channel = client
+      .channel("gulmeli-catalog")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "products" },
+        () => void refreshCatalog().catch(() => undefined),
+      )
+      .subscribe();
+    return () => {
+      void client.removeChannel(channel);
+    };
+  }, [refreshCatalog]);
   useEffect(() => {
     if (!supabase) return;
     let active = true;

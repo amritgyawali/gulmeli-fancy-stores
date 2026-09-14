@@ -267,9 +267,20 @@ export default function AccountScreen() {
               <Tap
                 label="Admin dashboard"
                 onPress={() => go("/admin")}
-                style={{ padding: 4 }}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 6,
+                  paddingVertical: 6,
+                  paddingHorizontal: 10,
+                  borderRadius: 999,
+                  backgroundColor: "rgba(255,255,255,0.9)",
+                }}
               >
-                <FontIcon name="gauge-high" size={20} color="#4b5563" />
+                <FontIcon name="gauge-high" size={16} color="#4b5563" />
+                <T size={12} bold color="#374151">
+                  Admin
+                </T>
               </Tap>
               <Tap
                 label="Settings"

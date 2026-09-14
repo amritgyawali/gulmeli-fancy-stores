@@ -10,17 +10,23 @@ import { useRouter } from "expo-router";
 import { Button, T } from "@/components/ui";
 import { requireSupabase } from "@/services/supabase";
 import { useShop } from "@/store/ShopProvider";
+import { go } from "@/admin/navigate";
 
 export default function AuthScreen() {
   const router = useRouter();
   const { live, session } = useShop();
   const [create, setCreate] = useState(false);
+  const [admin, setAdmin] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
-  const submit = async () => {
+  const submit = async (destination?: "/account" | "/admin") => {
     if (busy) return;
+    if (destination === "/admin" && session) {
+      go("/admin");
+      return;
+    }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       setNotice("Enter a valid email address.");
       return;
@@ -38,8 +44,10 @@ export default function AuthScreen() {
         ? await client.auth.signUp(credentials)
         : await client.auth.signInWithPassword(credentials);
       if (error) throw error;
-      if (data.session) router.replace("/account");
-      else {
+      if (data.session) {
+        if (destination === "/admin") go("/admin");
+        else router.replace("/account");
+      } else {
         setCreate(false);
         setPassword("");
         setNotice(
@@ -66,11 +74,16 @@ export default function AuthScreen() {
         contentContainerStyle={{ padding: 24, gap: 18 }}
       >
         <T size={24} bold>
-          {create ? "Create your account" : "Welcome back"}
+          {admin
+            ? "Admin sign in"
+            : create
+              ? "Create your account"
+              : "Welcome back"}
         </T>
         <T>
-          Sign in to save your profile and place orders with Gulmeli Fancy
-          Stores.
+          {admin
+            ? "Enter your staff email and password to open the store dashboard."
+            : "Sign in to save your profile and place orders with Gulmeli Fancy Stores."}
         </T>
         {!live ? (
           <T>
@@ -123,10 +136,16 @@ export default function AuthScreen() {
             </View>
             <Button
               title={
-                busy ? "Please wait…" : create ? "Create account" : "Sign in"
+                busy
+                  ? "Please wait…"
+                  : admin
+                    ? "Admin sign in"
+                    : create
+                      ? "Create account"
+                      : "Sign in"
               }
               disabled={busy}
-              onPress={() => void submit()}
+              onPress={() => void submit(admin ? "/admin" : undefined)}
             />
             <Button
               title={
@@ -137,6 +156,7 @@ export default function AuthScreen() {
               disabled={busy}
               outline
               onPress={() => {
+                setAdmin(false);
                 setCreate(!create);
                 setNotice("");
               }}
@@ -147,6 +167,17 @@ export default function AuthScreen() {
           <T accessibilityRole="alert" color="#9a3412">
             {notice}
           </T>
+        )}
+        {live && (
+          <Button
+            title={admin ? "Back to customer sign-in" : "Admin login"}
+            outline
+            onPress={() => {
+              setAdmin(!admin);
+              setCreate(false);
+              setNotice("");
+            }}
+          />
         )}
         <Button
           title="Continue shopping"

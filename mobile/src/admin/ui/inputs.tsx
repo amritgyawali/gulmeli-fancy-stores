@@ -9,7 +9,7 @@ import {
   TextInput,
   View,
   type StyleProp,
-  type ViewStyle,
+  type TextStyle,
 } from "react-native";
 import {
   A,
@@ -99,7 +99,7 @@ export function TextBox({
   theme?: AdminTheme;
   label?: string;
   testID?: string;
-  style?: StyleProp<ViewStyle>;
+  style?: StyleProp<TextStyle>;
 }) {
   return (
     <TextInput

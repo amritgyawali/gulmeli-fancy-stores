@@ -52,6 +52,9 @@
     "preview": "node scripts/serve-preview.cjs",
     "format": "prettier --write src tests scripts playwright.config.ts",
     "backend:check": "node scripts/check-backend.mjs",
+    "backend:seed:push": "node scripts/push-seed.mjs",
+    "backend:sql": "node scripts/apply-sql.mjs",
+    "backend:deploy": "node scripts/deploy-functions.mjs",
     "backend:seed": "node --experimental-strip-types scripts/generate-seed.ts",
     "test:backend:e2e": "playwright test -c playwright.backend.config.ts"
   },

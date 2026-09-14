@@ -41,9 +41,9 @@ export function useRelationOptions(resourceKey: string | undefined): Option[] {
   }, [store, resourceKey, revision]);
 }
 
-/** Adds a picked photo to the media library so it can be reused elsewhere. */
+/** Uploads a picked photo to Cloudinary and adds it to the media library. */
 export function useImagePicker() {
-  const { store, write, notify } = useAdmin();
+  const { store, write, notify, live } = useAdmin();
   return useCallback(async (): Promise<string | null> => {
     try {
       if (Platform.OS !== "web") {
@@ -57,9 +57,22 @@ export function useImagePicker() {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ["images"],
         quality: 0.8,
+        base64: live,
       });
       const asset = result.canceled ? null : result.assets[0];
       if (!asset?.uri) return null;
+      let url = asset.uri;
+      let publicId: string | null = null;
+      let bytes = asset.fileSize ?? 0;
+      if (live) {
+        const { uploadMediaFromUri } = await import("@/services/cloudinary");
+        const uploaded = await uploadMediaFromUri(asset.uri, {
+          folder: "gulmeli/media",
+        });
+        url = uploaded.url;
+        publicId = uploaded.publicId;
+        bytes = uploaded.bytes || bytes;
+      }
       store.create(
         "media",
         {
@@ -67,22 +80,28 @@ export function useImagePicker() {
             asset.fileName ?? `Upload ${new Date().toISOString().slice(0, 19)}`,
           folder: "Uploads",
           kind: "image",
-          url: asset.uri,
+          url,
+          publicId,
           alt: "",
           tags: [],
           width: asset.width ?? 0,
           height: asset.height ?? 0,
-          sizeKb: asset.fileSize ? Math.round(asset.fileSize / 1024) : 0,
+          sizeKb: bytes ? Math.round(bytes / 1024) : 0,
           note: "",
         },
         write,
       );
-      return asset.uri;
-    } catch {
-      notify("The photo could not be read from this device.", "danger");
+      return url;
+    } catch (error) {
+      notify(
+        error instanceof Error && /cloudinary|media|sign in/i.test(error.message)
+          ? error.message
+          : "The photo could not be saved. Please try again.",
+        "danger",
+      );
       return null;
     }
-  }, [notify, store, write]);
+  }, [live, notify, store, write]);
 }
 
 export interface FieldRendererProps {

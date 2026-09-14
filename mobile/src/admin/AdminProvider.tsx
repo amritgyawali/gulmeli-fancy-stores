@@ -47,6 +47,16 @@ import {
   publishConfigRemotely,
   refreshPublishedConfig,
 } from "@/services/storefront-config";
+import { backendConfig } from "@/services/backend-config";
+import { supabase } from "@/services/supabase";
+import {
+  markAppliedRemotely,
+  pullAdminData,
+  pullCustomerOrders,
+  pushAdminData,
+  queueCatalogSync,
+  watchRemoteAdmin,
+} from "@/services/remote-admin";
 
 export interface Toast {
   id: number;
@@ -56,6 +66,8 @@ export interface Toast {
 
 interface AdminValue {
   ready: boolean;
+  live: boolean;
+  syncOn: boolean;
   store: AdminStore;
   /** Bumped on every write so screens re-render off the mutable store. */
   revision: number;
@@ -118,6 +130,51 @@ const FALLBACK_ACTOR: Actor = {
   roleId: "role_super_admin",
 };
 
+/** Applies one server record locally without re-auditing or echoing it back. */
+function applyRemoteRecord(
+  store: AdminStore,
+  collection: string,
+  record: AdminRecord,
+) {
+  const current = store.get(collection, record.id);
+  if (current && current.revision >= Number(record.revision || 0)) return;
+  const list = store.raw(collection);
+  if (current) {
+    store.replaceAll({
+      ...store.snapshot(),
+      [collection]: list.map((entry) =>
+        entry.id === record.id ? record : entry,
+      ),
+    });
+  } else {
+    store.replaceAll({ ...store.snapshot(), [collection]: [...list, record] });
+  }
+}
+
+/** Copies customer-app orders into the board without touching admin records. */
+function mergeCustomerOrders(store: AdminStore, orders: AdminOrder[]) {
+  const existing = store.raw("orders");
+  const byId = new Map(existing.map((order) => [order.id, order]));
+  const merged = [...existing];
+  for (const order of orders) {
+    const current = byId.get(order.id);
+    if (!current) {
+      merged.push(order);
+      continue;
+    }
+    if (
+      current.source !== "customer-app" &&
+      current.updatedAt >= order.updatedAt
+    )
+      continue; // the admin progressed this order more recently
+    merged[merged.indexOf(current)] = {
+      ...order,
+      revision: current.revision + 1,
+    };
+  }
+  store.replaceAll({ ...store.snapshot(), orders: merged });
+}
+
 export function AdminProvider({ children }: PropsWithChildren) {
   const [store] = useState(() => new AdminStore());
   const [ready, setReady] = useState(false);
@@ -130,6 +187,13 @@ export function AdminProvider({ children }: PropsWithChildren) {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const toastId = useRef(0);
   const saveQueue = useRef(Promise.resolve());
+  // Set once the dashboard is sharing state with Supabase (signed-in admin).
+  const [syncOn, setSyncOn] = useState(false);
+  const syncRef = useRef(false);
+  const actorNameRef = useRef("admin");
+  useEffect(() => {
+    syncRef.current = syncOn;
+  }, [syncOn]);
 
   const notify = useCallback(
     (message: string, tone: Toast["tone"] = "info") => {
@@ -152,6 +216,8 @@ export function AdminProvider({ children }: PropsWithChildren) {
   );
 
   // Load persisted state, seeding from the shop's own catalogue on first run.
+  // When signed in as an admin with Supabase configured, the shared server
+  // copy wins so every device shows the same dashboard.
   useEffect(() => {
     let active = true;
     void (async () => {
@@ -181,17 +247,118 @@ export function AdminProvider({ children }: PropsWithChildren) {
     };
   }, [store]);
 
+  // Take over from the shared Supabase copy for admins, and keep following it
+  // over realtime so changes from any device land here within seconds.
+  useEffect(() => {
+    if (!backendConfig.live || !supabase) return;
+    const client = supabase;
+    let active = true;
+    const adopt = async (userId: string | null) => {
+      if (!userId) {
+        setSyncOn(false);
+        return;
+      }
+      const { data: admin } = await client.rpc("claim_first_admin");
+      if (!active || !admin) {
+        setSyncOn(false);
+        return;
+      }
+      try {
+        const shared = await pullAdminData();
+        if (!active) return;
+        const seeded = store.snapshot();
+        store.replaceAll(
+          Object.keys(shared).length ? shared : (seeded ?? shared),
+        );
+        if (!Object.keys(shared).length)
+          void pushAdminData(store.snapshot(), "admin");
+        try {
+          const orders = await pullCustomerOrders();
+          if (active) mergeCustomerOrders(store, orders);
+        } catch {
+          // Order mirroring is best-effort; the board keeps its own copy.
+        }
+        setSyncOn(true);
+        setRevision((value) => value + 1);
+      } catch (error) {
+        if (active)
+          setSnapshotError(
+            error instanceof Error
+              ? `Shared dashboard data could not be loaded: ${error.message}`
+              : "Shared dashboard data could not be loaded.",
+          );
+      }
+    };
+    void client.auth
+      .getSession()
+      .then(({ data }) => adopt(data.session?.user.id ?? null))
+      .catch(() => undefined);
+    const {
+      data: { subscription },
+    } = client.auth.onAuthStateChange((_event, session) => {
+      void adopt(session?.user.id ?? null);
+    });
+    return () => {
+      active = false;
+      subscription.unsubscribe();
+    };
+  }, [store]);
+
+  // Follow server changes while syncing.
+  useEffect(() => {
+    if (!syncOn) return;
+    const unsubscribe = watchRemoteAdmin({
+      onRecord: (collection, record) => {
+        if (record) {
+          markAppliedRemotely(collection, record.id);
+          applyRemoteRecord(store, collection, record);
+        } else setRevision((value) => value + 1);
+        setRevision((value) => value + 1);
+      },
+      onCatalogChange: () => setRevision((value) => value + 1),
+    });
+    const poll = setInterval(() => {
+      void pullAdminData()
+        .then((shared) => {
+          for (const [collection, records] of Object.entries(shared)) {
+            for (const record of records) {
+              markAppliedRemotely(collection, record.id);
+              applyRemoteRecord(store, collection, record);
+            }
+          }
+          setRevision((value) => value + 1);
+        })
+        .catch(() => undefined);
+    }, 3000);
+    return () => {
+      unsubscribe();
+      clearInterval(poll);
+    };
+  }, [syncOn, store]);
+
   // Persist every write, serialised so a slow write cannot overtake a newer one.
+  // While syncing with Supabase, also mirror to the server and republish the
+  // customer-facing catalogue.
   useEffect(() => {
     if (!ready) return;
     const unsubscribe = store.subscribe(() => {
       setRevision((value) => value + 1);
       const snapshot = store.snapshot();
       saveQueue.current = saveQueue.current
-        .then(() => adminStorage.save(snapshot))
-        .catch(() =>
+        .then(async () => {
+          await adminStorage.save(snapshot);
+          if (syncRef.current) {
+            await pushAdminData(snapshot, actorNameRef.current);
+            queueCatalogSync(snapshot);
+          }
+        })
+        .catch((error) =>
           setSnapshotError(
-            "Dashboard changes could not be saved on this device.",
+            syncRef.current
+              ? `Changes are on this device, but the server copy failed: ${
+                  error instanceof Error ? error.message : "unreachable"
+                }`
+              : "Dashboard changes could not be saved on this device.",
           ),
         );
     });
@@ -259,6 +426,9 @@ export function AdminProvider({ children }: PropsWithChildren) {
   );
 
   const write = useMemo<WriteOptions>(() => ({ actor }), [actor]);
+  useEffect(() => {
+    actorNameRef.current = actor.name || "admin";
+  }, [actor]);
 
   const setDraft = useCallback(
     (next: StorefrontConfig) =>
@@ -300,6 +470,8 @@ export function AdminProvider({ children }: PropsWithChildren) {
   const value = useMemo<AdminValue>(
     () => ({
       ready,
+      live: backendConfig.live,
+      syncOn,
       store,
       revision,
       snapshotError,
@@ -380,6 +552,7 @@ export function AdminProvider({ children }: PropsWithChildren) {
     }),
     [
       ready,
+      syncOn,
       store,
       revision,
       snapshotError,
