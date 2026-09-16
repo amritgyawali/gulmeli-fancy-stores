@@ -38,7 +38,7 @@ export function OffersPage() {
 
   return (
     <div>
-      <div className="mb-5 overflow-hidden rounded-2xl bg-gradient-to-r from-[#f85606] via-[#ff6f00] to-[#f97316] p-8 text-white shadow-md">
+      <div className="mb-5 overflow-hidden rounded-[2px] ribbon-gradient p-8 text-white shadow-md">
         <div className="flex items-center gap-2 text-xs font-black tracking-[0.25em]">
           <Icon name="tag" size={14} /> BUY MORE SAVE MORE
         </div>
@@ -53,7 +53,7 @@ export function OffersPage() {
 
       <div className="grid gap-5 lg:grid-cols-[240px_1fr]">
         {/* Sidebar filters */}
-        <aside className="h-fit space-y-4 rounded-2xl bg-white p-4 shadow-sm lg:sticky lg:top-40">
+        <aside className="h-fit space-y-4 rounded-[2px] border border-[#e0e0e0] bg-white p-4 shadow-sm lg:sticky lg:top-40">
           <div>
             <h3 className="mb-2 text-xs font-black uppercase tracking-wide text-slate-400">
               Category
@@ -62,7 +62,7 @@ export function OffersPage() {
               <li>
                 <button
                   onClick={() => setCategory(null)}
-                  className={`w-full rounded-lg px-3 py-1.5 text-left font-semibold ${!category ? "bg-orange-50 text-[#f85606]" : "text-slate-600 hover:bg-slate-50"}`}
+                  className={`w-full rounded-lg px-3 py-1.5 text-left font-semibold ${!category ? "bg-orange-50 text-[var(--store-primary-text)]" : "text-slate-600 hover:bg-slate-50"}`}
                 >
                   All offers ({offerProducts.length})
                 </button>
@@ -71,7 +71,7 @@ export function OffersPage() {
                 <li key={c}>
                   <button
                     onClick={() => setCategory(c === category ? null : c)}
-                    className={`w-full rounded-lg px-3 py-1.5 text-left font-semibold ${category === c ? "bg-orange-50 text-[#f85606]" : "text-slate-600 hover:bg-slate-50"}`}
+                    className={`w-full rounded-lg px-3 py-1.5 text-left font-semibold ${category === c ? "bg-orange-50 text-[var(--store-primary-text)]" : "text-slate-600 hover:bg-slate-50"}`}
                   >
                     {c} ({offerProducts.filter((p) => p.category === c).length})
                   </button>
@@ -97,7 +97,7 @@ export function OffersPage() {
           </div>
           <Link
             to="/"
-            className="block rounded-lg border border-slate-200 py-2 text-center text-xs font-bold text-slate-500 hover:bg-slate-50"
+            className="block rounded-lg border border-[var(--store-border)] py-2 text-center text-xs font-bold text-[var(--store-muted)] hover:bg-slate-50"
           >
             ← Back to home feed
           </Link>
@@ -105,8 +105,8 @@ export function OffersPage() {
 
         {/* Results */}
         <div className="min-w-0">
-          <div className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl bg-white p-3 shadow-sm">
-            <div className="flex min-w-52 flex-1 items-center gap-2 rounded-lg border border-slate-200 px-3">
+          <div className="mb-4 flex flex-wrap items-center gap-3 rounded-[2px] border border-[#e0e0e0] bg-white p-3 shadow-sm">
+            <div className="flex min-w-52 flex-1 items-center gap-2 rounded-lg border border-[var(--store-border)] px-3">
               <Icon name="search" size={14} className="text-slate-400" />
               <input
                 value={query}
@@ -119,12 +119,12 @@ export function OffersPage() {
                 className="min-w-0 flex-1 bg-transparent py-2 text-sm outline-none"
               />
             </div>
-            <label className="flex items-center gap-2 text-sm font-semibold text-slate-500">
+            <label className="flex items-center gap-2 text-sm font-semibold text-[var(--store-muted)]">
               Sort
               <select
                 value={sort}
                 onChange={(event) => setSort(event.target.value as Sort)}
-                className="rounded-lg border border-slate-200 bg-white px-2 py-2 text-sm font-bold outline-none"
+                className="rounded-lg border border-[var(--store-border)] bg-[var(--store-surface)] px-2 py-2 text-sm font-bold outline-none"
               >
                 <option value="popular">Most popular</option>
                 <option value="discount">Biggest discount</option>
@@ -137,13 +137,13 @@ export function OffersPage() {
           </div>
 
           {filtered.length ? (
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
               {filtered.map((p) => (
-                <ProductCard key={p.id} product={p} />
+                <ProductCard key={p.id} product={p} variant="flash" />
               ))}
             </div>
           ) : (
-            <div className="rounded-2xl bg-white py-20 text-center text-sm text-slate-400 shadow-sm">
+            <div className="rounded-[2px] border border-[#e0e0e0] bg-white py-20 text-center text-sm text-slate-400 shadow-sm">
               Nothing matches these filters — try clearing price or category.
             </div>
           )}

@@ -7,7 +7,9 @@ import {
   useState,
   type PropsWithChildren,
 } from "react";
-import { AppState } from "react-native";
+import { AppState, useColorScheme } from "react-native";
+import { resolveAppearance } from "@/admin/core/appearance";
+import { supabase } from "@/services/supabase";
 import { defaultConfig, type StorefrontConfig } from "@/admin/core/config";
 import { isLive } from "@/admin/core/publishing";
 import {
@@ -72,7 +74,24 @@ export function StorefrontProvider({ children }: PropsWithChildren) {
     const subscription = AppState.addEventListener("change", (state) => {
       if (state === "active") void refreshPublishedConfig();
     });
+    const channel = supabase
+      ?.channel("gulmeli-settings")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "app_config" },
+        () => {
+          void refreshPublishedConfig();
+        },
+      )
+      .subscribe();
+    const poll = supabase
+      ? setInterval(() => {
+          void refreshPublishedConfig();
+        }, 30000)
+      : null;
     return () => {
+      if (channel) void supabase?.removeChannel(channel);
+      if (poll) clearInterval(poll);
       unsubscribe();
       subscription.remove();
     };
@@ -116,29 +135,31 @@ export function useStorefront(): StorefrontValue {
 /** The published palette, ready to spread into styles. */
 export function useStorefrontTheme() {
   const { config } = useStorefront();
-  const dark = config.theme.colorScheme === "dark" && config.darkTheme.enabled;
+  const system = useColorScheme();
   return useMemo(
+    () => resolveAppearance(config, system === "dark"),
+    [config, system],
+  );
+}
+
+/** Uses the actual storefront components with an unpublished appearance draft. */
+export function StorefrontPreviewProvider({
+  config,
+  children,
+}: PropsWithChildren<{ config: StorefrontConfig }>) {
+  const value = useMemo<StorefrontValue>(
     () => ({
-      primary: config.theme.primaryColor,
-      secondary: config.theme.secondaryColor,
-      accent: config.theme.accentColor,
-      background: dark
-        ? config.darkTheme.backgroundColor
-        : config.theme.backgroundColor,
-      surface: dark ? config.darkTheme.surfaceColor : config.theme.surfaceColor,
-      text: dark ? config.darkTheme.textColor : config.theme.textColor,
-      muted: dark
-        ? config.darkTheme.mutedTextColor
-        : config.theme.mutedTextColor,
-      border: dark ? config.darkTheme.borderColor : config.theme.borderColor,
-      buttonColor: config.theme.buttonColor,
-      buttonTextColor: config.theme.buttonTextColor,
-      buttonRadius: config.theme.buttonRadius,
-      cardRadius: config.theme.cardRadius,
-      headerBackground: config.header.backgroundColor,
-      headerText: config.header.textColor,
-      dark,
+      ...fallback,
+      config,
+      loaded: true,
+      feature: (name) => config.features[name],
+      label: (name) => config.text[name],
     }),
-    [config, dark],
+    [config],
+  );
+  return (
+    <StorefrontContext.Provider value={value}>
+      {children}
+    </StorefrontContext.Provider>
   );
 }

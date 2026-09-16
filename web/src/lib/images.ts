@@ -1,4 +1,5 @@
 import type { Product } from "./types";
+import { photoFor } from "../../../mobile/src/services/product-media";
 
 // Keys resolve to files copied into public/img from the mobile asset set.
 const IMAGE_KEYS = new Set<string>([
@@ -12,6 +13,8 @@ const IMAGE_KEYS = new Set<string>([
 
 export function bundledImage(product: Product): string | null {
   if (product.imageUrl) return product.imageUrl; // already hosted (Cloudinary)
+  const photo = photoFor(product);
+  if (photo) return photo.url;
   if (product.imageKey && IMAGE_KEYS.has(product.imageKey))
     return `/img/${product.imageKey}.jpg`;
   return null;

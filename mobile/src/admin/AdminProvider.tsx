@@ -19,6 +19,7 @@ import {
   emptySnapshot,
   type SeedSourceProduct,
 } from "@/admin/core/seed";
+import { configErrors } from "@/admin/core/config-validation";
 import { defaultConfig, type StorefrontConfig } from "@/admin/core/config";
 import {
   applyScheduledPublish,
@@ -46,15 +47,19 @@ import {
   configStorage,
   publishConfigRemotely,
   refreshPublishedConfig,
+  loadPublishedConfig,
 } from "@/services/storefront-config";
 import { backendConfig } from "@/services/backend-config";
 import { supabase } from "@/services/supabase";
+import { BUILT_IN_ROLES } from "@/admin/core/rbac";
+import { View, Text, Pressable } from "react-native";
+import { router } from "expo-router";
 import {
-  markAppliedRemotely,
+  adoptAdminData,
+  mergeAdminData,
+  adminSyncBusy,
   pullAdminData,
-  pullCustomerOrders,
   pushAdminData,
-  queueCatalogSync,
   watchRemoteAdmin,
 } from "@/services/remote-admin";
 
@@ -72,6 +77,8 @@ interface AdminValue {
   /** Bumped on every write so screens re-render off the mutable store. */
   revision: number;
   snapshotError: string;
+  retrySync(): Promise<void>;
+  reloadRemote(): Promise<void>;
 
   configState: ConfigState;
   draft: StorefrontConfig;
@@ -130,51 +137,6 @@ const FALLBACK_ACTOR: Actor = {
   roleId: "role_super_admin",
 };
 
-/** Applies one server record locally without re-auditing or echoing it back. */
-function applyRemoteRecord(
-  store: AdminStore,
-  collection: string,
-  record: AdminRecord,
-) {
-  const current = store.get(collection, record.id);
-  if (current && current.revision >= Number(record.revision || 0)) return;
-  const list = store.raw(collection);
-  if (current) {
-    store.replaceAll({
-      ...store.snapshot(),
-      [collection]: list.map((entry) =>
-        entry.id === record.id ? record : entry,
-      ),
-    });
-  } else {
-    store.replaceAll({ ...store.snapshot(), [collection]: [...list, record] });
-  }
-}
-
-/** Copies customer-app orders into the board without touching admin records. */
-function mergeCustomerOrders(store: AdminStore, orders: AdminOrder[]) {
-  const existing = store.raw("orders");
-  const byId = new Map(existing.map((order) => [order.id, order]));
-  const merged = [...existing];
-  for (const order of orders) {
-    const current = byId.get(order.id);
-    if (!current) {
-      merged.push(order);
-      continue;
-    }
-    if (
-      current.source !== "customer-app" &&
-      current.updatedAt >= order.updatedAt
-    )
-      continue; // the admin progressed this order more recently
-    merged[merged.indexOf(current)] = {
-      ...order,
-      revision: current.revision + 1,
-    };
-  }
-  store.replaceAll({ ...store.snapshot(), orders: merged });
-}
-
 export function AdminProvider({ children }: PropsWithChildren) {
   const [store] = useState(() => new AdminStore());
   const [ready, setReady] = useState(false);
@@ -189,6 +151,12 @@ export function AdminProvider({ children }: PropsWithChildren) {
   const saveQueue = useRef(Promise.resolve());
   // Set once the dashboard is sharing state with Supabase (signed-in admin).
   const [syncOn, setSyncOn] = useState(false);
+  const [remoteRole, setRemoteRole] = useState("");
+  const [remoteUser, setRemoteUser] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+  const applyingRemote = useRef(false);
   const syncRef = useRef(false);
   const actorNameRef = useRef("admin");
   useEffect(() => {
@@ -227,11 +195,13 @@ export function AdminProvider({ children }: PropsWithChildren) {
           configStorage.load(),
         ]);
         if (!active) return;
-        store.replaceAll(snapshot ?? buildSeed(catalogSeed()));
+        store.replaceAll(
+          backendConfig.live ? {} : (snapshot ?? buildSeed(catalogSeed())),
+        );
         setConfigState(applyScheduledPublish(config));
       } catch {
         if (!active) return;
-        store.replaceAll(buildSeed(catalogSeed()));
+        store.replaceAll(backendConfig.live ? {} : buildSeed(catalogSeed()));
         setSnapshotError(
           "Saved dashboard data could not be read, so a fresh copy was loaded.",
         );
@@ -247,90 +217,108 @@ export function AdminProvider({ children }: PropsWithChildren) {
     };
   }, [store]);
 
-  // Take over from the shared Supabase copy for admins, and keep following it
-  // over realtime so changes from any device land here within seconds.
+  // Keep database requests outside the Supabase auth callback lock.
   useEffect(() => {
     if (!backendConfig.live || !supabase) return;
-    const client = supabase;
     let active = true;
-    const adopt = async (userId: string | null) => {
-      if (!userId) {
+    let lastUser: string | null = null;
+    const accept = (
+      session: import("@supabase/supabase-js").Session | null,
+    ) => {
+      if (!active) return;
+      const nextId = session?.user.id ?? null;
+      if (lastUser !== nextId) {
+        syncRef.current = false;
         setSyncOn(false);
-        return;
+        setRemoteRole("");
+        lastUser = nextId;
       }
-      const { data: admin } = await client.rpc("claim_first_admin");
-      if (!active || !admin) {
+      setRemoteUser(
+        session
+          ? { id: session.user.id, name: session.user.email ?? "Store admin" }
+          : null,
+      );
+      if (!session) {
+        syncRef.current = false;
         setSyncOn(false);
-        return;
-      }
-      try {
-        const shared = await pullAdminData();
-        if (!active) return;
-        const seeded = store.snapshot();
-        store.replaceAll(
-          Object.keys(shared).length ? shared : (seeded ?? shared),
-        );
-        if (!Object.keys(shared).length)
-          void pushAdminData(store.snapshot(), "admin");
-        try {
-          const orders = await pullCustomerOrders();
-          if (active) mergeCustomerOrders(store, orders);
-        } catch {
-          // Order mirroring is best-effort; the board keeps its own copy.
-        }
-        setSyncOn(true);
-        setRevision((value) => value + 1);
-      } catch (error) {
-        if (active)
-          setSnapshotError(
-            error instanceof Error
-              ? `Shared dashboard data could not be loaded: ${error.message}`
-              : "Shared dashboard data could not be loaded.",
-          );
+        setRemoteRole("");
+        store.replaceAll({});
       }
     };
-    void client.auth
-      .getSession()
-      .then(({ data }) => adopt(data.session?.user.id ?? null))
-      .catch(() => undefined);
+    void supabase.auth.getSession().then(({ data }) => accept(data.session));
     const {
       data: { subscription },
-    } = client.auth.onAuthStateChange((_event, session) => {
-      void adopt(session?.user.id ?? null);
-    });
+    } = supabase.auth.onAuthStateChange((_event, session) => accept(session));
     return () => {
       active = false;
       subscription.unsubscribe();
     };
   }, [store]);
+  const remoteId = remoteUser?.id;
+  useEffect(() => {
+    if (!ready || !remoteId || !supabase) return;
+    const client = supabase;
+    let active = true;
+    syncRef.current = false;
+    void (async () => {
+      const { data: membership, error } = await client
+        .from("admin_members")
+        .select("role")
+        .eq("user_id", remoteId)
+        .maybeSingle();
+      if (error) throw new Error(error.message);
+      if (!membership)
+        throw new Error("This account does not have store admin access.");
+      const [shared, settings] = await Promise.all([
+        pullAdminData(),
+        loadPublishedConfig(),
+      ]);
+      if (!active) return;
+      applyingRemote.current = true;
+      adoptAdminData(shared);
+      store.replaceAll(shared);
+      applyingRemote.current = false;
+      if (settings.source === "remote")
+        setConfigState(initialConfigState(settings.config));
+      setRemoteRole(membership.role);
+      setSnapshotError("");
+      syncRef.current = true;
+      setSyncOn(true);
+    })().catch((error) => {
+      if (active) setSnapshotError(error.message);
+    });
+    return () => {
+      active = false;
+      syncRef.current = false;
+    };
+  }, [ready, remoteId, store]);
 
-  // Follow server changes while syncing.
   useEffect(() => {
     if (!syncOn) return;
-    const unsubscribe = watchRemoteAdmin({
-      onRecord: (collection, record) => {
-        if (record) {
-          markAppliedRemotely(collection, record.id);
-          applyRemoteRecord(store, collection, record);
-        } else setRevision((value) => value + 1);
-        setRevision((value) => value + 1);
-      },
-      onCatalogChange: () => setRevision((value) => value + 1),
-    });
-    const poll = setInterval(() => {
+    let active = true,
+      loading = false;
+    const refresh = () => {
+      if (loading || adminSyncBusy()) return;
+      loading = true;
       void pullAdminData()
         .then((shared) => {
-          for (const [collection, records] of Object.entries(shared)) {
-            for (const record of records) {
-              markAppliedRemotely(collection, record.id);
-              applyRemoteRecord(store, collection, record);
-            }
-          }
-          setRevision((value) => value + 1);
+          if (!active) return;
+          const merged = mergeAdminData(store.snapshot(), shared);
+          applyingRemote.current = true;
+          store.replaceAll(merged);
+          applyingRemote.current = false;
         })
-        .catch(() => undefined);
-    }, 3000);
+        .catch((error) => {
+          if (active) setSnapshotError(error.message);
+        })
+        .finally(() => {
+          loading = false;
+        });
+    };
+    const unsubscribe = watchRemoteAdmin({ onChange: refresh });
+    const poll = setInterval(refresh, 10000);
     return () => {
+      active = false;
       unsubscribe();
       clearInterval(poll);
     };
@@ -343,13 +331,14 @@ export function AdminProvider({ children }: PropsWithChildren) {
     if (!ready) return;
     const unsubscribe = store.subscribe(() => {
       setRevision((value) => value + 1);
+      if (applyingRemote.current) return;
       const snapshot = store.snapshot();
       saveQueue.current = saveQueue.current
         .then(async () => {
           await adminStorage.save(snapshot);
           if (syncRef.current) {
             await pushAdminData(snapshot, actorNameRef.current);
-            queueCatalogSync(snapshot);
+            setSnapshotError("");
           }
         })
         .catch((error) =>
@@ -377,12 +366,27 @@ export function AdminProvider({ children }: PropsWithChildren) {
   }, [configState, ready]);
 
   const roles = useMemo(
-    () => store.all<RoleRecord>("roles"),
+    () =>
+      backendConfig.live
+        ? BUILT_IN_ROLES.map((role) => ({
+            ...role,
+            id: role.key,
+            createdAt: "",
+            updatedAt: "",
+            revision: 1,
+          }))
+        : store.all<RoleRecord>("roles"),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [store, revision],
   );
 
   const actor = useMemo<Actor>(() => {
+    if (backendConfig.live)
+      return {
+        id: remoteUser?.id ?? "",
+        name: remoteUser?.name ?? "",
+        roleId: remoteRole,
+      };
     const user = store.get("admin_users", actorId);
     if (!user) return FALLBACK_ACTOR;
     return {
@@ -391,7 +395,7 @@ export function AdminProvider({ children }: PropsWithChildren) {
       roleId: String(user.roleId ?? ""),
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [store, actorId, revision]);
+  }, [store, actorId, revision, remoteUser, remoteRole]);
 
   const role = useMemo(
     () =>
@@ -403,8 +407,8 @@ export function AdminProvider({ children }: PropsWithChildren) {
 
   const allowed = useCallback(
     (module: string, action: PermissionAction = "view") =>
-      can(role, module, action),
-    [role],
+      (!backendConfig.live || syncOn) && can(role, module, action),
+    [role, syncOn],
   );
 
   const data = useMemo<DashboardData>(
@@ -438,8 +442,12 @@ export function AdminProvider({ children }: PropsWithChildren) {
 
   const publish = useCallback(
     async (label?: string) => {
+      const errors = configErrors(configState.draft);
+      if (errors.length) {
+        notify(errors[0].message, "danger");
+        return;
+      }
       const next = publishDraft(configState, actor.name, label);
-      setConfigState(next);
       store.log(
         "publish",
         "appearance",
@@ -448,6 +456,7 @@ export function AdminProvider({ children }: PropsWithChildren) {
       );
       try {
         await publishConfigRemotely(next.published);
+        setConfigState(next);
         // Storefront screens listen to this, so the change shows up immediately.
         await refreshPublishedConfig();
         notify(
@@ -475,6 +484,32 @@ export function AdminProvider({ children }: PropsWithChildren) {
       store,
       revision,
       snapshotError,
+      retrySync: async () => {
+        try {
+          await pushAdminData(store.snapshot(), actor.name);
+          setSnapshotError("");
+        } catch (error) {
+          setSnapshotError(
+            error instanceof Error ? error.message : "Save failed.",
+          );
+        }
+      },
+      reloadRemote: async () => {
+        try {
+          if (adminSyncBusy())
+            throw new Error("Wait for the current save to finish.");
+          const shared = await pullAdminData();
+          applyingRemote.current = true;
+          adoptAdminData(shared);
+          store.replaceAll(shared);
+          applyingRemote.current = false;
+          setSnapshotError("");
+        } catch (error) {
+          setSnapshotError(
+            error instanceof Error ? error.message : "Reload failed.",
+          );
+        }
+      },
       configState,
       draft: configState.draft,
       published: configState.published,
@@ -508,12 +543,23 @@ export function AdminProvider({ children }: PropsWithChildren) {
         notify("Permissions updated.", "success");
       },
       resetDemoData: async () => {
-        store.replaceAll(buildSeed(catalogSeed()));
+        if (backendConfig.live) {
+          notify(
+            "Demo reset is only available in local preview mode.",
+            "danger",
+          );
+          return;
+        }
+        store.replaceAll(backendConfig.live ? {} : buildSeed(catalogSeed()));
         await adminStorage.save(store.snapshot());
         setRevision((current) => current + 1);
         notify("Demo data restored.", "success");
       },
       clearBusinessData: async () => {
+        if (backendConfig.live) {
+          notify("Use each resource trash to manage live records.", "danger");
+          return;
+        }
         store.replaceAll(emptySnapshot(catalogSeed()));
         await adminStorage.save(store.snapshot());
         setRevision((current) => current + 1);
@@ -571,6 +617,26 @@ export function AdminProvider({ children }: PropsWithChildren) {
     ],
   );
 
+  if (backendConfig.live && !syncOn)
+    return (
+      <View style={{ flex: 1, padding: 32, justifyContent: "center", gap: 16 }}>
+        <Text style={{ fontSize: 24, fontWeight: "700" }}>
+          Store administration
+        </Text>
+        <Text>
+          {snapshotError ||
+            (remoteUser
+              ? "Checking staff access and loading store data..."
+              : "Sign in with your store admin account to continue.")}
+        </Text>
+        <Pressable onPress={() => router.replace("/auth")}>
+          <Text style={{ color: "#d84315" }}>Sign in</Text>
+        </Pressable>
+        <Pressable onPress={() => router.replace("/")}>
+          <Text>Return to store</Text>
+        </Pressable>
+      </View>
+    );
   return (
     <AdminContext.Provider value={value}>{children}</AdminContext.Provider>
   );

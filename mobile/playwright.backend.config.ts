@@ -14,7 +14,7 @@ export default defineConfig({
   webServer: {
     command: "node scripts/backend-test-server.mjs",
     url: "http://localhost:8084",
-    timeout: 180000,
+    timeout: 600000,
     reuseExistingServer: false,
   },
   reporter: "list",

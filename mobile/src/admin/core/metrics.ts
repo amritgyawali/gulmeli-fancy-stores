@@ -145,15 +145,17 @@ export function buildSeries(
   bucket: "day" | "week" | "month" = "day",
 ): SeriesPoint[] {
   const points = new Map<string, { at: Date; value: number }>();
+  const localDayKey = (date: Date) =>
+    `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
   const keyFor = (date: Date): string => {
     if (bucket === "month")
       return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
     if (bucket === "week") {
       const monday = new Date(date);
       monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
-      return monday.toISOString().slice(0, 10);
+      return localDayKey(monday);
     }
-    return date.toISOString().slice(0, 10);
+    return localDayKey(date);
   };
   const startOfBucket = (date: Date): Date => {
     if (bucket === "month")
@@ -176,9 +178,8 @@ export function buildSeries(
       points.set(keyFor(cursor), { at: new Date(cursor), value: 0 });
       if (bucket === "month")
         cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1);
-      else if (bucket === "week")
-        cursor = new Date(cursor.getTime() + 7 * 86_400_000);
-      else cursor = new Date(cursor.getTime() + 86_400_000);
+      else if (bucket === "week") cursor.setDate(cursor.getDate() + 7);
+      else cursor.setDate(cursor.getDate() + 1);
       guard += 1;
     }
   }

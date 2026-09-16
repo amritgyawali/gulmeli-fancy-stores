@@ -1,11 +1,6 @@
+import { ScrollView, TextInput, View } from "@/components/store-ui";
 import { useState } from "react";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  TextInput,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, Platform } from "react-native";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
@@ -14,14 +9,8 @@ import { requireSupabase } from "@/services/supabase";
 import { useShop } from "@/store/ShopProvider";
 import { go } from "@/admin/navigate";
 import { track } from "@/services/telemetry";
-import {
-  useSocialSignIn,
-  type SocialProvider,
-} from "@/services/clerk-auth";
-import {
-  credentialsSchema,
-  type Credentials,
-} from "@/lib/schemas";
+import { useSocialSignIn, type SocialProvider } from "@/services/clerk-auth";
+import { credentialsSchema, type Credentials } from "@/lib/schemas";
 
 const inputStyle = {
   backgroundColor: "white",
@@ -60,7 +49,10 @@ export default function AuthScreen() {
     setNotice("");
     try {
       const client = requireSupabase();
-      const credentials = { email: values.email.trim(), password: values.password };
+      const credentials = {
+        email: values.email.trim(),
+        password: values.password,
+      };
       const { data, error } = create
         ? await client.auth.signUp(credentials)
         : await client.auth.signInWithPassword(credentials);

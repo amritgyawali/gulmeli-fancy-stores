@@ -1,5 +1,5 @@
-# Files excluded from EAS Build uploads. Mirrors .gitignore, except that
-# .env.local is uploaded so the EXPO_PUBLIC_* values reach the build.
+# Files excluded from EAS Build uploads. Public release settings are in eas.json;
+# local configuration and server secrets must never enter a build archive.
 
 node_modules/
 .expo/
@@ -26,6 +26,11 @@ yarn-error.*
 *.pem
 
 .env
+.env.local
+supabase/.env.local
+.analysis/
+.graphify-detect.json
+src/graphify-out/
 supabase/.temp/
 *.tsbuildinfo
 example
@@ -35,3 +40,6 @@ example
 
 test-results/
 playwright-report/
+
+**/.env.local
+**/.claude/

@@ -228,14 +228,14 @@ test("metrics survive an empty store without dividing by zero", () => {
 
 test("a series fills empty days so the chart has no gaps", () => {
   const range = {
-    from: new Date("2026-05-01T00:00:00.000Z"),
-    to: new Date("2026-05-07T23:59:59.999Z"),
+    from: new Date(2026, 4, 1, 0, 0, 0, 0),
+    to: new Date(2026, 4, 7, 23, 59, 59, 999),
   };
   const series = buildSeries(
     [
-      { at: "2026-05-02T09:00:00.000Z", value: 100 },
-      { at: "2026-05-02T18:00:00.000Z", value: 50 },
-      { at: "2026-05-06T09:00:00.000Z", value: 25 },
+      { at: new Date(2026, 4, 2, 9).toISOString(), value: 100 },
+      { at: new Date(2026, 4, 2, 18).toISOString(), value: 50 },
+      { at: new Date(2026, 4, 6, 9).toISOString(), value: 25 },
     ],
     range,
     "day",

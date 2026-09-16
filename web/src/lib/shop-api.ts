@@ -7,6 +7,7 @@ export async function loadCatalog(): Promise<Product[]> {
   const { data, error } = await supabase
     .from("products")
     .select("id,name,price,stock,category,product_group,image_url,details")
+    .eq("active", true)
     .order("sort_order")
     .order("id");
   if (error) throw new Error(error.message);
@@ -116,7 +117,9 @@ export async function submitOrder(
 }
 
 export async function cancelRemoteOrder(id: string): Promise<LocalOrder> {
-  const { data, error } = await supabase.rpc("cancel_order", { p_order_id: id });
+  const { data, error } = await supabase.rpc("cancel_order", {
+    p_order_id: id,
+  });
   if (error) throw new Error(error.message);
   return data as LocalOrder;
 }

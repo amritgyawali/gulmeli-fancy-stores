@@ -1,6 +1,7 @@
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { ShopProvider } from "@/store/ShopContext";
 import { StoreLayout } from "@/components/StoreLayout";
+import { StoreM3Layout } from "@/layouts/StoreM3Layout";
 import { Home } from "@/pages/Home";
 import { ProductPage } from "@/pages/ProductPage";
 import CheckoutPage from "@/pages/CheckoutPage";
@@ -41,15 +42,19 @@ export default function App() {
     <ShopProvider>
       <HashRouter>
         <Routes>
+          {/* Orange Daraz chrome (homepage_clone design) */}
           <Route element={<StoreLayout />}>
             <Route index element={<Home />} />
-            <Route path="product/:id" element={<ProductPage />} />
             <Route path="cart" element={<CartPage />} />
             <Route path="offers" element={<OffersPage />} />
             <Route path="messages" element={<MessagesPage />} />
-            <Route path="account" element={<AccountPage />} />
             <Route path="auth" element={<AuthPage />} />
             <Route path="search" element={<SearchPage />} />
+          </Route>
+          {/* Material-3 chrome (product/checkout/account/seller/help designs) */}
+          <Route element={<StoreM3Layout />}>
+            <Route path="product/:id" element={<ProductPage />} />
+            <Route path="account" element={<AccountPage />} />
             <Route path="checkout" element={<CheckoutPage />} />
             <Route path="help" element={<HelpPage />} />
             <Route path="sell" element={<SellPage />} />

@@ -1,3 +1,4 @@
+import { sendSupportMessage, useSupportTickets } from "@/lib/support";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useShop } from "@/store/ShopContext";
@@ -33,6 +34,9 @@ const MESSAGES = [
 export function MessagesPage() {
   const { commerce, updateCommerce, ui, markMessagesRead, session } = useShop();
   const [category, setCategory] = useState("All");
+  const { tickets } = useSupportTickets(session?.user.id);
+  const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState("");
   const [text, setText] = useState("");
   const drafts = [...commerce.drafts].reverse();
 
@@ -53,7 +57,7 @@ export function MessagesPage() {
           </div>
           <button
             onClick={markMessagesRead}
-            className={`text-xs font-bold ${ui.messagesRead ? "text-slate-400" : "text-[#f85606]"}`}
+            className={`text-xs font-bold ${ui.messagesRead ? "text-slate-400" : "text-[var(--store-primary-text)]"}`}
           >
             {ui.messagesRead ? "All read ✓" : "Mark all as read"}
           </button>
@@ -64,7 +68,9 @@ export function MessagesPage() {
               key={tab}
               onClick={() => setCategory(tab)}
               className={`rounded-lg px-4 py-1.5 text-sm font-bold ${
-                category === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"
+                category === tab
+                  ? "bg-[var(--store-surface)] text-slate-900 shadow-sm"
+                  : "text-[var(--store-muted)]"
               }`}
             >
               {tab}
@@ -75,7 +81,7 @@ export function MessagesPage() {
           {visible.map((message) => (
             <article
               key={message.id}
-              className="flex gap-4 rounded-2xl bg-white p-5 shadow-sm transition hover:shadow-md"
+              className="flex gap-4 rounded-2xl bg-[var(--store-surface)] p-5 shadow-sm transition hover:shadow-md"
             >
               <span className="grid h-14 w-14 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-orange-100 to-amber-100 text-2xl">
                 {message.emoji}
@@ -83,17 +89,21 @@ export function MessagesPage() {
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline justify-between gap-2">
                   <h2 className="truncate font-bold">{message.title}</h2>
-                  <span className="shrink-0 text-[11px] text-slate-400">{message.time}</span>
+                  <span className="shrink-0 text-[11px] text-slate-400">
+                    {message.time}
+                  </span>
                 </div>
-                <p className="mt-0.5 text-sm text-slate-500">{message.footer}</p>
-                <span className="mt-2 inline-block rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-500">
+                <p className="mt-0.5 text-sm text-[var(--store-muted)]">
+                  {message.footer}
+                </p>
+                <span className="mt-2 inline-block rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-[var(--store-muted)]">
                   {message.type}
                 </span>
               </div>
             </article>
           ))}
           {!visible.length && (
-            <p className="rounded-2xl bg-white p-16 text-center text-sm text-slate-400 shadow-sm">
+            <p className="rounded-2xl bg-[var(--store-surface)] p-16 text-center text-sm text-slate-400 shadow-sm">
               Turn notifications on to see promos.
             </p>
           )}
@@ -102,49 +112,79 @@ export function MessagesPage() {
 
       {/* Compose */}
       <aside className="h-fit space-y-4 lg:sticky lg:top-40">
-        <section className="rounded-2xl bg-white p-5 shadow-sm">
+        <section className="rounded-2xl bg-[var(--store-surface)] p-5 shadow-sm">
           <h2 className="flex items-center gap-2 font-black">
-            <Icon name="message" size={16} className="text-[#f85606]" /> Write to the store
+            <Icon name="message" size={16} className="text-[var(--store-primary-text)]" /> Write
+            to the store
           </h2>
           <p className="mt-1 text-xs text-slate-400">
-            Saved as a draft on your account and synced to the mobile app.
-            Support chats are not sent automatically.
+            Send a message to the store and read staff replies here or in the
+            app.
           </p>
           <textarea
             value={text}
             onChange={(event) => setText(event.target.value)}
             rows={4}
             placeholder="Ask about an order, product or delivery…"
-            className="mt-3 w-full resize-none rounded-lg border border-slate-300 p-3 text-sm outline-none focus:border-[#f85606]"
+            className="mt-3 w-full resize-none rounded-lg border border-slate-300 p-3 text-sm outline-none focus:border-[var(--store-primary)]"
           />
           <button
-            disabled={!session || !text.trim()}
-            onClick={() => {
-              updateCommerce((current) => ({
-                ...current,
-                drafts: [
-                  ...current.drafts,
-                  {
-                    id: `draft-${Date.now()}`,
-                    text: text.trim(),
-                    createdAt: new Date().toISOString(),
-                  },
-                ].slice(-20),
-              }));
-              setText("");
+            disabled={busy || !session || !text.trim()}
+            onClick={async () => {
+              if (busy) return;
+              setBusy(true);
+              setNotice("");
+              try {
+                await sendSupportMessage(text);
+                setText("");
+                setNotice("Message sent.");
+              } catch (error) {
+                setNotice(
+                  error instanceof Error
+                    ? error.message
+                    : "Message could not be sent.",
+                );
+              } finally {
+                setBusy(false);
+              }
             }}
             className="mt-2 w-full rounded-lg bg-slate-800 py-2.5 text-sm font-bold text-white disabled:bg-slate-300"
           >
-            {session ? "Save draft" : "Sign in to save drafts"}
+            {busy
+              ? "Sending..."
+              : session
+                ? "Send message"
+                : "Sign in to send a message"}
           </button>
+          {!!notice && (
+            <p role="status" className="mt-2 text-sm">
+              {notice}
+            </p>
+          )}
+          {tickets.map((ticket) => (
+            <div key={ticket.id} className="my-4 rounded border p-3">
+              <strong>
+                {ticket.subject} - {ticket.status}
+              </strong>
+              {ticket.messages.map((message, i) => (
+                <p key={i} className="my-2 text-sm">
+                  <b>{message.author === "agent" ? "Store" : "You"}:</b>{" "}
+                  {message.body}
+                </p>
+              ))}
+            </div>
+          ))}
           {!session && (
-            <Link to="/auth" className="mt-1 block text-center text-xs font-bold text-[#f85606]">
+            <Link
+              to="/auth"
+              className="mt-1 block text-center text-xs font-bold text-[var(--store-primary-text)]"
+            >
               Sign in →
             </Link>
           )}
         </section>
         {drafts.length > 0 && (
-          <section className="rounded-2xl bg-white p-5 shadow-sm">
+          <section className="rounded-2xl bg-[var(--store-surface)] p-5 shadow-sm">
             <h3 className="mb-3 font-black">Your drafts</h3>
             <ul className="space-y-3">
               {drafts.map((draft) => (

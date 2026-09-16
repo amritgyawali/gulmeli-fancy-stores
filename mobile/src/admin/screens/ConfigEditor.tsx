@@ -64,7 +64,14 @@ export function ConfigEditor({ groups }: { groups: ConfigGroup[] }) {
         return next;
       });
     }
-    setDraft(setConfigValue(draft, name, value));
+    let next = setConfigValue(draft, name, value);
+    if (name === "theme.primaryColor") {
+      if (draft.theme.buttonColor === draft.theme.primaryColor)
+        next = setConfigValue(next, "theme.buttonColor", value);
+      if (draft.header.backgroundColor === draft.theme.primaryColor)
+        next = setConfigValue(next, "header.backgroundColor", value);
+    }
+    setDraft(next);
   };
 
   return (
@@ -134,6 +141,9 @@ export function PublishingPanel() {
     allowed,
   } = useAdmin();
   const [when, setWhen] = useState("");
+  const [publishing, setPublishing] = useState(false);
+  const [scheduleError, setScheduleError] = useState("");
+  const scheduleValid = Number.isFinite(Date.parse(when));
   const canPublish =
     allowed("appearance", "publish") || allowed("settings", "publish");
 
@@ -153,8 +163,11 @@ export function PublishingPanel() {
           tone="primary"
           small
           theme={theme}
-          disabled={!dirty || !canPublish}
-          onPress={() => void publish()}
+          disabled={!dirty || !canPublish || publishing}
+          onPress={() => {
+            setPublishing(true);
+            void publish().finally(() => setPublishing(false));
+          }}
         />
         <Btn
           title="Discard draft"
@@ -168,7 +181,7 @@ export function PublishingPanel() {
 
       <Col gap={6}>
         <A size={11.5} weight="600" color={theme.muted}>
-          Schedule the publication instead
+          Schedule publication while this dashboard remains open
         </A>
         <Row gap={8}>
           <View style={{ flex: 1 }}>
@@ -185,10 +198,16 @@ export function PublishingPanel() {
             icon="clock"
             small
             theme={theme}
-            disabled={!dirty || !when || !canPublish}
-            onPress={() => scheduleFor(new Date(when).toISOString())}
+            disabled={!dirty || !scheduleValid || !canPublish}
+            onPress={() => {
+              if (Date.parse(when) > Date.now()) {
+                setScheduleError("");
+                scheduleFor(new Date(when).toISOString());
+              } else setScheduleError("Choose a time in the future.");
+            }}
           />
         </Row>
+        {!!scheduleError && <A color={theme.danger}>{scheduleError}</A>}
         {!!configState.scheduledFor && (
           <A size={11.5} color={theme.info}>
             {`Scheduled to publish at ${new Date(configState.scheduledFor).toLocaleString()}.`}

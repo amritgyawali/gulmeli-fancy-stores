@@ -1,240 +1,193 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useShop } from "@/store/ShopContext";
-import { ProductVisual } from "@/components/ProductCard";
-import type { Product } from "@/lib/types";
+import { usePublishedConfig } from "@/lib/config-api";
+import {
+  useContent,
+  useTheme,
+  defaultSections,
+  sectionVisible,
+  safeStoreLink,
+  plainText,
+  type ContentRecord,
+} from "@/lib/storefront";
+import { ProductCard } from "@/components/ProductCard";
 
 /*
- * Homepage rebuilt from ../web ui ux design/daraz_nepal_homepage_clone/code.html:
- * hero + app-download card (10/2 grid), campaign ribbon, Flash Sale rail with
- * countdown, Categories grid, Just For You 6-column product wall. All sections
- * render the live Supabase catalog; the design's demo tiles became catalog
- * slices. FEEDS tabs keep the previous filtering behaviour.
+ * Home page ported from ../web ui ux design/daraz_nepal_homepage_clone/
+ * code.html: hero carousel with app-download side card, sale ribbon, Flash
+ * Sale white card with countdown, Categories card grid, and a Just-For-You
+ * product grid with LOAD MORE. Section ordering/visibility still honors the
+ * admin homepage_config so the storefront console keeps working.
  */
 
-const FEEDS = ["For You", "Voucher Max", "Hot deals", "Fast Delivery"];
-
-const CATEGORY_TILES = [
-  { label: "Fashion", emoji: "👗", q: "Fashion" },
-  { label: "Electronics", emoji: "🖥️", q: "Electronics" },
-  { label: "Groceries", emoji: "🥫", q: "Groceries" },
-  { label: "Lifestyle", emoji: "🧺", q: "Lifestyle" },
-  { label: "Jewelry", emoji: "💍", q: "Jewelry" },
-  { label: "Health & Beauty", emoji: "🧴", q: "Lifestyle" },
-  { label: "Home Living", emoji: "🛋️", q: "Lifestyle" },
-  { label: "Daily Deals", emoji: "⚡", q: "" },
-];
-
-function useCountdown(initialSeconds = 4 * 3600 + 28 * 60 + 45) {
-  const [remaining, setRemaining] = useState(initialSeconds);
+function useCountdown() {
+  const [left, setLeft] = useState(() => msToEod());
   useEffect(() => {
-    const timer = setInterval(
-      () => setRemaining((s) => (s > 0 ? s - 1 : initialSeconds)),
-      1000,
-    );
-    return () => clearInterval(timer);
-  }, [initialSeconds]);
-  const parts = [
-    Math.floor(remaining / 3600),
-    Math.floor(remaining / 60) % 60,
-    remaining % 60,
-  ].map((n) => `${n}`.padStart(2, "0"));
-  return parts;
+    const t = setInterval(() => setLeft(msToEod()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const total = Math.max(0, left);
+  const hh = String(Math.floor(total / 3_600_000)).padStart(2, "0");
+  const mm = String(Math.floor((total % 3_600_000) / 60_000)).padStart(2, "0");
+  const ss = String(Math.floor((total % 60_000) / 1000)).padStart(2, "0");
+  return [hh, mm, ss];
+}
+function msToEod() {
+  const now = new Date();
+  return (
+    new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59).getTime() -
+    now.getTime()
+  );
 }
 
-function SectionTitle({ children }: { children: React.ReactNode }) {
+function SectionHeading({ children }: { children: ReactNode }) {
   return <div className="mb-2 text-lg font-bold text-gray-800">{children}</div>;
 }
 
-function FlashCard({ product }: { product: Product }) {
-  const pct =
-    product.originalPrice && product.originalPrice > product.price
-      ? Math.round((1 - product.price / product.originalPrice) * 100)
-      : null;
-  return (
-    <Link
-      to={`/product/${product.id}`}
-      className="flash-card flex flex-col justify-between bg-white p-2 transition"
-    >
-      <div>
-        <div className="mb-2 flex aspect-square w-full items-center justify-center overflow-hidden rounded bg-gray-50 p-2">
-          <ProductVisual product={product} fit="contain" />
-        </div>
-        <h3 className="line-clamp-2 mb-1 text-xs leading-snug text-gray-800">
-          {product.name}
-        </h3>
-      </div>
-      <div>
-        <div className="text-base font-bold text-[#f85606]">
-          Rs. {product.price.toLocaleString("en-US")}
-        </div>
-        {product.originalPrice != null && product.originalPrice > product.price && (
-          <div className="text-[11px] text-gray-400">
-            <span className="line-through">
-              Rs. {product.originalPrice.toLocaleString("en-US")}
-            </span>
-            {pct != null && (
-              <span className="ml-1 font-semibold text-gray-800">-{pct}%</span>
-            )}
-          </div>
-        )}
-      </div>
-    </Link>
-  );
-}
-
-function JustForYouCard({ product }: { product: Product }) {
-  const pct =
-    product.originalPrice && product.originalPrice > product.price
-      ? Math.round((1 - product.price / product.originalPrice) * 100)
-      : null;
-  const rating = Number.parseFloat(product.rating ?? "0") || 0;
-  const stars = Math.round(rating);
-  return (
-    <Link
-      to={`/product/${product.id}`}
-      className="daraz-card flex flex-col justify-between rounded-[2px] border border-transparent bg-white p-2 hover:border-gray-200"
-    >
-      <div>
-        <div className="mb-2 aspect-square w-full overflow-hidden bg-gray-50">
-          <ProductVisual product={product} fit="contain" />
-        </div>
-        <h4 className="line-clamp-2 mb-1 text-xs leading-snug text-gray-800">
-          {product.name}
-        </h4>
-      </div>
-      <div>
-        <div className="text-sm font-bold text-[#f85606]">
-          Rs. {product.price.toLocaleString("en-US")}{" "}
-          {pct != null && (
-            <span className="text-[10px] font-normal text-gray-400">-{pct}%</span>
-          )}
-        </div>
-        <div className="mt-1 flex items-center text-[10px] text-yellow-500">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <i
-              key={i}
-              className={
-                i < stars ? "fa-solid fa-star" : "fa-regular fa-star"
-              }
-            />
-          ))}
-          {product.sold != null && (
-            <span className="ml-1 text-gray-400">({product.sold})</span>
-          )}
-        </div>
-      </div>
-    </Link>
-  );
-}
-
 export function Home() {
-  const {
-    homeProducts,
-    offerProducts,
-    recommendations,
-    catalogReady,
-    ui,
-    setFilter,
-    backendError,
-    retryBackend,
-  } = useShop();
-  const [slide, setSlide] = useState(0);
-  const [tab, setTab] = useState(ui.homeFeed);
+  const [failedBanners, setFailedBanners] = useState<string[]>([]);
+  const { products } = useShop();
+  const config = usePublishedConfig();
+  const theme = useTheme();
+  const content = useContent();
+  const [mobile, setMobile] = useState(window.innerWidth < 768);
+  const [visible, setVisible] = useState(24);
   const [hh, mm, ss] = useCountdown();
-
   useEffect(() => {
-    const timer = setInterval(() => setSlide((s) => (s + 1) % 5), 6000);
-    return () => clearInterval(timer);
+    const update = () => setMobile(window.innerWidth < 768);
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
   }, []);
-
-  const heroCopy = [
-    { badge: "UP TO", big: "Rs. 50L OFF" },
-    { badge: "ENJOY", big: "FREE DELIVERY" },
-    { badge: "EXTRA", big: "70% OFF" },
-  ];
-
+  const sections = (
+    content("homepage_config")[0]?.configured
+      ? content("homepage_sections")
+      : defaultSections
+  )
+    .filter((s) => sectionVisible(s, mobile))
+    .sort((a, b) => Number(a.sortOrder ?? 0) - Number(b.sortOrder ?? 0));
+  const follow = (url: unknown, label: ReactNode) => {
+    const target = safeStoreLink(url);
+    return target ? (
+      target.startsWith("/") ? (
+        <Link to={target}>{label}</Link>
+      ) : (
+        <a href={target}>{label}</a>
+      )
+    ) : (
+      label
+    );
+  };
+  const banners = content("banners")
+    .filter(
+      (b) =>
+        !failedBanners.includes(b.id) && !!(b.image || b.mobileImage),
+    )
+    .filter((b) => !!b.image || !!b.mobileImage);
+  const heroBanner = banners[0];
+  const flashProducts = useMemo(
+    () => products.filter((p) => (p.originalPrice ?? 0) > p.price).slice(0, 6),
+    [products],
+  );
+  const categories = useMemo(() => {
+    const rows = content("categories");
+    const entries = rows.length
+      ? rows
+      : [...new Set(products.map((p) => p.category))].map(
+          (name) => ({ id: name, name }) as ContentRecord,
+        );
+    return entries.slice(0, 16);
+  }, [content, products]);
   const feed = useMemo(() => {
-    const list = [...(tab === "For You" ? homeProducts : recommendations.length ? recommendations : homeProducts)];
-    if (tab === "Voucher Max") return list.filter((p) => p.voucher);
-    if (tab === "Fast Delivery") return list.filter((p) => p.fastDelivery);
-    if (tab === "Hot deals")
-      return list.sort(
-        (a, b) =>
-          Number.parseInt(b.discount ?? "0", 10) -
-          Number.parseInt(a.discount ?? "0", 10),
-      );
-    return list;
-  }, [homeProducts, recommendations, tab]);
-
-  const flash = offerProducts.length ? offerProducts : homeProducts;
-
-  if (backendError)
-    return (
-      <div className="rounded-2xl border border-rose-200 bg-rose-50 p-10 text-center">
-        <p className="mb-4 font-semibold text-rose-700">{backendError}</p>
-        <button
-          onClick={retryBackend}
-          className="rounded-lg bg-rose-600 px-6 py-2.5 text-sm font-bold text-white"
-        >
-          Retry
-        </button>
-      </div>
+    const list = [...products].sort(
+      (a, b) => (b.sold ?? 0) - (a.sold ?? 0),
     );
-  if (!catalogReady)
-    return (
-      <div className="grid grid-cols-2 gap-2.5 md:grid-cols-4 lg:grid-cols-6">
-        {Array.from({ length: 18 }).map((_, i) => (
-          <div key={i} className="aspect-[3/4] animate-pulse rounded bg-gray-200" />
-        ))}
-      </div>
-    );
+    return list.slice(0, visible);
+  }, [products, visible]);
+  const hasMore = feed.length < products.length;
 
   return (
-    <div>
-      {/* ===== Hero carousel + app download (10/2 grid) ===== */}
-      <section className="mb-4 grid grid-cols-12 gap-3">
-        <div className="relative col-span-12 flex min-h-[340px] items-center overflow-hidden rounded-[2px] bg-gradient-to-r from-[#d82a0b] via-[#f85606] to-[#fc8621] p-6 text-white shadow-sm lg:col-span-10">
-          <div className="z-10 max-w-[65%]">
-            <div className="mb-2 inline-flex items-center gap-2">
-              <span className="rounded-full bg-black/30 px-2.5 py-1 text-xs font-semibold uppercase tracking-wider backdrop-blur-sm">
-                8 SEP (8PM) - 15 SEP
-              </span>
-            </div>
-            <h1 className="mb-1 text-4xl font-black leading-none tracking-tight drop-shadow-md sm:text-5xl">
-              9.9 <span className="text-yellow-300">SALE</span>
-            </h1>
-            <p className="mb-4 text-lg font-bold tracking-wide text-yellow-100">
-              BIGGEST SALE OF THE SEASON
-            </p>
-            <div className="mb-5 flex flex-wrap gap-2">
-              {heroCopy.map((h) => (
-                <div
-                  key={h.big}
-                  className="rounded border border-white/30 bg-white/20 px-3 py-1.5 text-center backdrop-blur-md"
-                >
-                  <span className="block text-xs font-bold uppercase text-yellow-200">
-                    {h.badge}
-                  </span>
-                  <span className="text-sm font-extrabold">{h.big}</span>
-                </div>
-              ))}
-            </div>
+    <div className="space-y-6">
+      {/* BEGIN: HeroCarouselAndAppDownload */}
+      <section className="grid grid-cols-12 gap-3">
+        <div className="hero-gradient relative col-span-12 flex min-h-[340px] items-center overflow-hidden rounded-[2px] p-6 text-white shadow-sm lg:col-span-10">
+          {heroBanner ? (
             <Link
-              to="/offers"
-              className="inline-block rounded-full bg-white px-7 py-2.5 text-sm font-black text-[#f85606] shadow-lg transition hover:bg-yellow-50"
+              to={
+                heroBanner.productId
+                  ? `/product/${String(heroBanner.productId)}`
+                  : safeStoreLink(heroBanner.ctaLink) || "/search"
+              }
+              className="relative z-10 max-w-[65%]"
             >
-              Shop Now
+              <img
+                onError={() =>
+                  setFailedBanners((c) => [...c, String(heroBanner.id)])
+                }
+                src={String(
+                  mobile
+                    ? heroBanner.mobileImage || heroBanner.image
+                    : heroBanner.image || heroBanner.mobileImage,
+                )}
+                alt={String(heroBanner.heading || heroBanner.name || "Collection")}
+                className="max-h-[300px] w-full rounded object-contain"
+              />
+              {!!heroBanner.heading && (
+                <p className="mt-3 text-2xl font-black leading-tight drop-shadow-md">
+                  {String(heroBanner.heading)}
+                </p>
+              )}
             </Link>
-          </div>
-          <div className="absolute right-4 top-1/2 flex -translate-y-1/2 items-center justify-center opacity-95">
+          ) : (
+            <div className="relative z-10 max-w-[65%]">
+              <div className="mb-2 inline-flex items-center gap-2">
+                <span className="rounded-full bg-black/30 px-2.5 py-1 text-xs font-semibold uppercase tracking-wider backdrop-blur-sm">
+                  8 SEP (8PM) - 15 SEP
+                </span>
+              </div>
+              <h1 className="mb-1 text-4xl font-black leading-none tracking-tight drop-shadow-md sm:text-5xl">
+                {String(config.text.homeHeading || "9.9")}{" "}
+                <span className="text-yellow-300">SALE</span>
+              </h1>
+              <p className="mb-4 text-lg font-bold tracking-wide text-yellow-100">
+                {config.branding.tagline || "BIGGEST SALE OF THE SEASON"}
+              </p>
+              <div className="mb-5 flex flex-wrap gap-2">
+                {[
+                  ["UP TO", "Rs. 50L OFF"],
+                  ["ENJOY", "FREE DELIVERY"],
+                  ["EXTRA", "70% OFF"],
+                ].map(([k, v]) => (
+                  <div
+                    key={k}
+                    className="rounded border border-white/30 bg-white/20 px-3 py-1.5 text-center backdrop-blur-md"
+                  >
+                    <span className="block text-xs font-bold uppercase text-yellow-200">
+                      {k}
+                    </span>
+                    <span className="text-sm font-extrabold">{v}</span>
+                  </div>
+                ))}
+              </div>
+              <Link
+                to="/search"
+                className="inline-block rounded-full bg-white px-7 py-2.5 text-sm font-black text-[#f85606] shadow-lg transition hover:bg-yellow-50"
+              >
+                Shop Now
+              </Link>
+            </div>
+          )}
+          {/* Banner right graphic embellishment */}
+          <div className="absolute right-4 top-1/2 hidden -translate-y-1/2 items-center justify-center opacity-95 md:flex">
             <div className="relative flex h-72 w-72 items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-inner">
               <i className="fa-solid fa-bag-shopping text-8xl text-yellow-300/40" />
               <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
                 <span className="text-xs uppercase tracking-widest text-white/90">
                   Exclusive Brands
                 </span>
-                <span className="text-2xl font-black text-white">MEGA DEALS</span>
+                <span className="text-2xl font-black text-white">
+                  MEGA DEALS
+                </span>
                 <span className="mt-1 rounded bg-yellow-400 px-2 py-0.5 text-xs font-extrabold text-black">
                   LIMITED STOCK
                 </span>
@@ -242,17 +195,13 @@ export function Home() {
             </div>
           </div>
           <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 space-x-1.5">
-            {[0, 1, 2, 3, 4].map((i) => (
-              <span
-                key={i}
-                className={`h-2 w-2 rounded-full ${
-                  i === slide ? "bg-white" : "bg-white/50"
-                }`}
-              />
-            ))}
+            <span className="h-2 w-2 rounded-full bg-white" />
+            <span className="h-2 w-2 rounded-full bg-white/50" />
+            <span className="h-2 w-2 rounded-full bg-white/50" />
+            <span className="h-2 w-2 rounded-full bg-white/50" />
+            <span className="h-2 w-2 rounded-full bg-white/50" />
           </div>
         </div>
-
         {/* Download App side promo card */}
         <div className="col-span-12 flex flex-col items-center justify-between rounded-[2px] border border-gray-200 bg-white p-3.5 text-center shadow-sm lg:col-span-2">
           <div className="w-full">
@@ -271,42 +220,44 @@ export function Home() {
             </div>
           </div>
           <div className="w-full space-y-1.5 pt-1">
-            <a
-              href="#"
-              onClick={(e) => e.preventDefault()}
-              className="flex w-full items-center justify-center gap-2 rounded bg-black px-2 py-1.5 text-[10px] text-white hover:bg-gray-800"
-            >
-              <i className="fa-brands fa-apple text-sm" />
-              <span className="text-left leading-tight">
-                <span className="block text-[8px] leading-none text-gray-400">
-                  Download on
-                </span>
-                <span className="font-bold">App Store</span>
-              </span>
-            </a>
-            <a
-              href="#"
-              onClick={(e) => e.preventDefault()}
-              className="flex w-full items-center justify-center gap-2 rounded bg-black px-2 py-1.5 text-[10px] text-white hover:bg-gray-800"
-            >
-              <i className="fa-brands fa-google-play text-xs text-yellow-400" />
-              <span className="text-left leading-tight">
-                <span className="block text-[8px] leading-none text-gray-400">
-                  GET IT ON
-                </span>
-                <span className="font-bold">Google Play</span>
-              </span>
-            </a>
+            {config.footer.showAppLinks && (
+              <>
+                <a
+                  href={safeStoreLink(config.app.appStoreUrl) || "#"}
+                  className="flex w-full items-center justify-center gap-2 rounded bg-black px-2 py-1.5 text-[10px] text-white transition hover:bg-gray-800"
+                >
+                  <i className="fa-brands fa-apple text-sm" />
+                  <span className="text-left leading-tight">
+                    <span className="block text-[8px] leading-none text-gray-400">
+                      Download on
+                    </span>
+                    <span className="font-bold">App Store</span>
+                  </span>
+                </a>
+                <a
+                  href={safeStoreLink(config.app.playStoreUrl) || "#"}
+                  className="flex w-full items-center justify-center gap-2 rounded bg-black px-2 py-1.5 text-[10px] text-white transition hover:bg-gray-800"
+                >
+                  <i className="fa-brands fa-google-play text-xs text-yellow-400" />
+                  <span className="text-left leading-tight">
+                    <span className="block text-[8px] leading-none text-gray-400">
+                      GET IT ON
+                    </span>
+                    <span className="font-bold">Google Play</span>
+                  </span>
+                </a>
+              </>
+            )}
           </div>
         </div>
       </section>
-
+      {/* END: HeroCarouselAndAppDownload */}
       {/* Secondary promotional ribbon */}
       <Link
         to="/offers"
-        className="mb-6 flex w-full cursor-pointer items-center justify-between rounded-[2px] bg-gradient-to-r from-[#d82a0b] via-[#f85606] to-[#f42e12] p-2.5 text-white shadow-sm transition hover:opacity-95"
+        className="ribbon-gradient flex w-full cursor-pointer items-center justify-between rounded-[2px] px-2 py-2.5 text-white shadow-sm transition hover:opacity-95"
       >
-        <span className="flex items-center space-x-3 pl-4">
+        <span className="flex items-center gap-3 pl-2">
           <span className="text-xl font-black italic tracking-wide text-yellow-300">
             9.9 SALE
           </span>
@@ -314,19 +265,16 @@ export function Home() {
             9.9 Sale is LIVE NOW
           </span>
         </span>
-        <span className="flex items-center pr-3">
-          <span className="flex items-center gap-1 rounded bg-yellow-400 px-4 py-1.5 text-xs font-extrabold uppercase tracking-wider text-black shadow hover:bg-yellow-300">
-            Shop Now <i className="fa-solid fa-chevron-right text-[10px]" />
-          </span>
+        <span className="flex items-center gap-1 rounded bg-yellow-400 px-4 py-1.5 text-xs font-extrabold uppercase tracking-wider text-black shadow transition hover:bg-yellow-300">
+          Shop Now <i className="fa-solid fa-chevron-right text-[10px]" />
         </span>
       </Link>
-
-      {/* ===== Flash Sale section ===== */}
-      <section className="mb-6">
-        <SectionTitle>Flash Sale</SectionTitle>
-        <div className="rounded-[2px] border border-gray-100 bg-white p-3 shadow-sm">
-          <div className="mb-3 border-b border-gray-100 pb-3">
-            <div className="flex items-center justify-between">
+      {/* BEGIN: FlashSaleSection */}
+      {config.features.flashSales && flashProducts.length > 0 && (
+        <section>
+          <SectionHeading>Flash Sale</SectionHeading>
+          <div className="rounded-[2px] border border-gray-100 bg-white p-3 shadow-sm">
+            <div className="mb-3 flex items-center justify-between border-b border-gray-100 pb-3">
               <div className="flex items-center gap-4">
                 <span className="text-sm font-bold text-[#f85606]">
                   On Sale Now
@@ -334,9 +282,20 @@ export function Home() {
                 <div className="flex items-center gap-1.5 text-xs text-gray-500">
                   <span>Ending in</span>
                   <div className="flex items-center gap-1 font-mono font-bold text-white">
-                    <span className="rounded-[2px] bg-[#d04402] px-1.5 py-0.5">{hh}</span>:
-                    <span className="rounded-[2px] bg-[#d04402] px-1.5 py-0.5">{mm}</span>:
-                    <span className="rounded-[2px] bg-[#d04402] px-1.5 py-0.5">{ss}</span>
+                    {[hh, ":", mm, ":", ss].map((c, i) =>
+                      c === ":" ? (
+                        <span key={i} className="text-[#d04402]">
+                          :
+                        </span>
+                      ) : (
+                        <span
+                          key={i}
+                          className="rounded-[2px] bg-[#d04402] px-1.5 py-0.5"
+                        >
+                          {c}
+                        </span>
+                      ),
+                    )}
                   </div>
                 </div>
               </div>
@@ -344,96 +303,166 @@ export function Home() {
                 to="/offers"
                 className="rounded-[2px] border border-[#f85606] px-3.5 py-1.5 text-xs font-semibold uppercase text-[#f85606] transition hover:bg-[#fff6f2]"
               >
-                Shop all products
+                SHOP ALL PRODUCTS
               </Link>
             </div>
+            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-6">
+              {flashProducts.map((p) => (
+                <ProductCard key={p.id} product={p} variant="flash" />
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-6">
-            {flash.slice(0, 6).map((p) => (
-              <FlashCard key={p.id} product={p} />
+        </section>
+      )}
+      {/* END: FlashSaleSection */}
+      {/* BEGIN: CategoriesSection */}
+      {categories.length > 0 && (
+        <section>
+          <SectionHeading>Categories</SectionHeading>
+          <div className="divide-y divide-gray-100 rounded-[2px] border border-gray-200 bg-white shadow-sm">
+            {[0, 8].map((start) => (
+              <div
+                key={start}
+                className="grid grid-cols-4 divide-x divide-gray-100 sm:grid-cols-8"
+              >
+                {categories.slice(start, start + 8).map((c) => (
+                  <Link
+                    key={c.id}
+                    to={`/search?q=${encodeURIComponent(String(c.name))}`}
+                    className="category-item flex flex-col items-center p-3 text-center transition hover:bg-gray-50"
+                  >
+                    <div className="mb-2 flex h-16 w-16 items-center justify-center">
+                      {c.image ? (
+                        <img
+                          src={String(c.image)}
+                          alt=""
+                          className="max-h-full max-w-full object-contain"
+                        />
+                      ) : (
+                        <i className="fa-solid fa-bag-shopping text-3xl text-gray-300" />
+                      )}
+                    </div>
+                    <span className="text-xs leading-tight text-gray-700">
+                      {String(c.name)}
+                    </span>
+                  </Link>
+                ))}
+              </div>
             ))}
           </div>
-          {/* stock burn bars like the design */}
-          <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-6">
-            {flash.slice(0, 6).map((p) => {
-              const sold = Math.min(100, Math.round((p.sold ?? 20) % 100));
-              return (
-                <div key={p.id} className="px-2">
-                  <div className="h-1.5 overflow-hidden rounded-full bg-gray-100">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-[#f85606] to-[#fc8621]"
-                      style={{ width: `${Math.max(12, sold)}%` }}
-                    />
+        </section>
+      )}
+      {/* END: CategoriesSection */}
+      {/* Remaining admin-configured non-grid sections (newsletter, blog, etc.) */}
+      {sections
+        .filter((s) =>
+          [
+            "newsletter",
+            "brands",
+            "blog",
+            "social",
+            "rich_text",
+            "video",
+            "banner",
+            "promo_banner",
+            "gallery",
+          ].includes(String(s.type)),
+        )
+        .map((section) => {
+          const type = String(section.type);
+          let body: ReactNode;
+          if (["banner", "promo_banner", "gallery"].includes(type)) {
+            const items = content("banners")
+              .filter(
+                (b) =>
+                  !failedBanners.includes(b.id) &&
+                  !!(b.image || b.mobileImage) &&
+                  (!Array.isArray(section.bannerIds) ||
+                    !section.bannerIds.length ||
+                    section.bannerIds.includes(b.id)),
+              )
+              .slice(1);
+            body = items.length ? (
+              <div className="flex snap-x gap-3 overflow-x-auto">
+                {items.map((b) => (
+                  <div
+                    key={b.id}
+                    className="w-full shrink-0 snap-start overflow-hidden rounded-[2px] border border-gray-200 bg-white shadow-sm"
+                  >
+                    {follow(
+                      b.productId ? `/product/${String(b.productId)}` : b.ctaLink,
+                      <img
+                        onError={() =>
+                          setFailedBanners((c) => [...c, String(b.id)])
+                        }
+                        src={String(
+                          mobile
+                            ? b.mobileImage || b.image
+                            : b.image || b.mobileImage,
+                        )}
+                        alt={String(b.heading || b.name || "Collection")}
+                        className="aspect-[2/1] w-full object-cover"
+                      />,
+                    )}
                   </div>
-                  <p className="mt-0.5 text-center text-[9px] text-gray-400">
-                    {Math.max(12, sold)}% sold
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== Categories section ===== */}
-      <section className="mb-6">
-        <SectionTitle>Categories</SectionTitle>
-        <div className="divide-y divide-gray-100 rounded-[2px] border border-gray-200 bg-white shadow-sm">
-          <div className="grid grid-cols-4 divide-x divide-gray-100 sm:grid-cols-8">
-            {CATEGORY_TILES.map((c) => (
-              <Link
-                key={c.label}
-                to={c.q ? `/search?q=${encodeURIComponent(c.q)}` : "/offers"}
-                className="flex flex-col items-center p-3 text-center transition hover:bg-gray-50"
-              >
-                <span className="mb-2 flex h-16 w-16 items-center justify-center text-4xl">
-                  {c.emoji}
-                </span>
-                <span className="text-xs leading-tight text-gray-700">
-                  {c.label}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== Just For You ===== */}
-      <section className="mb-8">
-        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-          <SectionTitle>
-            <span className="mb-0 inline-block">Just For You</span>
-          </SectionTitle>
-          <div className="flex gap-1 rounded-xl bg-gray-100 p-1">
-            {FEEDS.map((f) => (
-              <button
-                key={f}
-                onClick={() => {
-                  setTab(f);
-                  setFilter("homeFeed", f);
-                }}
-                className={`rounded-lg px-4 py-1.5 text-sm font-bold transition ${
-                  tab === f
-                    ? "bg-white text-[#f85606] shadow-sm"
-                    : "text-slate-500 hover:text-slate-800"
-                }`}
-              >
-                {f}
-              </button>
-            ))}
-          </div>
-        </div>
+                ))}
+              </div>
+            ) : null;
+          } else if (type === "blog")
+            body = (
+              <div className="space-y-6 rounded-[2px] border border-gray-200 bg-white p-4 shadow-sm">
+                {content("blog_posts").map((p) => (
+                  <article key={p.id}>
+                    <h3 className="text-lg font-bold text-gray-800">
+                      {String(p.title)}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      {plainText(p.body || p.content)}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            );
+          else
+            body = (
+              <div className="space-y-3 rounded-[2px] border border-gray-200 bg-white p-4 text-sm text-gray-600 shadow-sm">
+                <p className="whitespace-pre-line">
+                  {plainText(section.body || section.html)}
+                </p>
+                {type === "video" &&
+                  follow(section.videoUrl, "Watch video")}
+              </div>
+            );
+          if (!body) return null;
+          return (
+            <section key={section.id}>
+              {section.title ? <SectionHeading>{String(section.title)}</SectionHeading> : null}
+              {body}
+            </section>
+          );
+        })}
+      {/* BEGIN: JustForYouSection */}
+      <section>
+        <SectionHeading>Just For You</SectionHeading>
         <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {feed.map((p) => (
-            <JustForYouCard key={p.id} product={p} />
+            <ProductCard key={p.id} product={p} />
           ))}
-          {!feed.length && (
-            <p className="col-span-full py-14 text-center text-sm text-gray-400">
-              Nothing in this feed right now.
-            </p>
-          )}
         </div>
+        {hasMore && (
+          <div className="mt-8 flex justify-center">
+            <button
+              onClick={() => setVisible((v) => v + 24)}
+              className="w-96 max-w-full rounded-[2px] border border-[#f85606] bg-white py-3 text-xs font-bold uppercase tracking-wider text-[#f85606] shadow-sm transition hover:bg-[#fff0eb]"
+            >
+              LOAD MORE
+            </button>
+          </div>
+        )}
       </section>
+      {/* END: JustForYouSection */}
+      {/* Theme hook retained for admin appearance overrides */}
+      <span className="hidden" aria-hidden style={{ color: theme.primary }} />
     </div>
   );
 }

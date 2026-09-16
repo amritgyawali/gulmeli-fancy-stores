@@ -52,13 +52,13 @@ export default function SellPage() {
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               to="/auth"
-              className="rounded-full bg-white px-6 py-2.5 text-sm font-black text-[#f85606] shadow-lg hover:bg-yellow-50"
+              className="rounded-full bg-[var(--store-surface)] px-6 py-2.5 text-sm font-black text-[var(--store-primary-text)] shadow-lg hover:bg-yellow-50"
             >
               Start Selling
             </Link>
             <a
               href="#calculator"
-              className="rounded-full border border-white/50 px-6 py-2.5 text-sm font-bold text-white hover:bg-white/10"
+              className="rounded-full border border-white/50 px-6 py-2.5 text-sm font-bold text-white hover:bg-[var(--store-surface)]/10"
             >
               Try the fee calculator
             </a>
@@ -71,11 +71,11 @@ export default function SellPage() {
         <h2 className="mb-4 text-lg font-bold text-gray-800">Start Selling in 4 Easy Steps</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {STEPS.map((s, i) => (
-            <div key={s.title} className="daraz-card relative rounded-[2px] border border-gray-200 bg-white p-4 shadow-sm">
-              <span className="absolute -top-3 left-4 grid h-6 w-6 place-items-center rounded-full bg-[#f85606] text-xs font-black text-white">
+            <div key={s.title} className="daraz-card relative rounded-[2px] border border-gray-200 bg-[var(--store-surface)] p-4 shadow-sm">
+              <span className="absolute -top-3 left-4 grid h-6 w-6 place-items-center rounded-full bg-[var(--store-primary)] text-xs font-black text-white">
                 {i + 1}
               </span>
-              <i className={`fa-solid ${s.icon} mt-2 text-xl text-[#f85606]`} />
+              <i className={`fa-solid ${s.icon} mt-2 text-xl text-[var(--store-primary-text)]`} />
               <h3 className="mt-2 text-sm font-black text-gray-800">{s.title}</h3>
               <p className="mt-1 text-[11px] leading-snug text-gray-500">{s.copy}</p>
             </div>
@@ -99,7 +99,7 @@ export default function SellPage() {
       </section>
 
       {/* Fee calculator */}
-      <section id="calculator" className="grid gap-4 rounded-[2px] border border-gray-200 bg-white p-6 shadow-sm lg:grid-cols-2">
+      <section id="calculator" className="grid gap-4 rounded-[2px] border border-gray-200 bg-[var(--store-surface)] p-6 shadow-sm lg:grid-cols-2">
         <div>
           <h2 className="text-lg font-bold text-gray-800">Seller Fee Calculator</h2>
           <p className="mb-4 text-xs text-gray-500">
@@ -138,7 +138,7 @@ export default function SellPage() {
               min={0}
               value={shipping}
               onChange={(e) => setShipping(Math.max(0, Number(e.target.value) || 0))}
-              className="mt-1 w-40 rounded border border-gray-200 px-3 py-1.5 text-sm font-normal outline-none focus:border-[#f85606]"
+              className="mt-1 w-40 rounded border border-gray-200 px-3 py-1.5 text-sm font-normal outline-none focus:border-[var(--store-primary)]"
             />
           </label>
         </div>
@@ -158,7 +158,7 @@ export default function SellPage() {
           <hr className="border-gray-200" />
           <div className="flex items-baseline justify-between">
             <span className="font-black text-gray-800">You keep per order</span>
-            <span className="text-2xl font-black text-[#f85606]">{rs(payout)}</span>
+            <span className="text-2xl font-black text-[var(--store-primary-text)]">{rs(payout)}</span>
           </div>
           <p className="text-[10px] text-gray-400">
             Weekly disbursal via NCHL-IPS. VAT/IRD withholding applies to
@@ -175,8 +175,8 @@ export default function SellPage() {
           { icon: "fa-graduation-cap", title: "Seller University", copy: "Free courses on listings, photography and growth." },
           { icon: "fa-hand-holding-dollar", title: "Zero Upfront Cost", copy: "No rent, no listing fee — pay only when you sell." },
         ].map((w) => (
-          <div key={w.title} className="rounded-[2px] border border-gray-200 bg-white p-4 shadow-sm">
-            <i className={`fa-solid ${w.icon} text-lg text-[#f85606]`} />
+          <div key={w.title} className="rounded-[2px] border border-gray-200 bg-[var(--store-surface)] p-4 shadow-sm">
+            <i className={`fa-solid ${w.icon} text-lg text-[var(--store-primary-text)]`} />
             <h3 className="mt-2 text-sm font-black text-gray-800">{w.title}</h3>
             <p className="mt-1 text-[11px] leading-snug text-gray-500">{w.copy}</p>
           </div>
@@ -186,7 +186,7 @@ export default function SellPage() {
       {/* FAQ */}
       <section className="max-w-3xl">
         <h2 className="mb-3 text-lg font-bold text-gray-800">Frequently Asked Questions</h2>
-        <div className="divide-y divide-gray-100 rounded-[2px] border border-gray-200 bg-white shadow-sm">
+        <div className="divide-y divide-gray-100 rounded-[2px] border border-gray-200 bg-[var(--store-surface)] shadow-sm">
           {FAQS.map((f) => (
             <details key={f.q} className="group px-4">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-3 py-3.5 text-sm font-semibold text-gray-800">
@@ -206,7 +206,7 @@ export default function SellPage() {
         </p>
         <Link
           to="/auth"
-          className="mt-5 inline-block rounded-full bg-[#f85606] px-8 py-3 text-sm font-black uppercase tracking-wide hover:bg-[#d04402]"
+          className="mt-5 inline-block rounded-full bg-[var(--store-primary)] px-8 py-3 text-sm font-black uppercase tracking-wide hover:bg-[#d04402]"
         >
           Open your store
         </Link>

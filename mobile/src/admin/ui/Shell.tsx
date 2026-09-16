@@ -493,7 +493,8 @@ export function AdminShell({
   scroll = true,
   children,
 }: PropsWithChildren<ShellProps>) {
-  const { theme, dirty, snapshotError, ready } = useAdmin();
+  const { theme, dirty, snapshotError, ready, retrySync, reloadRemote } =
+    useAdmin();
   const layout = useLayout();
   const pathname = usePathname();
   const [drawer, setDrawer] = useState(false);
@@ -611,6 +612,24 @@ export function AdminShell({
               <A size={11.5} color={theme.danger} accessibilityRole="alert">
                 {snapshotError}
               </A>
+              <Pressable
+                onPress={() => {
+                  void retrySync();
+                }}
+                accessibilityRole="button"
+                accessibilityLabel="Retry saving changes"
+              >
+                <A>Retry saving changes</A>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  void reloadRemote();
+                }}
+                accessibilityRole="button"
+                accessibilityLabel="Discard unsaved edits and reload server copy"
+              >
+                <A>Discard unsaved edits and reload server copy</A>
+              </Pressable>
             </View>
           )}
           {dirty && (

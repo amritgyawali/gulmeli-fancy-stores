@@ -16,7 +16,9 @@ export function readBackendConfig(values: {
   key?: string;
   cloudName?: string;
 }) {
-  const live = values.mode === "supabase";
+  const live =
+    values.mode === "supabase" ||
+    (!values.mode && Boolean(values.url || values.key));
   const url = values.url?.trim() || "";
   const key = values.key?.trim() || "";
   const cloudName = values.cloudName?.trim() || "";

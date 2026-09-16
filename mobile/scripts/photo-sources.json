@@ -1,0 +1,58 @@
+[
+  {
+    "id": "dabur",
+    "url": "https://static-01.daraz.com.np/p/29e19df70745ad24645012529ed1ba11.jpg",
+    "source": "https://www.daraz.com.np/products/dabur-glucose-d-500gm-free-glass-i116066718.html"
+  },
+  {
+    "id": "horlicks",
+    "url": "https://images.apollo247.in/pub/media/catalog/product/H/O/HOR0011_3-JULY23_1.jpg",
+    "source": "https://www.apollopharmacy.in/otc/horlicks-original-jar-1kg"
+  },
+  {
+    "id": "didian",
+    "url": "https://minio-oks404ksgws8sc0wg8kcgok0.209.50.229.110.sslip.io/food/1761817517548-tn1ob18iwq8.png",
+    "source": "https://www.arkshfood.com/products/didian-compressed-high-energy-army-biscuit-chocolate-flavor-300-gm-15-gm-x-20-packs"
+  },
+  {
+    "id": "monitor",
+    "url": "https://static-01.daraz.com.np/p/69a034ec42a62b55a6981c3b47fa3041.jpg",
+    "source": "https://www.daraz.com.np/products/vartex-24-frameless-gaming-monitor-100hz-refresh-rate-full-hd-ips-panel-with-built-in-speakers-eye-care-freesync-i181906281.html"
+  },
+  {
+    "id": "gyan",
+    "url": "https://img.drz.lazcdn.com/g/kf/S3eb3b3bb7bf249d2a962f0cc1f96695dS.jpg_720x720q80.jpg",
+    "source": "https://www.daraz.com.np/products/gyan-chiura-800gm-i182587434.html",
+    "illustrative": false
+  },
+  {
+    "id": "speaker",
+    "url": "https://img.drz.lazcdn.com/static/lk/p/17dde363800c9313338b942914fed2f4.jpg_720x720q80.jpg_.webp",
+    "source": "https://www.daraz.lk/products/tg-113-portable-bluetooth-speaker-random-color-wireless-5w-speaker-with-deep-bass-1200mah-battery-built-in-mic-usb-tf-card-aux-fm-rechargeable-style-outdoor-speaker-bt-style-bluetooth-speaker-party-box-i636251257.html",
+    "illustrative": true
+  },
+  {
+    "id": "balaclava",
+    "url": "https://m.media-amazon.com/images/I/91tjSma8kjL._AC_SL1500_.jpg",
+    "source": "https://tiendamia.com/pe/producto?amz=B07Q81C7XR",
+    "illustrative": true
+  },
+  {
+    "id": "posters",
+    "url": "https://s.anixmirai.com/posters/3Qs3gj66YFOmyIfCTg9oak6KoyU8x9.jpg",
+    "source": "https://anixart-app.com/release/1256",
+    "illustrative": true
+  },
+  {
+    "id": "film",
+    "url": "https://i5.walmartimages.com/seo/14-Inch-Laptop-Screen-Protector-Anti-Blue-Light-Glare-Filter-Eye-Protection-Blocking-Protector-14-16-9-Aspect-Ratio-2-Pack_eb8754de-d7e6-4a0e-9679-609efdbe18a9.fad13ee150db15173a59f608881d7826.jpeg",
+    "source": "https://www.walmart.com/ip/14-Inch-Laptop-Screen-Protector-Anti-Blue-Light-Glare-Filter-Eye-Protection-Blocking-Protector-14-16-9-Aspect-Ratio-2-Pack/5044720651",
+    "illustrative": true
+  },
+  {
+    "id": "restricted",
+    "url": "https://www.magspremiums.com/wp-content/uploads/2023/07/Satin-Pouch.jpeg",
+    "source": "https://www.magspremiums.com/satin-pouch-printing/",
+    "illustrative": true
+  }
+]

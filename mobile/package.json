@@ -72,18 +72,24 @@
     "web": "expo start --web --clear",
     "lint": "eslint src tests",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "test": "node --experimental-strip-types --test --test-concurrency=1 tests/*.test.ts",
     "check": "npm run typecheck && npm run lint && npm test",
     "test:e2e": "playwright test",
-    "export": "expo export --platform all --clear",
+    "export": "expo export --platform all --clear --max-workers 2 && node scripts/check-export-backend.mjs",
     "preview": "node scripts/serve-preview.cjs",
     "format": "prettier --write src tests scripts playwright.config.ts",
     "backend:check": "node scripts/check-backend.mjs",
     "backend:seed:push": "node scripts/push-seed.mjs",
     "backend:sql": "node scripts/apply-sql.mjs",
     "backend:deploy": "node scripts/deploy-functions.mjs",
+    "backend:photos": "node scripts/import-photos.mjs",
+    "backend:release-config": "node scripts/release-config.mjs",
+    "backend:prepare": "node scripts/prepare-backend.mjs",
+    "backend:setup": "npm run backend:prepare && npm run backend:sql -- supabase/deploy.sql && npm run backend:sql -- supabase/catalog-photos.sql && npm run backend:deploy && npm run backend:check -- --remote",
     "backend:seed": "node --experimental-strip-types scripts/generate-seed.ts",
-    "test:backend:e2e": "playwright test -c playwright.backend.config.ts"
+    "test:backend:e2e": "playwright test -c playwright.backend.config.ts",
+    "branding:prepare": "node scripts/prepare-branding.mjs",
+    "eas-build-post-install": "node scripts/prepare-branding.mjs"
   },
   "expo": {
     "autolinking": {

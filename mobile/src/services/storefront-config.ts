@@ -14,6 +14,7 @@ export const ADMIN_STORAGE_KEY = "gulmeli:admin:v1";
 
 /** The single row the storefront reads its published configuration from. */
 const CONFIG_ROW_ID = "storefront";
+const PUBLISHED_CACHE_KEY = "gulmeli:published:v1";
 
 function parse<T>(raw: string | null): T | null {
   if (!raw) return null;
@@ -66,6 +67,7 @@ export async function loadPublishedConfig(): Promise<{
       .eq("id", CONFIG_ROW_ID)
       .maybeSingle();
     if (!error && data?.published) {
+      await AsyncStorage.setItem(PUBLISHED_CACHE_KEY, JSON.stringify(data.published)).catch(()=>undefined);
       return {
         config: restoreConfig(data.published),
         source: "remote",
@@ -73,8 +75,8 @@ export async function loadPublishedConfig(): Promise<{
       };
     }
     if (error && error.code !== "PGRST116") {
-      const local = await configStorage.load();
-      return { config: local.published, source: "local", error: error.message };
+      const cached = parse(await AsyncStorage.getItem(PUBLISHED_CACHE_KEY));
+      return { config: restoreConfig(cached), source: cached ? "local" : "default", error: error.message };
     }
   }
   const raw = await AsyncStorage.getItem(CONFIG_STORAGE_KEY);
@@ -131,9 +133,10 @@ export async function refreshPublishedConfig(): Promise<PublishedConfigSnapshot>
           "The store settings could not be loaded, so the built-in defaults are being used.",
       }))
       .then((value) => {
+        const changed = JSON.stringify(snapshot) !== JSON.stringify(value);
         snapshot = value;
         inFlight = null;
-        for (const listener of [...listeners]) listener(value);
+        if(changed) for (const listener of [...listeners]) listener(value);
         return value;
       });
   return inFlight;

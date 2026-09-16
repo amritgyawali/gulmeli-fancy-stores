@@ -15,11 +15,23 @@
       "node": "24.13.0",
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_BACKEND": "supabase",
+        "EXPO_PUBLIC_SUPABASE_URL": "https://mebobqjfoexyhheupjuf.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_t8PJDZ8IRa44o0PJpdoWuw_5g7up9GA",
+        "EXPO_PUBLIC_CLOUDINARY_CLOUD_NAME": "pfpnbrtx"
       }
     },
     "production": {
       "autoIncrement": true,
-      "channel": "production"
+      "channel": "production",
+      "env": {
+        "EXPO_PUBLIC_BACKEND": "supabase",
+        "EXPO_PUBLIC_SUPABASE_URL": "https://mebobqjfoexyhheupjuf.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_t8PJDZ8IRa44o0PJpdoWuw_5g7up9GA",
+        "EXPO_PUBLIC_CLOUDINARY_CLOUD_NAME": "pfpnbrtx"
+      }
     }
   },
   "submit": {

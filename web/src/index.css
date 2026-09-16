@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
 @import "tailwindcss";
 @import "@fortawesome/fontawesome-free/css/all.min.css";
 
@@ -8,15 +10,36 @@
 body {
   font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI",
     "Helvetica Neue", Arial, sans-serif;
-  background: #f5f5f5;
+  background-color: #f5f5f5;
   color: #212121;
+}
+
+/* Material Symbols (icon font used by the M3 storefront pages and the
+   operations consoles in ../web ui ux design/). */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+.material-symbols-outlined.fill {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
 }
 
 /*
   Palette and utility classes ported from the Stitch exports in
-  ../web ui ux design/. The ops/admin designs use Material-3 semantic tokens
-  (surface/on-surface/...), mapped to the Daraz-orange brand family below so
-  every console stays on-brand for Gulmeli Fancy Stores.
+  ../web ui ux design/. The homepage keeps the "Daraz orange" system
+  (daraz_nepal_homepage_clone); the five inner storefront pages, the ops
+  consoles and the enterprise dashboards use the Material-3 system from the
+  M3 exports. The tokens below are the EXACT tailwind.config values from
+  those exports (radius, spacing scale, type ramp, M3 color roles).
 */
 @theme {
   --color-daraz: #f85606;
@@ -26,8 +49,13 @@ body {
   --color-daraz-muted: #757575;
   --color-daraz-border: #e2e8f0;
   --color-daraz-link: #0f828a;
+  --color-daraz-star: #faca15;
+  --color-daraz-soft: #fff6f2;
 
+  /* M3 color roles — exact from the design exports' tailwind.config */
   --color-surface: #fcf9f8;
+  --color-surface-dim: #dcd9d9;
+  --color-surface-bright: #fcf9f8;
   --color-surface-container-lowest: #ffffff;
   --color-surface-container-low: #f6f3f2;
   --color-surface-container: #f0eded;
@@ -35,56 +63,187 @@ body {
   --color-surface-container-highest: #e5e2e1;
   --color-on-surface: #1b1c1c;
   --color-on-surface-variant: #5b4137;
-  --color-inverse-surface: #16181b;
+  --color-inverse-surface: #303030;
   --color-inverse-on-surface: #f3f0ef;
   --color-outline: #8f7065;
-  --color-outline-variant: #e6e0de;
-  --color-primary: #aa3700;
+  --color-outline-variant: #e4beb2;
+  --color-surface-tint: #aa3700;
+  --color-primary: #a63600;
   --color-on-primary: #ffffff;
-  --color-primary-container: #f85606;
+  --color-primary-container: #cf4500;
   --color-on-primary-container: #fffbff;
+  --color-primary-fixed: #ffdbcf;
+  --color-primary-fixed-dim: #ffb59b;
+  --color-on-primary-fixed: #380d00;
+  --color-on-primary-fixed-variant: #822800;
+  --color-inverse-primary: #ffb59b;
+  --color-secondary: #735c00;
+  --color-on-secondary: #ffffff;
   --color-secondary-container: #fccc19;
-  --color-on-secondary-container: #3d2f00;
+  --color-on-secondary-container: #6e5700;
+  --color-secondary-fixed: #ffe088;
+  --color-secondary-fixed-dim: #f0c100;
   --color-tertiary: #006578;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #008097;
+  --color-on-tertiary-container: #f9fdff;
   --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
   --color-error-container: #ffdad6;
   --color-on-error-container: #93000a;
-  --color-sidebar-bg: #101214;
-  --color-sidebar-border: #1f2428;
-  --color-sidebar-hover: #1c2226;
+  --color-background: #fcf9f8;
+  --color-on-background: #1b1c1c;
+  --color-surface-variant: #e5e2e1;
+  --color-sidebar-bg: #0f172a;
+  --color-sidebar-border: #1e293b;
+  --color-sidebar-hover: #1e293b;
+  --color-sidebar-active: #f85606;
+  --color-badge-green: #10b981;
+  --color-badge-green-bg: #d1fae5;
+
+  /* M3 radius overrides from the design configs:
+     rounded=0.125rem, rounded-lg=0.25rem, rounded-xl=0.5rem,
+     rounded-full=0.75rem. Scoped to .m3 below (not global) so the
+     homepage's orange chrome keeps Tailwind defaults. */
+
+  /* M3 spacing scale (design classes p-space-md, gap-space-xs, …) */
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 0.75rem;
+  --spacing-space-lg: 1rem;
+  --spacing-space-xl: 1.5rem;
+  --spacing-margin: 0.75rem;
+  --spacing-margin-desktop: 1.5rem;
+  --spacing-gutter: 0.75rem;
+  --spacing-gutter-desktop: 1rem;
+
+  /* Roboto Flex type ramp — exact px/line-height/weight from the configs.
+     Generates text-headline-lg, font-body-md etc. used by the designs
+     (they apply font-X (family) and text-X (size) as a pair). */
+  --font-headline-xl: "Roboto Flex";
+  --font-headline-xl-mobile: "Roboto Flex";
+  --font-headline-lg: "Roboto Flex";
+  --font-headline-lg-mobile: "Roboto Flex";
+  --font-headline-md: "Roboto Flex";
+  --font-headline-sm: "Roboto Flex";
+  --font-price-hero: "Roboto Flex";
+  --font-price-card: "Roboto Flex";
+  --font-price-strikethrough: "Roboto Flex";
+  --font-body-lg: "Roboto Flex";
+  --font-body-md: "Roboto Flex";
+  --font-body-sm: "Roboto Flex";
+  --font-label-md: "Roboto Flex";
+  --font-label-sm: "Roboto Flex";
+  --font-badge-micro: "Roboto Flex";
+
+  --text-headline-xl: 32px;
+  --text-headline-xl--line-height: 40px;
+  --text-headline-xl--font-weight: 700;
+  --text-headline-xl-mobile: 24px;
+  --text-headline-xl-mobile--line-height: 32px;
+  --text-headline-xl-mobile--font-weight: 700;
+  --text-headline-lg: 24px;
+  --text-headline-lg--line-height: 32px;
+  --text-headline-lg--font-weight: 700;
+  --text-headline-lg-mobile: 20px;
+  --text-headline-lg-mobile--line-height: 28px;
+  --text-headline-lg-mobile--font-weight: 700;
+  --text-headline-md: 18px;
+  --text-headline-md--line-height: 24px;
+  --text-headline-md--font-weight: 600;
+  --text-headline-sm: 16px;
+  --text-headline-sm--line-height: 22px;
+  --text-headline-sm--font-weight: 600;
+  --text-price-hero: 28px;
+  --text-price-hero--line-height: 36px;
+  --text-price-hero--font-weight: 700;
+  --text-price-card: 18px;
+  --text-price-card--line-height: 24px;
+  --text-price-card--font-weight: 700;
+  --text-price-strikethrough: 12px;
+  --text-price-strikethrough--line-height: 16px;
+  --text-price-strikethrough--font-weight: 400;
+  --text-body-lg: 15px;
+  --text-body-lg--line-height: 22px;
+  --text-body-lg--font-weight: 400;
+  --text-body-md: 13px;
+  --text-body-md--line-height: 18px;
+  --text-body-md--font-weight: 400;
+  --text-body-sm: 12px;
+  --text-body-sm--line-height: 16px;
+  --text-body-sm--font-weight: 400;
+  --text-label-md: 13px;
+  --text-label-md--line-height: 16px;
+  --text-label-md--font-weight: 500;
+  --text-label-sm: 11px;
+  --text-label-sm--line-height: 14px;
+  --text-label-sm--font-weight: 600;
+  --text-badge-micro: 10px;
+  --text-badge-micro--line-height: 12px;
+  --text-badge-micro--font-weight: 700;
 }
 
-/* Hover effects from the designs */
+/*
+  .m3 scope — applied to the M3 chrome roots (inner storefront pages, ops
+  consoles). Tailwind v4 radius utilities read var(--radius-*), so
+  redefining them here gives the designs' exact radii without touching the
+  homepage. Roboto Flex is the default UI font on M3 pages.
+*/
+.m3 {
+  --radius: 0.125rem;
+  --radius-sm: 0.125rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.5rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-full: 0.75rem;
+  font-family: "Roboto Flex", Roboto, sans-serif;
+  background-color: #fcf9f8;
+  color: #1b1c1c;
+}
+
+/* Tailwind hardcodes these two radius utilities; re-scope them inside .m3 so
+   the design overrides (rounded=0.125rem, rounded-full=0.75rem) apply. */
+.m3 .rounded {
+  border-radius: var(--radius);
+}
+.m3 .rounded-full {
+  border-radius: var(--radius-full);
+}
+
+/* Ops-suite / enterprise designs that run primary on Daraz orange */
+.ops-orange {
+  --color-primary: #f85606;
+}
+
 .daraz-card {
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 .daraz-card:hover {
-  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.12);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+.flash-card {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 .flash-card:hover {
-  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.1);
+}
+.category-item:hover {
+  transform: translateY(-2px);
+  border-color: #f85606;
 }
 
-/* Ops-console typography helpers (headline/body scale from the exports) */
-.font-headline-lg {
-  font-size: 22px;
-  line-height: 28px;
-  font-weight: 700;
+/* Hero gradient from the homepage design (9.9 sale banner) */
+.hero-gradient {
+  background: linear-gradient(90deg, #d82a0b, #f85606 50%, #fc8621);
 }
-.font-headline-md {
-  font-size: 18px;
-  line-height: 24px;
-  font-weight: 700;
-}
-.font-headline-xl {
-  font-size: 28px;
-  line-height: 36px;
-  font-weight: 700;
-}
-.text-body-md {
-  font-size: 14px;
-  line-height: 20px;
+.ribbon-gradient {
+  background: linear-gradient(90deg, #d82a0b, #f85606 55%, #f42e12);
 }
 
 /* Thin scrollbars for horizontal rails */

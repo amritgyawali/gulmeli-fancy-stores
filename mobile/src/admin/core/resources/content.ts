@@ -400,7 +400,7 @@ export const homepageSections: ResourceDefinition = {
         ["brands", "Brands"],
         ["video", "Video"],
         ["gallery", "Image gallery"],
-        ["newsletter", "Newsletter"],
+        ["newsletter", "Newsletter signup link"],
         ["blog", "Blog"],
         ["social", "Instagram / social"],
         ["text", "Custom text"],
@@ -458,7 +458,11 @@ export const homepageSections: ResourceDefinition = {
       showIf: (values) => values.type === "video",
     }),
     f.text("ctaLabel", "Button label", { section: "Content", width: "half" }),
-    f.url("ctaLink", "Button link", { section: "Content", width: "half" }),
+    f.url("ctaLink", "Button link", {
+      section: "Content",
+      width: "half",
+      help: "Use an HTTPS address. Newsletter sections require a link to your signup page. Custom HTML is displayed as plain text in the native app.",
+    }),
     f.boolean("enabled", "Section visible", {
       section: "Visibility",
       defaultValue: true,

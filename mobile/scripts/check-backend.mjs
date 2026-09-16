@@ -44,20 +44,67 @@ check(
   ),
 );
 if (process.argv.includes("--remote") && !failed) {
-  const response = await fetch(
-    `${app.EXPO_PUBLIC_SUPABASE_URL.replace(/\/$/, "")}/rest/v1/products?select=id&limit=1`,
-    {
-      headers: { apikey: publicKey },
-      signal: AbortSignal.timeout(15000),
-    },
+  const url = app.EXPO_PUBLIC_SUPABASE_URL.replace(/\/$/, "");
+  const headers = { apikey: publicKey, "Content-Type": "application/json" };
+  async function remote(
+    label,
+    endpoint,
+    options = {},
+    valid = (response) => response.ok,
+  ) {
+    try {
+      const response = await fetch(url + endpoint, {
+        ...options,
+        headers,
+        signal: AbortSignal.timeout(15000),
+      });
+      check(label, valid(response));
+      return response;
+    } catch {
+      check(label, false);
+      return null;
+    }
+  }
+  const catalog = await remote(
+    "Public catalog API",
+    "/rest/v1/products?select=id,image_url&active=eq.true&limit=1000",
   );
-  check("Public catalog API is reachable", response.ok);
-  if (response.ok)
+  if (catalog?.ok) {
+    const rows = await catalog.json();
     console.log(
-      (await response.json()).length
-        ? "Catalog contains products."
-        : "Catalog is empty. Add products or run the sample seed SQL.",
+      `Catalog: ${rows.length} products, ${rows.filter((p) => p.image_url).length} database photo URLs.`,
     );
+    check("Catalog has products", rows.length > 0);
+  }
+  await remote(
+    "Published settings table",
+    "/rest/v1/app_config?select=id&limit=1",
+  );
+  await remote(
+    "Public content RPC (live migration)",
+    "/rest/v1/rpc/storefront_content",
+    { method: "POST", body: "{}" },
+  );
+  for (const [name, body] of [
+    ["save_admin_changes", { p_changes: [] }],
+    ["quote_order", { p_items: [], p_voucher: "" }],
+    ["my_support_tickets", {}],
+  ]) {
+    await remote(
+      `${name} exists and rejects anonymous access`,
+      "/rest/v1/rpc/" + name,
+      { method: "POST", body: JSON.stringify(body) },
+      (r) => r.status === 401 || r.status === 403,
+    );
+  }
+  for (const name of ["cloudinary-media", "upload-image"]) {
+    await remote(
+      `${name} deployed and requires sign-in`,
+      "/functions/v1/" + name,
+      { method: "POST", body: "{}" },
+      (r) => r.status === 401,
+    );
+  }
 }
 console.log(
   "Credential values are never printed. This check does not deploy services or verify authenticated checkout/uploads.",

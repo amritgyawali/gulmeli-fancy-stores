@@ -4,6 +4,8 @@ Expo SDK 57 / React Native shopping app with Supabase accounts, catalog and orde
 
 **Admin dashboard:** [control-centre guide](docs/admin-dashboard.md). Open `/admin` in the app, or tap the gauge icon in the Account header.
 
+**Current integration:** [Live backend setup, verified behavior and deployment status](docs/live-backend-handoff.md). This is the authoritative guide for the Supabase/Cloudinary integration.
+
 **Backend setup:** [Supabase + Cloudinary guide](docs/backend-setup.md). Fill in `.env.local` and `supabase/.env.local`, apply the SQL migration and deploy the upload function. Run `npm run backend:check` to check the settings without printing secrets.
 
 ## Run

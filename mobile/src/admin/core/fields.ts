@@ -248,10 +248,14 @@ export function validate(
         field: field.name,
         message: `${field.label} must be a valid email address.`,
       });
-    if (field.type === "url" && !/^https?:\/\/.+/.test(String(value)))
+    if (
+      field.type === "url" &&
+      !/^https?:\/\/.+/.test(String(value)) &&
+      !/^\/(?!\/)[^\\]*$/.test(String(value))
+    )
       errors.push({
         field: field.name,
-        message: `${field.label} must start with http:// or https://.`,
+        message: `${field.label} must be a web address or a store path starting with /.`,
       });
     if (field.type === "slug" && !/^[a-z0-9-]+$/.test(String(value)))
       errors.push({

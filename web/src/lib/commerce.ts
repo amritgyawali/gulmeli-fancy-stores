@@ -1,10 +1,4 @@
-import type {
-  CartItem,
-  Commerce,
-  LocalOrder,
-  Product,
-  Profile,
-} from "./types";
+import type { CartItem, Commerce, LocalOrder, Product, Profile } from "./types";
 
 export const initialCommerce: Commerce = {
   profile: { name: "", phone: "", address: "", avatar: "" },
@@ -59,7 +53,12 @@ export function createLocalOrder(
         i.quantity > p.stock
       )
         throw new Error("An item is out of stock. Update your cart.");
-      return { productId: p.id, name: p.name, price: p.price, quantity: i.quantity };
+      return {
+        productId: p.id,
+        name: p.name,
+        price: p.price,
+        quantity: i.quantity,
+      };
     });
   if (!items.length) throw new Error("Select at least one item in your cart.");
   const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
@@ -86,9 +85,12 @@ export function restoreCommerce(value: unknown): Commerce {
     Array.isArray(v) && v.every((x) => typeof x === "string");
   if (
     !c.profile ||
-    ![c.profile.name, c.profile.phone, c.profile.address, c.profile.avatar].every(
-      (x) => typeof x === "string",
-    ) ||
+    ![
+      c.profile.name,
+      c.profile.phone,
+      c.profile.address,
+      c.profile.avatar,
+    ].every((x) => typeof x === "string") ||
     !strings(c.wishlist) ||
     !strings(c.following) ||
     !strings(c.recent) ||
@@ -98,9 +100,20 @@ export function restoreCommerce(value: unknown): Commerce {
         o &&
         typeof o.id === "string" &&
         typeof o.createdAt === "string" &&
-        ["Saved locally", "Placed", "Shipped", "Delivered", "Cancelled"].includes(
-          o.status,
-        ) &&
+        [
+          "Saved locally",
+          "Placed",
+          "Confirmed",
+          "Processing",
+          "Packed",
+          "Out_for_delivery",
+          "Returned",
+          "Refunded",
+          "Failed",
+          "Shipped",
+          "Delivered",
+          "Cancelled",
+        ].includes(o.status) &&
         Number.isFinite(o.total) &&
         Array.isArray(o.items) &&
         o.items.every(

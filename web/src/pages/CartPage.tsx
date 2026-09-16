@@ -60,17 +60,17 @@ export function CartPage() {
 
   if (placed)
     return (
-      <div className="mx-auto max-w-lg rounded-2xl bg-white p-8 text-center shadow-sm">
+      <div className="mx-auto max-w-lg rounded-2xl bg-[var(--store-surface)] p-8 text-center shadow-sm">
         <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-600">
           <Icon name="check" size={32} />
         </div>
         <h1 className="mt-4 text-xl font-bold">Order placed</h1>
-        <p className="mt-1 break-all text-sm text-slate-500">
+        <p className="mt-1 break-all text-sm text-[var(--store-muted)]">
           Order ID <span className="font-mono font-semibold">{placed}</span> — pay cash
           on delivery. It is now in your Account and visible on the mobile app.
         </p>
         <div className="mt-5 flex justify-center gap-3">
-          <Link to="/account" className="rounded-lg bg-[#f85606] px-5 py-2.5 text-sm font-bold text-white">
+          <Link to="/account" className="rounded-lg bg-[var(--store-primary)] px-5 py-2.5 text-sm font-bold text-white">
             View orders
           </Link>
           <Link to="/" className="rounded-lg border border-slate-300 px-5 py-2.5 text-sm font-bold text-slate-700">
@@ -85,7 +85,7 @@ export function CartPage() {
       <div className="py-20 text-center">
         <p className="text-4xl">🛒</p>
         <h1 className="mt-3 text-lg font-bold text-slate-700">Your cart is empty</h1>
-        <Link to="/" className="mt-4 inline-block rounded-lg bg-[#f85606] px-6 py-2.5 text-sm font-bold text-white">
+        <Link to="/" className="mt-4 inline-block rounded-lg bg-[var(--store-primary)] px-6 py-2.5 text-sm font-bold text-white">
           Browse the store
         </Link>
       </div>
@@ -93,11 +93,11 @@ export function CartPage() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
-      <section className="overflow-hidden rounded-2xl bg-white shadow-sm">
+      <section className="overflow-hidden rounded-2xl bg-[var(--store-surface)] shadow-sm">
         <header className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
           <div className="flex items-center gap-3">
             <h1 className="text-lg font-black">Shopping cart</h1>
-            <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-bold text-[#f85606]">
+            <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-bold text-[var(--store-primary-text)]">
               {items.length} product{items.length === 1 ? "" : "s"}
             </span>
           </div>
@@ -113,7 +113,7 @@ export function CartPage() {
             </label>
             <button
               onClick={removeSelected}
-              className="flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-rose-600"
+              className="flex items-center gap-1 text-xs font-semibold text-[var(--store-muted)] hover:text-rose-600"
             >
               <Icon name="trash" size={14} /> Remove selected
             </button>
@@ -133,7 +133,7 @@ export function CartPage() {
                 <ProductVisual product={product} />
               </Link>
               <div className="min-w-0 flex-1">
-                <Link to={`/product/${product.id}`} className="line-clamp-2 text-sm font-medium hover:text-[#f85606]">
+                <Link to={`/product/${product.id}`} className="line-clamp-2 text-sm font-medium hover:text-[var(--store-primary-text)]">
                   {product.name}
                 </Link>
                 <p className="mt-0.5 text-[10px] text-slate-400">
@@ -142,7 +142,7 @@ export function CartPage() {
                     : `Rs.${product.price.toLocaleString()} each · ${product.stock} in stock`}
                 </p>
               </div>
-              <div className="flex items-center rounded-lg border border-slate-200">
+              <div className="flex items-center rounded-lg border border-[var(--store-border)]">
                 <button
                   aria-label="Decrease quantity"
                   disabled={item.quantity <= 1}
@@ -161,7 +161,7 @@ export function CartPage() {
                   <Icon name="plus" size={12} />
                 </button>
               </div>
-              <p className="w-24 text-right text-sm font-extrabold text-[#f5222d]">
+              <p className="w-24 text-right text-sm font-bold text-[var(--store-primary-text)]">
                 Rs.{(product.price * item.quantity).toLocaleString()}
               </p>
             </li>
@@ -169,7 +169,7 @@ export function CartPage() {
         </ul>
       </section>
 
-      <aside className="h-fit space-y-4 rounded-2xl bg-white p-5 shadow-sm">
+      <aside className="h-fit space-y-4 rounded-2xl bg-[var(--store-surface)] p-5 shadow-sm">
         <h2 className="text-base font-bold">Order summary</h2>
         <div className="flex gap-2">
           <input
@@ -177,7 +177,7 @@ export function CartPage() {
             onChange={(event) => setVoucherInput(event.target.value)}
             placeholder="Voucher code"
             aria-label="Voucher code"
-            className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#f85606]"
+            className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[var(--store-primary)]"
           />
           <button onClick={applyVoucher} className="rounded-lg bg-slate-800 px-4 py-2 text-sm font-bold text-white">
             Apply
@@ -200,22 +200,22 @@ export function CartPage() {
         )}
         <dl className="space-y-1.5 border-t border-slate-100 pt-3 text-sm">
           <div className="flex justify-between">
-            <dt className="text-slate-500">Selected items ({count})</dt>
+            <dt className="text-[var(--store-muted)]">Selected items ({count})</dt>
             <dd className="font-semibold">Rs.{subtotal.toLocaleString()}</dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-slate-500">Voucher discount</dt>
+            <dt className="text-[var(--store-muted)]">Voucher discount</dt>
             <dd className={`font-semibold ${discount ? "text-emerald-600" : ""}`}>
               {discount ? `-Rs.${discount}` : "—"}
             </dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-slate-500">Shipping</dt>
+            <dt className="text-[var(--store-muted)]">Shipping</dt>
             <dd className="font-semibold text-emerald-600">Free</dd>
           </div>
           <div className="flex justify-between border-t border-slate-100 pt-2 text-base">
             <dt className="font-bold">Total</dt>
-            <dd className="font-black text-[#f5222d]">Rs.{total.toLocaleString()}</dd>
+            <dd className="font-black text-[var(--store-primary-text)]">Rs.{total.toLocaleString()}</dd>
           </div>
         </dl>
         {error && (
@@ -233,7 +233,7 @@ export function CartPage() {
         ) : (
           <Link
             to="/auth"
-            className="block rounded-xl bg-[#f85606] py-3 text-center text-sm font-bold text-white"
+            className="block rounded-xl bg-[var(--store-primary)] py-3 text-center text-sm font-bold text-white"
           >
             Sign in to place the order
           </Link>
@@ -285,12 +285,12 @@ function CheckoutForm({
         ] as const
       ).map(([key, label, type]) => (
         <label key={key} className="block">
-          <span className="mb-1 block text-xs font-semibold text-slate-500">{label}</span>
+          <span className="mb-1 block text-xs font-semibold text-[var(--store-muted)]">{label}</span>
           <input
             type={type}
             value={form[key]}
             onChange={(event) => setForm((current) => ({ ...current, [key]: event.target.value }))}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#f85606]"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[var(--store-primary)]"
           />
         </label>
       ))}
@@ -298,7 +298,7 @@ function CheckoutForm({
       <button
         onClick={() => void submit()}
         disabled={busy || disabled}
-        className="w-full rounded-xl bg-[#f85606] py-3 text-sm font-bold text-white shadow-sm hover:bg-[#e14d05] disabled:cursor-not-allowed disabled:bg-slate-300"
+        className="w-full rounded-xl bg-[var(--store-primary)] py-3 text-sm font-bold text-white shadow-sm hover:bg-[#e14d05] disabled:cursor-not-allowed disabled:bg-slate-300"
       >
         {busy ? "Placing order…" : disabled ? "Select at least one item" : "Place order · Cash on delivery"}
       </button>

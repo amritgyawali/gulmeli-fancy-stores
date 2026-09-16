@@ -51,3 +51,6 @@ example
 # Verification output
 test-results/
 playwright-report/
+.analysis/
+.graphify-detect.json
+src/graphify-out/

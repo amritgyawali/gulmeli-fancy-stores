@@ -9,7 +9,14 @@ import {
   type PropsWithChildren,
 } from "react";
 import type { Session } from "@supabase/supabase-js";
-import type { CartItem, Commerce, LocalOrder, Product, Profile, ShopUi } from "@/lib/types";
+import type {
+  CartItem,
+  Commerce,
+  LocalOrder,
+  Product,
+  Profile,
+  ShopUi,
+} from "@/lib/types";
 import { supabase } from "@/lib/supabase";
 import {
   addItem,
@@ -65,11 +72,15 @@ interface ShopValue {
   toggle: (id: string) => void;
   select: (ids: string[], selected: boolean) => void;
   removeSelected: () => void;
+  removeItem: (id: string) => void;
   updateCommerce: (update: (current: Commerce) => Commerce) => void;
   collectVouchers: () => void;
   markMessagesRead: () => void;
-  setFilter: (key: "offerQuery" | "offerCategory" | "homeFeed", value: string) => void;
-  checkout: (profile: Profile) => Promise<string>;
+  setFilter: (
+    key: "offerQuery" | "offerCategory" | "homeFeed",
+    value: string,
+  ) => void;
+  checkout: (profile: Profile, voucher?: string) => Promise<string>;
   cancelOrder: (id: string) => Promise<void>;
   refreshCatalog: () => Promise<void>;
   retryBackend: () => void;
@@ -91,7 +102,11 @@ function loadGuestCart(catalog: Record<string, Product>): CartItem[] {
 export function ShopProvider({ children }: PropsWithChildren) {
   const [products, setProducts] = useState<Product[]>([]);
   const productById = useMemo(
-    () => Object.fromEntries(products.map((p) => [p.id, p])) as Record<string, Product>,
+    () =>
+      Object.fromEntries(products.map((p) => [p.id, p])) as Record<
+        string,
+        Product
+      >,
     [products],
   );
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -134,7 +149,7 @@ export function ShopProvider({ children }: PropsWithChildren) {
         setCustomerReady(false);
         setSyncStatus("");
         setCommerce(id ? emptyCommerce() : emptyCommerce());
-        if (id) setCart([]);
+        setCart([]);
       }
       setSession(next);
       setSessionReady(true);
@@ -153,16 +168,18 @@ export function ShopProvider({ children }: PropsWithChildren) {
 
   // Guest persistence
   useEffect(() => {
-    if (userId) return;
+    if (userId || !sessionReady || !catalogReady) return;
     try {
       localStorage.setItem(GUEST_KEY, JSON.stringify({ version: 1, cart }));
     } catch {
       /* private mode */
     }
-  }, [cart, userId]);
+  }, [cart, userId, sessionReady, catalogReady]);
   useEffect(() => {
     if (userId || !catalogReady) return;
-    setCart((current) => (current.length ? current : loadGuestCart(productById)));
+    setCart((current) =>
+      current.length ? current : loadGuestCart(productById),
+    );
   }, [userId, catalogReady, productById]);
 
   // Catalog + realtime
@@ -186,6 +203,14 @@ export function ShopProvider({ children }: PropsWithChildren) {
     };
   }, [refreshCatalog, retry]);
   useEffect(() => {
+    const reload = () => {
+      void refreshCatalog().catch((error) =>
+        setBackendError(errorMessage(error)),
+      );
+    };
+    window.addEventListener("online", reload);
+    window.addEventListener("focus", reload);
+    const poll = setInterval(reload, 30000);
     const channel = supabase
       .channel("gulmeli-web-catalog")
       .on(
@@ -196,6 +221,9 @@ export function ShopProvider({ children }: PropsWithChildren) {
       .subscribe();
     return () => {
       void supabase.removeChannel(channel);
+      window.removeEventListener("online", reload);
+      window.removeEventListener("focus", reload);
+      clearInterval(poll);
     };
   }, [refreshCatalog]);
 
@@ -206,7 +234,9 @@ export function ShopProvider({ children }: PropsWithChildren) {
     void loadCustomer(userId)
       .then(({ commerce: loaded, cart: loadedCart }) => {
         if (!active) return;
-        savedSnapshot.current = JSON.stringify(customerSnapshot(loaded, loadedCart));
+        savedSnapshot.current = JSON.stringify(
+          customerSnapshot(loaded, loadedCart),
+        );
         setCommerce(loaded);
         setCart((current) => mergeCustomerCart(loadedCart, current));
         setCustomerReady(true);
@@ -219,37 +249,88 @@ export function ShopProvider({ children }: PropsWithChildren) {
     };
   }, [userId, sessionReady, retry]);
   useEffect(() => {
-    if (!userId) return;
+    if (!userId || !customerReady) return;
+    let active = true,
+      loading = false;
+    const reload = () => {
+      if (loading) return;
+      loading = true;
+      void loadCustomer(userId)
+        .then((loaded) => {
+          if (!active || activeUser.current !== userId) return;
+          const current = stateRef.current;
+          if (
+            JSON.stringify(customerSnapshot(current.commerce, current.cart)) ===
+            savedSnapshot.current
+          ) {
+            savedSnapshot.current = JSON.stringify(
+              customerSnapshot(loaded.commerce, loaded.cart),
+            );
+            setCommerce(loaded.commerce);
+            setCart(loaded.cart);
+          } else
+            setCommerce((current) => ({
+              ...current,
+              orders: loaded.commerce.orders,
+            }));
+        })
+        .catch((error) => {
+          if (active) setBackendError(errorMessage(error));
+        })
+        .finally(() => {
+          loading = false;
+        });
+    };
     const channel = supabase
-      .channel("gulmeli-web-orders")
+      .channel(`gulmeli-web-account-${userId}`)
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "orders" },
-        () => {
-          void loadCustomer(userId)
-            .then(({ commerce: loaded }) =>
-              setCommerce((current) => ({ ...current, orders: loaded.orders })),
-            )
-            .catch(() => undefined);
+        {
+          event: "*",
+          schema: "public",
+          table: "orders",
+          filter: `user_id=eq.${userId}`,
         },
+        reload,
       )
-      .subscribe();
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "customer_state",
+          filter: `user_id=eq.${userId}`,
+        },
+        reload,
+      )
+      .subscribe((status) => {
+        if (status === "SUBSCRIBED") reload();
+      });
+    const poll = setInterval(reload, 30000);
+    window.addEventListener("focus", reload);
+    window.addEventListener("online", reload);
     return () => {
+      active = false;
       void supabase.removeChannel(channel);
+      clearInterval(poll);
+      window.removeEventListener("focus", reload);
+      window.removeEventListener("online", reload);
     };
-  }, [userId]);
+  }, [userId, customerReady]);
 
   // Debounced save queue for signed-in customers (mirrors the app).
   const queueCustomerSave = useCallback((owner: string) => {
     const epoch = remoteEpoch.current;
+    const captured = stateRef.current;
     const snapshot = JSON.stringify(
-      customerSnapshot(stateRef.current.commerce, stateRef.current.cart),
+      customerSnapshot(captured.commerce, captured.cart),
     );
     const task = remoteQueue.current
       .catch(() => undefined)
       .then(async () => {
-        if (activeUser.current !== owner || epoch !== remoteEpoch.current) return;
-        await saveCustomer(owner, stateRef.current.commerce, stateRef.current.cart);
+        if (activeUser.current !== owner || epoch !== remoteEpoch.current)
+          return;
+        await saveCustomer(owner, captured.commerce, captured.cart);
         if (activeUser.current === owner && epoch === remoteEpoch.current) {
           savedSnapshot.current = snapshot;
           setSyncStatus(
@@ -322,6 +403,10 @@ export function ShopProvider({ children }: PropsWithChildren) {
     () => setCart((current) => current.filter((i) => !i.selected)),
     [],
   );
+  const removeItem = useCallback(
+    (id: string) => setCart((current) => current.filter((i) => i.productId !== id)),
+    [],
+  );
   const collectVouchers = useCallback(
     () => setUi((current) => ({ ...current, vouchersCollected: true })),
     [],
@@ -337,7 +422,7 @@ export function ShopProvider({ children }: PropsWithChildren) {
   );
 
   const checkoutLock = useRef(false);
-  const checkout = async (profile: Profile) => {
+  const checkout = async (profile: Profile, voucherOverride?: string) => {
     const error = profileError(profile);
     if (error) throw new Error(error);
     if (checkoutLock.current)
@@ -349,11 +434,16 @@ export function ShopProvider({ children }: PropsWithChildren) {
     checkoutLock.current = true;
     try {
       const snapshot = stateRef.current;
-      const voucher = snapshot.commerce.voucher;
+      const voucher = voucherOverride ?? snapshot.commerce.voucher;
       const requestId = await checkoutRequest(owner, snapshot.cart, voucher);
       if (activeUser.current !== owner)
         throw new Error("Your account changed. Please sign in again.");
-      const order = await submitOrder(snapshot.cart, profile, voucher, requestId);
+      const order = await submitOrder(
+        snapshot.cart,
+        profile,
+        voucher,
+        requestId,
+      );
       if (activeUser.current !== owner)
         throw new Error("Account changed. Sign in again to see your order.");
       setCart((current) =>
@@ -398,8 +488,7 @@ export function ShopProvider({ children }: PropsWithChildren) {
     setRetry((value) => value + 1);
   };
   const signOut = async () => {
-    if (userId && customerReady)
-      await queueCustomerSave(userId).catch(() => undefined);
+    if (userId && customerReady) await queueCustomerSave(userId);
     const { error } = await supabase.auth.signOut({ scope: "local" });
     if (error) throw error;
   };
@@ -442,6 +531,7 @@ export function ShopProvider({ children }: PropsWithChildren) {
     toggle,
     select,
     removeSelected,
+    removeItem,
     updateCommerce,
     collectVouchers,
     markMessagesRead,

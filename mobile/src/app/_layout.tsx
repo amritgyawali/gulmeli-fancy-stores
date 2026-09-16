@@ -1,6 +1,6 @@
 import { Stack, usePathname, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { View } from "react-native";
+import { View, useWindowDimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
@@ -9,8 +9,13 @@ import * as SplashScreen from "expo-splash-screen";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useEffect } from "react";
 import { ShopProvider, useShop } from "@/store/ShopProvider";
-import { StorefrontProvider, useStorefront } from "@/store/StorefrontProvider";
+import {
+  StorefrontProvider,
+  useStorefront,
+  useStorefrontTheme,
+} from "@/store/StorefrontProvider";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { BrandDocument } from "@/components/BrandDocument";
 import { AppLock } from "@/components/AppLock";
 import { Button, Row, T } from "@/components/ui";
 import { ClerkAuth } from "@/services/clerk-auth";
@@ -35,6 +40,8 @@ function AppFrame() {
     retryBackend,
   } = useShop();
   const { config, announcement, maintenance, label } = useStorefront();
+  const theme = useStorefrontTheme();
+  const { width } = useWindowDimensions();
   const [loaded, error] = useFonts(FontAwesome6.font);
   const admin = path.startsWith("/admin");
   useEffect(() => {
@@ -52,7 +59,7 @@ function AppFrame() {
     <Stack
       screenOptions={{
         headerShown: false,
-        contentStyle: { backgroundColor: admin ? "#f6f7f9" : "#f4f4f4" },
+        contentStyle: { backgroundColor: admin ? "#f6f7f9" : theme.background },
         animation: "none",
       }}
     >
@@ -67,35 +74,33 @@ function AppFrame() {
   // The dashboard is its own full-width surface, without the storefront chrome.
   if (admin)
     return (
-      <View style={{ flex: 1, backgroundColor: "#f6f7f9" }}>
+      <SafeAreaView
+        edges={["top", "bottom", "left", "right"]}
+        style={{ flex: 1, backgroundColor: "#f6f7f9" }}
+      >
         <StatusBar style="dark" />
         {navigator}
-      </View>
+      </SafeAreaView>
     );
-  const backgroundColor =
-    path === "/"
-      ? "#161616"
-      : path === "/offers"
-        ? "#FF4600"
-        : path === "/account"
-          ? "#fceae4"
-          : path === "/messages"
-            ? "#f4f4f6"
-            : "#fff";
+  const backgroundColor = theme.background;
   return (
-    <View style={{ flex: 1, backgroundColor: "#e5e7eb", alignItems: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme.background,
+        alignItems: "center",
+      }}
+    >
       <SafeAreaView
         edges={["top", "left", "right"]}
         style={{
           flex: 1,
           width: "100%",
-          maxWidth: path === "/" ? 448 : 430,
+          maxWidth: width >= 768 ? 1100 : undefined,
           backgroundColor,
         }}
       >
-        <StatusBar
-          style={path === "/" || path === "/offers" ? "light" : "dark"}
-        />
+        <StatusBar style={theme.dark ? "light" : "dark"} />
         {!!announcement && (
           <T
             size={11}
@@ -136,7 +141,14 @@ function AppFrame() {
           </T>
         )}
         {live && (
-          <View style={{ backgroundColor: "#fff7ed", padding: 8, gap: 5 }}>
+          <View
+            style={{
+              backgroundColor: theme.surface,
+              paddingHorizontal: 12,
+              paddingVertical: 6,
+              gap: 5,
+            }}
+          >
             {!!backendError ? (
               <T accessibilityRole="alert" color="#b91c1c">
                 {backendError}
@@ -148,10 +160,12 @@ function AppFrame() {
             ) : session && !customerReady ? (
               <T>Loading your saved account…</T>
             ) : !session ? (
-              <Row style={{ justifyContent: "space-between" }}>
-                <T>{label("homeHeading")}</T>
+              <Row style={{ justifyContent: "space-between", gap: 12 }}>
+                <T color={theme.muted} style={{ flex: 1 }}>
+                  Welcome. Sign in to save your favourites.
+                </T>
                 <Button
-                  title={label("login")}
+                  title={path === "/account" ? "Sign in" : label("login")}
                   color={config.theme.primaryColor}
                   onPress={() => router.push("/auth")}
                 />
@@ -186,6 +200,7 @@ export default withErrorReporting(function RootLayout() {
         <QueryClientProvider client={queryClient}>
           <ClerkAuth>
             <StorefrontProvider>
+              <BrandDocument />
               <ShopProvider>
                 <AppLock>
                   <AppFrame />

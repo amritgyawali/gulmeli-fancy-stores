@@ -154,10 +154,7 @@ const themeGroup: ConfigGroup = {
         width: "third",
       },
     ),
-    f.boolean("darkTheme.enabled", "Offer dark mode", {
-      section: "Dark mode",
-      width: "third",
-    }),
+
     f.color("darkTheme.backgroundColor", "Dark background", {
       section: "Dark mode",
       width: "third",
@@ -211,14 +208,17 @@ const brandingGroup: ConfigGroup = {
       width: "third",
     }),
     f.image("branding.favicon", "Favicon", {
+      help: "Updates the browser tab icon after publication.",
       section: "Logos",
       width: "third",
     }),
     f.image("branding.appIcon", "App icon", {
+      help: "Launcher icon for the next Android/iOS release. Upload a square image; preparing a new build downloads the published asset.",
       section: "Logos",
       width: "third",
     }),
     f.image("branding.splashLogo", "Splash-screen logo", {
+      help: "Native launch artwork for the next Android/iOS build.",
       section: "Logos",
       width: "third",
     }),

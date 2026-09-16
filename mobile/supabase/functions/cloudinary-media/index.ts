@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { uploadTarget, signingText, validDeletionId } from "./policy.ts";
 
 // Authenticated media proxy for Cloudinary: signed uploads and deletions.
 // The Cloudinary API secret never reaches the app; it stays in function
@@ -17,7 +18,7 @@ const reply = (status: number, body: unknown) =>
     headers: { ...cors, "Content-Type": "application/json" },
   });
 
-const MAX_BYTES = 11_000_000; // generous cap for documents and video clips
+const MAX_BYTES = 14_000_000; // JSON/base64 representation of a 10 MB file
 const IMAGE_LIMIT = 2_100_000; // avatars and photos via data URI stay small
 
 const CLOUD_NAME = Deno.env.get("CLOUDINARY_CLOUD_NAME") ?? "";
@@ -94,37 +95,31 @@ async function handleUpload(
     return reply(400, {
       error: "The file could not be read. Choose a file under 10 MB.",
     });
+  const { data: admin, error: roleError } = await client.rpc("is_admin");
+  if (roleError)
+    return reply(503, { error: "Unable to check media permissions." });
+  let publicId: string;
+  try {
+    publicId = uploadTarget(body, userId, Boolean(admin));
+  } catch (error) {
+    return reply(403, { error: (error as Error).message });
+  }
   const isImage = /^data:image\//.test(dataUri);
   if (isImage && dataUri.length > IMAGE_LIMIT && !body.folder)
     return reply(413, {
       error: "Choose a profile photo under 1.5 MB.",
     });
-  const rawFolder =
-    typeof body.folder === "string" ? body.folder.trim() : "gulmeli/misc";
-  const folder = /^gulmeli\/[a-z0-9_-]{1,40}$/i.test(rawFolder)
-    ? rawFolder
-    : `gulmeli/uploads`;
   const { data: allowed } = await client.rpc("reserve_image_upload");
   if (!allowed)
     return reply(429, {
       error: "Upload limit reached. Try again in an hour.",
     });
-  const publicId =
-    typeof body.publicId === "string" &&
-    /^[a-z0-9_\/-]{3,140}$/i.test(body.publicId)
-      ? body.publicId
-      : `${folder}/${userId}-${Date.now().toString(36)}`;
   const params: Record<string, string> = {
     public_id: publicId,
     overwrite: "true",
     timestamp: String(Math.floor(Date.now() / 1000)),
   };
-  const signature = await sha1Hex(
-    Object.keys(params)
-      .sort()
-      .map((k) => `${k}=${params[k]}`)
-      .join("&") + API_SECRET,
-  );
+  const signature = await sha1Hex(signingText(params, API_SECRET));
   const form = new FormData();
   for (const [name, value] of Object.entries(params)) form.append(name, value);
   form.append("api_key", API_KEY);
@@ -165,7 +160,7 @@ async function handleUpload(
 
 async function handleDelete(body: Record<string, unknown>, client: any) {
   const publicId = body.publicId;
-  if (typeof publicId !== "string" || !/^[a-z0-9_.-]{3,140}$/i.test(publicId))
+  if (!validDeletionId(publicId))
     return reply(400, { error: "Invalid media reference." });
   if (!publicId.startsWith("gulmeli/"))
     return reply(403, {
@@ -176,7 +171,8 @@ async function handleDelete(body: Record<string, unknown>, client: any) {
   if (!isAdmin)
     return reply(403, { error: "Only store admins can delete media." });
   const timestamp = String(Math.floor(Date.now() / 1000));
-  const signature = await sha1Hex(`public_id=${publicId}${timestamp}${API_SECRET}`);
+  const params = { public_id: publicId, timestamp, invalidate: "true" };
+  const signature = await sha1Hex(signingText(params, API_SECRET));
   let destroyed: Response | null = null;
   let result: any = null;
   for (const type of ["image", "video", "raw"]) {
@@ -185,7 +181,7 @@ async function handleDelete(body: Record<string, unknown>, client: any) {
     form.append("timestamp", timestamp);
     form.append("signature", signature);
     form.append("public_id", publicId);
-    form.append("invalidation", "true");
+    form.append("invalidate", "true");
     destroyed = await fetch(
       `https://api.cloudinary.com/v1_1/${encodeURIComponent(CLOUD_NAME)}/${type}/destroy`,
       { method: "POST", body: form, signal: AbortSignal.timeout(30_000) },
@@ -193,13 +189,14 @@ async function handleDelete(body: Record<string, unknown>, client: any) {
     result = await destroyed.json().catch(() => null);
     if (destroyed.ok && result?.result === "ok") break;
   }
-  if (!destroyed?.ok || result?.result !== "ok")
+  if (!destroyed?.ok || !["ok", "not found"].includes(result?.result))
     return reply(502, { error: "Cloudinary could not delete the file." });
   return reply(200, { result: "ok" });
 }
 
 Deno.serve(async (request: Request) => {
-  if (request.method === "OPTIONS") return new Response(null, { headers: cors });
+  if (request.method === "OPTIONS")
+    return new Response(null, { headers: cors });
   if (request.method !== "POST") return reply(405, { error: "Use POST." });
   if (!CLOUD_NAME || !API_KEY || !API_SECRET)
     return reply(503, { error: "Media storage is not configured yet." });
@@ -211,9 +208,10 @@ Deno.serve(async (request: Request) => {
     const body = JSON.parse(text);
     if (typeof body !== "object" || body === null)
       return reply(400, { error: "Invalid request." });
-    if (body.action === "delete")
-      return await handleDelete(body, auth.client);
-    return await handleUpload(body, auth.user.id, auth.client);
+    if (body.action === "delete") return await handleDelete(body, auth.client);
+    if (body.action === "upload")
+      return await handleUpload(body, auth.user.id, auth.client);
+    return reply(400, { error: "Unknown media action." });
   } catch (error) {
     if (error instanceof Error && error.message === "too-large")
       return reply(413, { error: "File too large." });

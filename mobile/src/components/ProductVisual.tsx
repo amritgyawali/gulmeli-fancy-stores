@@ -5,6 +5,8 @@ import type { Product } from "@/types/shop";
 import { T } from "./ui";
 import { FontIcon } from "./FontIcon";
 import { shared } from "@/theme/tokens";
+import { photoFor } from "@/services/product-media";
+import { useMediaUrl } from "@/services/media-library";
 
 export function StitchImage({
   imageKey,
@@ -15,9 +17,12 @@ export function StitchImage({
   fit?: "contain" | "cover";
   style?: StyleProp<ImageStyle>;
 }) {
+  const mediaUrl = useMediaUrl(imageKey);
   return (
     <Image
-      source={stitchImages[imageKey as StitchImageKey]}
+      source={
+        mediaUrl ? { uri: mediaUrl } : stitchImages[imageKey as StitchImageKey]
+      }
       contentFit={fit}
       cachePolicy="memory-disk"
       style={[{ width: "100%", height: "100%" }, style]}
@@ -32,14 +37,32 @@ export function ProductVisual({
   product: Product;
   small?: boolean;
 }) {
-  if (product.imageUrl)
+  const photo = photoFor(product);
+  const imageUrl = product.imageUrl || photo?.url;
+  if (imageUrl)
     return (
-      <Image
-        source={{ uri: product.imageUrl }}
-        contentFit="cover"
-        cachePolicy="memory-disk"
-        style={{ width: "100%", height: "100%" }}
-      />
+      <View style={{ width: "100%", height: "100%" }}>
+        <Image
+          source={{ uri: imageUrl }}
+          accessibilityLabel={product.name}
+          contentFit="cover"
+          cachePolicy="memory-disk"
+          style={{ width: "100%", height: "100%" }}
+        />
+        {(product.imageIllustrative ||
+          (!product.imageUrl && photo?.illustrative)) && (
+          <View
+            style={{
+              position: "absolute",
+              bottom: 0,
+              backgroundColor: "#ffffffdd",
+              padding: 3,
+            }}
+          >
+            <T size={9}>Illustrative photo</T>
+          </View>
+        )}
+      </View>
     );
   if (product.imageKey)
     return (

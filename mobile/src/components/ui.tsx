@@ -1,5 +1,6 @@
 import type { PropsWithChildren } from "react";
 import {
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -11,28 +12,64 @@ import {
 } from "react-native";
 import { SvgXml } from "react-native-svg";
 import icons from "@/data/stitch-icons.json";
+import { useStorefront, useStorefrontTheme } from "@/store/StorefrontProvider";
+import { appearanceColor } from "@/admin/core/appearance";
+import { themedStyle } from "./store-ui";
 import { colors, fontFamily, shared } from "@/theme/tokens";
 
 export function T({
   size = 12,
   bold = false,
-  color = colors.text,
+  color,
   style,
+  preserveColor = false,
   ...props
-}: TextProps & { size?: number; bold?: boolean; color?: string }) {
+}: TextProps & {
+  size?: number;
+  bold?: boolean;
+  color?: string;
+  preserveColor?: boolean;
+}) {
+  const theme = useStorefrontTheme();
+  const { config } = useStorefront();
+  size = Math.max(
+    11,
+    (size >= 20 ? (size * theme.headingScale) / 1.25 : size) +
+      theme.baseFontSize -
+      12,
+  );
+  color =
+    color === undefined
+      ? theme.text
+      : preserveColor
+        ? color
+        : appearanceColor(color, theme);
   return (
     <Text
       {...props}
       style={[
         {
-          fontFamily,
+          fontFamily:
+            config.theme.fontFamily === "serif"
+              ? Platform.OS === "ios"
+                ? "Georgia"
+                : "serif"
+              : config.theme.fontFamily === "rounded"
+                ? Platform.OS === "ios"
+                  ? "Arial Rounded MT Bold"
+                  : "sans-serif"
+                : config.theme.fontFamily === "monospace"
+                  ? Platform.OS === "ios"
+                    ? "Menlo"
+                    : "monospace"
+                  : fontFamily,
           fontSize: size,
           lineHeight: size * 1.45,
           color,
-          fontWeight: bold ? "700" : "400",
+          fontWeight: bold ? theme.headingWeight : "400",
           includeFontPadding: false,
         },
-        style,
+        preserveColor ? style : themedStyle(style, theme),
       ]}
     />
   );
@@ -61,18 +98,27 @@ export function Tap({
   role?: "button" | "tab" | "checkbox";
   testID?: string;
 }>) {
+  const theme = useStorefrontTheme();
   return (
     <Pressable
       testID={testID}
       accessibilityRole={role}
       accessibilityLabel={label}
+      accessibilityState={{
+        disabled: !!disabled,
+        selected: role === "tab" ? selected : undefined,
+        checked: role === "checkbox" ? selected : undefined,
+      }}
       aria-disabled={disabled}
       aria-selected={role === "tab" ? selected : undefined}
       aria-checked={role === "checkbox" ? selected : undefined}
       disabled={disabled}
       onPress={onPress}
       hitSlop={5}
-      style={({ pressed }) => [style, pressed && { opacity: 0.72 }]}
+      style={({ pressed }) => [
+        themedStyle(style, theme),
+        pressed && { opacity: 0.72 },
+      ]}
     >
       {children}
     </Pressable>
@@ -82,7 +128,7 @@ export function Button({
   title,
   onPress,
   outline = false,
-  color = colors.orange,
+  color,
   style,
   textStyle,
   disabled,
@@ -95,6 +141,10 @@ export function Button({
   textStyle?: StyleProp<TextStyle>;
   disabled?: boolean;
 }) {
+  const theme = useStorefrontTheme();
+  color = color
+    ? appearanceColor(color, theme, "backgroundColor")
+    : theme.buttonColor;
   return (
     <Tap
       label={title}
@@ -105,11 +155,19 @@ export function Button({
         {
           backgroundColor: outline ? "transparent" : color,
           borderColor: color,
+          minHeight: 48,
+          borderRadius: theme.buttonRadius,
+          opacity: disabled ? 0.45 : 1,
         },
         style,
       ]}
     >
-      <T bold color={outline ? color : "#fff"} style={textStyle}>
+      <T
+        preserveColor
+        bold
+        color={outline ? theme.primaryText : theme.buttonTextColor}
+        style={textStyle}
+      >
         {title}
       </T>
     </Tap>

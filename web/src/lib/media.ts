@@ -53,7 +53,7 @@ export async function uploadMediaFile(
 
 export async function uploadAvatar(
   dataUri: string,
-  userId: string,
+  _userId: string,
 ): Promise<string> {
   if (!cloudName) throw new Error("Cloudinary cloud name is not configured.");
   // Same fixed public id the mobile app uses, so avatars overwrite in place
@@ -61,8 +61,6 @@ export async function uploadAvatar(
   const data = await invoke({
     action: "upload",
     image: dataUri,
-    folder: "gulmeli/avatars",
-    publicId: `gulmeli/avatars/${userId}`,
   });
   if (
     typeof data?.url !== "string" ||

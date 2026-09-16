@@ -1,26 +1,13 @@
-import {
-  Suspense,
-  lazy,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
-import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Share,
-  StyleSheet,
-  Switch,
-  TextInput,
-  View,
-} from "react-native";
+import { View, ScrollView, TextInput } from "@/components/store-ui";
+import { Suspense, lazy, useEffect, useState, type ReactNode } from "react";
+import { Image, KeyboardAvoidingView, Platform, Share, StyleSheet, Switch } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { Button, Row, T, Tap } from "@/components/ui";
 import CameraCapture from "@/components/CameraCapture";
 import { ProductVisual } from "@/components/ProductVisual";
+import { sendSupportMessage, useSupportTickets } from "@/services/support";
+import { useOrderQuote } from "@/services/order-quote";
 import { ProductCard } from "@/components/ProductCard";
 import { useShop, useCatalog } from "@/store/ShopProvider";
 import { openDestination } from "@/services/navigation";
@@ -32,9 +19,7 @@ import { currentBrand } from "@/utils/branding";
 import type { Product } from "@/types/shop";
 
 // The Stripe SDK only enters the bundle on native builds that are configured.
-const StripePayButtonLazy = lazy(
-  () => import("@/components/StripePayButton"),
-);
+const StripePayButtonLazy = lazy(() => import("@/components/StripePayButton"));
 
 const money = (n: number) => `Rs. ${n.toLocaleString("en-US")}`;
 const categories = [
@@ -191,8 +176,7 @@ function FeatureContent({
       if (result.success) {
         usePrefs.getState().setBiometricsEnabled(true);
         setNotice("Biometric lock enabled. It applies on next launch.");
-      } else
-        setNotice("Biometric verification failed. The lock stays off.");
+      } else setNotice("Biometric verification failed. The lock stays off.");
     } catch {
       setNotice("Biometrics are unavailable on this device.");
     }
@@ -208,6 +192,15 @@ function FeatureContent({
   const isRewards = /gems|candy|land|freebie/.test(mode);
   const isHelp = /help|care|chats/.test(mode);
   const isAffiliate = /affiliate/.test(mode);
+  const { tickets: supportTickets } = useSupportTickets(
+    live && isHelp ? session?.user.id : undefined,
+  );
+  const { quote, error: quoteError } = useOrderQuote(
+    live && isCheckout && !!session && count > 0,
+    state.cart,
+    c.voucher,
+  );
+
   const store = params.store || "Gulmeli Fancy Stores";
   useEffect(() => {
     if (isProduct && product)
@@ -275,6 +268,13 @@ function FeatureContent({
         : [...s.wishlist, id],
     }));
   const applyVoucher = () => {
+    if (live) {
+      updateCommerce((s) => ({ ...s, voucher: code.trim().toUpperCase() }));
+      setNotice(
+        "Voucher saved. Eligibility and discount are checked at checkout.",
+      );
+      return;
+    }
     if (code.trim().toUpperCase() !== "GULMELI10") {
       setNotice(
         "Code not recognized. Use GULMELI10 for 10% off orders of Rs. 500 or more, up to Rs. 100.",
@@ -294,10 +294,22 @@ function FeatureContent({
         <View style={styles.hero}>
           <ProductVisual product={product} />
         </View>
+        {!!product.images?.length && product.images.length > 1 && (
+          <ScrollView horizontal contentContainerStyle={{ gap: 10 }}>
+            {product.images
+              .filter((url) => url.startsWith("https://"))
+              .map((url) => (
+                <View key={url} style={{ width: 180, height: 180 }}>
+                  <ProductVisual product={{ ...product, imageUrl: url }} />
+                </View>
+              ))}
+          </ScrollView>
+        )}
         <Card>
           <T size={21} bold>
             {product.name}
           </T>
+          {!!product.description && <T>{product.description}</T>}
           <T size={24} bold color="#f85606">
             {money(product.price)}
           </T>
@@ -384,7 +396,9 @@ function FeatureContent({
       </Card>
     );
   } else if (isCheckout) {
-    const discount = voucherDiscount(c.voucher, subtotal);
+    const discount = live
+      ? (quote?.discount ?? 0)
+      : voucherDiscount(c.voucher, subtotal);
     content = (
       <>
         <Card>
@@ -447,10 +461,17 @@ function FeatureContent({
               <T>Subtotal: {money(subtotal)}</T>
               <T>Discount: −{money(discount)}</T>
               <T>
-                {live ? "Shipping: Rs. 0" : "Shipping: Rs. 0 (local estimate)"}
+                {live
+                  ? `Shipping: ${quote ? money(quote.shipping) : "Calculating..."}`
+                  : "Shipping: Rs. 0 (local estimate)"}
               </T>
               <T size={20} bold>
-                Total: {money(subtotal - discount)}
+                Total:{" "}
+                {live
+                  ? quote
+                    ? money(quote.total)
+                    : "Calculating..."
+                  : money(subtotal - discount)}
               </T>
               <T>
                 Payment preference: Cash on delivery. No payment is collected
@@ -458,7 +479,11 @@ function FeatureContent({
               </T>
               {paymentsAvailable && (
                 <Suspense
-                  fallback={<T size={11} color="#6b7280">Loading secure payment…</T>}
+                  fallback={
+                    <T size={11} color="#6b7280">
+                      Loading secure payment…
+                    </T>
+                  }
                 >
                   <StripePayButtonLazy
                     total={subtotal - discount}
@@ -468,6 +493,7 @@ function FeatureContent({
                   />
                 </Suspense>
               )}
+              {!!quoteError && <T color="#b91c1c">{quoteError}</T>}
               <Button
                 title={
                   busy
@@ -476,7 +502,7 @@ function FeatureContent({
                       ? "Place order - Cash on delivery"
                       : "Save local order"
                 }
-                disabled={busy}
+                disabled={busy || (live && !quote)}
                 onPress={async () => {
                   if (busy) return;
                   setBusy(true);
@@ -978,11 +1004,12 @@ function FeatureContent({
         </Card>
         <Card>
           <T size={18} bold>
-            Customer care drafts
+            {live ? "Customer care" : "Customer care drafts"}
           </T>
           <T>
-            Write a message and save it for later. These drafts are not sent to
-            customer care.
+            {live
+              ? "Send a message to the store. Staff replies appear below."
+              : "Write a message and save it for later. These drafts are not sent to customer care."}
           </T>
           <Field
             label="Message"
@@ -991,8 +1018,32 @@ function FeatureContent({
             onChangeText={setText}
           />
           <Button
-            title="Save message draft"
-            onPress={() => {
+            title={
+              live
+                ? busy
+                  ? "Sending..."
+                  : "Send message"
+                : "Save message draft"
+            }
+            disabled={busy}
+            onPress={async () => {
+              if (live) {
+                setBusy(true);
+                try {
+                  await sendSupportMessage(text);
+                  setText("");
+                  setNotice("Message sent to the store.");
+                } catch (error) {
+                  setNotice(
+                    error instanceof Error
+                      ? error.message
+                      : "Message could not be sent.",
+                  );
+                } finally {
+                  setBusy(false);
+                }
+                return;
+              }
               if (!text.trim()) {
                 setNotice("Enter a message first.");
                 return;
@@ -1012,6 +1063,20 @@ function FeatureContent({
               setNotice("Draft saved. It has not been sent.");
             }}
           />
+          {live &&
+            supportTickets.map((ticket) => (
+              <View key={ticket.id} style={{ gap: 5 }}>
+                <T bold>
+                  {ticket.subject} - {ticket.status}
+                </T>
+                {ticket.messages.map((message, i) => (
+                  <T key={i}>
+                    {message.author === "agent" ? "Store" : "You"}:{" "}
+                    {message.body}
+                  </T>
+                ))}
+              </View>
+            ))}
           {c.drafts.map((d) => (
             <View key={d.id} style={{ gap: 6 }}>
               <T>{d.text}</T>

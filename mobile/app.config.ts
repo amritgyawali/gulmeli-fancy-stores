@@ -12,6 +12,50 @@ const base = JSON.parse(
 ) as { expo: Record<string, any> };
 const env = process.env;
 
+// Distributed builds must embed the shared backend connection. A user's phone
+// does not read the developer's .env.local or need a developer machine running.
+if (
+  env.EAS_BUILD_PROFILE === "preview" ||
+  env.EAS_BUILD_PROFILE === "production"
+) {
+  if (
+    env.EXPO_PUBLIC_BACKEND !== "supabase" ||
+    !env.EXPO_PUBLIC_SUPABASE_URL?.startsWith("https://") ||
+    !env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    !env.EXPO_PUBLIC_CLOUDINARY_CLOUD_NAME
+  ) {
+    throw new Error(
+      "Release backend configuration is incomplete. Run npm run backend:release-config before building.",
+    );
+  }
+}
+
+// Installed launcher icons and native splash assets are selected at build time.
+const releaseFile = path.join(root, "assets/branding/release.json");
+if (fs.existsSync(releaseFile)) {
+  const branding = JSON.parse(fs.readFileSync(releaseFile, "utf8"));
+  if (branding.name) base.expo.name = branding.name;
+  if (branding.appIcon) {
+    base.expo.icon = branding.appIcon;
+    base.expo.ios.icon = branding.appIcon;
+    base.expo.android.icon = branding.appIcon;
+    base.expo.android.adaptiveIcon.foregroundImage = branding.appIcon;
+  }
+  if (branding.primaryColor)
+    base.expo.android.adaptiveIcon.backgroundColor = branding.primaryColor;
+  if (branding.favicon) base.expo.web.favicon = branding.favicon;
+  const splash = base.expo.plugins.find(
+    (p: unknown) => Array.isArray(p) && p[0] === "expo-splash-screen",
+  );
+  if (splash) {
+    if (branding.splashLogo) splash[1].image = branding.splashLogo;
+    if (branding.backgroundColor)
+      splash[1].backgroundColor = branding.backgroundColor;
+  }
+}
+base.expo.userInterfaceStyle = "automatic";
+base.expo.orientation = "default";
+
 const googleServices = path.join(root, "google-services.json");
 const googleServiceInfo = path.join(root, "GoogleService-Info.plist");
 if (fs.existsSync(googleServices))

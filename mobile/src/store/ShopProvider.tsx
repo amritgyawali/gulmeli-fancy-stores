@@ -195,16 +195,31 @@ function useShopState() {
   useEffect(() => {
     const client = supabase;
     if (!client) return;
+    const reload = () => {
+      void refreshCatalog().catch((error) =>
+        setBackendError(errorMessage(error)),
+      );
+    };
     const channel = client
       .channel("gulmeli-catalog")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "products" },
-        () => void refreshCatalog().catch(() => undefined),
+        reload,
       )
-      .subscribe();
+      .subscribe((status) => {
+        if (status === "SUBSCRIBED") reload();
+      });
+    const foreground = AppState.addEventListener("change", (value) => {
+      if (value === "active") reload();
+    });
+    const poll = setInterval(() => {
+      if (Platform.OS === "web" || AppState.currentState === "active") reload();
+    }, 30000);
     return () => {
       void client.removeChannel(channel);
+      foreground.remove();
+      clearInterval(poll);
     };
   }, [refreshCatalog]);
   useEffect(() => {
@@ -247,16 +262,18 @@ function useShopState() {
       .catch(async (error) => {
         if (!active) return;
         // Degrade to the last synced snapshot from SQLite.
-        const cached = await offlineDb.get<{ commerce: unknown; cart: unknown }>(
-          `customer:${userId}`,
-        );
+        const cached = await offlineDb.get<{
+          commerce: unknown;
+          cart: unknown;
+        }>(`customer:${userId}`);
+        if (!active) return;
         if (cached?.commerce) {
           setState((s) => ({
             ...s,
             commerce: restoreCommerce(cached.commerce as Commerce),
             cart: restoreCustomerCart(cached.cart),
           }));
-          setCustomerReady(true);
+          // Cached accounts remain read-only until a server read succeeds.
         }
         setBackendError(errorMessage(error));
       });
@@ -264,6 +281,81 @@ function useShopState() {
       active = false;
     };
   }, [userId, sessionReady, retry]);
+
+  // Follow orders and account changes on other devices without overwriting an unsaved edit.
+  useEffect(() => {
+    const client = supabase;
+    if (!client || !userId || !customerReady) return;
+    let active = true,
+      loading = false;
+    const reload = () => {
+      if (loading) return;
+      loading = true;
+      void loadCustomer(userId)
+        .then((loaded) => {
+          if (!active || activeUser.current !== userId) return;
+          const current = stateRef.current;
+          const clean =
+            JSON.stringify(customerSnapshot(current.commerce, current.cart)) ===
+            savedSnapshot.current;
+          if (clean) {
+            savedSnapshot.current = JSON.stringify(
+              customerSnapshot(loaded.commerce, loaded.cart),
+            );
+            setState((s) => ({
+              ...s,
+              commerce: loaded.commerce,
+              cart: loaded.cart,
+            }));
+          } else
+            setState((s) => ({
+              ...s,
+              commerce: { ...s.commerce, orders: loaded.commerce.orders },
+            }));
+        })
+        .catch((error) => {
+          if (active) setBackendError(errorMessage(error));
+        })
+        .finally(() => {
+          loading = false;
+        });
+    };
+    const channel = client
+      .channel(`gulmeli-account-${userId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "orders",
+          filter: `user_id=eq.${userId}`,
+        },
+        reload,
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "customer_state",
+          filter: `user_id=eq.${userId}`,
+        },
+        reload,
+      )
+      .subscribe((status) => {
+        if (status === "SUBSCRIBED") reload();
+      });
+    const foreground = AppState.addEventListener("change", (value) => {
+      if (value === "active") reload();
+    });
+    const poll = setInterval(reload, 30000);
+    return () => {
+      active = false;
+      void client.removeChannel(channel);
+      foreground.remove();
+      clearInterval(poll);
+    };
+  }, [userId, customerReady]);
 
   const queueCustomerSave = useCallback(
     (commerce: Commerce, owner: string, cart: CartItem[]) => {
@@ -275,7 +367,7 @@ function useShopState() {
           if (activeUser.current !== owner || epoch !== remoteEpoch.current)
             return;
           await saveCustomer(owner, commerce, cart);
-          void offlineDb.put(`customer:${owner}`, customerSnapshot(commerce, cart));
+          void offlineDb.put(`customer:${owner}`, { commerce, cart });
           if (activeUser.current === owner && epoch === remoteEpoch.current) {
             savedSnapshot.current = snapshot;
             setSyncStatus(
@@ -389,13 +481,10 @@ function useShopState() {
         setStorageError("Shopping state could not be saved on this device."),
       );
   }, [state, hydrated]);
-  const add = useCallback(
-    (product: Product) => {
-      track("add_to_cart", { product_id: product.id, price: product.price });
-      setState((s) => ({ ...s, cart: addItem(s.cart, product) }));
-    },
-    [],
-  );
+  const add = useCallback((product: Product) => {
+    track("add_to_cart", { product_id: product.id, price: product.price });
+    setState((s) => ({ ...s, cart: addItem(s.cart, product) }));
+  }, []);
   const quantity = useCallback(
     (product: Product, count: number) =>
       setState((s) => ({ ...s, cart: setQuantity(s.cart, product, count) })),

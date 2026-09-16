@@ -49,7 +49,7 @@ export function AuthPage() {
   };
 
   return (
-    <div className="mx-auto grid max-w-5xl gap-0 overflow-hidden rounded-2xl bg-white shadow-lg lg:grid-cols-[1fr_440px]">
+    <div className="mx-auto grid max-w-5xl gap-0 overflow-hidden rounded-2xl bg-[var(--store-surface)] shadow-lg lg:grid-cols-[1fr_440px]">
       {/* Marketing panel */}
       <div className="relative hidden flex-col justify-between bg-gradient-to-br from-[#161616] via-[#1c1d22] to-[#3a1d05] p-10 text-white lg:flex">
         <div>
@@ -72,7 +72,7 @@ export function AuthPage() {
             ["☁️", "Media hosted on Cloudinary, data on Supabase"],
           ].map(([icon, text]) => (
             <li key={text} className="flex items-center gap-3">
-              <span className="grid h-9 w-9 place-items-center rounded-lg bg-white/10">
+              <span className="grid h-9 w-9 place-items-center rounded-lg bg-[var(--store-surface)]/10">
                 {icon}
               </span>
               {text}
@@ -86,7 +86,7 @@ export function AuthPage() {
         <h1 className="text-2xl font-black">
           {admin ? "Admin sign in" : create ? "Create your account" : "Welcome back"}
         </h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-[var(--store-muted)]">
           {admin
             ? "Enter your staff email and password to open the store dashboard."
             : "Sign in to save your profile and place orders with Gulmeli Fancy Stores."}
@@ -94,7 +94,7 @@ export function AuthPage() {
         {session ? (
           <button
             onClick={() => navigate(admin ? "/admin" : "/account")}
-            className="mt-6 w-full rounded-xl bg-[#f85606] py-3 text-sm font-bold text-white"
+            className="mt-6 w-full rounded-xl bg-[var(--store-primary)] py-3 text-sm font-bold text-white"
           >
             Go to {admin ? "dashboard" : "my account"}
           </button>
@@ -107,29 +107,29 @@ export function AuthPage() {
             }}
           >
             <label className="block">
-              <span className="mb-1 block text-xs font-bold text-slate-500">Email address</span>
+              <span className="mb-1 block text-xs font-bold text-[var(--store-muted)]">Email address</span>
               <input
                 type="email"
                 autoComplete="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-[#f85606]"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-[var(--store-primary)]"
               />
             </label>
             <label className="block">
-              <span className="mb-1 block text-xs font-bold text-slate-500">Password</span>
+              <span className="mb-1 block text-xs font-bold text-[var(--store-muted)]">Password</span>
               <input
                 type="password"
                 autoComplete={create ? "new-password" : "current-password"}
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-[#f85606]"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-[var(--store-primary)]"
               />
             </label>
             <button
               type="submit"
               disabled={busy}
-              className="w-full rounded-xl bg-[#f85606] py-3 text-sm font-bold text-white hover:bg-[#e14d05] disabled:opacity-60"
+              className="w-full rounded-xl bg-[var(--store-primary)] py-3 text-sm font-bold text-white hover:bg-[#e14d05] disabled:opacity-60"
             >
               {busy
                 ? "Please wait…"
@@ -164,11 +164,11 @@ export function AuthPage() {
               setCreate(false);
               setNotice("");
             }}
-            className="font-bold text-[#f85606]"
+            className="font-bold text-[var(--store-primary-text)]"
           >
             {admin ? "← Back to customer sign-in" : "Admin login"}
           </button>
-          <Link to="/" className="font-semibold text-slate-500 hover:text-slate-800">
+          <Link to="/" className="font-semibold text-[var(--store-muted)] hover:text-[var(--store-text)]">
             Continue shopping →
           </Link>
         </div>

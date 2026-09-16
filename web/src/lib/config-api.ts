@@ -1,82 +1,76 @@
-// Reads the published storefront config the admin dashboard publishes from
-// either surface (app_config row id 'storefront'); subscribes to realtime so a
-// publish lands without a reload.
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+import { configErrors } from "../../../mobile/src/admin/core/config-validation";
 import { supabase } from "./supabase";
-
-export interface StorefrontConfig {
-  theme: {
-    primaryColor: string;
-    buttonColor: string;
-    backgroundColor: string;
-    textColor: string;
-    [key: string]: unknown;
-  };
-  branding: { companyName: string; tagline: string; logo: string; [key: string]: unknown };
-  [key: string]: unknown;
-}
-
-export const fallbackConfig: StorefrontConfig = {
-  theme: {
-    primaryColor: "#f85606",
-    buttonColor: "#f85606",
-    backgroundColor: "#f4f4f4",
-    textColor: "#212121",
-  },
-  branding: {
-    companyName: "Gulmeli Fancy Stores",
-    tagline: "Everything you need, delivered",
-    logo: "",
-  },
-};
-
+import {
+  defaultConfig,
+  restoreConfig,
+  type StorefrontConfig,
+} from "../../../mobile/src/admin/core/config";
+export type { StorefrontConfig };
+export const fallbackConfig = defaultConfig;
+let current = defaultConfig;
+const listeners = new Set<() => void>();
+let timer: ReturnType<typeof setInterval> | undefined;
+let channel: ReturnType<typeof supabase.channel> | undefined;
+let pending: Promise<StorefrontConfig> | null = null;
 export async function loadPublishedConfig(): Promise<StorefrontConfig> {
   const { data, error } = await supabase
     .from("app_config")
     .select("published")
     .eq("id", "storefront")
     .maybeSingle();
-  if (error || !data?.published) return fallbackConfig;
-  const raw = data.published as Partial<StorefrontConfig>;
-  return {
-    ...fallbackConfig,
-    ...raw,
-    theme: { ...fallbackConfig.theme, ...(raw.theme ?? {}) },
-    branding: { ...fallbackConfig.branding, ...(raw.branding ?? {}) },
-  };
+  if (error) throw Error(error.message);
+  return restoreConfig(data?.published);
 }
-
-export function usePublishedConfig() {
-  const [config, setConfig] = useState<StorefrontConfig>(fallbackConfig);
-  useEffect(() => {
-    void loadPublishedConfig().then(setConfig).catch(() => undefined);
-    const channel = supabase
-      .channel("gulmeli-web-config")
+async function refresh() {
+  if (pending) return pending;
+  pending = loadPublishedConfig()
+    .then((next) => {
+      if (JSON.stringify(next) !== JSON.stringify(current)) {
+        current = next;
+        listeners.forEach((fn) => fn());
+      }
+      return next;
+    })
+    .catch(() => current)
+    .finally(() => {
+      pending = null;
+    });
+  return pending;
+}
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  if (listeners.size === 1) {
+    void refresh();
+    timer = setInterval(() => void refresh(), 15000);
+    channel = supabase
+      .channel("web-published-config")
       .on(
         "postgres_changes",
-        { event: "UPDATE", schema: "public", table: "app_config" },
-        (payload) => {
-          const raw = (payload.new as { published?: Partial<StorefrontConfig> })
-            ?.published;
-          if (raw)
-            setConfig({
-              ...fallbackConfig,
-              ...raw,
-              theme: { ...fallbackConfig.theme, ...(raw.theme ?? {}) },
-              branding: { ...fallbackConfig.branding, ...(raw.branding ?? {}) },
-            });
-        },
+        { event: "*", schema: "public", table: "app_config" },
+        () => void refresh(),
       )
       .subscribe();
-    return () => {
-      void supabase.removeChannel(channel);
-    };
-  }, []);
-  return config;
+  }
+  return () => {
+    listeners.delete(listener);
+    if (!listeners.size) {
+      clearInterval(timer);
+      if (channel) void supabase.removeChannel(channel);
+      channel = undefined;
+    }
+  };
 }
-
-/** Admin side: publish a draft so both clients pick it up. */
+export function usePublishedConfig() {
+  return useSyncExternalStore(
+    subscribe,
+    () => current,
+    () => defaultConfig,
+  );
+}
 export async function publishConfig(config: StorefrontConfig) {
+  const errors = configErrors(config);
+  if (errors.length) throw Error(errors[0].message);
   const { error } = await supabase
     .from("app_config")
     .upsert({
@@ -84,5 +78,6 @@ export async function publishConfig(config: StorefrontConfig) {
       published: config,
       published_at: new Date().toISOString(),
     });
-  if (error) throw new Error(error.message);
+  if (error) throw Error(error.message);
+  await refresh();
 }

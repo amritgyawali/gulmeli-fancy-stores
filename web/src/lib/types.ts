@@ -1,12 +1,9 @@
 // Shared contracts with the mobile app (same Supabase tables and JSON docs).
 export type ProductGroup =
-  | "home"
-  | "offer"
-  | "recommendation"
-  | "choice"
-  | "unavailable";
+  "home" | "offer" | "recommendation" | "choice" | "unavailable";
 
 export interface Product {
+  createdAt?: string;
   id: string;
   name: string;
   price: number;
@@ -16,6 +13,8 @@ export interface Product {
   category: string;
   imageKey?: string;
   imageUrl?: string;
+  images?: string[];
+  imageIllustrative?: boolean;
   illustration?: string;
   brand?: string;
   store?: string;
@@ -49,7 +48,19 @@ export interface LocalOrder {
   discount: number;
   total: number;
   profile: Profile;
-  status: "Saved locally" | "Placed" | "Shipped" | "Delivered" | "Cancelled";
+  status:
+    | "Saved locally"
+    | "Placed"
+    | "Confirmed"
+    | "Processing"
+    | "Packed"
+    | "Out_for_delivery"
+    | "Returned"
+    | "Refunded"
+    | "Failed"
+    | "Shipped"
+    | "Delivered"
+    | "Cancelled";
 }
 
 export interface Commerce {

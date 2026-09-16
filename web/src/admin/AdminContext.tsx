@@ -13,15 +13,13 @@ import {
 } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
-import { loadCatalog } from "@/lib/shop-api";
-import type { Product } from "@/lib/types";
 import {
   claimAdmin,
-  markAppliedRemotely,
+  adoptAdminData,
+  mergeAdminData,
+  adminSyncBusy,
   pullAdminData,
-  pullCustomerOrders,
   pushAdminData,
-  queueCatalogSync,
   watchRemoteAdmin,
   type AdminRecord,
   type Snapshot,
@@ -70,6 +68,7 @@ export function AdminProvider({ children }: PropsWithChildren) {
       if (active) {
         setSession(data.session);
         if (!data.session) {
+          setSnapshot({});
           setIsAdmin(false);
           setDenied("Sign in with a staff account to open the dashboard.");
           setReady(true);
@@ -99,7 +98,9 @@ export function AdminProvider({ children }: PropsWithChildren) {
         if (!active) return;
         setIsAdmin(admin);
         setDenied(
-          admin ? "" : "This account is not a store admin. Add it to admin_members first.",
+          admin
+            ? ""
+            : "This account is not a store admin. Add it to admin_members first.",
         );
         setReady(!admin);
       })
@@ -123,44 +124,8 @@ export function AdminProvider({ children }: PropsWithChildren) {
       try {
         const shared = await pullAdminData();
         if (!active) return;
-        const merged: Snapshot = Object.keys(shared).length ? { ...shared } : {};
-        try {
-          const orders = await pullCustomerOrders();
-          const existing = merged.orders ?? [];
-          const byId = new Map(
-            existing.map((r): [string, AdminRecord] => [r.id, r]),
-          );
-          const combined = [...existing];
-          for (const order of orders) {
-            const current = byId.get(order.id);
-            if (!current) {
-              combined.push(order);
-              continue;
-            }
-            if (
-              current.source !== "customer-app" &&
-              String(current.updatedAt) >= String(order.updatedAt)
-            )
-              continue;
-            combined[combined.indexOf(current)] = {
-              ...order,
-              revision: Number(current.revision ?? 0) + 1,
-            };
-          }
-          merged.orders = combined;
-        } catch {
-          /* order mirroring is best-effort */
-        }
-        if (Object.keys(merged).length) {
-          setSnapshot(merged);
-        } else {
-          const products: AdminRecord[] = (await loadCatalog()).map((p) =>
-            productFromCatalog(p),
-          );
-          const seeded: Snapshot = { products };
-          setSnapshot(seeded);
-          dirty.current = true;
-        }
+        adoptAdminData(shared);
+        setSnapshot(shared);
       } catch (error) {
         if (active) setDenied(errorMessage(error));
       } finally {
@@ -178,37 +143,22 @@ export function AdminProvider({ children }: PropsWithChildren) {
   // Realtime + poll from other devices.
   useEffect(() => {
     if (!isAdmin || !ready) return;
-    const applyRecord = (
-      collection: string,
-      record: AdminRecord | null,
-      removedId?: string,
-    ) => {
-      setSnapshot((current) => {
-        const list = current[collection] ?? [];
-        dirty.current = true;
-        if (!record)
-          return { ...current, [collection]: list.filter((r) => r.id !== removedId) };
-        markAppliedRemotely(collection, record.id);
-        const index = list.findIndex((r) => r.id === record.id);
-        dirty.current = true;
-        if (index < 0) return { ...current, [collection]: [...list, record] };
-        const next = [...list];
-        next[index] = record;
-        return { ...current, [collection]: next };
-      });
-      setRevision((v) => v + 1);
-    };
-    const unsubscribe = watchRemoteAdmin({ onRecord: applyRecord });
-    const poll = setInterval(() => {
+    let active = true;
+    const refresh = () => {
+      if (dirty.current || adminSyncBusy()) return;
       void pullAdminData()
         .then((shared) => {
-          if (dirty.current) return; // local edits pending; they win
-          setSnapshot(shared);
-          setRevision((v) => v + 1);
+          if (!active || dirty.current) return;
+          setSnapshot((current) => mergeAdminData(current, shared));
         })
-        .catch(() => undefined);
-    }, 3000);
+        .catch((error) =>
+          setSyncStatus(`Refresh failed: ${errorMessage(error)}`),
+        );
+    };
+    const unsubscribe = watchRemoteAdmin({ onChange: refresh });
+    const poll = setInterval(refresh, 10000);
     return () => {
+      active = false;
       unsubscribe();
       clearInterval(poll);
     };
@@ -216,14 +166,15 @@ export function AdminProvider({ children }: PropsWithChildren) {
 
   // Debounced mirror of every local write.
   useEffect(() => {
-    if (!ready || !isAdmin) return;
-    dirty.current = true;
+    if (!ready || !isAdmin || !dirty.current) return;
     const timer = setTimeout(() => {
-      dirty.current = false;
       saveQueue.current = saveQueue.current
         .then(async () => {
-          await pushAdminData(dataRef.current, session?.user.email ?? "web-admin");
-          queueCatalogSync(dataRef.current);
+          await pushAdminData(
+            dataRef.current,
+            session?.user.email ?? "web-admin",
+          );
+          dirty.current = false;
           setSyncStatus("Synced with the mobile dashboard");
         })
         .catch((error) => setSyncStatus(`Not synced: ${errorMessage(error)}`));
@@ -238,11 +189,13 @@ export function AdminProvider({ children }: PropsWithChildren) {
       id: string,
       updater: (current: Snapshot) => Snapshot,
     ) => {
+      if (!isAdmin) return;
+      dirty.current = true;
       setSnapshot((current) => updater(current));
       setRevision((v) => v + 1);
       void id;
     },
-    [],
+    [isAdmin],
   );
 
   const value = useMemo<AdminValue>(
@@ -261,7 +214,10 @@ export function AdminProvider({ children }: PropsWithChildren) {
       create: (collection, values) => {
         const record: AdminRecord = {
           ...values,
-          id: String(values.id ?? `${collection.slice(0, 4)}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`),
+          id: String(
+            values.id ??
+              `${collection.slice(0, 4)}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`,
+          ),
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           deletedAt: null,
@@ -293,9 +249,7 @@ export function AdminProvider({ children }: PropsWithChildren) {
         mutate(collection, id, (current) => ({
           ...current,
           [collection]: (current[collection] ?? []).map((r) =>
-            r.id === id
-              ? { ...r, deletedAt: new Date().toISOString() }
-              : r,
+            r.id === id ? { ...r, deletedAt: new Date().toISOString() } : r,
           ),
         })),
       restore: (collection, id) =>
@@ -314,26 +268,18 @@ export function AdminProvider({ children }: PropsWithChildren) {
         await supabase.auth.signOut({ scope: "local" });
       },
       setOrderStatus: async (order, status) => {
-        // Update the shared orders table (RLS admin policy) so the customer
-        // surfaces pick it up, then reflect it in the local board.
-        const { data, error } = await supabase
-          .from("orders")
-          .select("document")
-          .eq("id", order.id)
-          .maybeSingle();
-        if (error) throw new Error(error.message);
-        if (!data) throw new Error("This order is not in the shared orders table.");
-        const doc = { ...(data.document as Record<string, unknown>), status };
-        const { error: updateError } = await supabase
-          .from("orders")
-          .update({ document: doc })
-          .eq("id", order.id);
-        if (updateError) throw new Error(updateError.message);
+        // The database projects this admin record into the customer order atomically.
+        const doc = { status };
         mutate("orders", order.id, (current) => ({
           ...current,
           orders: (current.orders ?? []).map((r) =>
             r.id === order.id
-              ? { ...r, status, document: doc, updatedAt: new Date().toISOString() }
+              ? {
+                  ...r,
+                  status,
+                  document: doc,
+                  updatedAt: new Date().toISOString(),
+                }
               : r,
           ),
         }));
@@ -341,51 +287,13 @@ export function AdminProvider({ children }: PropsWithChildren) {
     }),
     [ready, denied, isAdmin, session, snapshot, revision, syncStatus, mutate],
   );
-  return <AdminContext.Provider value={value}>{children}</AdminContext.Provider>;
+  return (
+    <AdminContext.Provider value={value}>{children}</AdminContext.Provider>
+  );
 }
 
 export function useAdmin() {
   const value = useContext(AdminContext);
   if (!value) throw new Error("AdminProvider is missing");
   return value;
-}
-
-/** Reverse of the mobile syncCatalog mapping, for first-run seeding. */
-function productFromCatalog(p: Product): AdminRecord {
-  const details: Record<string, unknown> = {
-    discount: p.discount,
-    originalPrice: p.originalPrice,
-    imageKey: p.imageKey,
-    illustration: p.illustration,
-    brand: p.brand,
-    store: p.store,
-    rating: p.rating,
-    sold: p.sold,
-    gems: p.gems,
-    fastDelivery: p.fastDelivery,
-    voucher: p.voucher,
-    badge: p.badge,
-  };
-  for (const key of Object.keys(details))
-    if (details[key] === undefined) delete details[key];
-  return {
-    id: p.id,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    deletedAt: null,
-    revision: 1,
-    name: p.name,
-    slug: p.id,
-    sku: p.id.toUpperCase(),
-    status: "published",
-    price: p.price,
-    salePrice: null,
-    stock: p.stock,
-    unlimitedStock: false,
-    categoryId: null,
-    categoryName: p.category,
-    storefrontGroup: p.group,
-    images: p.imageUrl ? [p.imageUrl] : [],
-    details,
-  };
 }

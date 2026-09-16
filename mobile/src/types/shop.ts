@@ -2,6 +2,7 @@ import type { Commerce } from "../store/commerce";
 export type ProductGroup =
   "home" | "offer" | "recommendation" | "choice" | "unavailable";
 export interface Product {
+  createdAt?: string;
   id: string;
   name: string;
   price: number;
@@ -11,6 +12,9 @@ export interface Product {
   category: string;
   imageKey?: string;
   imageUrl?: string;
+  images?: string[];
+  imageIllustrative?: boolean;
+  description?: string;
   illustration?: string;
   brand?: string;
   store?: string;

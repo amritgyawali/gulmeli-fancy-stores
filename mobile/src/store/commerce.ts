@@ -15,7 +15,19 @@ export interface LocalOrder {
   discount: number;
   total: number;
   profile: Profile;
-  status: "Saved locally" | "Placed" | "Shipped" | "Delivered" | "Cancelled";
+  status:
+    | "Saved locally"
+    | "Placed"
+    | "Confirmed"
+    | "Processing"
+    | "Packed"
+    | "Out_for_delivery"
+    | "Returned"
+    | "Refunded"
+    | "Failed"
+    | "Shipped"
+    | "Delivered"
+    | "Cancelled";
 }
 export interface Commerce {
   profile: Profile;
@@ -129,6 +141,13 @@ export function restoreCommerce(value: unknown): Commerce {
         [
           "Saved locally",
           "Placed",
+          "Confirmed",
+          "Processing",
+          "Packed",
+          "Out_for_delivery",
+          "Returned",
+          "Refunded",
+          "Failed",
           "Shipped",
           "Delivered",
           "Cancelled",

@@ -1,12 +1,6 @@
+import { View, TextInput, FlatList } from "@/components/store-ui";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import {
-  FlatList,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  TextInput,
-  View,
-} from "react-native";
+import { Keyboard, KeyboardAvoidingView, Platform } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import { Button, CheckBox, Row, T, Tap } from "@/components/ui";
 import { FontIcon } from "@/components/FontIcon";
@@ -57,136 +51,143 @@ function CartRow({ item }: { item: CartItem }) {
   if (!p) return null;
   return (
     <SwipeToDelete label={p.name} onDelete={() => remove(p.id)}>
-    <Row
-      style={{
-        alignItems: "flex-start",
-        gap: 10,
-        paddingTop: 16,
-        marginTop: 16,
-        borderTopWidth: 1,
-        borderColor: "#f3f4f6",
-      }}
-    >
-      <View style={{ marginTop: 32 }}>
-        <CheckBox
-          checked={item.selected}
-          onPress={() => toggle(p.id)}
-          label={`Select ${p.name}`}
-        />
-      </View>
-      <Tap
-        label={`Open ${p.name}`}
-        onPress={() => openDestination("Product details", { id: p.id })}
+      <Row
         style={{
-          width: 80,
-          height: 80,
-          borderRadius: 4,
-          borderWidth: 1,
+          alignItems: "flex-start",
+          gap: 10,
+          paddingTop: 16,
+          marginTop: 16,
+          borderTopWidth: 1,
           borderColor: "#f3f4f6",
-          overflow: "hidden",
         }}
       >
-        <ProductVisual product={p} />
-      </Tap>
-      <View style={{ flex: 1, minWidth: 0 }}>
+        <View style={{ marginTop: 32 }}>
+          <CheckBox
+            checked={item.selected}
+            onPress={() => toggle(p.id)}
+            label={`Select ${p.name}`}
+          />
+        </View>
         <Tap
-          label={`View ${p.name}`}
+          label={`Open ${p.name}`}
           onPress={() => openDestination("Product details", { id: p.id })}
-        >
-          <T size={12} numberOfLines={2} style={{ lineHeight: 16 }}>
-            <T
-              size={9}
-              bold
-              color="#fff"
-              style={{ backgroundColor: colors.orange }}
-            >
-              {" "}
-              9.9{" "}
-            </T>{" "}
-            {p.name}
-          </T>
-        </Tap>
-        <T size={11} color="#9ca3af" style={{ marginTop: 2 }}>
-          {p.brand ?? p.category}
-        </T>
-        {p.stock < 10 ? (
-          <T size={11} color="#ef4444" style={{ marginTop: 2 }}>
-            {p.stock} item(s) left
-          </T>
-        ) : p.id === "horlicks" ? (
-          <T
-            size={10}
-            color={colors.orange}
-            style={{
-              marginTop: 2,
-              backgroundColor: "#fff0eb",
-              alignSelf: "flex-start",
-              paddingHorizontal: 4,
-              borderRadius: 4,
-            }}
-          >
-            Limited New Sale
-          </T>
-        ) : null}
-        <Row
           style={{
-            justifyContent: "space-between",
-            marginTop: 4,
-            flexWrap: "wrap",
-            gap: 4,
+            width: 80,
+            height: 80,
+            borderRadius: 4,
+            borderWidth: 1,
+            borderColor: "#f3f4f6",
+            overflow: "hidden",
           }}
         >
-          <Row style={{ gap: 6, flexWrap: "wrap" }}>
-            <T size={14} bold color={colors.orange}>
-              Rs. {p.price.toLocaleString("en-US")}
-            </T>
-            {p.originalPrice && (
-              <T color="#9ca3af" style={{ textDecorationLine: "line-through" }}>
-                Rs. {p.originalPrice.toLocaleString("en-US")}
-              </T>
-            )}
-          </Row>
-          <Row
-            style={{ borderWidth: 1, borderColor: "#e5e7eb", borderRadius: 4 }}
-          >
-            <Tap
-              label={`Decrease ${p.name}`}
-              disabled={item.quantity <= 1}
-              onPress={() => quantity(p, item.quantity - 1)}
-              style={{ paddingHorizontal: 8, paddingVertical: 2 }}
-            >
-              <T color={item.quantity <= 1 ? "#d1d5db" : "#4b5563"}>-</T>
-            </Tap>
-            <T style={{ paddingHorizontal: 6 }}>{item.quantity}</T>
-            <Tap
-              label={`Increase ${p.name}`}
-              disabled={item.quantity >= p.stock}
-              onPress={() => quantity(p, item.quantity + 1)}
-              style={{ paddingHorizontal: 8, paddingVertical: 2 }}
-            >
-              <T color="#4b5563">+</T>
-            </Tap>
-          </Row>
-        </Row>
-        <Tap
-          label={`Open ${p.store ?? "seller"}`}
-          onPress={() =>
-            openDestination("Seller storefront", {
-              store: p.store || "Gulmeli Fancy Stores",
-            })
-          }
-          style={{ marginTop: 8 }}
-        >
-          <Row style={{ gap: 4 }}>
-            <FontIcon name="store" color="#9ca3af" size={12} />
-            <T size={11} color="#6b7280" style={{ flexShrink: 1 }}>
-              {p.store ?? "Buy More Save More"}
-            </T>
-            <FontIcon name="chevron-right" size={8} color="#9ca3af" />
-          </Row>
+          <ProductVisual product={p} />
         </Tap>
-      </View>
-    </Row>
+        <View style={{ flex: 1, minWidth: 0 }}>
+          <Tap
+            label={`View ${p.name}`}
+            onPress={() => openDestination("Product details", { id: p.id })}
+          >
+            <T size={12} numberOfLines={2} style={{ lineHeight: 16 }}>
+              <T
+                size={9}
+                bold
+                color="#fff"
+                style={{ backgroundColor: colors.orange }}
+              >
+                {" "}
+                9.9{" "}
+              </T>{" "}
+              {p.name}
+            </T>
+          </Tap>
+          <T size={11} color="#9ca3af" style={{ marginTop: 2 }}>
+            {p.brand ?? p.category}
+          </T>
+          {p.stock < 10 ? (
+            <T size={11} color="#ef4444" style={{ marginTop: 2 }}>
+              {p.stock} item(s) left
+            </T>
+          ) : p.id === "horlicks" ? (
+            <T
+              size={10}
+              color={colors.orange}
+              style={{
+                marginTop: 2,
+                backgroundColor: "#fff0eb",
+                alignSelf: "flex-start",
+                paddingHorizontal: 4,
+                borderRadius: 4,
+              }}
+            >
+              Limited New Sale
+            </T>
+          ) : null}
+          <Row
+            style={{
+              justifyContent: "space-between",
+              marginTop: 4,
+              flexWrap: "wrap",
+              gap: 4,
+            }}
+          >
+            <Row style={{ gap: 6, flexWrap: "wrap" }}>
+              <T size={14} bold color={colors.orange}>
+                Rs. {p.price.toLocaleString("en-US")}
+              </T>
+              {p.originalPrice && (
+                <T
+                  color="#9ca3af"
+                  style={{ textDecorationLine: "line-through" }}
+                >
+                  Rs. {p.originalPrice.toLocaleString("en-US")}
+                </T>
+              )}
+            </Row>
+            <Row
+              style={{
+                borderWidth: 1,
+                borderColor: "#e5e7eb",
+                borderRadius: 4,
+              }}
+            >
+              <Tap
+                label={`Decrease ${p.name}`}
+                disabled={item.quantity <= 1}
+                onPress={() => quantity(p, item.quantity - 1)}
+                style={{ paddingHorizontal: 8, paddingVertical: 2 }}
+              >
+                <T color={item.quantity <= 1 ? "#d1d5db" : "#4b5563"}>-</T>
+              </Tap>
+              <T style={{ paddingHorizontal: 6 }}>{item.quantity}</T>
+              <Tap
+                label={`Increase ${p.name}`}
+                disabled={item.quantity >= p.stock}
+                onPress={() => quantity(p, item.quantity + 1)}
+                style={{ paddingHorizontal: 8, paddingVertical: 2 }}
+              >
+                <T color="#4b5563">+</T>
+              </Tap>
+            </Row>
+          </Row>
+          <Tap
+            label={`Open ${p.store ?? "seller"}`}
+            onPress={() =>
+              openDestination("Seller storefront", {
+                store: p.store || "Gulmeli Fancy Stores",
+              })
+            }
+            style={{ marginTop: 8 }}
+          >
+            <Row style={{ gap: 4 }}>
+              <FontIcon name="store" color="#9ca3af" size={12} />
+              <T size={11} color="#6b7280" style={{ flexShrink: 1 }}>
+                {p.store ?? "Buy More Save More"}
+              </T>
+              <FontIcon name="chevron-right" size={8} color="#9ca3af" />
+            </Row>
+          </Tap>
+        </View>
+      </Row>
     </SwipeToDelete>
   );
 }

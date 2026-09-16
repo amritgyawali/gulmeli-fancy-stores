@@ -1,3 +1,5 @@
+import HomeScreen from "@/screens/HomeScreen";
+import { StorefrontPreviewProvider } from "@/store/StorefrontProvider";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
 import { AdminShell, Panel } from "@/admin/ui/Shell";
@@ -13,7 +15,6 @@ const APPEARANCE_GROUPS = CONFIG_GROUPS.filter((group) =>
   ["theme", "branding", "chrome"].includes(group.key),
 );
 
-/** A small, honest mock of the storefront using the draft values. */
 function StorefrontPreview({
   config,
   device,
@@ -21,190 +22,26 @@ function StorefrontPreview({
   config: StorefrontConfig;
   device: "mobile" | "desktop";
 }) {
-  const dark = config.theme.colorScheme === "dark" && config.darkTheme.enabled;
-  const background = dark
-    ? config.darkTheme.backgroundColor
-    : config.theme.backgroundColor;
-  const surface = dark
-    ? config.darkTheme.surfaceColor
-    : config.theme.surfaceColor;
-  const text = dark ? config.darkTheme.textColor : config.theme.textColor;
-  const muted = dark
-    ? config.darkTheme.mutedTextColor
-    : config.theme.mutedTextColor;
-  const border = dark ? config.darkTheme.borderColor : config.theme.borderColor;
-  const width = device === "mobile" ? 300 : 520;
-
+  const width = device === "mobile" ? 340 : 600;
   return (
     <View
+      pointerEvents="none"
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
       style={{
         width,
         maxWidth: "100%",
+        height: 580,
         alignSelf: "center",
-        borderRadius: 18,
-        borderWidth: 8,
-        borderColor: "#1f2124",
+        borderRadius: 24,
+        borderWidth: 6,
+        borderColor: "#25262a",
         overflow: "hidden",
-        backgroundColor: background,
       }}
     >
-      {config.announcement.enabled && (
-        <View
-          style={{
-            backgroundColor: config.announcement.backgroundColor,
-            padding: 6,
-          }}
-        >
-          <A size={10} color={config.announcement.textColor} numberOfLines={1}>
-            {config.announcement.text || "Announcement bar"}
-          </A>
-        </View>
-      )}
-      <View
-        style={{
-          backgroundColor: config.header.backgroundColor,
-          padding: 10,
-          flexDirection: "row",
-          alignItems: "center",
-          gap: 8,
-        }}
-      >
-        {config.header.showLogo && (
-          <A
-            size={13}
-            weight="700"
-            color={config.header.textColor}
-            numberOfLines={1}
-            style={{ flex: 1 }}
-          >
-            {config.branding.companyName}
-          </A>
-        )}
-        {config.header.showSearch && (
-          <Icon
-            name="magnifying-glass"
-            size={12}
-            color={config.header.textColor}
-          />
-        )}
-        {config.header.showWishlist && (
-          <Icon name="heart" size={12} color={config.header.textColor} />
-        )}
-        {config.header.showCart && (
-          <Icon
-            name="cart-shopping"
-            size={12}
-            color={config.header.textColor}
-          />
-        )}
-        {config.header.showProfile && (
-          <Icon name="user" size={12} color={config.header.textColor} />
-        )}
-      </View>
-
-      <View
-        style={{ padding: config.theme.spacing, gap: config.theme.spacing }}
-      >
-        <View
-          style={{
-            height: 84,
-            borderRadius: config.theme.cardRadius,
-            backgroundColor: config.theme.primaryColor,
-            justifyContent: "flex-end",
-            padding: 10,
-          }}
-        >
-          <A
-            size={config.theme.baseFontSize + 2}
-            weight={config.theme.headingWeight}
-            color="#ffffff"
-          >
-            {config.text.homeHeading || "Shop now"}
-          </A>
-        </View>
-
-        <Row gap={8}>
-          {[0, 1].map((index) => (
-            <View
-              key={index}
-              style={{
-                flex: 1,
-                backgroundColor: surface,
-                borderRadius: config.theme.cardRadius,
-                borderWidth: config.theme.borderWidth,
-                borderColor: border,
-                padding: 8,
-                gap: 6,
-              }}
-            >
-              <View
-                style={{
-                  height: 52,
-                  borderRadius: 6,
-                  backgroundColor: background,
-                }}
-              />
-              <A
-                size={config.theme.baseFontSize - 1}
-                color={text}
-                numberOfLines={2}
-              >
-                Sample product name
-              </A>
-              <A
-                size={config.theme.baseFontSize}
-                weight="700"
-                color={config.theme.secondaryColor}
-              >
-                {`${config.localisation.currencySymbol} 499`}
-              </A>
-              <A size={config.theme.baseFontSize - 3} color={muted}>
-                {config.text.lowStock}
-              </A>
-              <View
-                style={{
-                  backgroundColor: config.theme.buttonColor,
-                  borderRadius: config.theme.buttonRadius,
-                  paddingVertical: 6,
-                  alignItems: "center",
-                }}
-              >
-                <A
-                  size={config.theme.baseFontSize - 2}
-                  weight="700"
-                  color={config.theme.buttonTextColor}
-                >
-                  {config.text.addToCart}
-                </A>
-              </View>
-            </View>
-          ))}
-        </Row>
-
-        {config.footer.enabled && (
-          <View
-            style={{
-              backgroundColor: config.footer.backgroundColor,
-              borderRadius: config.theme.cardRadius,
-              padding: 10,
-              gap: 4,
-            }}
-          >
-            <A size={10} weight="700" color={config.footer.textColor}>
-              {config.branding.companyName}
-            </A>
-            {config.footer.showNewsletter && (
-              <A size={9} color={config.footer.textColor}>
-                {config.footer.newsletterHeading}
-              </A>
-            )}
-            <A size={9} color={config.footer.textColor}>
-              {config.footer.copyright ||
-                `© ${new Date().getFullYear()} ${config.branding.legalName}`}
-            </A>
-          </View>
-        )}
-      </View>
+      <StorefrontPreviewProvider config={config}>
+        <HomeScreen previewWidth={width} />
+      </StorefrontPreviewProvider>
     </View>
   );
 }
@@ -322,7 +159,7 @@ export function AppearanceScreen() {
         <Col gap={5}>
           {[
             "Colours and typography drive both the customer app and the website.",
-            "Logos feed the app icon, splash screen, invoices, emails and social sharing.",
+            "Store logos and favicon update live. Launcher icon and splash changes require a new native build.",
             "Header and footer switches decide which controls customers actually see.",
             "The announcement bar respects its own start and end dates.",
           ].map((line) => (

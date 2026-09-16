@@ -34,17 +34,17 @@ export function AccountPage() {
 
   if (!session)
     return (
-      <div className="mx-auto max-w-md rounded-2xl bg-white p-12 text-center shadow-sm">
+      <div className="mx-auto max-w-md rounded-2xl bg-[var(--store-surface)] p-12 text-center shadow-sm">
         <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-orange-50 text-3xl">
           👤
         </span>
         <h1 className="mt-4 text-xl font-black">Sign in to your account</h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-[var(--store-muted)]">
           Keep your cart, wishlist and orders in sync with the mobile app.
         </p>
         <Link
           to="/auth"
-          className="mt-5 inline-block rounded-xl bg-[#f85606] px-8 py-3 text-sm font-bold text-white"
+          className="mt-5 inline-block rounded-xl bg-[var(--store-primary)] px-8 py-3 text-sm font-bold text-white"
         >
           Sign in / Create account
         </Link>
@@ -115,7 +115,7 @@ export function AccountPage() {
       {/* Account sidebar */}
       <aside className="h-fit space-y-4 lg:sticky lg:top-40">
         <section className="rounded-2xl bg-gradient-to-br from-[#161616] to-[#2b2b2b] p-5 text-center text-white shadow-sm">
-          <span className="mx-auto grid h-20 w-20 place-items-center overflow-hidden rounded-full bg-white/10 text-3xl ring-2 ring-[#f85606]">
+          <span className="mx-auto grid h-20 w-20 place-items-center overflow-hidden rounded-full bg-[var(--store-surface)]/10 text-3xl ring-2 ring-[#f85606]">
             {commerce.profile.avatar ? (
               <img src={commerce.profile.avatar} alt="" className="h-full w-full object-cover" />
             ) : (
@@ -134,20 +134,20 @@ export function AccountPage() {
           <button
             onClick={checkIn}
             disabled={checkInToday}
-            className="mt-4 w-full rounded-xl bg-amber-400 py-2 text-xs font-black text-amber-950 disabled:bg-white/10 disabled:text-white/50"
+            className="mt-4 w-full rounded-xl bg-amber-400 py-2 text-xs font-black text-amber-950 disabled:bg-[var(--store-surface)]/10 disabled:text-white/50"
           >
             {checkInToday ? "Checked in today" : "Daily check-in · +5 gems 💎"}
           </button>
           {notice && <p className="mt-2 text-xs font-bold text-emerald-300">{notice}</p>}
         </section>
-        <nav className="rounded-2xl bg-white p-2 shadow-sm">
+        <nav className="rounded-2xl bg-[var(--store-surface)] p-2 shadow-sm">
           {NAV.map((item) => (
             <button
               key={item.key}
               onClick={() => setPanel(item.key)}
               className={`flex w-full items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-sm font-bold transition ${
                 panel === item.key
-                  ? "bg-orange-50 text-[#f85606]"
+                  ? "bg-orange-50 text-[var(--store-primary-text)]"
                   : "text-slate-600 hover:bg-slate-50"
               }`}
             >
@@ -159,13 +159,13 @@ export function AccountPage() {
             onClick={() =>
               void signOut().then(() => navigate("/")).catch((e) => setError(errorMessage(e)))
             }
-            className="flex w-full items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-sm font-bold text-slate-500 hover:bg-rose-50 hover:text-rose-600"
+            className="flex w-full items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-sm font-bold text-[var(--store-muted)] hover:bg-rose-50 hover:text-rose-600"
           >
             <Icon name="logout" size={16} /> Sign out
           </button>
           <Link
             to="/admin"
-            className="flex w-full items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-sm font-bold text-slate-500 hover:bg-slate-50"
+            className="flex w-full items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-sm font-bold text-[var(--store-muted)] hover:bg-slate-50"
           >
             <Icon name="gauge" size={16} /> Admin dashboard
           </Link>
@@ -178,9 +178,9 @@ export function AccountPage() {
       {/* Panels */}
       <div className="min-w-0 space-y-6">
         {panel === "orders" && (
-          <section className="rounded-2xl bg-white p-6 shadow-sm">
+          <section className="rounded-2xl bg-[var(--store-surface)] p-6 shadow-sm">
             <h2 className="mb-4 flex items-center gap-2 text-lg font-black">
-              <Icon name="box" size={18} className="text-[#f85606]" /> My orders
+              <Icon name="box" size={18} className="text-[var(--store-primary-text)]" /> My orders
             </h2>
             {commerce.orders.length ? (
               <ul className="divide-y divide-slate-100">
@@ -203,7 +203,7 @@ export function AccountPage() {
                             <Link
                               key={i.productId}
                               to={`/product/${i.productId}`}
-                              className="rounded-lg bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-600 hover:bg-orange-50 hover:text-[#f85606]"
+                              className="rounded-lg bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-600 hover:bg-orange-50 hover:text-[var(--store-primary-text)]"
                             >
                               {p ? p.name.slice(0, 30) : i.name.slice(0, 30)} ×{i.quantity}
                             </Link>
@@ -247,7 +247,7 @@ export function AccountPage() {
               <div className="py-16 text-center">
                 <p className="text-4xl">🧾</p>
                 <p className="mt-3 font-bold text-slate-600">No orders yet</p>
-                <Link to="/" className="mt-3 inline-block rounded-xl bg-[#f85606] px-6 py-2.5 text-sm font-bold text-white">
+                <Link to="/" className="mt-3 inline-block rounded-xl bg-[var(--store-primary)] px-6 py-2.5 text-sm font-bold text-white">
                   Start shopping
                 </Link>
               </div>
@@ -256,7 +256,7 @@ export function AccountPage() {
         )}
 
         {panel === "wishlist" && (
-          <section className="rounded-2xl bg-white p-6 shadow-sm">
+          <section className="rounded-2xl bg-[var(--store-surface)] p-6 shadow-sm">
             <h2 className="mb-4 flex items-center gap-2 text-lg font-black">
               <Icon name="heart" size={18} className="text-rose-500" /> Wishlist ({wishlist.length})
             </h2>
@@ -288,10 +288,10 @@ export function AccountPage() {
         )}
 
         {panel === "profile" && (
-          <section className="rounded-2xl bg-white p-6 shadow-sm">
+          <section className="rounded-2xl bg-[var(--store-surface)] p-6 shadow-sm">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="flex items-center gap-2 text-lg font-black">
-                <Icon name="settings" size={18} className="text-[#f85606]" /> Profile &amp; settings
+                <Icon name="settings" size={18} className="text-[var(--store-primary-text)]" /> Profile &amp; settings
               </h2>
               {!editing && (
                 <button
@@ -314,18 +314,18 @@ export function AccountPage() {
                   ] as const
                 ).map(([key, label]) => (
                   <label key={key} className="block">
-                    <span className="mb-1 block text-xs font-bold text-slate-500">{label}</span>
+                    <span className="mb-1 block text-xs font-bold text-[var(--store-muted)]">{label}</span>
                     <input
                       value={form[key]}
                       onChange={(event) =>
                         setForm((current) => ({ ...current, [key]: event.target.value }))
                       }
-                      className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-[#f85606]"
+                      className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-[var(--store-primary)]"
                     />
                   </label>
                 ))}
                 <label className="block sm:col-span-2">
-                  <span className="mb-1 block text-xs font-bold text-slate-500">
+                  <span className="mb-1 block text-xs font-bold text-[var(--store-muted)]">
                     Delivery address
                   </span>
                   <textarea
@@ -334,7 +334,7 @@ export function AccountPage() {
                     onChange={(event) =>
                       setForm((current) => ({ ...current, address: event.target.value }))
                     }
-                    className="w-full resize-none rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-[#f85606]"
+                    className="w-full resize-none rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-[var(--store-primary)]"
                   />
                 </label>
                 {error && (
@@ -344,7 +344,7 @@ export function AccountPage() {
                   <button
                     disabled={Boolean(busy)}
                     onClick={() => void saveProfile(null)}
-                    className="rounded-xl bg-[#f85606] px-6 py-3 text-sm font-black text-white disabled:opacity-60"
+                    className="rounded-xl bg-[var(--store-primary)] px-6 py-3 text-sm font-black text-white disabled:opacity-60"
                   >
                     {busy || "Save profile"}
                   </button>
@@ -360,7 +360,7 @@ export function AccountPage() {
                       setEditing(false);
                       setError("");
                     }}
-                    className="ml-auto text-sm font-bold text-slate-500"
+                    className="ml-auto text-sm font-bold text-[var(--store-muted)]"
                   >
                     Cancel
                   </button>
@@ -402,7 +402,7 @@ export function AccountPage() {
 
 function Metric({ n, label, onClick }: { n: number; label: string; onClick?: () => void }) {
   return (
-    <button onClick={onClick} className="rounded-xl bg-white/5 py-2 hover:bg-white/10">
+    <button onClick={onClick} className="rounded-xl bg-[var(--store-surface)]/5 py-2 hover:bg-[var(--store-surface)]/10">
       <span className="block text-lg font-black">{n}</span>
       <span className="text-[9px] uppercase tracking-wide text-white/50">{label}</span>
     </button>
