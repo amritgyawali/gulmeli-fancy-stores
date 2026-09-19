@@ -1,216 +1,202 @@
-import { sendSupportMessage, useSupportTickets } from "@/lib/support";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useShop } from "@/store/ShopContext";
 import { Icon } from "@/components/Icon";
+import { sendSupportMessage, useSupportTickets } from "@/lib/support";
 
-const MESSAGES = [
-  {
-    id: "early",
-    emoji: "🛒🏃",
-    title: "छिट्टो गर्नुहोस् — Hurry!",
-    time: "43 minutes ago",
-    footer: "Be the first to save up to 35% OFF on best deals 🤩",
-    type: "Promos",
-  },
-  {
-    id: "hot",
-    emoji: "🔥",
-    title: "ALERT: HIGH TEMPERATURE",
-    time: "13:30 PM",
-    footer: "Enjoy up to 55% OFF on deals 🛒 Shop your favorites now ✅",
-    type: "Promos",
-  },
-  {
-    id: "gems",
-    emoji: "💎🛍️",
-    title: "40% OFF — shopping?",
-    time: "09:10 AM",
-    footer: "Free gifts & 40% OFF coupons waiting in Gems!",
-    type: "Alerts",
-  },
-];
-
+/*
+ * Messages.
+ *
+ * This page led with three hardcoded promotional notifications — "ALERT: HIGH
+ * TEMPERATURE", "40% OFF — shopping?", each with an emoji tile and a made-up
+ * timestamp ("43 minutes ago", "13:30 PM") that never changed. They were not
+ * messages; nobody sent them and no discount stood behind them. They are
+ * gone.
+ *
+ * What the store actually has is a support thread per customer, already
+ * wired through `send_support_message` and `my_support_tickets`, which was
+ * buried in a sidebar under a textarea. That is the page now.
+ */
 export function MessagesPage() {
-  const { commerce, updateCommerce, ui, markMessagesRead, session } = useShop();
-  const [category, setCategory] = useState("All");
-  const { tickets } = useSupportTickets(session?.user.id);
+  const { commerce, updateCommerce, session } = useShop();
+  const { tickets, error: ticketError } = useSupportTickets(session?.user.id);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
   const [text, setText] = useState("");
+
   const drafts = [...commerce.drafts].reverse();
 
-  const visible = (
-    category === "All" ? MESSAGES : MESSAGES.filter((m) => m.type === category)
-  ).filter((m) => commerce.notifications || m.type !== "Promos");
+  const send = async () => {
+    if (busy || !text.trim()) return;
+    setBusy(true);
+    setNotice("");
+    try {
+      await sendSupportMessage(text.trim());
+      setText("");
+      setNotice("Message sent. The store usually replies within a working day.");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Message could not be sent.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const when = (iso: string) => {
+    const d = new Date(iso);
+    return Number.isNaN(d.getTime())
+      ? ""
+      : d.toLocaleString("en-GB", {
+          day: "numeric",
+          month: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+  };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
-      {/* Inbox */}
-      <div className="space-y-5">
-        <header className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-black tracking-tight">Messages</h1>
-            <p className="text-sm text-slate-400">
-              Store announcements, delivered to web and app together.
-            </p>
-          </div>
-          <button
-            onClick={markMessagesRead}
-            className={`text-xs font-bold ${ui.messagesRead ? "text-slate-400" : "text-[var(--store-primary-text)]"}`}
-          >
-            {ui.messagesRead ? "All read ✓" : "Mark all as read"}
-          </button>
-        </header>
-        <div className="flex gap-1 rounded-xl bg-slate-100 p-1">
-          {["All", "Promos", "Alerts"].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setCategory(tab)}
-              className={`rounded-lg px-4 py-1.5 text-sm font-bold ${
-                category === tab
-                  ? "bg-[var(--store-surface)] text-slate-900 shadow-sm"
-                  : "text-[var(--store-muted)]"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-        <div className="space-y-3">
-          {visible.map((message) => (
-            <article
-              key={message.id}
-              className="flex gap-4 rounded-2xl bg-[var(--store-surface)] p-5 shadow-sm transition hover:shadow-md"
-            >
-              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-orange-100 to-amber-100 text-2xl">
-                {message.emoji}
-              </span>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-baseline justify-between gap-2">
-                  <h2 className="truncate font-bold">{message.title}</h2>
-                  <span className="shrink-0 text-[11px] text-slate-400">
-                    {message.time}
-                  </span>
-                </div>
-                <p className="mt-0.5 text-sm text-[var(--store-muted)]">
-                  {message.footer}
-                </p>
-                <span className="mt-2 inline-block rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-[var(--store-muted)]">
-                  {message.type}
-                </span>
-              </div>
-            </article>
-          ))}
-          {!visible.length && (
-            <p className="rounded-2xl bg-[var(--store-surface)] p-16 text-center text-sm text-slate-400 shadow-sm">
-              Turn notifications on to see promos.
-            </p>
-          )}
-        </div>
-      </div>
+    <div>
+      <header className="mb-5">
+        <h1 className="text-2xl font-semibold text-ink">Messages</h1>
+        <p className="mt-0.5 text-sm text-ink-muted">
+          Your conversations with the store, shared with the mobile app.
+        </p>
+      </header>
 
-      {/* Compose */}
-      <aside className="h-fit space-y-4 lg:sticky lg:top-40">
-        <section className="rounded-2xl bg-[var(--store-surface)] p-5 shadow-sm">
-          <h2 className="flex items-center gap-2 font-black">
-            <Icon name="message" size={16} className="text-[var(--store-primary-text)]" /> Write
-            to the store
-          </h2>
-          <p className="mt-1 text-xs text-slate-400">
-            Send a message to the store and read staff replies here or in the
-            app.
-          </p>
-          <textarea
-            value={text}
-            onChange={(event) => setText(event.target.value)}
-            rows={4}
-            placeholder="Ask about an order, product or delivery…"
-            className="mt-3 w-full resize-none rounded-lg border border-slate-300 p-3 text-sm outline-none focus:border-[var(--store-primary)]"
-          />
-          <button
-            disabled={busy || !session || !text.trim()}
-            onClick={async () => {
-              if (busy) return;
-              setBusy(true);
-              setNotice("");
-              try {
-                await sendSupportMessage(text);
-                setText("");
-                setNotice("Message sent.");
-              } catch (error) {
-                setNotice(
-                  error instanceof Error
-                    ? error.message
-                    : "Message could not be sent.",
-                );
-              } finally {
-                setBusy(false);
-              }
-            }}
-            className="mt-2 w-full rounded-lg bg-slate-800 py-2.5 text-sm font-bold text-white disabled:bg-slate-300"
-          >
-            {busy
-              ? "Sending..."
-              : session
-                ? "Send message"
-                : "Sign in to send a message"}
-          </button>
-          {!!notice && (
-            <p role="status" className="mt-2 text-sm">
-              {notice}
-            </p>
-          )}
-          {tickets.map((ticket) => (
-            <div key={ticket.id} className="my-4 rounded border p-3">
-              <strong>
-                {ticket.subject} - {ticket.status}
-              </strong>
-              {ticket.messages.map((message, i) => (
-                <p key={i} className="my-2 text-sm">
-                  <b>{message.author === "agent" ? "Store" : "You"}:</b>{" "}
-                  {message.body}
-                </p>
-              ))}
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+        <section className="space-y-4">
+          {!session ? (
+            <div className="rounded-md border border-line bg-raised px-6 py-12 text-center">
+              <Icon name="message" size={32} strokeWidth={1.4} className="mx-auto text-ink-faint" />
+              <h2 className="mt-3 text-base font-semibold text-ink">Sign in to see your messages</h2>
+              <p className="mt-1 text-sm text-ink-muted">
+                Your conversations are tied to your account.
+              </p>
+              <Link
+                to="/auth"
+                className="mt-4 inline-block rounded-md bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-strong"
+              >
+                Sign in
+              </Link>
             </div>
-          ))}
-          {!session && (
-            <Link
-              to="/auth"
-              className="mt-1 block text-center text-xs font-bold text-[var(--store-primary-text)]"
+          ) : ticketError ? (
+            <p
+              role="alert"
+              className="flex items-start gap-2 rounded-md border border-critical/30 bg-critical-soft px-3 py-2.5 text-sm text-critical"
             >
-              Sign in →
-            </Link>
+              <Icon name="alert" size={15} className="mt-0.5 shrink-0" />
+              {ticketError}
+            </p>
+          ) : tickets.length === 0 ? (
+            <div className="rounded-md border border-line bg-raised px-6 py-12 text-center">
+              <Icon name="messages" size={32} strokeWidth={1.4} className="mx-auto text-ink-faint" />
+              <h2 className="mt-3 text-base font-semibold text-ink">No messages yet</h2>
+              <p className="mt-1 text-sm text-ink-muted">
+                Ask about an order, a product or a delivery and the reply appears here.
+              </p>
+            </div>
+          ) : (
+            tickets.map((ticket) => (
+              <article key={ticket.id} className="rounded-md border border-line bg-raised">
+                <header className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-4 py-3">
+                  <h2 className="text-base font-semibold text-ink">{ticket.subject}</h2>
+                  <span
+                    className={`rounded-sm px-2 py-0.5 text-2xs font-semibold uppercase tracking-wide ${
+                      /open|pending/i.test(ticket.status)
+                        ? "bg-caution-soft text-caution"
+                        : "bg-positive-soft text-positive"
+                    }`}
+                  >
+                    {ticket.status}
+                  </span>
+                </header>
+                <ul className="space-y-3 p-4">
+                  {ticket.messages.map((message, i) => {
+                    const fromStore = message.author === "agent";
+                    return (
+                      <li
+                        key={i}
+                        className={`flex ${fromStore ? "justify-start" : "justify-end"}`}
+                      >
+                        <div
+                          className={`max-w-[85%] rounded-md px-3 py-2 text-sm ${
+                            fromStore
+                              ? "bg-sunken text-ink"
+                              : "bg-brand-soft text-brand-strong"
+                          }`}
+                        >
+                          <p className="mb-0.5 text-2xs font-semibold uppercase tracking-wide opacity-70">
+                            {fromStore ? "Store" : "You"}
+                            {message.at && <span className="ml-1.5 font-normal">{when(message.at)}</span>}
+                          </p>
+                          <p className="whitespace-pre-line">{message.body}</p>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </article>
+            ))
           )}
         </section>
-        {drafts.length > 0 && (
-          <section className="rounded-2xl bg-[var(--store-surface)] p-5 shadow-sm">
-            <h3 className="mb-3 font-black">Your drafts</h3>
-            <ul className="space-y-3">
-              {drafts.map((draft) => (
-                <li key={draft.id} className="flex items-start gap-2.5 text-sm">
-                  <span className="mt-0.5 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold text-amber-700">
-                    DRAFT
-                  </span>
-                  <span className="flex-1 text-slate-600">{draft.text}</span>
-                  <button
-                    onClick={() =>
-                      updateCommerce((current) => ({
-                        ...current,
-                        drafts: current.drafts.filter((d) => d.id !== draft.id),
-                      }))
-                    }
-                    className="text-slate-300 hover:text-rose-500"
-                    aria-label="Delete draft"
-                  >
-                    ✕
-                  </button>
-                </li>
-              ))}
-            </ul>
+
+        <aside className="space-y-4 lg:sticky lg:top-24">
+          <section className="rounded-md border border-line bg-raised p-4">
+            <h2 className="flex items-center gap-2 text-base font-semibold text-ink">
+              <Icon name="message" size={17} className="text-ink-muted" />
+              Write to the store
+            </h2>
+            <label htmlFor="support-message" className="sr-only">
+              Your message
+            </label>
+            <textarea
+              id="support-message"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              rows={4}
+              disabled={!session}
+              placeholder="Ask about an order, product or delivery…"
+              className="mt-3 w-full resize-y rounded-md border border-line bg-raised p-3 text-base text-ink outline-none placeholder:text-ink-faint focus:border-brand disabled:bg-sunken"
+            />
+            <button
+              type="button"
+              disabled={busy || !session || !text.trim()}
+              onClick={() => void send()}
+              className="mt-2 w-full rounded-md bg-brand py-2.5 text-sm font-semibold text-white hover:bg-brand-strong disabled:bg-line-strong disabled:text-ink-faint"
+            >
+              {busy ? "Sending…" : session ? "Send message" : "Sign in to send"}
+            </button>
+            <div aria-live="polite">
+              {notice && <p className="mt-2 text-sm text-ink-muted">{notice}</p>}
+            </div>
           </section>
-        )}
-      </aside>
+
+          {drafts.length > 0 && (
+            <section className="rounded-md border border-line bg-raised p-4">
+              <h2 className="mb-3 text-base font-semibold text-ink">Drafts</h2>
+              <ul className="space-y-2.5">
+                {drafts.map((draft) => (
+                  <li key={draft.id} className="flex items-start gap-2 text-sm">
+                    <span className="flex-1 text-ink-soft">{draft.text}</span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateCommerce((current) => ({
+                          ...current,
+                          drafts: current.drafts.filter((d) => d.id !== draft.id),
+                        }))
+                      }
+                      aria-label="Delete draft"
+                      className="shrink-0 rounded-sm p-1 text-ink-faint hover:text-critical"
+                    >
+                      <Icon name="trash" size={15} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </aside>
+      </div>
     </div>
   );
 }

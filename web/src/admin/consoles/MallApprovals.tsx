@@ -14,33 +14,33 @@ export function MallApprovals() {
       />
       <OpsTable head={["Submission / SLA", "Brand & Legal Entity", "Authenticity Tier & Category", "Verification Credentials & DOI", "Security & IRD CBMS", "Maker-Checker Actions"]}>
         {mallQueue.map((m) => (
-          <tr key={m.id} className="hover:bg-orange-50/30">
+          <tr key={m.id} className="hover:bg-brand-soft/30">
             <td className="px-4 py-3">
-              <p className="font-bold text-on-surface">{m.id}</p>
-              <p className="text-[10px] text-on-surface-variant">{m.submitted}</p>
-              <p className={`text-[10px] font-bold ${m.slaHours > 24 ? "text-rose-600" : "text-emerald-700"}`}>
+              <p className="font-bold text-ink">{m.id}</p>
+              <p className="text-[10px] text-ink-muted">{m.submitted}</p>
+              <p className={`text-[10px] font-bold ${m.slaHours > 24 ? "text-critical" : "text-positive"}`}>
                 SLA {m.slaHours}h
               </p>
             </td>
             <td className="px-4 py-3">
-              <p className="font-bold text-on-surface">{m.brand}</p>
-              <p className="text-[10px] text-on-surface-variant">{m.entity}</p>
+              <p className="font-bold text-ink">{m.brand}</p>
+              <p className="text-[10px] text-ink-muted">{m.entity}</p>
             </td>
-            <td className="px-4 py-3 text-on-surface-variant">
+            <td className="px-4 py-3 text-ink-muted">
               <StatusPill tone={m.tier === "Brand Owner" ? "live" : "ok"}>{m.tier}</StatusPill>
               <span className="block text-[10px]">{m.category}</span>
             </td>
-            <td className="px-4 py-3 font-mono text-[10px] text-on-surface-variant">{m.doi}</td>
+            <td className="px-4 py-3 font-mono text-[10px] text-ink-muted">{m.doi}</td>
             <td className="px-4 py-3">
               <StatusPill tone={m.cbms === "Verified" ? "live" : m.cbms === "Pending" ? "warn" : "bad"}>
                 CBMS {m.cbms}
               </StatusPill>
             </td>
             <td className="whitespace-nowrap px-4 py-3 text-[11px] font-bold">
-              <span className="mr-2 text-on-surface-variant">checker: {m.checker}</span>
-              <button type="button" className="text-emerald-700 hover:underline">Approve</button>
-              <span className="text-gray-300"> · </span>
-              <button type="button" className="text-rose-600 hover:underline">Request docs</button>
+              <span className="mr-2 text-ink-muted">checker: {m.checker}</span>
+              <button type="button" className="text-positive hover:underline">Approve</button>
+              <span className="text-ink-faint"> · </span>
+              <button type="button" className="text-critical hover:underline">Request docs</button>
             </td>
           </tr>
         ))}

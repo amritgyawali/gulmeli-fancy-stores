@@ -76,36 +76,36 @@ export function AdminReports() {
     <div className="space-y-5">
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-black">Reports &amp; export</h1>
-          <p className="text-sm text-slate-500">
+          <h1 className="text-2xl font-semibold">Reports &amp; export</h1>
+          <p className="text-sm text-ink-muted">
             Live counts from the shared store data. CSV downloads work offline too.
           </p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={exportCsv}
-            className="flex items-center gap-1.5 rounded-lg bg-[#f85606] px-4 py-2.5 text-sm font-bold text-white"
+            className="flex items-center gap-1.5 rounded-lg bg-brand px-4 py-2.5 text-sm font-bold text-white"
           >
             <Icon name="download" size={14} /> Export {meta.label} CSV
           </button>
           <button
             onClick={exportAll}
-            className="flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-50"
+            className="flex items-center gap-1.5 rounded-lg border border-line bg-white px-4 py-2.5 text-sm font-bold text-ink-soft hover:bg-sunken"
           >
             <Icon name="box" size={14} /> Full backup JSON
           </button>
         </div>
       </header>
 
-      <div className="flex flex-wrap gap-2 rounded-2xl bg-white p-3 shadow-sm">
+      <div className="flex flex-wrap gap-2 rounded-lg bg-white p-3 shadow-sm">
         {collections.map((k) => (
           <button
             key={k}
             onClick={() => setCollection(k)}
             className={`rounded-full px-4 py-1.5 text-sm font-bold ${
               collection === k
-                ? "bg-slate-900 text-white"
-                : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                ? "bg-shell text-white"
+                : "bg-sunken text-ink-soft hover:bg-line"
             }`}
           >
             {metaFor(k).label} ({all(k).length})
@@ -114,7 +114,7 @@ export function AdminReports() {
       </div>
 
       {collection === "orders" && (
-        <div className="flex gap-1 rounded-xl bg-slate-100 p-1 w-fit">
+        <div className="flex gap-1 rounded-md bg-sunken p-1 w-fit">
           {[
             [30, "30 days"],
             [90, "90 days"],
@@ -123,7 +123,7 @@ export function AdminReports() {
             <button
               key={String(v)}
               onClick={() => setRange(Number(v))}
-              className={`rounded-lg px-4 py-1.5 text-sm font-bold ${range === v ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"}`}
+              className={`rounded-lg px-4 py-1.5 text-sm font-bold ${range === v ? "bg-white text-ink shadow-sm" : "text-ink-muted"}`}
             >
               {label}
             </button>
@@ -142,9 +142,9 @@ export function AdminReports() {
         <Card label="Collection" value={meta.label} />
       </div>
 
-      <div className="overflow-x-auto rounded-2xl bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-lg bg-white shadow-sm">
         <table className="w-full min-w-[640px] text-sm">
-          <thead className="border-b border-slate-100 text-left text-xs uppercase tracking-wide text-slate-400">
+          <thead className="border-b border-line text-left text-xs uppercase tracking-wide text-ink-faint">
             <tr>
               {["id", ...meta.columns].map((c) => (
                 <th key={c} className="px-4 py-3">{c}</th>
@@ -154,7 +154,7 @@ export function AdminReports() {
           <tbody className="divide-y divide-slate-50">
             {rows.slice(0, 50).map((r) => (
               <tr key={r.id}>
-                <td className="max-w-40 truncate px-4 py-2.5 font-mono text-xs text-slate-400">
+                <td className="max-w-40 truncate px-4 py-2.5 font-mono text-xs text-ink-faint">
                   {String(r.id)}
                 </td>
                 {meta.columns.map((c) => (
@@ -170,7 +170,7 @@ export function AdminReports() {
             ))}
             {!rows.length && (
               <tr>
-                <td colSpan={meta.columns.length + 1} className="px-4 py-14 text-center text-slate-400">
+                <td colSpan={meta.columns.length + 1} className="px-4 py-14 text-center text-ink-faint">
                   No records — adjust the filter or add data from either dashboard.
                 </td>
               </tr>
@@ -179,7 +179,7 @@ export function AdminReports() {
         </table>
       </div>
       {rows.length > 50 && (
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-ink-faint">
           Showing the first 50 of {rows.length} rows — CSV export includes them all.
         </p>
       )}
@@ -189,9 +189,9 @@ export function AdminReports() {
 
 function Card({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl bg-white p-5 shadow-sm">
-      <p className="text-xs font-bold uppercase tracking-wide text-slate-400">{label}</p>
-      <p className="mt-1 text-xl font-black">{value}</p>
+    <div className="rounded-lg bg-white p-5 shadow-sm">
+      <p className="text-xs font-bold uppercase tracking-wide text-ink-faint">{label}</p>
+      <p className="mt-1 text-xl font-semibold">{value}</p>
     </div>
   );
 }

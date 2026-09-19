@@ -1,12 +1,25 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useShop } from "@/store/ShopContext";
 import { ProductVisual } from "@/components/ProductCard";
 import { Icon } from "@/components/Icon";
-import { profileError, voucherDiscount } from "@/lib/commerce";
-import { errorMessage } from "@/lib/format";
-import type { Profile } from "@/lib/types";
+import { voucherDiscount, voucherTerms, VOUCHER } from "@/lib/commerce";
+import { deliveryFeeFor, useDeliveryTerms } from "@/lib/shipping";
+import { rs } from "@/lib/format";
 
+/*
+ * The cart.
+ *
+ * This page used to contain a second checkout: its own name/phone/address
+ * form, its own validation, and its own "Place order · Cash on delivery"
+ * button, sitting alongside the real /checkout route. The two disagreed —
+ * this one showed "Shipping: Free" unconditionally while checkout billed the
+ * server's delivery fee — so the total a customer agreed to here was not the
+ * total they were charged.
+ *
+ * The cart is now a cart: review lines, change quantities, apply a voucher,
+ * then continue to checkout, which is the one place an order is placed.
+ */
 export function CartPage() {
   const {
     cart,
@@ -15,293 +28,278 @@ export function CartPage() {
     toggle,
     select,
     removeSelected,
+    removeItem,
     commerce,
     updateCommerce,
     subtotal,
     count,
-    checkout,
-    session,
   } = useShop();
-  const navigate = useNavigate();
+  const terms = useDeliveryTerms();
   const [voucherInput, setVoucherInput] = useState(commerce.voucher);
   const [voucherNotice, setVoucherNotice] = useState("");
-  const [placing, setPlacing] = useState(false);
-  const [error, setError] = useState("");
-  const [placed, setPlaced] = useState("");
+
   const discount = voucherDiscount(commerce.voucher, subtotal);
-  const total = Math.max(0, subtotal - discount);
+  const delivery = count > 0 ? deliveryFeeFor(subtotal, terms) : 0;
+  const total = Math.max(0, subtotal + delivery - discount);
+
   const items = cart
     .map((item) => ({ item, product: productById[item.productId] }))
     .filter((entry) => entry.product);
-  const allSelected = items.length > 0 && items.every((entry) => entry.item.selected);
+  const selectedCount = items.filter((e) => e.item.selected).length;
+  const allSelected = items.length > 0 && selectedCount === items.length;
+  const unavailable = items.filter((e) => e.item.selected && e.product.stock < 1);
 
   const applyVoucher = () => {
     const code = voucherInput.trim().toUpperCase();
-    if (code && code !== "GULMELI10") {
-      setVoucherNotice("Code not recognized. Use GULMELI10 for 10% off Rs. 500+ orders, up to Rs. 100.");
+    if (code && code !== VOUCHER.code) {
+      setVoucherNotice(`That code is not recognised. ${voucherTerms()}`);
+      return;
+    }
+    if (code && subtotal < VOUCHER.minSpend) {
+      setVoucherNotice(`Spend ${rs(VOUCHER.minSpend - subtotal)} more to use this code.`);
       return;
     }
     setVoucherNotice("");
     updateCommerce((current) => ({ ...current, voucher: code }));
   };
 
-  const placeOrder = async (profile: Profile) => {
-    setPlacing(true);
-    setError("");
-    try {
-      const orderId = await checkout(profile);
-      setPlaced(orderId);
-    } catch (e) {
-      setError(errorMessage(e));
-    } finally {
-      setPlacing(false);
-    }
-  };
-
-  if (placed)
-    return (
-      <div className="mx-auto max-w-lg rounded-2xl bg-[var(--store-surface)] p-8 text-center shadow-sm">
-        <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-600">
-          <Icon name="check" size={32} />
-        </div>
-        <h1 className="mt-4 text-xl font-bold">Order placed</h1>
-        <p className="mt-1 break-all text-sm text-[var(--store-muted)]">
-          Order ID <span className="font-mono font-semibold">{placed}</span> — pay cash
-          on delivery. It is now in your Account and visible on the mobile app.
-        </p>
-        <div className="mt-5 flex justify-center gap-3">
-          <Link to="/account" className="rounded-lg bg-[var(--store-primary)] px-5 py-2.5 text-sm font-bold text-white">
-            View orders
-          </Link>
-          <Link to="/" className="rounded-lg border border-slate-300 px-5 py-2.5 text-sm font-bold text-slate-700">
-            Keep shopping
-          </Link>
-        </div>
-      </div>
-    );
-
   if (!items.length)
     return (
-      <div className="py-20 text-center">
-        <p className="text-4xl">🛒</p>
-        <h1 className="mt-3 text-lg font-bold text-slate-700">Your cart is empty</h1>
-        <Link to="/" className="mt-4 inline-block rounded-lg bg-[var(--store-primary)] px-6 py-2.5 text-sm font-bold text-white">
-          Browse the store
+      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3 text-center">
+        <Icon name="cart" size={40} strokeWidth={1.4} className="text-ink-faint" />
+        <h1 className="text-xl font-semibold text-ink">Your cart is empty</h1>
+        <p className="text-sm text-ink-muted">Items you add will show up here.</p>
+        <Link
+          to="/search"
+          className="mt-1 rounded-md bg-brand px-6 py-2.5 text-sm font-semibold text-white hover:bg-brand-strong"
+        >
+          Browse products
         </Link>
       </div>
     );
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
-      <section className="overflow-hidden rounded-2xl bg-[var(--store-surface)] shadow-sm">
-        <header className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
-          <div className="flex items-center gap-3">
-            <h1 className="text-lg font-black">Shopping cart</h1>
-            <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-bold text-[var(--store-primary-text)]">
-              {items.length} product{items.length === 1 ? "" : "s"}
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-slate-600">
+    <div>
+      <h1 className="mb-5 text-2xl font-semibold text-ink">
+        Cart
+        <span className="tnum ml-2 text-base font-normal text-ink-muted">
+          {items.length} {items.length === 1 ? "product" : "products"}
+        </span>
+      </h1>
+
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+        <section className="overflow-hidden rounded-md border border-line bg-raised">
+          <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
+            <label className="flex cursor-pointer items-center gap-2.5 text-sm font-medium text-ink">
               <input
                 type="checkbox"
                 checked={allSelected}
-                onChange={() => select(items.map((e) => e.item.productId), !allSelected)}
-                className="h-4 w-4 accent-[#f85606]"
+                onChange={() =>
+                  select(items.map((e) => e.item.productId), !allSelected)
+                }
+                className="h-4 w-4 accent-[var(--color-brand)]"
               />
               Select all
             </label>
             <button
+              type="button"
               onClick={removeSelected}
-              className="flex items-center gap-1 text-xs font-semibold text-[var(--store-muted)] hover:text-rose-600"
+              disabled={selectedCount === 0}
+              className="flex items-center gap-1.5 text-sm text-ink-muted hover:text-critical disabled:opacity-40 disabled:hover:text-ink-muted"
             >
-              <Icon name="trash" size={14} /> Remove selected
+              <Icon name="trash" size={15} />
+              Remove selected
             </button>
-          </div>
-        </header>
-        <ul className="divide-y divide-slate-100">
-          {items.map(({ item, product }) => (
-            <li key={item.productId} className="flex items-center gap-4 px-5 py-4">
+          </header>
+
+          <ul className="divide-y divide-line">
+            {items.map(({ item, product }) => {
+              const out = product.stock < 1;
+              const overStock = item.quantity > product.stock;
+              return (
+                <li key={item.productId} className="flex flex-wrap items-start gap-3 p-4">
+                  <input
+                    type="checkbox"
+                    checked={item.selected}
+                    onChange={() => toggle(item.productId)}
+                    aria-label={`Include ${product.name} in the order`}
+                    className="mt-6 h-4 w-4 shrink-0 accent-[var(--color-brand)]"
+                  />
+                  <Link
+                    to={`/product/${product.id}`}
+                    className="media h-20 w-20 shrink-0 rounded-sm border border-line"
+                  >
+                    <ProductVisual product={product} fit="contain" sizes="80px" />
+                  </Link>
+
+                  <div className="min-w-[180px] flex-1">
+                    <Link
+                      to={`/product/${product.id}`}
+                      className="clamp-2 text-sm text-ink hover:text-brand"
+                    >
+                      {product.name}
+                    </Link>
+                    <p className="tnum mt-1 text-sm text-ink-muted">{rs(product.price)} each</p>
+                    {out ? (
+                      <p className="mt-1 text-xs font-medium text-critical">
+                        Out of stock — deselect to continue
+                      </p>
+                    ) : overStock ? (
+                      <p className="tnum mt-1 text-xs font-medium text-caution">
+                        Only {product.stock} available
+                      </p>
+                    ) : null}
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center rounded-md border border-line">
+                      <button
+                        type="button"
+                        aria-label={`Decrease quantity of ${product.name}`}
+                        disabled={item.quantity <= 1}
+                        onClick={() => setQty(product, item.quantity - 1)}
+                        className="grid h-9 w-9 place-items-center text-ink-soft hover:bg-sunken disabled:opacity-30"
+                      >
+                        <Icon name="minus" size={14} />
+                      </button>
+                      <span className="tnum w-9 text-center text-sm font-semibold text-ink">
+                        {item.quantity}
+                      </span>
+                      <button
+                        type="button"
+                        aria-label={`Increase quantity of ${product.name}`}
+                        disabled={item.quantity >= product.stock}
+                        onClick={() => setQty(product, item.quantity + 1)}
+                        className="grid h-9 w-9 place-items-center text-ink-soft hover:bg-sunken disabled:opacity-30"
+                      >
+                        <Icon name="plus" size={14} />
+                      </button>
+                    </div>
+
+                    <p className="tnum w-24 text-right text-sm font-semibold text-ink">
+                      {rs(product.price * item.quantity)}
+                    </p>
+
+                    <button
+                      type="button"
+                      aria-label={`Remove ${product.name} from cart`}
+                      onClick={() => removeItem(product.id)}
+                      className="rounded-sm p-1.5 text-ink-faint hover:text-critical"
+                    >
+                      <Icon name="trash" size={16} />
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+
+        <aside className="lg:sticky lg:top-24">
+          <div className="rounded-md border border-line bg-raised p-4">
+            <h2 className="mb-3 text-base font-semibold text-ink">Summary</h2>
+
+            <div className="flex gap-2">
               <input
-                type="checkbox"
-                checked={item.selected}
-                onChange={() => toggle(item.productId)}
-                aria-label={`Select ${product.name}`}
-                className="h-4 w-4 shrink-0 accent-[#f85606]"
+                value={voucherInput}
+                onChange={(e) => setVoucherInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && applyVoucher()}
+                placeholder="Voucher code"
+                aria-label="Voucher code"
+                className="min-w-0 flex-1 rounded-md border border-line bg-raised px-3 py-2.5 text-base uppercase text-ink outline-none placeholder:normal-case placeholder:text-ink-faint focus:border-brand"
               />
-              <Link to={`/product/${product.id}`} className="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-slate-100">
-                <ProductVisual product={product} />
-              </Link>
-              <div className="min-w-0 flex-1">
-                <Link to={`/product/${product.id}`} className="line-clamp-2 text-sm font-medium hover:text-[var(--store-primary-text)]">
-                  {product.name}
-                </Link>
-                <p className="mt-0.5 text-[10px] text-slate-400">
-                  {product.stock < 1
-                    ? "Out of stock — deselect to continue"
-                    : `Rs.${product.price.toLocaleString()} each · ${product.stock} in stock`}
+              <button
+                type="button"
+                onClick={applyVoucher}
+                className="shrink-0 rounded-md border border-line px-4 text-sm font-semibold text-ink hover:border-brand hover:text-brand"
+              >
+                Apply
+              </button>
+            </div>
+            <div aria-live="polite">
+              {voucherNotice && <p className="mt-2 text-sm text-critical">{voucherNotice}</p>}
+              {commerce.voucher && !voucherNotice && (
+                <p className="mt-2 flex items-center gap-2 text-sm text-positive">
+                  <Icon name="check" size={15} />
+                  {commerce.voucher} applied
+                  <button
+                    type="button"
+                    onClick={() => {
+                      updateCommerce((current) => ({ ...current, voucher: "" }));
+                      setVoucherInput("");
+                    }}
+                    className="ml-auto text-ink-muted underline hover:text-critical"
+                  >
+                    Remove
+                  </button>
                 </p>
+              )}
+            </div>
+
+            <dl className="tnum mt-4 space-y-2 border-t border-line pt-4 text-sm">
+              <div className="flex justify-between">
+                <dt className="text-ink-muted">
+                  Selected ({count} {count === 1 ? "item" : "items"})
+                </dt>
+                <dd className="text-ink">{rs(subtotal)}</dd>
               </div>
-              <div className="flex items-center rounded-lg border border-[var(--store-border)]">
-                <button
-                  aria-label="Decrease quantity"
-                  disabled={item.quantity <= 1}
-                  onClick={() => setQty(product, item.quantity - 1)}
-                  className="px-2.5 py-1.5 disabled:opacity-30"
-                >
-                  <Icon name="minus" size={12} />
-                </button>
-                <span className="w-8 text-center text-sm font-bold">{item.quantity}</span>
-                <button
-                  aria-label="Increase quantity"
-                  disabled={item.quantity >= product.stock}
-                  onClick={() => setQty(product, item.quantity + 1)}
-                  className="px-2.5 py-1.5 disabled:opacity-30"
-                >
-                  <Icon name="plus" size={12} />
-                </button>
+              <div className="flex justify-between">
+                <dt className="text-ink-muted">Delivery</dt>
+                <dd className={delivery ? "text-ink" : "text-positive"}>
+                  {delivery ? rs(delivery) : "Free"}
+                </dd>
               </div>
-              <p className="w-24 text-right text-sm font-bold text-[var(--store-primary-text)]">
-                Rs.{(product.price * item.quantity).toLocaleString()}
+              {discount > 0 && (
+                <div className="flex justify-between text-positive">
+                  <dt>Voucher</dt>
+                  <dd>− {rs(discount)}</dd>
+                </div>
+              )}
+              <div className="flex items-baseline justify-between border-t border-line pt-3 text-base font-semibold">
+                <dt className="text-ink">Total</dt>
+                <dd className="text-xl text-brand">{rs(total)}</dd>
+              </div>
+            </dl>
+            <p className="mt-1 text-xs text-ink-muted">
+              Confirmed at checkout, where stock and delivery are re-checked.
+            </p>
+
+            {unavailable.length > 0 && (
+              <p
+                role="alert"
+                className="mt-3 flex items-start gap-2 rounded-md border border-caution/30 bg-caution-soft px-3 py-2.5 text-sm text-caution"
+              >
+                <Icon name="alert" size={15} className="mt-0.5 shrink-0" />
+                Deselect the {unavailable.length === 1 ? "item that is" : "items that are"} out
+                of stock to continue.
               </p>
-            </li>
-          ))}
-        </ul>
-      </section>
+            )}
 
-      <aside className="h-fit space-y-4 rounded-2xl bg-[var(--store-surface)] p-5 shadow-sm">
-        <h2 className="text-base font-bold">Order summary</h2>
-        <div className="flex gap-2">
-          <input
-            value={voucherInput}
-            onChange={(event) => setVoucherInput(event.target.value)}
-            placeholder="Voucher code"
-            aria-label="Voucher code"
-            className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[var(--store-primary)]"
-          />
-          <button onClick={applyVoucher} className="rounded-lg bg-slate-800 px-4 py-2 text-sm font-bold text-white">
-            Apply
-          </button>
-        </div>
-        {voucherNotice && <p className="text-xs text-rose-600">{voucherNotice}</p>}
-        {commerce.voucher && (
-          <p className="text-xs font-semibold text-emerald-600">
-            {commerce.voucher} applied
-            <button
-              onClick={() => {
-                updateCommerce((current) => ({ ...current, voucher: "" }));
-                setVoucherInput("");
+            <Link
+              to="/checkout"
+              aria-disabled={count < 1 || unavailable.length > 0}
+              onClick={(e) => {
+                if (count < 1 || unavailable.length > 0) e.preventDefault();
               }}
-              className="ml-2 text-slate-400 underline hover:text-rose-600"
+              className={`mt-4 flex w-full items-center justify-center gap-2 rounded-md py-3 text-base font-semibold ${
+                count < 1 || unavailable.length > 0
+                  ? "pointer-events-none bg-line-strong text-ink-faint"
+                  : "bg-brand text-white hover:bg-brand-strong"
+              }`}
             >
-              remove
-            </button>
-          </p>
-        )}
-        <dl className="space-y-1.5 border-t border-slate-100 pt-3 text-sm">
-          <div className="flex justify-between">
-            <dt className="text-[var(--store-muted)]">Selected items ({count})</dt>
-            <dd className="font-semibold">Rs.{subtotal.toLocaleString()}</dd>
-          </div>
-          <div className="flex justify-between">
-            <dt className="text-[var(--store-muted)]">Voucher discount</dt>
-            <dd className={`font-semibold ${discount ? "text-emerald-600" : ""}`}>
-              {discount ? `-Rs.${discount}` : "—"}
-            </dd>
-          </div>
-          <div className="flex justify-between">
-            <dt className="text-[var(--store-muted)]">Shipping</dt>
-            <dd className="font-semibold text-emerald-600">Free</dd>
-          </div>
-          <div className="flex justify-between border-t border-slate-100 pt-2 text-base">
-            <dt className="font-bold">Total</dt>
-            <dd className="font-black text-[var(--store-primary-text)]">Rs.{total.toLocaleString()}</dd>
-          </div>
-        </dl>
-        {error && (
-          <p role="alert" className="rounded-lg bg-rose-50 p-2.5 text-xs font-semibold text-rose-700">
-            {error}
-          </p>
-        )}
-        {session ? (
-          <CheckoutForm
-            busy={placing}
-            disabled={count < 1}
-            profile={commerce.profile}
-            onPlace={placeOrder}
-          />
-        ) : (
-          <Link
-            to="/auth"
-            className="block rounded-xl bg-[var(--store-primary)] py-3 text-center text-sm font-bold text-white"
-          >
-            Sign in to place the order
-          </Link>
-        )}
-        <button
-          onClick={() => navigate("/")}
-          className="w-full text-center text-xs font-semibold text-slate-400 hover:text-slate-700"
-        >
-          ← Continue shopping
-        </button>
-      </aside>
-    </div>
-  );
-}
+              {count < 1 ? "Select an item to continue" : "Continue to checkout"}
+              {count > 0 && unavailable.length === 0 && <Icon name="arrowRight" size={17} />}
+            </Link>
 
-function CheckoutForm({
-  profile,
-  busy,
-  disabled,
-  onPlace,
-}: {
-  profile: Profile;
-  busy: boolean;
-  disabled: boolean;
-  onPlace: (profile: Profile) => Promise<void>;
-}) {
-  const [form, setForm] = useState<Profile>({
-    ...profile,
-    avatar: profile.avatar || "",
-  });
-  const [fieldError, setFieldError] = useState("");
-  const submit = async () => {
-    const error = profileError(form);
-    if (error) {
-      setFieldError(error);
-      return;
-    }
-    setFieldError("");
-    await onPlace(form);
-  };
-  return (
-    <div className="space-y-2 border-t border-slate-100 pt-4">
-      <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Delivery details</p>
-      {(
-        [
-          ["name", "Full name", "text"],
-          ["phone", "Phone number", "tel"],
-          ["address", "Delivery address", "text"],
-        ] as const
-      ).map(([key, label, type]) => (
-        <label key={key} className="block">
-          <span className="mb-1 block text-xs font-semibold text-[var(--store-muted)]">{label}</span>
-          <input
-            type={type}
-            value={form[key]}
-            onChange={(event) => setForm((current) => ({ ...current, [key]: event.target.value }))}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[var(--store-primary)]"
-          />
-        </label>
-      ))}
-      {fieldError && <p className="text-xs font-semibold text-rose-600">{fieldError}</p>}
-      <button
-        onClick={() => void submit()}
-        disabled={busy || disabled}
-        className="w-full rounded-xl bg-[var(--store-primary)] py-3 text-sm font-bold text-white shadow-sm hover:bg-[#e14d05] disabled:cursor-not-allowed disabled:bg-slate-300"
-      >
-        {busy ? "Placing order…" : disabled ? "Select at least one item" : "Place order · Cash on delivery"}
-      </button>
+            <Link
+              to="/search"
+              className="mt-3 block text-center text-sm text-ink-muted hover:text-brand"
+            >
+              Continue shopping
+            </Link>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }

@@ -29,13 +29,17 @@ export function BrandIdentity({
           style={{ width: "100%", maxWidth: 220, height: compact ? 32 : 42 }}
         />
       ) : (
+        // A long store name wrapped to two lines and pushed the search field
+        // and the first product down the screen. One line, shrinking to fit.
         <T
           preserveColor
           color={color ?? theme.text}
           bold
-          size={compact ? 18 : 22}
-          numberOfLines={2}
-          style={{ letterSpacing: -0.6 }}
+          size={compact ? 17 : 20}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          minimumFontScale={0.75}
+          style={{ letterSpacing: -0.4 }}
         >
           {config.branding.companyName}
         </T>

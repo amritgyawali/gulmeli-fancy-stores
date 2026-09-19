@@ -81,8 +81,8 @@ export function AdminMedia() {
     <div className="space-y-4">
       <header className="flex flex-wrap items-center gap-3">
         <div className="mr-auto">
-          <h1 className="text-2xl font-black">Media library</h1>
-          <p className="text-sm text-slate-500">
+          <h1 className="text-2xl font-semibold">Media library</h1>
+          <p className="text-sm text-ink-muted">
             Every file lives in Cloudinary (cloud “{cloudName || "not configured"}”); this
             library is the shared index used by both dashboards.
           </p>
@@ -97,13 +97,13 @@ export function AdminMedia() {
         <button
           disabled={uploading}
           onClick={() => fileInput.current?.click()}
-          className="flex items-center gap-1.5 rounded-lg bg-[#f85606] px-4 py-2.5 text-sm font-bold text-white disabled:opacity-60"
+          className="flex items-center gap-1.5 rounded-lg bg-brand px-4 py-2.5 text-sm font-bold text-white disabled:opacity-60"
         >
           <Icon name="upload" size={14} /> {uploading ? "Uploading to Cloudinary…" : "Upload file"}
         </button>
       </header>
       {error && (
-        <p className="rounded-lg bg-rose-50 p-3 text-sm font-semibold text-rose-700">{error}</p>
+        <p className="rounded-lg bg-critical-soft p-3 text-sm font-semibold text-critical">{error}</p>
       )}
 
       <div className="flex flex-wrap items-center gap-2">
@@ -111,13 +111,13 @@ export function AdminMedia() {
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="Search by name, alt or tag"
-          className="min-w-52 flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-[#f85606]"
+          className="min-w-52 flex-1 rounded-lg border border-line bg-white px-3 py-2 text-sm outline-none focus:border-brand"
         />
         <input
           value={url}
           onChange={(event) => setUrl(event.target.value)}
           placeholder="Add by URL"
-          className="min-w-52 flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-[#f85606]"
+          className="min-w-52 flex-1 rounded-lg border border-line bg-white px-3 py-2 text-sm outline-none focus:border-brand"
         />
         <button
           onClick={() => {
@@ -142,7 +142,7 @@ export function AdminMedia() {
             });
             setUrl("");
           }}
-          className="rounded-lg bg-slate-800 px-4 py-2 text-sm font-bold text-white"
+          className="rounded-lg bg-shell px-4 py-2 text-sm font-bold text-white"
         >
           Add
         </button>
@@ -153,7 +153,7 @@ export function AdminMedia() {
             key={f}
             onClick={() => setFolder(f)}
             className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-bold ${
-              folder === f ? "bg-slate-900 text-white" : "bg-white text-slate-600"
+              folder === f ? "bg-shell text-white" : "bg-white text-ink-soft"
             }`}
           >
             {f === "all" ? `All (${files.length})` : f}
@@ -167,15 +167,15 @@ export function AdminMedia() {
             <button
               key={file.id}
               onClick={() => setSelected(file.id === selected ? null : file.id)}
-              className={`overflow-hidden rounded-xl bg-white text-left shadow-sm ring-2 transition ${
-                selected === file.id ? "ring-[#f85606]" : "ring-transparent hover:ring-slate-200"
+              className={`overflow-hidden rounded-md bg-white text-left shadow-sm ring-2 transition ${
+                selected === file.id ? "ring-brand" : "ring-transparent hover:ring-slate-200"
               }`}
             >
-              <span className="grid aspect-square place-items-center bg-slate-100">
+              <span className="grid aspect-square place-items-center bg-sunken">
                 {file.kind === "image" ? (
                   <img src={String(file.url)} alt={String(file.alt ?? "")} loading="lazy" className="h-full w-full object-cover" />
                 ) : (
-                  <Icon name={file.kind === "video" ? "image" : "box"} size={28} className="text-slate-400" />
+                  <Icon name={file.kind === "video" ? "image" : "box"} size={28} className="text-ink-faint" />
                 )}
               </span>
               <span className="block truncate px-2 py-1.5 text-xs font-medium">{String(file.name)}</span>
@@ -183,17 +183,17 @@ export function AdminMedia() {
           ))}
         </div>
       ) : (
-        <p className="rounded-2xl bg-white py-16 text-center text-sm text-slate-400 shadow-sm">
+        <p className="rounded-lg bg-white py-16 text-center text-sm text-ink-faint shadow-sm">
           No files yet — upload a photo, video, PDF or document.
         </p>
       )}
 
       {record && (
-        <section className="rounded-2xl bg-white p-5 shadow-sm">
+        <section className="rounded-lg bg-white p-5 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <h2 className="font-bold">{String(record.name)}</h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-ink-faint">
                 {String(record.kind)} · {record.sizeKb ? `${record.sizeKb} KB · ` : ""}
                 {record.publicId ? "Cloudinary asset" : "external URL"}
               </p>
@@ -203,13 +203,13 @@ export function AdminMedia() {
                 onClick={() => {
                   void navigator.clipboard.writeText(String(record.url));
                 }}
-                className="rounded-lg border border-slate-300 px-3 py-2 text-xs font-bold text-slate-600"
+                className="rounded-lg border border-line px-3 py-2 text-xs font-bold text-ink-soft"
               >
                 Copy URL
               </button>
               <button
                 onClick={() => void destroy()}
-                className="flex items-center gap-1 rounded-lg bg-rose-50 px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-100"
+                className="flex items-center gap-1 rounded-lg bg-critical-soft px-3 py-2 text-xs font-bold text-critical hover:bg-critical-soft"
               >
                 <Icon name="trash" size={13} /> Delete
               </button>
@@ -224,11 +224,11 @@ export function AdminMedia() {
               ] as const
             ).map(([key, label]) => (
               <label key={key} className="block">
-                <span className="mb-1 block text-xs font-bold text-slate-500">{label}</span>
+                <span className="mb-1 block text-xs font-bold text-ink-muted">{label}</span>
                 <input
                   value={String(record[key] ?? "")}
                   onChange={(event) => update("media", record.id, { [key]: event.target.value })}
-                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#f85606]"
+                  className="w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-brand"
                 />
               </label>
             ))}
@@ -239,7 +239,7 @@ export function AdminMedia() {
                 key={kind}
                 onClick={() => update("media", record.id, { kind })}
                 className={`rounded-full px-3 py-1 text-[11px] font-bold capitalize ${
-                  record.kind === kind ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-500"
+                  record.kind === kind ? "bg-shell text-white" : "bg-sunken text-ink-muted"
                 }`}
               >
                 {kind}

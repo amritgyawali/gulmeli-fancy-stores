@@ -46,7 +46,7 @@ export default function MessagesScreen() {
         >
           <FontIcon name="comments" size={38} color={theme.primaryText} />
           <T preserveColor bold size={20}>
-            We?re here to help
+            We are here to help
           </T>
           <T preserveColor color={theme.muted} style={{ textAlign: "center" }}>
             Ask about a product or an order. Your conversations and replies

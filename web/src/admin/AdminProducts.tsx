@@ -45,14 +45,14 @@ export function AdminProducts() {
     <div className="space-y-4">
       <header className="flex flex-wrap items-center gap-3">
         <div className="mr-auto">
-          <h1 className="text-2xl font-black">Products</h1>
-          <p className="text-sm text-slate-500">
+          <h1 className="text-2xl font-semibold">Products</h1>
+          <p className="text-sm text-ink-muted">
             Published changes reach the customer app and storefront in seconds.
           </p>
         </div>
         <button
           onClick={() => setCreating(true)}
-          className="flex items-center gap-1.5 rounded-lg bg-[#f85606] px-4 py-2.5 text-sm font-bold text-white"
+          className="flex items-center gap-1.5 rounded-lg bg-brand px-4 py-2.5 text-sm font-bold text-white"
         >
           <Icon name="plus" size={14} /> New product
         </button>
@@ -63,14 +63,14 @@ export function AdminProducts() {
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="Search name or SKU"
-          className="min-w-52 flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-[#f85606]"
+          className="min-w-52 flex-1 rounded-lg border border-line bg-white px-3 py-2 text-sm outline-none focus:border-brand"
         />
         {["all", ...GROUPS.map((g) => g[0])].map((g) => (
           <button
             key={g}
             onClick={() => setGroup(g)}
             className={`rounded-full px-3.5 py-1.5 text-xs font-bold ${
-              group === g ? "bg-slate-900 text-white" : "bg-white text-slate-600"
+              group === g ? "bg-shell text-white" : "bg-white text-ink-soft"
             }`}
           >
             {g === "all" ? "All" : GROUPS.find((x) => x[0] === g)?.[1]}
@@ -78,9 +78,9 @@ export function AdminProducts() {
         ))}
       </div>
 
-      <div className="overflow-x-auto rounded-2xl bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-lg bg-white shadow-sm">
         <table className="w-full min-w-[720px] text-sm">
-          <thead className="border-b border-slate-100 text-left text-xs uppercase tracking-wide text-slate-400">
+          <thead className="border-b border-line text-left text-xs uppercase tracking-wide text-ink-faint">
             <tr>
               <th className="px-4 py-3">Product</th>
               <th className="px-4 py-3">Price</th>
@@ -92,10 +92,10 @@ export function AdminProducts() {
           </thead>
           <tbody className="divide-y divide-slate-50">
             {filtered.map((product) => (
-              <tr key={product.id} className="hover:bg-orange-50/40">
+              <tr key={product.id} className="hover:bg-brand-soft/40">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
-                    <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-lg bg-slate-100 text-lg">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-lg bg-sunken text-lg">
                       {typeof (product.images as unknown[] | undefined)?.[0] === "string" ? (
                         <img
                           src={(product.images as string[])[0]}
@@ -103,12 +103,12 @@ export function AdminProducts() {
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        "📦"
+                        <Icon name="box" size={18} className="text-ink-faint" />
                       )}
                     </span>
                     <span className="min-w-0">
                       <span className="block truncate font-semibold">{String(product.name)}</span>
-                      <span className="text-xs text-slate-400">{String(product.sku ?? product.id)}</span>
+                      <span className="text-xs text-ink-faint">{String(product.sku ?? product.id)}</span>
                     </span>
                   </div>
                 </td>
@@ -116,21 +116,21 @@ export function AdminProducts() {
                 <td className="px-4 py-3">
                   <span
                     className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${
-                      Number(product.stock) < 5 ? "bg-rose-100 text-rose-700" : "bg-slate-100"
+                      Number(product.stock) < 5 ? "bg-critical-soft text-critical" : "bg-sunken"
                     }`}
                   >
                     {Number(product.stock)}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-xs capitalize text-slate-500">
+                <td className="px-4 py-3 text-xs capitalize text-ink-muted">
                   {String(product.storefrontGroup)}
                 </td>
                 <td className="px-4 py-3">
                   <span
                     className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
                       product.status === "published"
-                        ? "bg-emerald-100 text-emerald-700"
-                        : "bg-amber-100 text-amber-700"
+                        ? "bg-positive-soft text-positive"
+                        : "bg-caution-soft text-caution"
                     }`}
                   >
                     {String(product.status)}
@@ -141,7 +141,7 @@ export function AdminProducts() {
                     <button
                       aria-label={`Edit ${product.name}`}
                       onClick={() => setEditing(product)}
-                      className="rounded p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                      className="rounded p-2 text-ink-faint hover:bg-sunken hover:text-ink"
                     >
                       <Icon name="edit" size={15} />
                     </button>
@@ -151,7 +151,7 @@ export function AdminProducts() {
                         if (window.confirm(`Move “${product.name}” to trash?`))
                           remove("products", product.id);
                       }}
-                      className="rounded p-2 text-slate-400 hover:bg-rose-50 hover:text-rose-600"
+                      className="rounded p-2 text-ink-faint hover:bg-critical-soft hover:text-critical"
                     >
                       <Icon name="trash" size={15} />
                     </button>
@@ -161,7 +161,7 @@ export function AdminProducts() {
             ))}
             {!filtered.length && (
               <tr>
-                <td colSpan={6} className="px-4 py-14 text-center text-sm text-slate-400">
+                <td colSpan={6} className="px-4 py-14 text-center text-sm text-ink-faint">
                   No products match.
                 </td>
               </tr>
@@ -246,8 +246,8 @@ function ProductEditor({
         className="h-full w-full max-w-lg overflow-y-auto bg-white p-6 shadow-2xl"
       >
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-lg font-black">{product ? "Edit product" : "New product"}</h2>
-          <button type="button" onClick={onClose} aria-label="Close" className="rounded p-2 hover:bg-slate-100">
+          <h2 className="text-lg font-semibold">{product ? "Edit product" : "New product"}</h2>
+          <button type="button" onClick={onClose} aria-label="Close" className="rounded p-2 hover:bg-sunken">
             <Icon name="close" size={18} />
           </button>
         </div>
@@ -301,8 +301,8 @@ function ProductEditor({
               </select>
             </Field>
           </div>
-          <label className="flex items-center gap-2 text-sm font-semibold text-slate-600">
-            <input type="checkbox" checked={Boolean(form.unlimitedStock)} onChange={(e) => set("unlimitedStock", e.target.checked)} className="accent-[#f85606]" />
+          <label className="flex items-center gap-2 text-sm font-semibold text-ink-soft">
+            <input type="checkbox" checked={Boolean(form.unlimitedStock)} onChange={(e) => set("unlimitedStock", e.target.checked)} className="accent-[var(--color-brand)]" />
             Unlimited stock
           </label>
           <Field label="Badge (e.g. NEW PACK)">
@@ -328,14 +328,14 @@ function ProductEditor({
           </Field>
         </div>
         <div className="mt-6 flex gap-3">
-          <button type="submit" className="flex-1 rounded-xl bg-[#f85606] py-3 text-sm font-bold text-white">
+          <button type="submit" className="flex-1 rounded-md bg-brand py-3 text-sm font-bold text-white">
             {product ? "Save changes" : "Create product"}
           </button>
-          <button type="button" onClick={onClose} className="rounded-xl border border-slate-300 px-5 text-sm font-bold text-slate-600">
+          <button type="button" onClick={onClose} className="rounded-md border border-line px-5 text-sm font-bold text-ink-soft">
             Cancel
           </button>
         </div>
-        <p className="mt-3 text-center text-xs text-slate-400">
+        <p className="mt-3 text-center text-xs text-ink-faint">
           Saving syncs to Supabase and republishes the storefront catalog automatically.
         </p>
       </form>
@@ -344,7 +344,7 @@ function ProductEditor({
 }
 
 const inputClass =
-  "w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#f85606]";
+  "w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-brand";
 
 function Field({
   label,
@@ -359,12 +359,12 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-xs font-bold text-slate-500">
+      <span className="mb-1 block text-xs font-bold text-ink-muted">
         {label}
-        {required && <span className="text-rose-500"> *</span>}
+        {required && <span className="text-critical"> *</span>}
       </span>
       {children}
-      {hint && <span className="mt-1 block text-[11px] text-slate-400">{hint}</span>}
+      {hint && <span className="mt-1 block text-[11px] text-ink-faint">{hint}</span>}
     </label>
   );
 }

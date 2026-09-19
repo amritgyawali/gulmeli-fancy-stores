@@ -55,12 +55,12 @@ export function AdminSettings() {
     }
   };
   const textInput =
-    "min-h-12 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm";
+    "min-h-12 w-full rounded-md border border-line px-3 py-2 text-sm";
   return (
     <div className="max-w-4xl space-y-5">
       <header>
         <h1 className="text-2xl font-bold">Store appearance</h1>
-        <p className="text-slate-500">
+        <p className="text-ink-muted">
           Edit your brand, preview the colours and publish when ready.
         </p>
       </header>
@@ -149,7 +149,7 @@ export function AdminSettings() {
             </label>
           ))}
         </div>
-        <p className="mt-4 text-sm text-slate-500">
+        <p className="mt-4 text-sm text-ink-muted">
           Logos and browser favicon update live. Launcher icons and the native
           splash image are included in the next Android/iOS build.
         </p>
@@ -283,21 +283,21 @@ export function AdminSettings() {
         </div>
       </Panel>
       {error && (
-        <p role="alert" className="text-rose-700">
+        <p role="alert" className="text-critical">
           {error}
         </p>
       )}
       <button
         disabled={busy}
         onClick={() => void save()}
-        className="min-h-12 rounded-xl bg-slate-900 px-6 py-3 font-bold text-white disabled:opacity-50"
+        className="min-h-12 rounded-md bg-shell px-6 py-3 font-bold text-white disabled:opacity-50"
       >
         {busy ? "Saving?" : "Publish storefront"}
       </button>
-      <p role="status" className="text-sm text-slate-500">
+      <p role="status" className="text-sm text-ink-muted">
         {status || syncStatus}
       </p>
-      <p className="text-sm text-slate-500">
+      <p className="text-sm text-ink-muted">
         Use the app dashboard?s Homepage Builder to add, reorder and hide
         sections. Both storefronts read that published layout.
       </p>

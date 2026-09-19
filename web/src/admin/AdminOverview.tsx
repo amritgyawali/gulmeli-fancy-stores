@@ -37,8 +37,8 @@ export function AdminOverview() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="text-2xl font-black">Overview</h1>
-        <p className="text-sm text-slate-500">
+        <h1 className="text-2xl font-semibold">Overview</h1>
+        <p className="text-sm text-ink-muted">
           Live store data — the same documents the mobile dashboard reads and writes.
         </p>
       </header>
@@ -51,16 +51,16 @@ export function AdminOverview() {
       <div className="grid gap-6 lg:grid-cols-2">
         <Panel title="Recent orders">
           {stats.recent.length ? (
-            <ul className="divide-y divide-slate-100 text-sm">
+            <ul className="divide-y divide-line text-sm">
               {stats.recent.map((order) => (
                 <li key={order.id} className="flex items-center justify-between gap-3 py-2.5">
                   <div className="min-w-0">
                     <p className="truncate font-semibold">
                       {String(order.customerName ?? order.number ?? order.id)}
                     </p>
-                    <p className="text-xs text-slate-400">{shortDate(String(order.createdAt ?? order.placedAt))}</p>
+                    <p className="text-xs text-ink-faint">{shortDate(String(order.createdAt ?? order.placedAt))}</p>
                   </div>
-                  <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-bold capitalize text-slate-600">
+                  <span className="shrink-0 rounded-full bg-sunken px-2.5 py-0.5 text-[11px] font-bold capitalize text-ink-soft">
                     {String(order.status)}
                   </span>
                   <span className="w-20 shrink-0 text-right font-extrabold">
@@ -70,20 +70,20 @@ export function AdminOverview() {
               ))}
             </ul>
           ) : (
-            <p className="py-6 text-center text-sm text-slate-400">No orders yet.</p>
+            <p className="py-6 text-center text-sm text-ink-faint">No orders yet.</p>
           )}
         </Panel>
         <Panel title="Low stock">
           {stats.lowStockList.length ? (
-            <ul className="divide-y divide-slate-100 text-sm">
+            <ul className="divide-y divide-line text-sm">
               {stats.lowStockList.map((product) => (
                 <li key={product.id} className="flex items-center justify-between gap-3 py-2.5">
                   <span className="truncate font-medium">{String(product.name)}</span>
                   <span
                     className={`shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
                       Number(product.stock) === 0
-                        ? "bg-rose-100 text-rose-700"
-                        : "bg-amber-100 text-amber-700"
+                        ? "bg-critical-soft text-critical"
+                        : "bg-caution-soft text-caution"
                     }`}
                   >
                     {Number(product.stock)} left
@@ -92,8 +92,8 @@ export function AdminOverview() {
               ))}
             </ul>
           ) : (
-            <p className="py-6 text-center text-sm text-slate-400">
-              Every product has healthy stock. 🎉
+            <p className="py-6 text-center text-sm text-ink-faint">
+              Every product has healthy stock.
             </p>
           )}
         </Panel>
@@ -116,11 +116,11 @@ function Stat({
   return (
     <Link
       to={to}
-      className="rounded-2xl bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+      className="rounded-lg bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
     >
-      <p className="text-xs font-bold uppercase tracking-wide text-slate-400">{label}</p>
-      <p className="mt-2 text-2xl font-black">{value}</p>
-      {hint && <p className="mt-0.5 text-xs text-slate-400">{hint}</p>}
+      <p className="text-xs font-bold uppercase tracking-wide text-ink-faint">{label}</p>
+      <p className="mt-2 text-2xl font-semibold">{value}</p>
+      {hint && <p className="mt-0.5 text-xs text-ink-faint">{hint}</p>}
     </Link>
   );
 }

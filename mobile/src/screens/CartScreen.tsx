@@ -1,5 +1,5 @@
 import { View, TextInput, FlatList } from "@/components/store-ui";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { Keyboard, KeyboardAvoidingView, Platform } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import { Button, CheckBox, Row, T, Tap } from "@/components/ui";
@@ -87,39 +87,20 @@ function CartRow({ item }: { item: CartItem }) {
             label={`View ${p.name}`}
             onPress={() => openDestination("Product details", { id: p.id })}
           >
-            <T size={12} numberOfLines={2} style={{ lineHeight: 16 }}>
-              <T
-                size={9}
-                bold
-                color="#fff"
-                style={{ backgroundColor: colors.orange }}
-              >
-                {" "}
-                9.9{" "}
-              </T>{" "}
+            <T size={13} numberOfLines={2} style={{ lineHeight: 18 }}>
               {p.name}
             </T>
           </Tap>
           <T size={11} color="#9ca3af" style={{ marginTop: 2 }}>
             {p.brand ?? p.category}
           </T>
-          {p.stock < 10 ? (
-            <T size={11} color="#ef4444" style={{ marginTop: 2 }}>
-              {p.stock} item(s) left
+          {p.stock < 1 ? (
+            <T size={11} color={colors.critical} style={{ marginTop: 2 }}>
+              Out of stock
             </T>
-          ) : p.id === "horlicks" ? (
-            <T
-              size={10}
-              color={colors.orange}
-              style={{
-                marginTop: 2,
-                backgroundColor: "#fff0eb",
-                alignSelf: "flex-start",
-                paddingHorizontal: 4,
-                borderRadius: 4,
-              }}
-            >
-              Limited New Sale
+          ) : p.stock < 10 ? (
+            <T size={11} color={colors.caution} style={{ marginTop: 2 }}>
+              Only {p.stock} left
             </T>
           ) : null}
           <Row
@@ -180,8 +161,8 @@ function CartRow({ item }: { item: CartItem }) {
           >
             <Row style={{ gap: 4 }}>
               <FontIcon name="store" color="#9ca3af" size={12} />
-              <T size={11} color="#6b7280" style={{ flexShrink: 1 }}>
-                {p.store ?? "Buy More Save More"}
+              <T size={11} color={colors.muted} style={{ flexShrink: 1 }}>
+                {p.store ?? p.brand ?? p.category}
               </T>
               <FontIcon name="chevron-right" size={8} color="#9ca3af" />
             </Row>
@@ -197,22 +178,6 @@ export default function CartScreen() {
   const [expanded, setExpanded] = useState(false);
   const [voucher, setVoucher] = useState("");
   const list = useRef<FlatList>(null);
-  const [remaining, setRemaining] = useState(7 * 3600 + 44 * 60 + 6);
-  useEffect(() => {
-    const end = Date.now() + (7 * 3600 + 44 * 60 + 6) * 1000;
-    const timer = setInterval(
-      () => setRemaining(Math.max(0, Math.floor((end - Date.now()) / 1000))),
-      1000,
-    );
-    return () => clearInterval(timer);
-  }, []);
-  const time = [
-    Math.floor(remaining / 3600),
-    Math.floor(remaining / 60) % 60,
-    remaining % 60,
-  ]
-    .map((n) => `${n}`.padStart(2, "0"))
-    .join(":");
   const ids = state.cart.map((i) => i.productId);
   const all = ids.length > 0 && state.cart.every((i) => i.selected);
   const choiceIds = state.cart
@@ -280,128 +245,60 @@ export default function CartScreen() {
             <View
               style={{ backgroundColor: "#fff", borderRadius: 8, padding: 12 }}
             >
-              <Row
-                style={{
-                  gap: 8,
-                  paddingBottom: 10,
-                  borderBottomWidth: 1,
-                  borderColor: "#f3f4f6",
-                }}
-              >
-                <CheckBox
-                  checked={choiceSelected}
-                  disabled={!choiceIds.length}
-                  onPress={() => select(choiceIds, !choiceSelected)}
-                  label="Select Choice items"
-                />
-                <Tap
-                  label="Choice 1-3 Days Delivery"
-                  onPress={() => openDestination("Choice")}
+              {/*
+                Was: a yellow "CHOICE" chip next to "1-3 Days Delivery",
+                naming a delivery tier the store does not offer, shown above
+                the cart lines whether or not the cart had any. What the
+                checkbox actually does is select every line, so that is what
+                it says now, and it only appears when there is something to
+                select.
+              */}
+              {!!choiceIds.length && (
+                <Row
+                  style={{
+                    gap: 8,
+                    paddingBottom: 10,
+                    borderBottomWidth: 1,
+                    borderColor: colors.line,
+                  }}
                 >
-                  <Row style={{ gap: 6 }}>
-                    <T
-                      size={10}
-                      bold
-                      style={{
-                        backgroundColor: "#ffe500",
-                        paddingHorizontal: 6,
-                        paddingVertical: 2,
-                        borderRadius: 4,
-                        fontStyle: "italic",
-                      }}
-                    >
-                      CHOICE
-                    </T>
-                    <T size={14} bold>
-                      1-3 Days Delivery
-                    </T>
-                    <FontIcon name="chevron-right" size={10} color="#9ca3af" />
-                  </Row>
-                </Tap>
-              </Row>
-              <Row
-                style={{
-                  justifyContent: "space-between",
-                  paddingVertical: 12,
-                  borderBottomWidth: 1,
-                  borderColor: "#f3f4f6",
-                  gap: 6,
-                }}
-              >
-                <Row style={{ gap: 8 }}>
-                  {choiceProducts.slice(0, 3).map((p) => (
-                    <Tap
-                      key={p.id}
-                      label={`View ${p.name}`}
-                      onPress={() =>
-                        openDestination("Product details", { id: p.id })
-                      }
-                      style={{
-                        width: 48,
-                        height: 48,
-                        borderWidth: 1,
-                        borderColor: "#e5e7eb",
-                        borderRadius: 4,
-                        padding: 4,
-                      }}
-                    >
-                      <ProductVisual product={p} small />
-                    </Tap>
-                  ))}
-                  <Tap
-                    label="Add more Choice products"
-                    onPress={() => openDestination("Choice product selection")}
-                    style={{
-                      width: 48,
-                      height: 48,
-                      borderWidth: 1,
-                      borderColor: "#fde68a",
-                      borderRadius: 4,
-                      backgroundColor: "#fffbeb",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <FontIcon name="circle-plus" size={16} color="#fbbf24" />
-                  </Tap>
+                  <CheckBox
+                    checked={choiceSelected}
+                    onPress={() => select(choiceIds, !choiceSelected)}
+                    label="Select all items"
+                  />
+                  <T size={14} bold>
+                    Select all
+                  </T>
                 </Row>
-                <View style={{ flex: 1 }}>
-                  <T size={11} style={{ textAlign: "right" }}>
-                    Buy 3 for
-                  </T>
-                  <T bold style={{ textAlign: "right" }}>
-                    free shipping
-                  </T>
-                </View>
-              </Row>
-              <Row
-                style={{
-                  justifyContent: "space-between",
-                  paddingTop: 10,
-                  gap: 4,
-                }}
-              >
-                <T size={12} style={{ flexShrink: 1 }}>
-                  Add 4 more for <T bold>1 Free Gift</T>{" "}
-                  <T color="#9ca3af">| End in</T>{" "}
-                  <T color="#ef4444" bold>
-                    {time}
-                  </T>
-                </T>
-                <Tap
-                  label="Pick free gift items"
-                  onPress={() => openDestination("Choice product selection")}
-                >
-                  <T color={colors.orange}>Pick ›</T>
-                </Tap>
-              </Row>
+              )}
+              {/*
+                Removed from here: a strip of three product thumbnails with a
+                "+" tile captioned "Buy 3 for free shipping", and beneath it
+                "Add 4 more for 1 Free Gift | End in <countdown>" with a
+                "Pick" link. No bundle, gift or countdown of that kind exists
+                in the store; the free-shipping rule is the spend threshold in
+                the config. Worse, all of it rendered above "Your cart is
+                empty.", so an empty cart advertised progress toward a reward
+                nobody could collect.
+              */}
               {choiceLines.map((item) => (
                 <CartRow key={item.productId} item={item} />
               ))}
               {!state.cart.length && (
-                <T color="#6b7280" style={{ paddingVertical: 16 }}>
-                  Your cart is empty.
-                </T>
+                <View style={{ alignItems: "center", gap: 10, paddingVertical: 28 }}>
+                  <FontIcon name="cart-shopping" size={34} color={colors.faint} />
+                  <T bold size={16}>
+                    Your cart is empty
+                  </T>
+                  <T color={colors.muted} style={{ textAlign: "center" }}>
+                    Items you add appear here, on every device you sign in on.
+                  </T>
+                  <Button
+                    title="Browse products"
+                    onPress={() => openDestination("Search results", { query: "" })}
+                  />
+                </View>
               )}
             </View>
             {shown.length > 0 && (
@@ -576,20 +473,25 @@ export default function CartScreen() {
                 </Row>
               </View>
             )}
-            <Tap
-              label={expanded ? "View Less" : "View All"}
-              onPress={() => setExpanded((x) => !x)}
-              style={{ alignSelf: "center", paddingVertical: 4 }}
-            >
-              <Row style={{ gap: 4 }}>
-                <T color="#6b7280">{expanded ? "View Less" : "View All"}</T>
-                <FontIcon
-                  name={expanded ? "chevron-up" : "chevron-down"}
-                  size={10}
-                  color="#6b7280"
-                />
-              </Row>
-            </Tap>
+            {otherLines.length > 3 && (
+              <Tap
+                label={expanded ? "View less" : "View all"}
+                onPress={() => setExpanded((x) => !x)}
+                style={{ alignSelf: "center", paddingVertical: 4 }}
+              >
+                <Row style={{ gap: 4 }}>
+                  <T color={colors.muted}>
+                    {expanded ? "View less" : `View all ${otherLines.length}`}
+                  </T>
+                  <FontIcon
+                    name={expanded ? "chevron-up" : "chevron-down"}
+                    size={10}
+                    color={colors.muted}
+                  />
+                </Row>
+              </Tap>
+            )}
+            {!!state.cart.length && (
             <View
               style={{ backgroundColor: "#fff", borderRadius: 8, padding: 12 }}
             >
@@ -628,6 +530,7 @@ export default function CartScreen() {
                 }
               />
             </View>
+            )}
           </View>
         }
       />
@@ -653,51 +556,46 @@ export default function CartScreen() {
       >
         <FontIcon name="arrow-up" size={16} />
       </Tap>
-      <Row
-        style={{
-          paddingHorizontal: 12,
-          paddingVertical: 8,
-          backgroundColor: "#fff",
-          borderTopWidth: 1,
-          borderColor: "#e5e7eb",
-          gap: 10,
-        }}
-      >
-        <CheckBox
-          checked={all}
-          onPress={() => select(ids, !all)}
-          label="Select all cart items"
-          disabled={!ids.length}
-        />
-        <T size={14}>All</T>
-        <View style={{ flex: 1, alignItems: "flex-end" }}>
-          <T>
-            Subtotal:{" "}
-            <T size={14} bold color={colors.orange}>
-              Rs. {subtotal.toLocaleString("en-US")}
-            </T>
-          </T>
-          <T size={10} color="#9ca3af">
-            Shipping Fee:{" "}
-            <T size={10} color={colors.orange}>
-              Rs. 0
-            </T>
-          </T>
-        </View>
-        <Button
-          title={`Check Out(${count})`}
-          onPress={() =>
-            openDestination(
-              count ? "Checkout" : "Checkout — select an item first",
-            )
-          }
+      {/* The order bar only exists once there is an order. It used to sit
+          under an empty cart reading "Subtotal: Rs. 0" beside a
+          "Check Out(0)" button that led to a screen telling you to go back
+          and select an item. */}
+      {!!state.cart.length && (
+        <Row
           style={{
-            borderRadius: 2,
-            paddingHorizontal: 16,
-            paddingVertical: 10,
+            paddingHorizontal: 12,
+            paddingVertical: 8,
+            backgroundColor: "#fff",
+            borderTopWidth: 1,
+            borderColor: colors.line,
+            gap: 10,
           }}
-        />
-      </Row>
+        >
+          <CheckBox
+            checked={all}
+            onPress={() => select(ids, !all)}
+            label="Select all cart items"
+          />
+          <T size={14}>All</T>
+          <View style={{ flex: 1, alignItems: "flex-end" }}>
+            <T>
+              Subtotal:{" "}
+              <T size={15} bold color={colors.brand}>
+                Rs. {subtotal.toLocaleString("en-US")}
+              </T>
+            </T>
+            <T size={11} color={colors.muted}>
+              Delivery calculated at checkout
+            </T>
+          </View>
+          <Button
+            title={`Checkout (${count})`}
+            disabled={!count}
+            onPress={() => openDestination("Checkout")}
+            style={{ paddingHorizontal: 16, paddingVertical: 10 }}
+          />
+        </Row>
+      )}
     </KeyboardAvoidingView>
   );
 }

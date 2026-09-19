@@ -61,7 +61,7 @@ export function CatalogConsole() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Filter SKU / product / category"
           aria-label="Filter catalog"
-          className="w-64 rounded border border-outline-variant bg-white px-3 py-1.5 text-xs outline-none focus:border-[#f85606]"
+          className="w-64 rounded border border-line bg-white px-3 py-1.5 text-xs outline-none focus:border-brand"
         />
       </OpsPageHead>
 
@@ -72,9 +72,9 @@ export function CatalogConsole() {
           ["Low stock (<10)", `${rows.filter((r) => r.stock > 0 && r.stock < 10).length}`],
           ["Avg run-rate", "12.4 / day"],
         ].map(([label, value]) => (
-          <div key={label} className="rounded-xl border border-outline-variant bg-white p-3 text-center shadow-sm">
-            <p className="text-lg font-black text-on-surface">{value}</p>
-            <p className="text-[10px] font-bold uppercase tracking-wide text-on-surface-variant">{label}</p>
+          <div key={label} className="rounded-md border border-line bg-white p-3 text-center shadow-sm">
+            <p className="text-lg font-semibold text-ink">{value}</p>
+            <p className="text-[10px] font-bold uppercase tracking-wide text-ink-muted">{label}</p>
           </div>
         ))}
       </div>
@@ -83,37 +83,37 @@ export function CatalogConsole() {
         {filtered.map((r) => {
           const pct = r.stock > 0 ? Math.min(100, r.stock) : 0;
           return (
-            <tr key={`${r.sku}-${r.product}`} className="hover:bg-orange-50/30">
-              <td className="px-4 py-3 font-mono text-[10px] text-on-surface-variant">{r.sku}</td>
+            <tr key={`${r.sku}-${r.product}`} className="hover:bg-brand-soft/30">
+              <td className="px-4 py-3 font-mono text-[10px] text-ink-muted">{r.sku}</td>
               <td className="px-4 py-3">
-                <p className="line-clamp-1 max-w-[260px] font-bold text-on-surface">{r.product}</p>
-                <p className="text-[10px] text-on-surface-variant">{r.merchant}{!r.live && " · sample"}</p>
+                <p className="line-clamp-1 max-w-[260px] font-bold text-ink">{r.product}</p>
+                <p className="text-[10px] text-ink-muted">{r.merchant}{!r.live && " · sample"}</p>
               </td>
-              <td className="px-4 py-3 text-on-surface-variant">
+              <td className="px-4 py-3 text-ink-muted">
                 {r.category}
                 <span className="block text-[10px]">{r.irdTax}</span>
               </td>
               <td className="px-4 py-3">
-                <span className="font-black text-[#d04402]">{rs(r.price)}</span>
+                <span className="font-semibold text-brand-strong">{rs(r.price)}</span>
                 {r.strike > 0 && (
-                  <span className="ml-1 text-[10px] text-gray-400 line-through">{rs(r.strike)}</span>
+                  <span className="ml-1 text-[10px] text-ink-faint line-through">{rs(r.strike)}</span>
                 )}
               </td>
               <td className="w-44 px-4 py-3">
-                <div className="flex items-center justify-between text-[10px] text-on-surface-variant">
+                <div className="flex items-center justify-between text-[10px] text-ink-muted">
                   <span>{r.stock} on hand</span>
                   {r.reserved > 0 && <span>+{r.reserved} reserved</span>}
                 </div>
                 <div className="mt-1"><BurnBar pct={pct} /></div>
               </td>
-              <td className="px-4 py-3 text-on-surface-variant">{r.runRate ? `${r.runRate}/day` : "—"}</td>
+              <td className="px-4 py-3 text-ink-muted">{r.runRate ? `${r.runRate}/day` : "—"}</td>
               <td className="px-4 py-3">
                 <StatusPill tone={r.status === "Active" ? "live" : r.status === "Review" ? "warn" : "muted"}>
                   {r.live ? "Live" : r.status}
                 </StatusPill>
               </td>
               <td className="px-4 py-3">
-                <Link to="/admin/products" className="text-[11px] font-bold text-[#0f828a] hover:underline">
+                <Link to="/admin/products" className="text-[11px] font-bold text-info hover:underline">
                   Manage
                 </Link>
               </td>

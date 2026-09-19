@@ -6,6 +6,7 @@ import * as ImagePicker from "expo-image-picker";
 import { Button, Row, T, Tap } from "@/components/ui";
 import CameraCapture from "@/components/CameraCapture";
 import { ProductVisual } from "@/components/ProductVisual";
+import { FontIcon } from "@/components/FontIcon";
 import { sendSupportMessage, useSupportTickets } from "@/services/support";
 import { useOrderQuote } from "@/services/order-quote";
 import { ProductCard } from "@/components/ProductCard";
@@ -16,6 +17,7 @@ import { uploadAvatar } from "@/services/cloudinary";
 import { paymentsAvailable } from "@/services/payments";
 import { usePrefs } from "@/store/prefs";
 import { currentBrand } from "@/utils/branding";
+import { colors } from "@/theme/tokens";
 import type { Product } from "@/types/shop";
 
 // The Stripe SDK only enters the bundle on native builds that are configured.
@@ -927,7 +929,18 @@ function FeatureContent({
           <T size={19} bold>
             Gulmeli Fancy Stores Candy: count the candies
           </T>
-          <T size={26}>{"🍬".repeat((game % 5) + 1)}</T>
+          {/* Rendered as icons rather than a repeated emoji character: the
+              candy emoji drew at a different size on each platform and was
+              announced one-by-one by screen readers. */}
+          <View
+            accessible
+            accessibilityLabel={`${(game % 5) + 1} gifts to count`}
+            style={{ flexDirection: "row", gap: 10 }}
+          >
+            {Array.from({ length: (game % 5) + 1 }).map((_, i) => (
+              <FontIcon key={i} name="gift" size={26} color={colors.brand} />
+            ))}
+          </View>
           <Row style={{ gap: 12 }}>
             {[1, 2, 3, 4, 5].map((n) => (
               <Tap
@@ -937,7 +950,7 @@ function FeatureContent({
                 selected={answer === n}
                 onPress={() => setAnswer(n)}
               >
-                <T size={22} color={answer === n ? "#f85606" : "#374151"}>
+                <T size={22} color={answer === n ? colors.brand : colors.soft}>
                   {n}
                 </T>
               </Tap>

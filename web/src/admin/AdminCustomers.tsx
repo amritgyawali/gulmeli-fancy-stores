@@ -43,8 +43,8 @@ export function AdminCustomers() {
   return (
     <div className="space-y-4">
       <header>
-        <h1 className="text-2xl font-black">Customers</h1>
-        <p className="text-sm text-slate-500">
+        <h1 className="text-2xl font-semibold">Customers</h1>
+        <p className="text-sm text-ink-muted">
           Derived from order history — contact details only appear once a customer
           has checked out. Private carts and wishlists stay on each account (RLS).
         </p>
@@ -53,11 +53,11 @@ export function AdminCustomers() {
         value={search}
         onChange={(event) => setSearch(event.target.value)}
         placeholder="Search name or phone"
-        className="w-full max-w-sm rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-[#f85606]"
+        className="w-full max-w-sm rounded-lg border border-line bg-white px-3 py-2 text-sm outline-none focus:border-brand"
       />
-      <div className="overflow-x-auto rounded-2xl bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-lg bg-white shadow-sm">
         <table className="w-full min-w-[640px] text-sm">
-          <thead className="border-b border-slate-100 text-left text-xs uppercase tracking-wide text-slate-400">
+          <thead className="border-b border-line text-left text-xs uppercase tracking-wide text-ink-faint">
             <tr>
               <th className="px-4 py-3">Customer</th>
               <th className="px-4 py-3">Phone</th>
@@ -69,18 +69,18 @@ export function AdminCustomers() {
           </thead>
           <tbody className="divide-y divide-slate-50">
             {filtered.map((customer) => (
-              <tr key={`${customer.name}|${customer.phone}`} className="hover:bg-orange-50/40">
+              <tr key={`${customer.name}|${customer.phone}`} className="hover:bg-brand-soft/40">
                 <td className="px-4 py-3 font-semibold">{customer.name}</td>
-                <td className="px-4 py-3 text-slate-500">{customer.phone || "—"}</td>
-                <td className="max-w-64 truncate px-4 py-3 text-slate-500">{customer.address || "—"}</td>
+                <td className="px-4 py-3 text-ink-muted">{customer.phone || "—"}</td>
+                <td className="max-w-64 truncate px-4 py-3 text-ink-muted">{customer.address || "—"}</td>
                 <td className="px-4 py-3">{customer.orders}</td>
                 <td className="px-4 py-3 font-bold">{rs(customer.spent)}</td>
-                <td className="px-4 py-3 text-slate-500">{shortDate(customer.last)}</td>
+                <td className="px-4 py-3 text-ink-muted">{shortDate(customer.last)}</td>
               </tr>
             ))}
             {!filtered.length && (
               <tr>
-                <td colSpan={6} className="px-4 py-14 text-center text-sm text-slate-400">
+                <td colSpan={6} className="px-4 py-14 text-center text-sm text-ink-faint">
                   No customers with orders yet.
                 </td>
               </tr>

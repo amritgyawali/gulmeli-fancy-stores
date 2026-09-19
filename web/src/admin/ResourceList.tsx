@@ -61,8 +61,8 @@ export function ResourceList() {
     <div className="space-y-4">
       <header className="flex flex-wrap items-center gap-3">
         <div className="mr-auto">
-          <h1 className="text-2xl font-black">{meta.label}</h1>
-          <p className="text-sm text-slate-500">
+          <h1 className="text-2xl font-semibold">{meta.label}</h1>
+          <p className="text-sm text-ink-muted">
             {collection === "media"
               ? "Files live in Cloudinary; this library syncs with the mobile dashboard."
               : `Shared with the mobile dashboard in real time via Supabase.`}
@@ -74,7 +74,7 @@ export function ResourceList() {
             onChange={(e) => {
               window.location.hash = `#/admin/r/${e.target.value}`;
             }}
-            className="rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm font-bold outline-none"
+            className="rounded-lg border border-line bg-white px-3 py-2.5 text-sm font-bold outline-none"
             aria-label="Switch collection"
           >
             {knownKeys.map((k) => (
@@ -86,15 +86,15 @@ export function ResourceList() {
         )}
         <button
           onClick={() => setCreating(true)}
-          className="flex items-center gap-1.5 rounded-lg bg-[#f85606] px-4 py-2.5 text-sm font-bold text-white"
+          className="flex items-center gap-1.5 rounded-lg bg-brand px-4 py-2.5 text-sm font-bold text-white"
         >
           <Icon name="plus" size={14} /> New {meta.label.toLowerCase().replace(/s$/, "")}
         </button>
       </header>
 
-      <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-white p-3 shadow-sm">
+      <div className="flex flex-wrap items-center gap-3 rounded-lg bg-white p-3 shadow-sm">
         <div className="flex min-w-52 flex-1 items-center gap-2 rounded-lg border border-slate-200 px-3">
-          <Icon name="search" size={14} className="text-slate-400" />
+          <Icon name="search" size={14} className="text-ink-faint" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -102,7 +102,7 @@ export function ResourceList() {
             className="min-w-0 flex-1 bg-transparent py-2 text-sm outline-none"
           />
         </div>
-        <label className="flex items-center gap-2 text-sm font-semibold text-slate-500">
+        <label className="flex items-center gap-2 text-sm font-semibold text-ink-muted">
           Sort
           <select
             value={`${sort.field}:${sort.dir}`}
@@ -119,12 +119,12 @@ export function ResourceList() {
             ))}
           </select>
         </label>
-        <span className="text-sm text-slate-400">{filtered.length} record(s)</span>
+        <span className="text-sm text-ink-faint">{filtered.length} record(s)</span>
       </div>
 
-      <div className="overflow-x-auto rounded-2xl bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-lg bg-white shadow-sm">
         <table className="w-full min-w-[640px] text-sm">
-          <thead className="border-b border-slate-100 text-left text-xs uppercase tracking-wide text-slate-400">
+          <thead className="border-b border-line text-left text-xs uppercase tracking-wide text-ink-faint">
             <tr>
               {columns.map((c) => (
                 <th key={c} className="px-4 py-3">{c}</th>
@@ -134,19 +134,19 @@ export function ResourceList() {
           </thead>
           <tbody className="divide-y divide-slate-50">
             {filtered.map((record) => (
-              <tr key={record.id} className="hover:bg-orange-50/40">
+              <tr key={record.id} className="hover:bg-brand-soft/40">
                 {columns.map((c) => (
                   <td key={c} className="max-w-72 truncate px-4 py-3">
                     {c === String(meta.labelField) ? (
                       <span className="font-semibold">{String(record[c] ?? "—")}</span>
                     ) : typeof record[c] === "boolean" ? (
                       <span
-                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${record[c] ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"}`}
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${record[c] ? "bg-positive-soft text-positive" : "bg-sunken text-ink-muted"}`}
                       >
                         {record[c] ? "yes" : "no"}
                       </span>
                     ) : typeof record[c] === "object" && record[c] != null ? (
-                      <span className="text-xs text-slate-400">
+                      <span className="text-xs text-ink-faint">
                         {Array.isArray(record[c])
                           ? `${(record[c] as unknown[]).length} item(s)`
                           : "…"}
@@ -161,7 +161,7 @@ export function ResourceList() {
                     <button
                       aria-label={`Edit ${String(record[meta.labelField] ?? record.id)}`}
                       onClick={() => setEditing(record)}
-                      className="rounded p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                      className="rounded p-2 text-ink-faint hover:bg-sunken hover:text-ink"
                     >
                       <Icon name="edit" size={15} />
                     </button>
@@ -171,7 +171,7 @@ export function ResourceList() {
                         if (window.confirm("Move this record to trash?"))
                           remove(collection, record.id);
                       }}
-                      className="rounded p-2 text-slate-400 hover:bg-rose-50 hover:text-rose-600"
+                      className="rounded p-2 text-ink-faint hover:bg-critical-soft hover:text-critical"
                     >
                       <Icon name="trash" size={15} />
                     </button>
@@ -181,7 +181,7 @@ export function ResourceList() {
             ))}
             {!filtered.length && (
               <tr>
-                <td colSpan={columns.length + 1} className="px-4 py-14 text-center text-sm text-slate-400">
+                <td colSpan={columns.length + 1} className="px-4 py-14 text-center text-sm text-ink-faint">
                   {records.length
                     ? "No records match your search."
                     : `Nothing here yet. Create a record or add it from the mobile dashboard.`}
@@ -192,7 +192,7 @@ export function ResourceList() {
         </table>
       </div>
       {error && (
-        <p className="rounded-lg bg-rose-50 p-3 text-sm font-semibold text-rose-700">{error}</p>
+        <p className="rounded-lg bg-critical-soft p-3 text-sm font-semibold text-critical">{error}</p>
       )}
       {(editing || creating) && (
         <RecordEditor
@@ -218,7 +218,7 @@ export function ResourceList() {
       )}
       <Link
         to="/admin"
-        className="inline-block text-xs font-bold text-slate-400 hover:text-[#f85606]"
+        className="inline-block text-xs font-bold text-ink-faint hover:text-brand"
       >
         ← Overview
       </Link>
@@ -271,10 +271,10 @@ function RecordEditor({
         className="h-full w-full max-w-xl overflow-y-auto bg-white p-6 shadow-2xl"
       >
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-lg font-black">
+          <h2 className="text-lg font-semibold">
             {record ? `Edit ${meta.label.toLowerCase()}` : `New ${meta.label.toLowerCase()}`}
           </h2>
-          <button type="button" onClick={onClose} aria-label="Close" className="rounded p-2 hover:bg-slate-100">
+          <button type="button" onClick={onClose} aria-label="Close" className="rounded p-2 hover:bg-sunken">
             <Icon name="close" size={18} />
           </button>
         </div>
@@ -284,7 +284,7 @@ function RecordEditor({
               const text = JSON.stringify(value, null, 2);
               return (
                 <label key={key} className="block">
-                  <span className="mb-1 block text-xs font-bold text-slate-500">{key} (JSON)</span>
+                  <span className="mb-1 block text-xs font-bold text-ink-muted">{key} (JSON)</span>
                   <textarea
                     rows={Math.min(10, text.split("\n").length + 1)}
                     value={text}
@@ -295,7 +295,7 @@ function RecordEditor({
                         /* keep last valid value while typing */
                       }
                     }}
-                    className="w-full resize-y rounded-lg border border-slate-300 px-3 py-2 font-mono text-xs outline-none focus:border-[#f85606]"
+                    className="w-full resize-y rounded-lg border border-line px-3 py-2 font-mono text-xs outline-none focus:border-brand"
                   />
                 </label>
               );
@@ -303,22 +303,22 @@ function RecordEditor({
             if (typeof value === "boolean")
               return (
                 <label key={key} className="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2.5">
-                  <span className="text-sm font-semibold text-slate-600">{key}</span>
+                  <span className="text-sm font-semibold text-ink-soft">{key}</span>
                   <input
                     type="checkbox"
                     checked={value}
                     onChange={(e) => set(key, e.target.checked)}
-                    className="h-4 w-4 accent-[#f85606]"
+                    className="h-4 w-4 accent-[var(--color-brand)]"
                   />
                 </label>
               );
             const numeric = typeof value === "number";
             return (
               <label key={key} className="block">
-                <span className="mb-1 block text-xs font-bold text-slate-500">
+                <span className="mb-1 block text-xs font-bold text-ink-muted">
                   {key}
                   {key === String(meta.labelField) && (
-                    <span className="text-rose-500"> *</span>
+                    <span className="text-critical"> *</span>
                   )}
                 </span>
                 {textFields.has(key) ? (
@@ -326,7 +326,7 @@ function RecordEditor({
                     rows={3}
                     value={String(value ?? "")}
                     onChange={(e) => set(key, e.target.value)}
-                    className="w-full resize-y rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#f85606]"
+                    className="w-full resize-y rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-brand"
                   />
                 ) : (
                   <input
@@ -336,7 +336,7 @@ function RecordEditor({
                     onChange={(e) =>
                       set(key, numeric ? Number(e.target.value) : e.target.value)
                     }
-                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#f85606]"
+                    className="w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-brand"
                   />
                 )}
               </label>
@@ -344,10 +344,10 @@ function RecordEditor({
           })}
         </div>
         <div className="mt-6 flex gap-3">
-          <button type="submit" className="flex-1 rounded-xl bg-[#f85606] py-3 text-sm font-bold text-white">
+          <button type="submit" className="flex-1 rounded-md bg-brand py-3 text-sm font-bold text-white">
             {record ? "Save changes" : "Create"}
           </button>
-          <button type="button" onClick={onClose} className="rounded-xl border border-slate-300 px-5 text-sm font-bold text-slate-600">
+          <button type="button" onClick={onClose} className="rounded-md border border-line px-5 text-sm font-bold text-ink-soft">
             Cancel
           </button>
         </div>

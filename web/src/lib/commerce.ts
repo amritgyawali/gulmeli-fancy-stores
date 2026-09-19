@@ -27,9 +27,25 @@ export function profileError(profile: Profile) {
   return "";
 }
 
+/*
+ * The one voucher the store honours. It used to be three separate facts: the
+ * rule here, a sentence on the offers page and a different sentence on the
+ * sign-in page, and the two sentences did not agree on the minimum spend.
+ * Pages now describe the rule from this object, so they cannot drift from it.
+ */
+export const VOUCHER = {
+  code: "GULMELI10",
+  percent: 10,
+  minSpend: 500,
+  maxDiscount: 100,
+} as const;
+
+export const voucherTerms = () =>
+  `${VOUCHER.code} — ${VOUCHER.percent}% off orders over Rs.${VOUCHER.minSpend.toLocaleString("en-US")}, up to Rs.${VOUCHER.maxDiscount.toLocaleString("en-US")}.`;
+
 export function voucherDiscount(code: string, subtotal: number) {
-  return code.trim().toUpperCase() === "GULMELI10" && subtotal >= 500
-    ? Math.min(100, Math.round(subtotal * 0.1))
+  return code.trim().toUpperCase() === VOUCHER.code && subtotal >= VOUCHER.minSpend
+    ? Math.min(VOUCHER.maxDiscount, Math.round(subtotal * (VOUCHER.percent / 100)))
     : 0;
 }
 

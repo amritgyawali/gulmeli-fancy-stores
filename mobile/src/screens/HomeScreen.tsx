@@ -7,7 +7,6 @@ import { TextInput, ScrollView } from "@/components/store-ui";
 import { BrandIdentity } from "@/components/BrandIdentity";
 import { FontIcon } from "@/components/FontIcon";
 import { ProductCard } from "@/components/ProductCard";
-import { ProductVisual } from "@/components/ProductVisual";
 import { useCatalog, useShop } from "@/store/ShopProvider";
 import { useStorefront, useStorefrontTheme } from "@/store/StorefrontProvider";
 import {
@@ -23,7 +22,41 @@ import {
   type ContentRecord,
 } from "@/admin/core/storefront-content";
 import { hexColor, readableColor } from "@/admin/core/appearance";
+import { TOUCH_SIZE } from "@/theme/tokens";
 import type { Product } from "@/types/shop";
+
+/*
+ * Pick a category icon from the category name rather than its position in the
+ * list. The previous version indexed a five-icon array by array position, so
+ * "Groceries" was a shirt on one screen and a gem on the next as soon as the
+ * sort order changed, and the sixth category onwards repeated the first five.
+ */
+/* One shape for every header action, so the wishlist, bag and account
+   controls line up instead of one carrying a border the others lack. */
+const headerAction = {
+  width: TOUCH_SIZE,
+  height: TOUCH_SIZE,
+  alignItems: "center",
+  justifyContent: "center",
+} as const;
+
+const CATEGORY_ICONS: [RegExp, string][] = [
+  [/cloth|fashion|wear|shirt|dress|apparel/i, "shirt"],
+  [/shoe|footwear|sandal|sneaker/i, "shoe-prints"],
+  [/watch|jewel|gem|ring|ornament/i, "gem"],
+  [/phone|mobile|electronic|laptop|computer|gadget/i, "mobile-screen"],
+  [/audio|headphone|speaker|music/i, "headphones"],
+  [/home|furniture|kitchen|decor|lifestyle/i, "house"],
+  [/beauty|cosmetic|care|health/i, "spray-can-sparkles"],
+  [/grocer|food|snack|drink|pantry/i, "basket-shopping"],
+  [/baby|toy|kid|child/i, "baby-carriage"],
+  [/sport|outdoor|fitness|gym/i, "dumbbell"],
+  [/book|stationery|paper/i, "book"],
+  [/auto|bike|motor|car/i, "car"],
+];
+function categoryIcon(name: string) {
+  return CATEGORY_ICONS.find(([pattern]) => pattern.test(name))?.[1] ?? "tag";
+}
 
 export default function HomeScreen({
   previewWidth,
@@ -236,15 +269,6 @@ export default function HomeScreen({
         >
           <T
             preserveColor
-            size={11}
-            bold
-            color={theme.onPrimary}
-            style={{ letterSpacing: 2 }}
-          >
-            CURATED FOR EVERY DAY
-          </T>
-          <T
-            preserveColor
             accessibilityRole="header"
             size={29}
             bold
@@ -269,23 +293,6 @@ export default function HomeScreen({
             textStyle={{ color: theme.text }}
             style={{ alignSelf: "flex-start" }}
           />
-          {!!products[0] && (
-            <View
-              style={{
-                position: "absolute",
-                right: -30,
-                bottom: -32,
-                width: 125,
-                height: 125,
-                borderRadius: 64,
-                overflow: "hidden",
-                opacity: 0.16,
-              }}
-              pointerEvents="none"
-            >
-              <ProductVisual product={products[0]} />
-            </View>
-          )}
         </View>
       );
     } else if (type === "categories") {
@@ -301,7 +308,7 @@ export default function HomeScreen({
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ gap: 10 }}
         >
-          {entries.map((c, i) => (
+          {entries.map((c) => (
             <Tap
               key={c.id}
               label={String(c.name)}
@@ -319,18 +326,19 @@ export default function HomeScreen({
               }}
             >
               {c.image ? (
+                // Category images are wide product photos, not square icons.
+                // Fitting them inside a 36pt box letterboxed every one of them
+                // down to a strip a few pixels tall; cropping to a circle
+                // fills the tile the way the web storefront does.
                 <Image
                   source={{ uri: String(c.image) }}
-                  contentFit="contain"
-                  style={{ width: 36, height: 36 }}
+                  contentFit="cover"
+                  accessibilityLabel=""
+                  style={{ width: 48, height: 48, borderRadius: 24 }}
                 />
               ) : (
                 <FontIcon
-                  name={
-                    ["shirt", "bag-shopping", "gem", "house", "headphones"][
-                      i % 5
-                    ]
-                  }
+                  name={categoryIcon(String(c.name))}
                   size={26}
                   color={theme.primaryText}
                 />
@@ -546,8 +554,7 @@ export default function HomeScreen({
         <View
           style={{
             padding: theme.spacing,
-            paddingTop: 20,
-            gap: 20,
+            gap: 14,
             backgroundColor: theme.headerBackground,
           }}
         >
@@ -561,15 +568,7 @@ export default function HomeScreen({
               <Tap
                 label="Wishlist"
                 onPress={() => openDestination("Wishlist")}
-                style={{
-                  width: 48,
-                  height: 48,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderWidth: 1,
-                  borderColor: theme.border,
-                  borderRadius: 16,
-                }}
+                style={headerAction}
               >
                 <FontIcon name="heart" size={20} color={theme.headerText} />
               </Tap>
@@ -578,12 +577,7 @@ export default function HomeScreen({
               <Tap
                 label="Shopping cart"
                 onPress={() => router.push("/cart")}
-                style={{
-                  width: 48,
-                  height: 48,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
+                style={headerAction}
               >
                 <FontIcon
                   name="bag-shopping"
@@ -596,14 +590,9 @@ export default function HomeScreen({
               <Tap
                 label="Your account"
                 onPress={() => router.push("/account")}
-                style={{
-                  width: 48,
-                  height: 48,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
+                style={headerAction}
               >
-                <FontIcon name="user" size={18} color={theme.headerText} />
+                <FontIcon name="user" size={20} color={theme.headerText} />
               </Tap>
             )}
           </Row>

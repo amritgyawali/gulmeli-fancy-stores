@@ -30,24 +30,22 @@ function Shell() {
   const { isAdmin, ready, denied, syncStatus, signOut, snapshot } = useAdmin();
   if (!ready && isAdmin !== false)
     return (
-      <div className="grid min-h-screen place-items-center bg-slate-950 text-slate-400">
+      <div className="grid min-h-screen place-items-center bg-slate-950 text-ink-faint">
         Checking your admin access…
       </div>
     );
   if (!isAdmin)
     return (
       <div className="mx-auto grid min-h-screen max-w-md place-items-center px-4">
-        <div className="w-full rounded-2xl bg-white p-8 text-center shadow-lg">
-          <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-orange-50 text-2xl">
-            🔐
-          </span>
-          <h1 className="mt-4 text-lg font-bold">Admin access required</h1>
-          <p className="mt-1 text-sm text-slate-500">{denied || "Please sign in."}</p>
+        <div className="w-full rounded-md border border-line bg-raised p-8 text-center">
+          <Icon name="lock" size={32} strokeWidth={1.4} className="mx-auto text-ink-faint" />
+          <h1 className="mt-4 text-lg font-semibold text-ink">Admin access required</h1>
+          <p className="mt-1 text-sm text-ink-muted">{denied || "Please sign in."}</p>
           <div className="mt-5 flex justify-center gap-3">
-            <Link to="/auth" className="rounded-lg bg-[#f85606] px-5 py-2.5 text-sm font-bold text-white">
+            <Link to="/auth" className="rounded-lg bg-brand px-5 py-2.5 text-sm font-bold text-white">
               Sign in
             </Link>
-            <Link to="/" className="rounded-lg border border-slate-300 px-5 py-2.5 text-sm font-bold text-slate-600">
+            <Link to="/" className="rounded-lg border border-line px-5 py-2.5 text-sm font-bold text-ink-soft">
               Back to store
             </Link>
           </div>
@@ -78,20 +76,20 @@ function Shell() {
   ];
 
   return (
-    <div className="flex min-h-screen bg-slate-100">
+    <div className="flex min-h-screen bg-sunken">
       <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col bg-slate-950 p-4 text-slate-300">
         <Link to="/" className="mb-5 flex items-center gap-2 px-2 text-white">
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#f85606]">🛍️</span>
+          <span className="grid h-8 w-8 place-items-center rounded-md bg-brand text-white"><Icon name="store" size={17} /></span>
           <span>
-            <span className="block text-sm font-black leading-tight">Gulmeli</span>
-            <span className="block text-[10px] text-slate-400">Store control</span>
+            <span className="block text-sm font-semibold leading-tight">Gulmeli</span>
+            <span className="block text-[10px] text-ink-faint">Store control</span>
           </span>
         </Link>
         <nav className="min-h-0 flex-1 space-y-1 overflow-y-auto pr-1">
           {PRIMARY.map((link) => (
             <SideLink key={link.to} {...link} end={link.end} />
           ))}
-          <p className="!mt-4 px-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+          <p className="!mt-4 px-2 text-[10px] font-semibold uppercase tracking-widest text-ink-muted">
             All data
           </p>
           <details className="group">
@@ -113,7 +111,7 @@ function Shell() {
               ))}
             </div>
           </details>
-          <p className="!mt-4 px-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+          <p className="!mt-4 px-2 text-[10px] font-semibold uppercase tracking-widest text-ink-muted">
             More
           </p>
           {SECONDARY.map((link) => (
@@ -121,10 +119,10 @@ function Shell() {
           ))}
         </nav>
         <div className="mt-3 space-y-3 px-1 text-xs">
-          <p className="text-slate-500">{syncStatus}</p>
+          <p className="text-ink-muted">{syncStatus}</p>
           <button
             onClick={() => void signOut().then(() => (window.location.hash = "#/"))}
-            className="flex items-center gap-2 font-semibold text-slate-400 hover:text-white"
+            className="flex items-center gap-2 font-semibold text-ink-faint hover:text-white"
           >
             <Icon name="logout" size={14} /> Sign out
           </button>
@@ -159,7 +157,7 @@ function SideLink({
           small ? "px-3 py-1.5 text-[13px]" : "px-3 py-2 text-sm"
         } ${
           isActive
-            ? "bg-[#f85606] text-white"
+            ? "bg-brand text-white"
             : "text-slate-300 hover:bg-white/10 hover:text-white"
         }`
       }
@@ -180,7 +178,7 @@ export function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-2xl bg-white p-5 shadow-sm">
+    <section className="rounded-lg bg-white p-5 shadow-sm">
       <div className="mb-4 flex items-center justify-between gap-3">
         <h2 className="font-bold">{title}</h2>
         {action}

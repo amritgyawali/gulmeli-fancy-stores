@@ -77,17 +77,17 @@ export function AdminAnalytics() {
     <div className="space-y-5">
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-black">Analytics</h1>
-          <p className="text-sm text-slate-500">
+          <h1 className="text-2xl font-semibold">Analytics</h1>
+          <p className="text-sm text-ink-muted">
             Computed live from orders shared with the mobile dashboard.
           </p>
         </div>
-        <div className="flex gap-1 rounded-xl bg-white p-1 shadow-sm">
+        <div className="flex gap-1 rounded-md bg-white p-1 shadow-sm">
           {[30, 90, 365].map((r) => (
             <button
               key={r}
               onClick={() => setRange(r)}
-              className={`rounded-lg px-4 py-1.5 text-sm font-bold ${range === r ? "bg-[#f85606] text-white" : "text-slate-500 hover:bg-slate-50"}`}
+              className={`rounded-lg px-4 py-1.5 text-sm font-bold ${range === r ? "bg-brand text-white" : "text-ink-muted hover:bg-sunken"}`}
             >
               {r === 365 ? "1 year" : `${r / 30} months`}
             </button>
@@ -96,10 +96,10 @@ export function AdminAnalytics() {
       </header>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <Stat label="Revenue" value={rs(data.revenue)} tone="text-emerald-600" />
+        <Stat label="Revenue" value={rs(data.revenue)} tone="text-positive" />
         <Stat label="Orders" value={String(data.orders)} />
         <Stat label="Average order" value={rs(Math.round(data.aov))} />
-        <Stat label="Low-stock products" value={String(data.low.length)} tone="text-rose-600" />
+        <Stat label="Low-stock products" value={String(data.low.length)} tone="text-critical" />
       </div>
 
       <Panel title="Revenue over time">
@@ -113,7 +113,7 @@ export function AdminAnalytics() {
             />
           ))}
         </div>
-        <p className="mt-2 text-xs text-slate-400">Last {Math.min(range, 30)} days</p>
+        <p className="mt-2 text-xs text-ink-faint">Last {Math.min(range, 30)} days</p>
       </Panel>
 
       <div className="grid gap-5 lg:grid-cols-2">
@@ -138,14 +138,14 @@ export function AdminAnalytics() {
                       className="h-3 w-3 rounded-full"
                       style={{ background: STATUS_COLORS[name] ?? "#64748b" }}
                     />
-                    <span className="flex-1 font-semibold capitalize text-slate-600">{name}</span>
-                    <span className="text-slate-400">{count}</span>
+                    <span className="flex-1 font-semibold capitalize text-ink-soft">{name}</span>
+                    <span className="text-ink-faint">{count}</span>
                   </li>
                 ))}
               </ul>
             </>
           ) : (
-            <p className="py-10 text-center text-sm text-slate-400">No orders yet.</p>
+            <p className="py-10 text-center text-sm text-ink-faint">No orders yet.</p>
           )}
         </Panel>
         <Panel title="Top products by revenue">
@@ -154,12 +154,12 @@ export function AdminAnalytics() {
               {data.top.map(([name, value]) => (
                 <li key={name}>
                   <div className="flex justify-between text-sm">
-                    <span className="truncate font-semibold text-slate-700">{name}</span>
-                    <span className="shrink-0 pl-3 font-black">{rs(value)}</span>
+                    <span className="truncate font-semibold text-ink">{name}</span>
+                    <span className="shrink-0 pl-3 font-semibold">{rs(value)}</span>
                   </div>
-                  <div className="mt-1 h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div className="mt-1 h-2 overflow-hidden rounded-full bg-sunken">
                     <div
-                      className="h-full rounded-full bg-[#f85606]"
+                      className="h-full rounded-full bg-brand"
                       style={{ width: `${(value / (data.top[0][1] || 1)) * 100}%` }}
                     />
                   </div>
@@ -167,7 +167,7 @@ export function AdminAnalytics() {
               ))}
             </ul>
           ) : (
-            <p className="py-10 text-center text-sm text-slate-400">
+            <p className="py-10 text-center text-sm text-ink-faint">
               Nothing sold in this window yet.
             </p>
           )}
@@ -177,7 +177,7 @@ export function AdminAnalytics() {
       <Panel
         title="Low stock watchlist"
         action={
-          <Link to="/admin/products" className="text-sm font-bold text-[#f85606]">
+          <Link to="/admin/products" className="text-sm font-bold text-brand">
             Manage products ›
           </Link>
         }
@@ -188,10 +188,10 @@ export function AdminAnalytics() {
               <li key={p.id} className="flex items-center justify-between py-2.5">
                 <span className="truncate font-medium">{String(p.name)}</span>
                 <span
-                  className={`shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-black ${
+                  className={`shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
                     Number(p.stock) === 0
-                      ? "bg-rose-100 text-rose-700"
-                      : "bg-amber-100 text-amber-700"
+                      ? "bg-critical-soft text-critical"
+                      : "bg-caution-soft text-caution"
                   }`}
                 >
                   {Number(p.stock)} left
@@ -200,7 +200,7 @@ export function AdminAnalytics() {
             ))}
           </ul>
         ) : (
-          <p className="py-8 text-center text-sm text-slate-400">All products are well stocked. 🎉</p>
+          <p className="py-8 text-center text-sm text-ink-faint">All products are well stocked.</p>
         )}
       </Panel>
     </div>
@@ -209,9 +209,9 @@ export function AdminAnalytics() {
 
 function Stat({ label, value, tone = "" }: { label: string; value: string; tone?: string }) {
   return (
-    <div className="rounded-2xl bg-white p-5 shadow-sm">
-      <p className="text-xs font-bold uppercase tracking-wide text-slate-400">{label}</p>
-      <p className={`mt-2 text-2xl font-black ${tone}`}>{value}</p>
+    <div className="rounded-lg bg-white p-5 shadow-sm">
+      <p className="text-xs font-bold uppercase tracking-wide text-ink-faint">{label}</p>
+      <p className={`mt-2 text-2xl font-semibold ${tone}`}>{value}</p>
     </div>
   );
 }

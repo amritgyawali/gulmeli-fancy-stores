@@ -19,8 +19,8 @@ export function AdminTrash() {
   return (
     <div className="space-y-4">
       <header>
-        <h1 className="text-2xl font-black">Trash</h1>
-        <p className="text-sm text-slate-500">
+        <h1 className="text-2xl font-semibold">Trash</h1>
+        <p className="text-sm text-ink-muted">
           Soft-deleted records from every collection, shared across both dashboards.
         </p>
       </header>
@@ -31,22 +31,22 @@ export function AdminTrash() {
             return (
               <li
                 key={`${collection}:${record.id}`}
-                className="flex flex-wrap items-center gap-3 rounded-2xl bg-white p-4 shadow-sm"
+                className="flex flex-wrap items-center gap-3 rounded-lg bg-white p-4 shadow-sm"
               >
-                <span className="grid h-10 w-10 place-items-center rounded-xl bg-slate-100 text-slate-400">
+                <span className="grid h-10 w-10 place-items-center rounded-md bg-sunken text-ink-faint">
                   <Icon name={meta.icon} size={18} />
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate font-bold">
                     {String(record[meta.labelField] ?? record.id)}
                   </span>
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-ink-faint">
                     {meta.label} · deleted {shortDate(String(record.deletedAt))}
                   </span>
                 </span>
                 <button
                   onClick={() => restore(collection, record.id)}
-                  className="rounded-lg bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-700 hover:bg-emerald-100"
+                  className="rounded-lg bg-positive-soft px-4 py-2 text-xs font-bold text-positive hover:bg-positive-soft"
                 >
                   Restore
                 </button>
@@ -55,7 +55,7 @@ export function AdminTrash() {
                     if (window.confirm("Delete permanently? This cannot be undone."))
                       purge(collection, record.id);
                   }}
-                  className="rounded-lg bg-rose-50 px-4 py-2 text-xs font-bold text-rose-600 hover:bg-rose-100"
+                  className="rounded-lg bg-critical-soft px-4 py-2 text-xs font-bold text-critical hover:bg-critical-soft"
                 >
                   Delete forever
                 </button>
@@ -64,8 +64,8 @@ export function AdminTrash() {
           })}
         </ul>
       ) : (
-        <p className="rounded-2xl bg-white py-20 text-center text-sm text-slate-400 shadow-sm">
-          🗑️ Trash is empty.
+        <p className="rounded-lg bg-white py-20 text-center text-sm text-ink-faint shadow-sm">
+          Trash is empty.
         </p>
       )}
     </div>

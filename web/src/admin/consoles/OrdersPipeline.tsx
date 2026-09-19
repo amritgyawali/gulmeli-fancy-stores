@@ -24,8 +24,8 @@ export function OrdersPipeline() {
       />
 
       {/* 21-stage strip */}
-      <div className="mb-5 rounded-xl border border-outline-variant bg-white p-3 shadow-sm">
-        <p className="mb-2 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+      <div className="mb-5 rounded-md border border-line bg-white p-3 shadow-sm">
+        <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-ink-muted">
           DEX Fulfillment Pipeline — 21 stages
         </p>
         <div className="rail flex gap-1 overflow-x-auto pb-1">
@@ -36,8 +36,8 @@ export function OrdersPipeline() {
               onClick={() => setStage(s)}
               className={`shrink-0 rounded-full px-3 py-1.5 text-[10px] font-bold transition ${
                 stage === s
-                  ? "bg-[#f85606] text-white shadow"
-                  : "bg-surface-container-low text-on-surface-variant hover:bg-orange-50"
+                  ? "bg-brand text-white shadow"
+                  : "bg-sunken text-ink-muted hover:bg-brand-soft"
               }`}
             >
               {i + 1}. {s}
@@ -46,54 +46,54 @@ export function OrdersPipeline() {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-outline-variant bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-md border border-line bg-white shadow-sm">
         <table className="w-full min-w-[900px] text-left text-xs">
-          <thead className="bg-surface-container-low text-[10px] uppercase tracking-wider text-on-surface-variant">
+          <thead className="bg-sunken text-[10px] uppercase tracking-wider text-ink-muted">
             <tr>
               {["Order ID & Timestamp", "Customer Details & Address", "Courier & Tracking", "Payment & Total", "Fraud Risk", "Admin Controls"].map((h) => (
-                <th key={h} className="whitespace-nowrap px-4 py-3 font-black">{h}</th>
+                <th key={h} className="whitespace-nowrap px-4 py-3 font-semibold">{h}</th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-outline-variant/60">
+          <tbody className="divide-y divide-line/60">
             {inStage.map((o) => (
-              <tr key={o.id} className="hover:bg-orange-50/30">
+              <tr key={o.id} className="hover:bg-brand-soft/30">
                 <td className="px-4 py-3">
-                  <p className="font-mono font-bold text-on-surface">{o.id}</p>
-                  <p className="text-[10px] text-on-surface-variant">{o.placedAt}</p>
+                  <p className="font-mono font-bold text-ink">{o.id}</p>
+                  <p className="text-[10px] text-ink-muted">{o.placedAt}</p>
                 </td>
                 <td className="px-4 py-3">
-                  <p className="font-semibold text-on-surface">{o.customer}</p>
-                  <p className="text-[10px] text-on-surface-variant">{o.city}, Nepal</p>
+                  <p className="font-semibold text-ink">{o.customer}</p>
+                  <p className="text-[10px] text-ink-muted">{o.city}, Nepal</p>
                 </td>
-                <td className="px-4 py-3 text-on-surface-variant">
+                <td className="px-4 py-3 text-ink-muted">
                   {o.courier}
                   <span className="block font-mono text-[10px]">{o.tracking}</span>
                 </td>
                 <td className="px-4 py-3">
                   <StatusPill tone={o.payment === "COD" ? "warn" : "ok"}>{o.payment}</StatusPill>
-                  <span className="ml-2 font-black text-[#d04402]">{rs(o.total)}</span>
+                  <span className="ml-2 font-semibold text-brand-strong">{rs(o.total)}</span>
                 </td>
                 <td className="px-4 py-3">
                   <StatusPill tone={o.risk === "Low" ? "live" : o.risk === "Watch" ? "warn" : "bad"}>
                     {o.risk}
                   </StatusPill>
                 </td>
-                <td className="whitespace-nowrap px-4 py-3 text-[11px] font-bold text-[#0f828a]">
+                <td className="whitespace-nowrap px-4 py-3 text-[11px] font-bold text-info">
                   <button type="button" className="hover:underline">Advance</button>
-                  <span className="text-gray-300"> · </span>
+                  <span className="text-ink-faint"> · </span>
                   <button type="button" className="hover:underline">Re-route</button>
-                  <span className="text-gray-300"> · </span>
-                  <button type="button" className="text-rose-600 hover:underline">Hold</button>
+                  <span className="text-ink-faint"> · </span>
+                  <button type="button" className="text-critical hover:underline">Hold</button>
                 </td>
               </tr>
             ))}
             {!inStage.length && (
               <tr>
-                <td colSpan={6} className="px-4 py-10 text-center text-gray-400">
+                <td colSpan={6} className="px-4 py-10 text-center text-ink-faint">
                   No dispatches at <span className="font-bold">{stage}</span> right now.
                   <span className="block text-[10px]">
-                    Live orders render in <a href="#/admin/orders" className="font-bold text-[#0f828a] underline">Orders board</a>.
+                    Live orders render in <a href="#/admin/orders" className="font-bold text-info underline">Orders board</a>.
                   </span>
                 </td>
               </tr>

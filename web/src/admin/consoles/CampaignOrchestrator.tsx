@@ -2,6 +2,7 @@ import { useState } from "react";
 import { OpsPageHead, StatusPill, BurnBar } from "../OpsLayout";
 import { campaigns, campaignSkus } from "@/lib/demo-data";
 import { rs } from "@/lib/format";
+import { Icon } from "@/components/Icon";
 
 /* Flash-sale campaign orchestrator — from
    ../web ui ux design/daraz_nepal_9.9_11.11_flash_sale_campaign_orchestrator */
@@ -22,14 +23,14 @@ export function CampaignOrchestrator() {
             key={c.id}
             type="button"
             onClick={() => setActive(c.id)}
-            className={`shrink-0 rounded-xl border px-4 py-3 text-left transition ${
+            className={`shrink-0 rounded-md border px-4 py-3 text-left transition ${
               active === c.id
-                ? "border-[#f85606] bg-orange-50"
-                : "border-outline-variant bg-white hover:border-gray-300"
+                ? "border-brand bg-brand-soft"
+                : "border-line bg-white hover:border-gray-300"
             }`}
           >
-            <p className="text-xs font-black text-on-surface">{c.name}</p>
-            <p className="mt-0.5 text-[10px] text-on-surface-variant">{c.windowLabel}</p>
+            <p className="text-xs font-semibold text-ink">{c.name}</p>
+            <p className="mt-0.5 text-[10px] text-ink-muted">{c.windowLabel}</p>
             <StatusPill tone={c.status === "Live" ? "live" : c.status === "Armed" ? "warn" : "muted"}>
               {c.status}
             </StatusPill>
@@ -44,54 +45,54 @@ export function CampaignOrchestrator() {
           ["Voucher Pool", campaign.voucherPool],
           ["Buyers", campaign.buyers.toLocaleString("en-US")],
         ].map(([l, v]) => (
-          <div key={l} className="rounded-xl border border-outline-variant bg-white p-3 shadow-sm">
-            <p className="text-[10px] font-black uppercase tracking-wide text-on-surface-variant">{l}</p>
-            <p className="mt-1 text-sm font-black text-on-surface">{v}</p>
+          <div key={l} className="rounded-md border border-line bg-white p-3 shadow-sm">
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-ink-muted">{l}</p>
+            <p className="mt-1 text-sm font-semibold text-ink">{v}</p>
           </div>
         ))}
       </div>
 
-      <div className="mb-4 rounded-xl border border-outline-variant bg-white p-4 shadow-sm">
+      <div className="mb-4 rounded-md border border-line bg-white p-4 shadow-sm">
         <div className="mb-2 flex items-center justify-between">
-          <h3 className="text-xs font-black uppercase tracking-wider text-on-surface-variant">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
             Price Economics (NPR) · Flash Stock Burn · Velocity
           </h3>
-          <span className="flex items-center gap-1 text-[10px] font-bold text-[#0f828a]">
-            <i className="fa-solid fa-shield-halved" /> Surge Sentinel & Bot Guard {campaign.botShield}
+          <span className="flex items-center gap-1 text-[10px] font-bold text-info">
+            <Icon name="shield" size={16} /> Surge Sentinel & Bot Guard {campaign.botShield}
           </span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[760px] text-left text-xs">
-            <thead className="text-[10px] uppercase tracking-wider text-on-surface-variant">
+            <thead className="text-[10px] uppercase tracking-wider text-ink-muted">
               <tr>
                 {["Product & Seller", "Listed → Campaign", "Subsidy Split", "Flash Stock Burn", "Velocity /min", "Intervention"].map((h) => (
-                  <th key={h} className="whitespace-nowrap px-3 py-2 font-black">{h}</th>
+                  <th key={h} className="whitespace-nowrap px-3 py-2 font-semibold">{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-outline-variant/60">
+            <tbody className="divide-y divide-line/60">
               {campaignSkus.map((s) => {
                 const burn = Math.round((s.burned / s.flashStock) * 100);
                 return (
-                  <tr key={s.product} className="hover:bg-orange-50/30">
+                  <tr key={s.product} className="hover:bg-brand-soft/30">
                     <td className="px-3 py-2.5">
-                      <p className="line-clamp-1 max-w-[240px] font-bold text-on-surface">{s.product}</p>
-                      <p className="text-[10px] text-on-surface-variant">{s.seller}</p>
+                      <p className="line-clamp-1 max-w-[240px] font-bold text-ink">{s.product}</p>
+                      <p className="text-[10px] text-ink-muted">{s.seller}</p>
                     </td>
                     <td className="px-3 py-2.5">
-                      <span className="text-gray-400 line-through">{rs(s.price)}</span>{" "}
-                      <span className="font-black text-[#d04402]">{rs(s.campaignPrice)}</span>
+                      <span className="text-ink-faint line-through">{rs(s.price)}</span>{" "}
+                      <span className="font-semibold text-brand-strong">{rs(s.campaignPrice)}</span>
                     </td>
-                    <td className="px-3 py-2.5 font-mono text-on-surface-variant">{s.subsidySplit}</td>
+                    <td className="px-3 py-2.5 font-mono text-ink-muted">{s.subsidySplit}</td>
                     <td className="w-40 px-3 py-2.5">
-                      <p className="mb-1 text-[10px] text-on-surface-variant">{s.burned}/{s.flashStock} · {burn}%</p>
+                      <p className="mb-1 text-[10px] text-ink-muted">{s.burned}/{s.flashStock} · {burn}%</p>
                       <BurnBar pct={burn} />
                     </td>
-                    <td className="px-3 py-2.5 font-bold text-on-surface">{s.velocity}</td>
-                    <td className="whitespace-nowrap px-3 py-2.5 text-[11px] font-bold text-[#0f828a]">
+                    <td className="px-3 py-2.5 font-bold text-ink">{s.velocity}</td>
+                    <td className="whitespace-nowrap px-3 py-2.5 text-[11px] font-bold text-info">
                       <button type="button" className="hover:underline">Inject stock</button>
-                      <span className="text-gray-300"> · </span>
-                      <button type="button" className="text-[#d04402] hover:underline">Abuse guard</button>
+                      <span className="text-ink-faint"> · </span>
+                      <button type="button" className="text-brand-strong hover:underline">Abuse guard</button>
                     </td>
                   </tr>
                 );
@@ -103,15 +104,15 @@ export function CampaignOrchestrator() {
 
       <div className="grid gap-3 lg:grid-cols-3 text-xs">
         {[
-          ["Instant Inventory Injection & Restock Surge", "fa-boxes-stacked", "Sellers can push stock into live flash slots without pausing the deal window; injections are rate-limited per SKU."],
-          ["Live Voucher Burn Engine", "fa-ticket", "Pool burn streams per second; circuit auto-throttles at 80% quota with dual-control freeze above that."],
-          ["Abuse Guard", "fa-robot", "Device-fingerprint clustering blocks coupon farming; verified search engines stay whitelisted."],
+          ["Instant Inventory Injection & Restock Surge", "boxes", "Sellers can push stock into live flash slots without pausing the deal window; injections are rate-limited per SKU."],
+          ["Live Voucher Burn Engine", "ticket", "Pool burn streams per second; circuit auto-throttles at 80% quota with dual-control freeze above that."],
+          ["Abuse Guard", "scan", "Device-fingerprint clustering blocks coupon farming; verified search engines stay whitelisted."],
         ].map(([t, icon, copy]) => (
-          <div key={t} className="rounded-xl border border-outline-variant bg-white p-4 shadow-sm">
-            <p className="flex items-center gap-2 font-black text-on-surface">
-              <i className={`fa-solid ${icon} text-[#f85606]`} /> {t}
+          <div key={t} className="rounded-md border border-line bg-white p-4 shadow-sm">
+            <p className="flex items-center gap-2 font-semibold text-ink">
+              <Icon name={icon} size={16} /> {t}
             </p>
-            <p className="mt-1.5 leading-relaxed text-on-surface-variant">{copy}</p>
+            <p className="mt-1.5 leading-relaxed text-ink-muted">{copy}</p>
           </div>
         ))}
       </div>

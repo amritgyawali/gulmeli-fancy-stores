@@ -1,259 +1,353 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
+@import url("https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&display=swap");
 @import "tailwindcss";
-@import "@fortawesome/fontawesome-free/css/all.min.css";
+
+/*
+ * ---------------------------------------------------------------------------
+ * Gulmeli storefront design system
+ * ---------------------------------------------------------------------------
+ * One palette, one type ramp, one spacing rhythm, one elevation set. The
+ * previous stylesheet carried two competing systems (a "daraz" orange one and
+ * a full Material 3 role set) plus three icon fonts; pages picked whichever
+ * they happened to be ported from, which is why the chrome never quite lined
+ * up between the home page and the inner pages.
+ *
+ * Notes on the choices here:
+ * - Brand orange is reserved for price, primary action and active state. It is
+ *   never a page background, because orange-on-orange is what made the old
+ *   header, ribbon and hero read as one undifferentiated block.
+ * - Text never goes below 12px, and body copy sits at 14px. The old pages used
+ *   8-11px for real content, which fails WCAG legibility in practice.
+ * - Neutrals are a single warm-grey ramp so borders, dividers and placeholders
+ *   relate to each other instead of being seven unrelated greys.
+ */
+
+@theme {
+  /* ---- brand ---- */
+  --color-brand: #e2540b;
+  --color-brand-strong: #b83f05;
+  --color-brand-soft: #fff1e9;
+  --color-brand-border: #ffd5bd;
+
+  /* ---- neutral ramp (warm) ---- */
+  --color-ink: #17181a;
+  --color-ink-soft: #4a4d52;
+  --color-ink-muted: #6e7278;
+  --color-ink-faint: #a5a9af;
+  --color-line: #e8e8ea;
+  --color-line-strong: #d6d7da;
+  --color-canvas: #f4f4f5;
+  --color-raised: #ffffff;
+  --color-sunken: #fafafa;
+
+  /* ---- semantic ---- */
+  --color-positive: #1a7f4b;
+  --color-positive-soft: #e8f6ee;
+  --color-caution: #9a6100;
+  --color-caution-soft: #fdf3e2;
+  --color-critical: #c02626;
+  --color-critical-soft: #fdeceb;
+  --color-info: #10646e;
+  --color-info-soft: #e7f3f5;
+  --color-star: #f0a018;
+
+  /* ---- admin / operations chrome ---- */
+  --color-shell: #14161a;
+  --color-shell-line: #282c33;
+  --color-shell-hover: #1f232a;
+  --color-shell-text: #d3d6db;
+
+  /* ---- type ---- */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace;
+
+  --text-2xs: 0.6875rem; /* 11px — badges and counters only */
+  --text-2xs--line-height: 1rem;
+  --text-xs: 0.75rem; /* 12px — metadata */
+  --text-xs--line-height: 1.125rem;
+  --text-sm: 0.8125rem; /* 13px — dense UI */
+  --text-sm--line-height: 1.25rem;
+  --text-base: 0.875rem; /* 14px — body */
+  --text-base--line-height: 1.375rem;
+  --text-lg: 1rem;
+  --text-lg--line-height: 1.5rem;
+  --text-xl: 1.125rem;
+  --text-xl--line-height: 1.625rem;
+  --text-2xl: 1.375rem;
+  --text-2xl--line-height: 1.875rem;
+  --text-3xl: 1.75rem;
+  --text-3xl--line-height: 2.125rem;
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: 2.5rem;
+
+  /* ---- shape ---- */
+  --radius-xs: 3px;
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* ---- elevation: tight, low-spread, no coloured glow ---- */
+  --shadow-e1: 0 1px 2px rgb(20 22 26 / 0.06), 0 0 0 1px rgb(20 22 26 / 0.04);
+  --shadow-e2: 0 2px 6px rgb(20 22 26 / 0.08), 0 0 0 1px rgb(20 22 26 / 0.05);
+  --shadow-e3: 0 8px 24px rgb(20 22 26 / 0.12), 0 0 0 1px rgb(20 22 26 / 0.06);
+
+  /* ---- layout ---- */
+  --container-page: 1240px;
+}
+
+/* ------------------------------------------------------ runtime theming --- */
+/*
+ * The storefront re-declares the palette tokens from the variables that
+ * StoreLayout publishes out of the admin console's appearance settings. It
+ * has to be declared *here*, on the element that carries those variables,
+ * rather than in @theme: a custom property that references another one
+ * resolves in the scope where it is declared, so a `--color-raised:
+ * var(--surface)` sitting on :root would look for --surface on :root and
+ * never see the value the layout sets further down the tree.
+ *
+ * This is what makes the console's colours and colour scheme reach the whole
+ * page. Previously the layout set variables that six or seven elements read
+ * while everything else used a fixed white, grey or orange, so choosing the
+ * dark scheme repainted the page background and left every card, table and
+ * label in its light-mode colour.
+ *
+ * The admin console and the operations suite sit outside `.storefront` and
+ * keep the static defaults above, which is correct — they are staff tools
+ * with their own chrome, not part of the customer's branding.
+ */
+.storefront {
+  --color-brand: var(--brand, #e2540b);
+  --color-brand-strong: var(--brand-strong, #b83f05);
+  --color-brand-soft: var(--brand-soft, #fff1e9);
+  --color-brand-border: var(--brand-border, #ffd5bd);
+  --color-ink: var(--ink, #17181a);
+  --color-ink-soft: var(--ink-soft, #4a4d52);
+  --color-ink-muted: var(--ink-muted, #6e7278);
+  --color-ink-faint: var(--ink-faint, #a5a9af);
+  --color-line: var(--line, #e8e8ea);
+  --color-line-strong: var(--line-strong, #d6d7da);
+  --color-canvas: var(--page, #f4f4f5);
+  --color-raised: var(--surface, #ffffff);
+  --color-sunken: var(--sunken, #fafafa);
+}
+
+/* ---------------------------------------------------------------- base --- */
 
 :root {
   color-scheme: light;
+  --page-gutter: 1rem;
+  --header-height: 56px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --page-gutter: 1.5rem;
+    --header-height: 64px;
+  }
+}
+
+* {
+  min-width: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Helvetica Neue", Arial, sans-serif;
-  background-color: #f5f5f5;
-  color: #212121;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--text-base--line-height);
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-synthesis-weight: none;
 }
 
-/* Material Symbols (icon font used by the M3 storefront pages and the
-   operations consoles in ../web ui ux design/). */
-.material-symbols-outlined {
-  font-family: "Material Symbols Outlined";
-  font-weight: normal;
-  font-style: normal;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
-}
-.material-symbols-outlined.fill {
-  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+/* Tabular figures everywhere a number is compared against another number:
+   prices in a grid, quantities in a cart, metrics in a console. */
+.tnum,
+table,
+input[type="number"] {
+  font-variant-numeric: tabular-nums;
 }
 
-/*
-  Palette and utility classes ported from the Stitch exports in
-  ../web ui ux design/. The homepage keeps the "Daraz orange" system
-  (daraz_nepal_homepage_clone); the five inner storefront pages, the ops
-  consoles and the enterprise dashboards use the Material-3 system from the
-  M3 exports. The tokens below are the EXACT tailwind.config values from
-  those exports (radius, spacing scale, type ramp, M3 color roles).
-*/
-@theme {
-  --color-daraz: #f85606;
-  --color-daraz-dark: #d04402;
-  --color-daraz-bg: #f5f5f5;
-  --color-daraz-text: #212121;
-  --color-daraz-muted: #757575;
-  --color-daraz-border: #e2e8f0;
-  --color-daraz-link: #0f828a;
-  --color-daraz-star: #faca15;
-  --color-daraz-soft: #fff6f2;
-
-  /* M3 color roles — exact from the design exports' tailwind.config */
-  --color-surface: #fcf9f8;
-  --color-surface-dim: #dcd9d9;
-  --color-surface-bright: #fcf9f8;
-  --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #f6f3f2;
-  --color-surface-container: #f0eded;
-  --color-surface-container-high: #eae7e7;
-  --color-surface-container-highest: #e5e2e1;
-  --color-on-surface: #1b1c1c;
-  --color-on-surface-variant: #5b4137;
-  --color-inverse-surface: #303030;
-  --color-inverse-on-surface: #f3f0ef;
-  --color-outline: #8f7065;
-  --color-outline-variant: #e4beb2;
-  --color-surface-tint: #aa3700;
-  --color-primary: #a63600;
-  --color-on-primary: #ffffff;
-  --color-primary-container: #cf4500;
-  --color-on-primary-container: #fffbff;
-  --color-primary-fixed: #ffdbcf;
-  --color-primary-fixed-dim: #ffb59b;
-  --color-on-primary-fixed: #380d00;
-  --color-on-primary-fixed-variant: #822800;
-  --color-inverse-primary: #ffb59b;
-  --color-secondary: #735c00;
-  --color-on-secondary: #ffffff;
-  --color-secondary-container: #fccc19;
-  --color-on-secondary-container: #6e5700;
-  --color-secondary-fixed: #ffe088;
-  --color-secondary-fixed-dim: #f0c100;
-  --color-tertiary: #006578;
-  --color-on-tertiary: #ffffff;
-  --color-tertiary-container: #008097;
-  --color-on-tertiary-container: #f9fdff;
-  --color-error: #ba1a1a;
-  --color-on-error: #ffffff;
-  --color-error-container: #ffdad6;
-  --color-on-error-container: #93000a;
-  --color-background: #fcf9f8;
-  --color-on-background: #1b1c1c;
-  --color-surface-variant: #e5e2e1;
-  --color-sidebar-bg: #0f172a;
-  --color-sidebar-border: #1e293b;
-  --color-sidebar-hover: #1e293b;
-  --color-sidebar-active: #f85606;
-  --color-badge-green: #10b981;
-  --color-badge-green-bg: #d1fae5;
-
-  /* M3 radius overrides from the design configs:
-     rounded=0.125rem, rounded-lg=0.25rem, rounded-xl=0.5rem,
-     rounded-full=0.75rem. Scoped to .m3 below (not global) so the
-     homepage's orange chrome keeps Tailwind defaults. */
-
-  /* M3 spacing scale (design classes p-space-md, gap-space-xs, …) */
-  --spacing-space-xs: 0.25rem;
-  --spacing-space-sm: 0.5rem;
-  --spacing-space-md: 0.75rem;
-  --spacing-space-lg: 1rem;
-  --spacing-space-xl: 1.5rem;
-  --spacing-margin: 0.75rem;
-  --spacing-margin-desktop: 1.5rem;
-  --spacing-gutter: 0.75rem;
-  --spacing-gutter-desktop: 1rem;
-
-  /* Roboto Flex type ramp — exact px/line-height/weight from the configs.
-     Generates text-headline-lg, font-body-md etc. used by the designs
-     (they apply font-X (family) and text-X (size) as a pair). */
-  --font-headline-xl: "Roboto Flex";
-  --font-headline-xl-mobile: "Roboto Flex";
-  --font-headline-lg: "Roboto Flex";
-  --font-headline-lg-mobile: "Roboto Flex";
-  --font-headline-md: "Roboto Flex";
-  --font-headline-sm: "Roboto Flex";
-  --font-price-hero: "Roboto Flex";
-  --font-price-card: "Roboto Flex";
-  --font-price-strikethrough: "Roboto Flex";
-  --font-body-lg: "Roboto Flex";
-  --font-body-md: "Roboto Flex";
-  --font-body-sm: "Roboto Flex";
-  --font-label-md: "Roboto Flex";
-  --font-label-sm: "Roboto Flex";
-  --font-badge-micro: "Roboto Flex";
-
-  --text-headline-xl: 32px;
-  --text-headline-xl--line-height: 40px;
-  --text-headline-xl--font-weight: 700;
-  --text-headline-xl-mobile: 24px;
-  --text-headline-xl-mobile--line-height: 32px;
-  --text-headline-xl-mobile--font-weight: 700;
-  --text-headline-lg: 24px;
-  --text-headline-lg--line-height: 32px;
-  --text-headline-lg--font-weight: 700;
-  --text-headline-lg-mobile: 20px;
-  --text-headline-lg-mobile--line-height: 28px;
-  --text-headline-lg-mobile--font-weight: 700;
-  --text-headline-md: 18px;
-  --text-headline-md--line-height: 24px;
-  --text-headline-md--font-weight: 600;
-  --text-headline-sm: 16px;
-  --text-headline-sm--line-height: 22px;
-  --text-headline-sm--font-weight: 600;
-  --text-price-hero: 28px;
-  --text-price-hero--line-height: 36px;
-  --text-price-hero--font-weight: 700;
-  --text-price-card: 18px;
-  --text-price-card--line-height: 24px;
-  --text-price-card--font-weight: 700;
-  --text-price-strikethrough: 12px;
-  --text-price-strikethrough--line-height: 16px;
-  --text-price-strikethrough--font-weight: 400;
-  --text-body-lg: 15px;
-  --text-body-lg--line-height: 22px;
-  --text-body-lg--font-weight: 400;
-  --text-body-md: 13px;
-  --text-body-md--line-height: 18px;
-  --text-body-md--font-weight: 400;
-  --text-body-sm: 12px;
-  --text-body-sm--line-height: 16px;
-  --text-body-sm--font-weight: 400;
-  --text-label-md: 13px;
-  --text-label-md--line-height: 16px;
-  --text-label-md--font-weight: 500;
-  --text-label-sm: 11px;
-  --text-label-sm--line-height: 14px;
-  --text-label-sm--font-weight: 600;
-  --text-badge-micro: 10px;
-  --text-badge-micro--line-height: 12px;
-  --text-badge-micro--font-weight: 700;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 650;
+  letter-spacing: -0.011em;
+  text-wrap: balance;
 }
 
-/*
-  .m3 scope — applied to the M3 chrome roots (inner storefront pages, ops
-  consoles). Tailwind v4 radius utilities read var(--radius-*), so
-  redefining them here gives the designs' exact radii without touching the
-  homepage. Roboto Flex is the default UI font on M3 pages.
-*/
-.m3 {
-  --radius: 0.125rem;
-  --radius-sm: 0.125rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.25rem;
-  --radius-xl: 0.5rem;
-  --radius-2xl: 1rem;
-  --radius-3xl: 1.5rem;
-  --radius-full: 0.75rem;
-  font-family: "Roboto Flex", Roboto, sans-serif;
-  background-color: #fcf9f8;
-  color: #1b1c1c;
+p {
+  text-wrap: pretty;
 }
 
-/* Tailwind hardcodes these two radius utilities; re-scope them inside .m3 so
-   the design overrides (rounded=0.125rem, rounded-full=0.75rem) apply. */
-.m3 .rounded {
-  border-radius: var(--radius);
-}
-.m3 .rounded-full {
-  border-radius: var(--radius-full);
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
 }
 
-/* Ops-suite / enterprise designs that run primary on Daraz orange */
-.ops-orange {
-  --color-primary: #f85606;
+/* --------------------------------------------------------------- focus --- */
+/* One visible focus treatment for every interactive element. Keyboard users
+   previously got the browser default on some controls and nothing at all on
+   the ones that set `outline: none` for their own hover styling. */
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
 }
 
-.daraz-card {
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-.daraz-card:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    0 10px 25px -5px rgba(0, 0, 0, 0.1),
-    0 8px 10px -6px rgba(0, 0, 0, 0.1);
-}
-.flash-card {
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-.flash-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.1);
-}
-.category-item:hover {
-  transform: translateY(-2px);
-  border-color: #f85606;
+.dark-surface :focus-visible {
+  outline-color: #ffffff;
 }
 
-/* Hero gradient from the homepage design (9.9 sale banner) */
-.hero-gradient {
-  background: linear-gradient(90deg, #d82a0b, #f85606 50%, #fc8621);
-}
-.ribbon-gradient {
-  background: linear-gradient(90deg, #d82a0b, #f85606 55%, #f42e12);
+/* ------------------------------------------------------------ controls --- */
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
 }
 
-/* Thin scrollbars for horizontal rails */
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+/* A control smaller than this is hard to hit on a touch screen. Applied to
+   icon-only buttons via the .hit class rather than globally, so text links in
+   dense tables are not forced to 44px. */
+.hit {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+@media (pointer: fine) {
+  .hit {
+    min-height: 36px;
+    min-width: 36px;
+  }
+}
+
+/* ------------------------------------------------------------- layout --- */
+
+.page {
+  width: 100%;
+  max-width: var(--container-page);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+
+/* Horizontal rails: hide the scrollbar chrome but keep the scroll, and snap so
+   a flick always lands on a card edge instead of halfway through one. */
 .rail {
-  scrollbar-width: thin;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
 }
+
 .rail::-webkit-scrollbar {
-  height: 6px;
+  display: none;
 }
-.rail::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 99px;
+
+.rail > * {
+  scroll-snap-align: start;
+  flex: none;
+}
+
+/* Truncation helpers, since two-line product titles appear in six places. */
+.clamp-1,
+.clamp-2,
+.clamp-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.clamp-1 {
+  -webkit-line-clamp: 1;
+}
+.clamp-2 {
+  -webkit-line-clamp: 2;
+}
+.clamp-3 {
+  -webkit-line-clamp: 3;
+}
+
+/* --------------------------------------------------------------- media --- */
+/* Placeholder shown while a product photo loads, and in place of one that is
+   missing. A neutral tint, not an emoji or a stock illustration. */
+
+.media {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-sunken);
+}
+
+.media > img {
+  width: 100%;
+  height: 100%;
+}
+
+.skeleton {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-line) 25%,
+    var(--color-sunken) 37%,
+    var(--color-line) 63%
+  );
+  background-size: 400% 100%;
+  animation: skeleton 1.4s ease infinite;
+}
+
+@keyframes skeleton {
+  from {
+    background-position: 100% 50%;
+  }
+  to {
+    background-position: 0 50%;
+  }
+}
+
+/* ------------------------------------------------------------ motion --- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --------------------------------------------------------------- print --- */
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
 }

@@ -82,7 +82,7 @@ export const COLLECTIONS: CollectionMeta[] = [
   { key: "back_in_stock", label: "Back-in-stock alerts", group: "Marketing", icon: "box", labelField: "email", columns: ["email", "productId"] },
   { key: "search_terms", label: "Search terms", group: "Marketing", icon: "search", labelField: "term", columns: ["term", "results", "createdAt"] },
   // ——— System
-  { key: "redirects", label: "URL redirects", group: "System", icon: "chevron", labelField: "from", columns: ["from", "to", "type"] },
+  { key: "redirects", label: "URL redirects", group: "System", icon: "swap", labelField: "from", columns: ["from", "to", "type"] },
   { key: "webhooks", label: "Webhooks", group: "System", icon: "gauge", labelField: "name", columns: ["name", "url", "active"] },
   { key: "webhook_logs", label: "Webhook log", group: "System", icon: "clock", labelField: "eventName", columns: ["eventName", "status", "createdAt"] },
   { key: "integrations", label: "Integrations", group: "System", icon: "gauge", labelField: "name", columns: ["name", "enabled"] },

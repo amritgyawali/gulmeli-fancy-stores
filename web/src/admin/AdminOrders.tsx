@@ -48,26 +48,26 @@ export function AdminOrders() {
   return (
     <div className="space-y-4">
       <header>
-        <h1 className="text-2xl font-black">Orders</h1>
-        <p className="text-sm text-slate-500">
+        <h1 className="text-2xl font-semibold">Orders</h1>
+        <p className="text-sm text-ink-muted">
           App and web orders, live. Status changes sync to every customer device.
         </p>
       </header>
       {error && (
-        <p className="rounded-lg bg-rose-50 p-3 text-sm font-semibold text-rose-700">{error}</p>
+        <p className="rounded-lg bg-critical-soft p-3 text-sm font-semibold text-critical">{error}</p>
       )}
       <div className="grid gap-4 xl:grid-cols-5">
         {COLUMNS.map((column) => (
-          <div key={column.key} className="min-w-0 rounded-2xl bg-slate-200/60 p-3">
-            <h2 className="mb-3 flex items-center justify-between px-1 text-xs font-black uppercase tracking-wide text-slate-500">
+          <div key={column.key} className="min-w-0 rounded-lg bg-line/60 p-3">
+            <h2 className="mb-3 flex items-center justify-between px-1 text-xs font-semibold uppercase tracking-wide text-ink-muted">
               {column.label}
               <span className="rounded-full bg-white px-2 py-0.5">{byColumn.get(column.key)?.length ?? 0}</span>
             </h2>
             <div className="space-y-3">
               {(byColumn.get(column.key) ?? []).map((order) => (
-                <article key={order.id} className="rounded-xl bg-white p-3.5 shadow-sm">
+                <article key={order.id} className="rounded-md bg-white p-3.5 shadow-sm">
                   <p className="truncate text-sm font-bold">{String(order.customerName ?? "Customer")}</p>
-                  <p className="mt-0.5 line-clamp-2 text-xs text-slate-500">
+                  <p className="mt-0.5 line-clamp-2 text-xs text-ink-muted">
                     {(Array.isArray(order.lines) ? order.lines : [])
                       .map((line: { name?: string; quantity?: number }) =>
                         `${line.quantity ?? 1}× ${line.name ?? "item"}`,
@@ -75,8 +75,8 @@ export function AdminOrders() {
                       .join(", ") || order.id}
                   </p>
                   <div className="mt-2 flex items-center justify-between">
-                    <span className="text-sm font-black">{rs(Number(order.total ?? 0))}</span>
-                    <span className="text-[10px] text-slate-400">
+                    <span className="text-sm font-semibold">{rs(Number(order.total ?? 0))}</span>
+                    <span className="text-[10px] text-ink-faint">
                       {shortDate(String(order.createdAt ?? order.placedAt ?? ""))}
                     </span>
                   </div>
@@ -85,25 +85,25 @@ export function AdminOrders() {
                       <button
                         disabled={busy === order.id}
                         onClick={() => void advance(order, 1)}
-                        className="flex items-center gap-1 rounded bg-emerald-50 px-2 py-1 text-[11px] font-bold text-emerald-700 hover:bg-emerald-100 disabled:opacity-50"
+                        className="flex items-center gap-1 rounded bg-positive-soft px-2 py-1 text-[11px] font-bold text-positive hover:bg-positive-soft disabled:opacity-50"
                       >
-                        Advance <Icon name="chevron" size={11} />
+                        Advance <Icon name="chevronRight" size={11} />
                       </button>
                     )}
                     {["pending", "processing"].includes(column.key) && (
                       <button
                         disabled={busy === order.id}
                         onClick={() => void advance(order, -1)}
-                        className="flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-[11px] font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-50"
+                        className="flex items-center gap-1 rounded bg-sunken px-2 py-1 text-[11px] font-bold text-ink-soft hover:bg-line disabled:opacity-50"
                       >
-                        <Icon name="chevron" size={11} className="rotate-180" /> Back
+                        <Icon name="chevronRight" size={11} className="rotate-180" /> Back
                       </button>
                     )}
                     {column.key === "pending" && (
                       <button
                         disabled={busy === order.id}
                         onClick={() => void setOrderStatus(order, "cancelled").catch((e) => setError(String(e)))}
-                        className="ml-auto rounded bg-rose-50 px-2 py-1 text-[11px] font-bold text-rose-600 hover:bg-rose-100 disabled:opacity-50"
+                        className="ml-auto rounded bg-critical-soft px-2 py-1 text-[11px] font-bold text-critical hover:bg-critical-soft disabled:opacity-50"
                       >
                         Cancel
                       </button>
@@ -112,7 +112,7 @@ export function AdminOrders() {
                 </article>
               ))}
               {!(byColumn.get(column.key) ?? []).length && (
-                <p className="py-6 text-center text-xs text-slate-400">—</p>
+                <p className="py-6 text-center text-xs text-ink-faint">—</p>
               )}
             </div>
           </div>

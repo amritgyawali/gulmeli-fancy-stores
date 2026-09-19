@@ -15,7 +15,8 @@ import icons from "@/data/stitch-icons.json";
 import { useStorefront, useStorefrontTheme } from "@/store/StorefrontProvider";
 import { appearanceColor } from "@/admin/core/appearance";
 import { themedStyle } from "./store-ui";
-import { colors, fontFamily, shared } from "@/theme/tokens";
+import { FontIcon } from "./FontIcon";
+import { colors, fontFamily, radius, shared, TOUCH_SIZE } from "@/theme/tokens";
 
 export function T({
   size = 12,
@@ -114,7 +115,7 @@ export function Tap({
       aria-checked={role === "checkbox" ? selected : undefined}
       disabled={disabled}
       onPress={onPress}
-      hitSlop={5}
+      hitSlop={8}
       style={({ pressed }) => [
         themedStyle(style, theme),
         pressed && { opacity: 0.72 },
@@ -237,17 +238,15 @@ export function CheckBox({
       style={[
         styles.checkbox,
         checked && {
-          backgroundColor: colors.orange,
-          borderColor: colors.orange,
+          backgroundColor: colors.brand,
+          borderColor: colors.brand,
         },
-        disabled && { backgroundColor: "#e5e7eb" },
+        disabled && { backgroundColor: colors.line },
       ]}
     >
-      {checked && (
-        <T color="#fff" size={12} bold>
-          ✓
-        </T>
-      )}
+      {/* A real glyph, not the "✓" character: the text checkmark rendered
+          at a different weight and baseline on every Android font. */}
+      {checked && <FontIcon name="check" size={11} color={colors.white} />}
     </Tap>
   );
 }
@@ -272,8 +271,8 @@ export function SectionTitle({
       {action && onPress && (
         <Tap label={action} onPress={onPress}>
           <Row>
-            <T color="#6b7280">{action}</T>
-            <SourceIcon index={7} size={14} color="#6b7280" />
+            <T color={colors.muted}>{action}</T>
+            <SourceIcon index={7} size={14} color={colors.muted} />
           </Row>
         </Tap>
       )}
@@ -282,9 +281,10 @@ export function SectionTitle({
 }
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 6,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    minHeight: TOUCH_SIZE,
+    borderRadius: radius.sm,
     borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -293,9 +293,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: -4,
     right: -7,
-    backgroundColor: "#ff2525",
+    backgroundColor: colors.critical,
     borderWidth: 1.5,
-    borderColor: "#fff",
+    borderColor: colors.white,
     borderRadius: 99,
     paddingHorizontal: 3,
     minWidth: 16,
@@ -304,11 +304,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   checkbox: {
-    width: 18,
-    height: 18,
-    borderColor: "#c7c7cc",
-    borderWidth: 1,
-    borderRadius: 2,
+    width: 22,
+    height: 22,
+    borderColor: colors.lineStrong,
+    borderWidth: 1.5,
+    borderRadius: radius.xs,
     alignItems: "center",
     justifyContent: "center",
   },
