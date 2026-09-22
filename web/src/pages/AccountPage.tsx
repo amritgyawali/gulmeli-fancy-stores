@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useShop } from "@/store/ShopContext";
 import { Icon } from "@/components/Icon";
 import { ProductCard } from "@/components/ProductCard";
@@ -64,7 +64,12 @@ export function AccountPage() {
     signOut,
   } = useShop();
   const navigate = useNavigate();
-  const [panel, setPanel] = useState<(typeof NAV)[number]["key"]>("orders");
+  const [params] = useSearchParams();
+  /* ?tab= opens a panel directly, so "View wishlist" links land on it. */
+  const [panel, setPanel] = useState<(typeof NAV)[number]["key"]>(() => {
+    const tab = params.get("tab");
+    return NAV.some((n) => n.key === tab) ? (tab as (typeof NAV)[number]["key"]) : "orders";
+  });
   const [editing, setEditing] = useState(false);
   const [busy, setBusy] = useState("");
   const [notice, setNotice] = useState("");

@@ -1,13 +1,8 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useShop } from "@/store/ShopContext";
-import {
-  Listing,
-  applyListing,
-  discountOf,
-  emptyListingState,
-  type ListingState,
-} from "@/components/Listing";
+import { Listing, applyListing, discountOf, useListingState } from "@/components/Listing";
+import { useDocumentMeta } from "@/lib/hooks";
 import { Icon } from "@/components/Icon";
 import { voucherTerms } from "@/lib/commerce";
 
@@ -23,16 +18,17 @@ import { voucherTerms } from "@/lib/commerce";
  */
 export function OffersPage() {
   const { offerProducts, products } = useShop();
-  const [state, setState] = useState<ListingState>({
-    ...emptyListingState,
-    sort: "discount",
-  });
+  const [state, setState] = useListingState({ sort: "discount" });
+  useDocumentMeta({ title: "Offers" });
 
   /* Anything genuinely reduced belongs on this page, whichever group the
      catalogue assigned it to. */
   const source = useMemo(() => {
     const seen = new Set(offerProducts.map((p) => p.id));
-    return [...offerProducts, ...products.filter((p) => !seen.has(p.id) && discountOf(p) > 0)];
+    return [
+      ...offerProducts,
+      ...products.filter((p) => !seen.has(p.id) && discountOf(p) > 0),
+    ].sort((a, b) => (b.sold ?? 0) - (a.sold ?? 0));
   }, [offerProducts, products]);
 
   const results = useMemo(() => applyListing(source, state), [source, state]);
@@ -48,7 +44,7 @@ export function OffersPage() {
       results={results}
       state={state}
       onChange={setState}
-      sortOptions={["discount", "relevance", "price-asc", "price-desc", "newest"]}
+      sortOptions={["discount", "relevance", "price-asc", "price-desc", "rating", "newest"]}
       heading="Offers"
       subheading={
         <span className="tnum">
@@ -57,7 +53,7 @@ export function OffersPage() {
         </span>
       }
       intro={
-        <p className="mb-5 flex items-center gap-2 rounded-md border border-brand-border bg-brand-soft px-3.5 py-2.5 text-sm text-brand-strong">
+        <p className="mb-5 flex items-center gap-2 rounded-xl border border-dashed border-brand bg-brand-soft px-3.5 py-3 text-sm font-medium text-brand-strong">
           <Icon name="ticket" size={16} className="shrink-0" />
           {voucherTerms()}
         </p>

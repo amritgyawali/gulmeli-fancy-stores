@@ -5,7 +5,7 @@ import type { Product } from "@/types/shop";
 import { T } from "./ui";
 import { FontIcon } from "./FontIcon";
 import { colors, shared } from "@/theme/tokens";
-import { photoFor } from "@/services/product-media";
+import { photoFor, sizedImage } from "@/services/product-media";
 import { useMediaUrl } from "@/services/media-library";
 
 export function StitchImage({
@@ -31,12 +31,19 @@ export function StitchImage({
 }
 // Photos come from the hosted media library, the bundled Stitch assets, or
 // neither - in which case a neutral placeholder says so.
+// `width` is the slot's size in points; hosted photos are fetched resized to
+// it (at 2x for sharp screens) instead of at their full upload size, and fade
+// in over a neutral tint rather than popping in.
 export function ProductVisual({
   product,
   small = false,
+  width = 400,
+  fit = "cover",
 }: {
   product: Product;
   small?: boolean;
+  width?: number;
+  fit?: "cover" | "contain";
 }) {
   const photo = photoFor(product);
   const imageUrl = product.imageUrl || photo?.url;
@@ -44,11 +51,13 @@ export function ProductVisual({
     return (
       <View style={{ width: "100%", height: "100%" }}>
         <Image
-          source={{ uri: imageUrl }}
+          source={{ uri: sizedImage(imageUrl, width * 2) }}
           accessibilityLabel={product.name}
-          contentFit="cover"
+          contentFit={fit}
           cachePolicy="memory-disk"
-          style={{ width: "100%", height: "100%" }}
+          transition={180}
+          recyclingKey={product.id}
+          style={{ width: "100%", height: "100%", backgroundColor: colors.sunken }}
         />
         {(product.imageIllustrative ||
           (!product.imageUrl && photo?.illustrative)) && (

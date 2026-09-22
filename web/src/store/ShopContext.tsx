@@ -99,6 +99,26 @@ function loadGuestCart(catalog: Record<string, Product>): CartItem[] {
   return [];
 }
 
+/*
+ * A guest's wishlist and browsing history, kept on this device. Without it a
+ * visitor who saved five products lost all of them on reload, and the
+ * "recently viewed" rail could never show anything to someone not signed in.
+ * Once signed in, the account's own lists take over.
+ */
+const ids = (value: unknown) =>
+  Array.isArray(value)
+    ? [...new Set(value.filter((x): x is string => typeof x === "string"))].slice(0, 100)
+    : [];
+
+function loadGuestLists(): Pick<Commerce, "wishlist" | "recent"> {
+  try {
+    const raw = JSON.parse(localStorage.getItem(GUEST_KEY) ?? "{}");
+    return { wishlist: ids(raw.wishlist), recent: ids(raw.recent) };
+  } catch {
+    return { wishlist: [], recent: [] };
+  }
+}
+
 export function ShopProvider({ children }: PropsWithChildren) {
   const [products, setProducts] = useState<Product[]>([]);
   const productById = useMemo(
@@ -167,14 +187,37 @@ export function ShopProvider({ children }: PropsWithChildren) {
   }, []);
 
   // Guest persistence
+  const guestListsLoaded = useRef(false);
   useEffect(() => {
-    if (userId || !sessionReady || !catalogReady) return;
+    if (userId || !sessionReady) {
+      guestListsLoaded.current = false;
+      return;
+    }
+    if (guestListsLoaded.current) return;
+    guestListsLoaded.current = true;
+    const saved = loadGuestLists();
+    setCommerce((current) => ({
+      ...current,
+      wishlist: [...new Set([...current.wishlist, ...saved.wishlist])],
+      recent: [...new Set([...current.recent, ...saved.recent])].slice(0, 30),
+    }));
+  }, [userId, sessionReady]);
+  useEffect(() => {
+    if (userId || !sessionReady || !catalogReady || !guestListsLoaded.current) return;
     try {
-      localStorage.setItem(GUEST_KEY, JSON.stringify({ version: 1, cart }));
+      localStorage.setItem(
+        GUEST_KEY,
+        JSON.stringify({
+          version: 1,
+          cart,
+          wishlist: commerce.wishlist,
+          recent: commerce.recent,
+        }),
+      );
     } catch {
       /* private mode */
     }
-  }, [cart, userId, sessionReady, catalogReady]);
+  }, [cart, commerce.wishlist, commerce.recent, userId, sessionReady, catalogReady]);
   useEffect(() => {
     if (userId || !catalogReady) return;
     setCart((current) =>

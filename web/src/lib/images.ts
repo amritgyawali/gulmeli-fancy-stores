@@ -1,5 +1,16 @@
 import type { Product } from "./types";
-import { photoFor } from "../../../mobile/src/services/product-media";
+import { photoFor, sizedImage } from "../../../mobile/src/services/product-media";
+
+/* Resized, modern-format delivery URL for a hosted photo (see sizedImage). */
+export const sized = sizedImage;
+
+/* 1x and 2x candidates, so a retina screen gets a sharp photo and an ordinary
+   one does not download twice the pixels. */
+export const srcSetFor = (url: string, width: number) => {
+  const one = sizedImage(url, width);
+  const two = sizedImage(url, width * 2);
+  return one === two ? undefined : `${one} 1x, ${two} 2x`;
+};
 
 // Keys resolve to files copied into public/img from the mobile asset set.
 const IMAGE_KEYS = new Set<string>([

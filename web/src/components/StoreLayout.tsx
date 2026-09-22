@@ -13,6 +13,9 @@ import { useTheme, safeStoreLink } from "@/lib/storefront";
 import { rs } from "@/lib/format";
 import { Icon } from "@/components/Icon";
 import { CartDrawer } from "@/components/CartDrawer";
+import { ToastProvider } from "@/components/Toast";
+import { bundledImage, sized } from "@/lib/images";
+import { discountPercent } from "@/components/ProductCard";
 
 /*
  * The storefront shell — one chrome for every customer-facing route.
@@ -43,17 +46,40 @@ function readRecent(): string[] {
   }
 }
 
-/* Destinations that belong in the phone bottom bar, in reach order. */
+/* Destinations that belong in the phone bottom bar, in reach order. The cart
+   is here, with its count, because it is the destination a shopper returns to
+   most; notifications moved to the menu. */
 const BOTTOM_NAV = [
   { to: "/", label: "Home", icon: "home", end: true },
-  { to: "/offers", label: "Offers", icon: "percent" },
   { to: "/search", label: "Browse", icon: "grid" },
-  { to: "/messages", label: "Inbox", icon: "message" },
+  { to: "/offers", label: "Deals", icon: "percent" },
+  { to: "/cart", label: "Cart", icon: "cart" },
   { to: "/account", label: "Account", icon: "user" },
 ] as const;
 
+/* Routes that carry their own fixed action bar on a phone (the product page's
+   Add to cart, the cart's and checkout's totals). The bottom navigation steps
+   aside on these instead of stacking a second bar on top of the first. The
+   empty cart has no bar, so the navigation stays there. */
+const OWN_ACTION_BAR = [/^\/product\//, /^\/checkout/];
+
+/* Wraps the part of a suggestion that matches what was typed. */
+function highlight(text: string, needle: string) {
+  const at = needle ? text.toLowerCase().indexOf(needle) : -1;
+  if (at < 0) return text;
+  return (
+    <>
+      {text.slice(0, at)}
+      <mark className="bg-transparent font-semibold text-ink">
+        {text.slice(at, at + needle.length)}
+      </mark>
+      {text.slice(at + needle.length)}
+    </>
+  );
+}
+
 export function StoreLayout() {
-  const { cartCount, session, backendError, retryBackend, products } = useShop();
+  const { cartCount, session, backendError, retryBackend, products, commerce } = useShop();
   const config = usePublishedConfig();
   const theme = useTheme();
   const navigate = useNavigate();
@@ -64,6 +90,10 @@ export function StoreLayout() {
   const [navOpen, setNavOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [recent, setRecent] = useState<string[]>(readRecent);
+  const [active, setActive] = useState(-1);
+  const [scrolled, setScrolled] = useState(false);
+  const [showTop, setShowTop] = useState(false);
+  const [bump, setBump] = useState(0);
 
   const searchWrap = useRef<HTMLDivElement>(null);
   const searchInput = useRef<HTMLInputElement>(null);
@@ -93,7 +123,7 @@ export function StoreLayout() {
       icon.rel = "icon";
       document.head.appendChild(icon);
     }
-    icon.href = safeStoreLink(config.branding.favicon) || "/favicon.ico";
+    icon.href = safeStoreLink(config.branding.favicon) || "/icon.svg";
   }, [brand, config.branding.favicon]);
 
   /* Close transient surfaces on navigation — a drawer left open across a route
@@ -102,6 +132,48 @@ export function StoreLayout() {
     setNavOpen(false);
     setSuggestOpen(false);
   }, [location.pathname, location.search]);
+
+  /* Header elevation once the page scrolls under it, and the back-to-top
+     control after roughly two screens. One passive listener, rAF-throttled. */
+  useEffect(() => {
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        setScrolled(window.scrollY > 4);
+        setShowTop(window.scrollY > window.innerHeight * 2);
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  /* Bump the cart badge when an item lands. The fly-to-cart animation fires
+     `cart:landed` on arrival; when it did not run (reduced motion, no photo)
+     the count increase itself triggers the bump. */
+  const lastCount = useRef(cartCount);
+  useEffect(() => {
+    const landed = () => setBump((b) => b + 1);
+    window.addEventListener("cart:landed", landed);
+    return () => window.removeEventListener("cart:landed", landed);
+  }, []);
+  useEffect(() => {
+    const grew = cartCount > lastCount.current;
+    lastCount.current = cartCount;
+    if (!grew) return;
+    const t = window.setTimeout(() => setBump((b) => b + 1), 700);
+    const cancel = () => window.clearTimeout(t);
+    window.addEventListener("cart:landed", cancel, { once: true });
+    return () => {
+      cancel();
+      window.removeEventListener("cart:landed", cancel);
+    };
+  }, [cartCount]);
 
   /* Lock the page behind the mobile drawer so the body does not scroll under
      it, and restore the exact previous value rather than clearing it. */
@@ -177,6 +249,39 @@ export function StoreLayout() {
         )
         .slice(0, 4)
     : [];
+  const options: ({ kind: "term"; term: string } | { kind: "product"; id: string })[] = [
+    ...termMatches.map((term) => ({ kind: "term" as const, term })),
+    ...productMatches.map((p) => ({ kind: "product" as const, id: p.id })),
+  ];
+  const optionId = (i: number) => `${listboxId}-opt-${i}`;
+  const choose = (i: number) => {
+    const option = options[i];
+    if (!option) return false;
+    if (option.kind === "term") submitSearch(option.term);
+    else {
+      setSuggestOpen(false);
+      setQuery("");
+      searchInput.current?.blur();
+      navigate(`/product/${option.id}`);
+    }
+    return true;
+  };
+  const onSearchKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!needle || !options.length) return;
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      setSuggestOpen(true);
+      /* -1 is the field itself, so arrowing past either end returns to it. */
+      const last = options.length - 1;
+      setActive((i) =>
+        e.key === "ArrowDown" ? (i >= last ? -1 : i + 1) : i <= -1 ? last : i - 1,
+      );
+    } else if (e.key === "Enter" && active >= 0 && active < options.length) {
+      e.preventDefault();
+      choose(active);
+    }
+  };
+
   const trending = useMemo(
     () =>
       [...new Set([...products].sort((a, b) => (b.sold ?? 0) - (a.sold ?? 0)).map((p) => p.category))]
@@ -238,10 +343,13 @@ export function StoreLayout() {
           aria-autocomplete="list"
           aria-label={`Search ${brand}`}
           placeholder={config.header.searchPlaceholder || "Search products"}
+          aria-activedescendant={active >= 0 && suggestOpen ? optionId(active) : undefined}
           onFocus={() => setSuggestOpen(true)}
+          onKeyDown={onSearchKey}
           onChange={(e) => {
             setQuery(e.target.value);
             setSuggestOpen(true);
+            setActive(-1);
           }}
           className="h-full w-full bg-transparent px-2.5 text-base text-ink outline-none placeholder:text-ink-faint [&::-webkit-search-cancel-button]:appearance-none"
         />
@@ -271,23 +379,29 @@ export function StoreLayout() {
         <div
           id={listboxId}
           role="listbox"
-          className="absolute inset-x-0 top-full z-50 mt-1.5 overflow-hidden rounded-md border border-line bg-raised shadow-e3"
+          className="animate-scale-in absolute inset-x-0 top-full z-50 mt-1.5 origin-top overflow-hidden rounded-lg border border-line bg-raised shadow-e3"
         >
           {needle ? (
             <>
               {termMatches.length > 0 && (
                 <ul className="py-1">
-                  {termMatches.map((t) => (
+                  {termMatches.map((t, i) => (
                     <li key={t}>
                       <button
                         type="button"
                         role="option"
-                        aria-selected="false"
+                        id={optionId(i)}
+                        aria-selected={active === i}
+                        tabIndex={-1}
+                        onMouseEnter={() => setActive(i)}
                         onClick={() => submitSearch(t)}
-                        className="flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm text-ink hover:bg-sunken"
+                        className={`flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm text-ink-soft ${
+                          active === i ? "bg-sunken" : "hover:bg-sunken"
+                        }`}
                       >
                         <Icon name="search" size={14} className="shrink-0 text-ink-faint" />
-                        <span className="clamp-1">{t}</span>
+                        <span className="clamp-1">{highlight(t, needle)}</span>
+                        <Icon name="arrowUpRight" size={14} className="ml-auto shrink-0 text-ink-faint" />
                       </button>
                     </li>
                   ))}
@@ -298,32 +412,50 @@ export function StoreLayout() {
                   <p className="px-1.5 pb-1 pt-1 text-2xs font-semibold uppercase tracking-wide text-ink-faint">
                     Products
                   </p>
-                  {productMatches.map((p) => (
-                    <button
-                      key={p.id}
-                      type="button"
-                      onClick={() => {
-                        setSuggestOpen(false);
-                        setQuery("");
-                        navigate(`/product/${p.id}`);
-                      }}
-                      className="flex w-full items-center gap-2.5 rounded-sm p-1.5 text-left hover:bg-sunken"
-                    >
-                      <span className="media grid h-10 w-10 shrink-0 place-items-center rounded-xs border border-line">
-                        {p.imageUrl ? (
-                          <img src={p.imageUrl} alt="" className="object-contain" />
-                        ) : (
-                          <Icon name="bag" size={16} className="text-ink-faint" />
-                        )}
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="clamp-1 block text-sm text-ink">{p.name}</span>
-                        <span className="tnum block text-sm font-semibold text-brand">
-                          {rs(p.price)}
+                  {productMatches.map((p, j) => {
+                    const i = termMatches.length + j;
+                    const image = bundledImage(p);
+                    const off = discountPercent(p);
+                    return (
+                      <button
+                        key={p.id}
+                        type="button"
+                        role="option"
+                        id={optionId(i)}
+                        aria-selected={active === i}
+                        tabIndex={-1}
+                        onMouseEnter={() => setActive(i)}
+                        onClick={() => choose(i)}
+                        className={`flex w-full items-center gap-2.5 rounded-md p-1.5 text-left ${
+                          active === i ? "bg-sunken" : "hover:bg-sunken"
+                        }`}
+                      >
+                        <span className="media grid h-11 w-11 shrink-0 place-items-center rounded-sm border border-line">
+                          {image ? (
+                            <img
+                              src={sized(image, 96)}
+                              alt=""
+                              loading="lazy"
+                              className="object-cover"
+                            />
+                          ) : (
+                            <Icon name="bag" size={16} className="text-ink-faint" />
+                          )}
                         </span>
-                      </span>
-                    </button>
-                  ))}
+                        <span className="min-w-0 flex-1">
+                          <span className="clamp-1 block text-sm text-ink-soft">
+                            {highlight(p.name, needle)}
+                          </span>
+                          <span className="tnum flex items-baseline gap-1.5 text-sm">
+                            <span className="font-semibold text-brand">{rs(p.price)}</span>
+                            {off > 0 && (
+                              <span className="text-2xs font-semibold text-positive">-{off}%</span>
+                            )}
+                          </span>
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               )}
               {termMatches.length === 0 && productMatches.length === 0 && (
@@ -397,7 +529,12 @@ export function StoreLayout() {
     </div>
   );
 
+  const ownActionBar =
+    OWN_ACTION_BAR.some((re) => re.test(location.pathname)) ||
+    (location.pathname === "/cart" && cartCount > 0);
+
   return (
+    <ToastProvider>
     <div
       className="storefront flex min-h-screen flex-col bg-canvas text-ink"
       style={{ ...vars, background: theme.background, color: theme.text }}
@@ -422,7 +559,9 @@ export function StoreLayout() {
       ) : null}
 
       <header
-        className={`${config.header.sticky ? "sticky top-0" : ""} z-40 border-b border-line bg-raised`}
+        className={`${config.header.sticky ? "sticky top-0" : ""} z-40 border-b border-line bg-raised transition-shadow duration-200 ${
+          scrolled && config.header.sticky ? "shadow-e2" : ""
+        }`}
       >
         {/* Utility strip — desktop only. On a phone these five links cost more
             vertical space than they are worth and are reachable from the menu. */}
@@ -488,6 +627,24 @@ export function StoreLayout() {
           </div>
 
           <div className="ml-auto flex shrink-0 items-center gap-0.5">
+            {config.header.showWishlist && config.features.wishlist && (
+              <Link
+                to="/wishlist"
+                className="hit relative grid place-items-center rounded-sm text-ink hover:bg-sunken"
+                aria-label={
+                  commerce.wishlist.length
+                    ? `Wishlist, ${commerce.wishlist.length} saved`
+                    : "Wishlist"
+                }
+              >
+                <Icon name="heart" size={21} />
+                {commerce.wishlist.length > 0 && (
+                  <span className="tnum absolute right-0.5 top-0.5 grid h-[17px] min-w-[17px] place-items-center rounded-full bg-ink px-1 text-2xs font-bold text-raised ring-2 ring-raised">
+                    {commerce.wishlist.length > 99 ? "99+" : commerce.wishlist.length}
+                  </span>
+                )}
+              </Link>
+            )}
             {config.header.showProfile && (
               <Link
                 to={session ? "/account" : "/auth"}
@@ -500,15 +657,26 @@ export function StoreLayout() {
             {config.header.showCart && (
               <button
                 type="button"
+                data-cart-target
                 onClick={() => setCartOpen(true)}
                 className="hit relative grid place-items-center rounded-sm text-ink hover:bg-sunken"
                 aria-label={
                   cartCount ? `Cart, ${cartCount} item${cartCount === 1 ? "" : "s"}` : "Cart, empty"
                 }
               >
-                <Icon name="cart" size={21} />
+                <Icon
+                  key={`icon-${bump}`}
+                  name="cart"
+                  size={21}
+                  className={bump ? "animate-bump" : undefined}
+                />
                 {cartCount > 0 && (
-                  <span className="tnum absolute right-0.5 top-0.5 grid h-[17px] min-w-[17px] place-items-center rounded-full bg-brand px-1 text-2xs font-bold text-white ring-2 ring-raised">
+                  <span
+                    key={`badge-${bump}`}
+                    className={`tnum absolute right-0.5 top-0.5 grid h-[17px] min-w-[17px] place-items-center rounded-full bg-brand px-1 text-2xs font-bold text-white ring-2 ring-raised ${
+                      bump ? "animate-bump" : ""
+                    }`}
+                  >
                     {cartCount > 99 ? "99+" : cartCount}
                   </span>
                 )}
@@ -564,12 +732,12 @@ export function StoreLayout() {
           <button
             type="button"
             aria-label="Close menu"
-            className="absolute inset-0 bg-ink/40"
+            className="animate-fade-in absolute inset-0 bg-ink/40"
             onClick={() => setNavOpen(false)}
           />
           <nav
             aria-label="Main"
-            className="absolute inset-y-0 left-0 flex w-[min(320px,85vw)] flex-col bg-raised shadow-e3"
+            className="animate-slide-in-left absolute inset-y-0 left-0 flex w-[min(320px,85vw)] flex-col bg-raised shadow-e3"
           >
             <div className="flex h-[var(--header-height)] shrink-0 items-center justify-between border-b border-line px-4">
               <span className="text-lg font-bold text-brand">{brand}</span>
@@ -587,6 +755,7 @@ export function StoreLayout() {
                 {[
                   { to: session ? "/account" : "/auth", icon: "user", label: session ? "My account" : "Sign in" },
                   { to: "/offers", icon: "percent", label: "Deals" },
+                  { to: "/wishlist", icon: "heart", label: "Wishlist" },
                   { to: "/messages", icon: "message", label: "Notifications" },
                   { to: "/help", icon: "headset", label: "Help & support" },
                   { to: "/sell", icon: "store", label: `Sell on ${brand}` },
@@ -643,8 +812,14 @@ export function StoreLayout() {
         </div>
       )}
 
-      <main id="store-main" className="page flex-1 py-4 pb-24 lg:pb-8">
-        <Outlet />
+      <main
+        id="store-main"
+        className={`page flex-1 py-4 lg:pb-8 ${ownActionBar ? "pb-28" : "pb-24"}`}
+      >
+        {/* Keyed on the path so each page fades up as it arrives. */}
+        <div key={location.pathname} className="route-enter">
+          <Outlet />
+        </div>
       </main>
 
       <StoreFooter brand={brand} />
@@ -653,7 +828,9 @@ export function StoreLayout() {
           padded for the home indicator on iOS. */}
       <nav
         aria-label="Primary"
-        className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-raised pb-[env(safe-area-inset-bottom)] lg:hidden"
+        className={`fixed inset-x-0 bottom-0 z-30 border-t border-line bg-raised/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden ${
+          ownActionBar ? "hidden" : ""
+        }`}
       >
         <ul className="grid grid-cols-5">
           {BOTTOM_NAV.map((item) => (
@@ -669,11 +846,24 @@ export function StoreLayout() {
               >
                 {({ isActive }) => (
                   <>
-                    <Icon
-                      name={item.icon}
-                      size={21}
-                      strokeWidth={isActive ? 2 : 1.6}
-                    />
+                    <span className="relative">
+                      <Icon
+                        name={item.icon}
+                        size={21}
+                        strokeWidth={isActive ? 2 : 1.6}
+                        className={`transition-transform duration-200 ${isActive ? "scale-110" : ""}`}
+                      />
+                      {item.to === "/cart" && cartCount > 0 && (
+                        <span
+                          key={`nav-badge-${bump}`}
+                          className={`tnum absolute -right-2.5 -top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-brand px-1 text-[10px] font-bold leading-none text-white ring-2 ring-raised ${
+                            bump ? "animate-bump" : ""
+                          }`}
+                        >
+                          {cartCount > 99 ? "99+" : cartCount}
+                        </span>
+                      )}
+                    </span>
                     {item.label}
                   </>
                 )}
@@ -683,8 +873,31 @@ export function StoreLayout() {
         </ul>
       </nav>
 
+      {showTop && (
+        <button
+          type="button"
+          onClick={() =>
+            window.scrollTo({
+              top: 0,
+              behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+                ? "auto"
+                : "smooth",
+            })
+          }
+          aria-label="Back to top"
+          className={`animate-scale-in fixed right-4 z-30 grid h-11 w-11 place-items-center rounded-full border border-line bg-raised text-ink shadow-e3 hover:text-brand lg:bottom-8 lg:right-8 ${
+            ownActionBar
+              ? "bottom-[calc(88px+env(safe-area-inset-bottom))]"
+              : "bottom-[calc(76px+env(safe-area-inset-bottom))]"
+          }`}
+        >
+          <Icon name="chevronUp" size={20} />
+        </button>
+      )}
+
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
     </div>
+    </ToastProvider>
   );
 }
 

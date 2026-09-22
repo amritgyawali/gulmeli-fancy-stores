@@ -16,6 +16,7 @@ export interface Product {
   images?: string[];
   imageIllustrative?: boolean;
   illustration?: string;
+  description?: string;
   brand?: string;
   store?: string;
   stock: number;
