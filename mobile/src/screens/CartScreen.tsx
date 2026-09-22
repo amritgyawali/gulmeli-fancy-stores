@@ -10,6 +10,9 @@ import { useShop, useCatalog } from "@/store/ShopProvider";
 import { openDestination } from "@/services/navigation";
 import { colors, fontFamily } from "@/theme/tokens";
 import type { CartItem } from "@/types/shop";
+import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated";
+import { useStorefront, useStorefrontTheme } from "@/store/StorefrontProvider";
+import { deliveryTerms } from "@/services/delivery";
 
 function SwipeToDelete({
   onDelete,
@@ -172,6 +175,60 @@ function CartRow({ item }: { item: CartItem }) {
     </SwipeToDelete>
   );
 }
+/*
+ * Progress toward free delivery, from the same terms the product screen and
+ * the web cart quote. The bar animates as items are added or removed.
+ */
+function FreeDeliveryBar({ subtotal }: { subtotal: number }) {
+  const { config } = useStorefront();
+  const theme = useStorefrontTheme();
+  const terms = deliveryTerms(config);
+  const toGo = Math.max(0, terms.freeOver - subtotal);
+  const progress = terms.freeOver > 0 ? Math.min(1, subtotal / terms.freeOver) : 1;
+  const bar = useAnimatedStyle(() => ({
+    width: withTiming(`${Math.round(progress * 100)}%`, { duration: 400 }),
+  }));
+  return (
+    <View
+      accessible
+      accessibilityLabel={
+        toGo > 0
+          ? `Add ${config.localisation.currencySymbol} ${toGo} more for free delivery`
+          : "Your order qualifies for free delivery"
+      }
+      style={{
+        backgroundColor: theme.surface,
+        borderRadius: 8,
+        padding: 12,
+        gap: 8,
+        borderWidth: 1,
+        borderColor: `${theme.primary}33`,
+      }}
+    >
+      <Row style={{ gap: 8 }}>
+        <FontIcon name="truck-fast" size={14} color={theme.primaryText} />
+        <T preserveColor size={13} color={theme.primaryText} style={{ flex: 1 }}>
+          {toGo > 0
+            ? `Add ${config.localisation.currencySymbol} ${toGo.toLocaleString("en-US")} more for free delivery`
+            : "Your order qualifies for free delivery"}
+        </T>
+      </Row>
+      <View
+        style={{
+          height: 6,
+          borderRadius: 3,
+          overflow: "hidden",
+          backgroundColor: `${theme.primary}22`,
+        }}
+      >
+        <Animated.View
+          style={[{ height: "100%", borderRadius: 3, backgroundColor: theme.primary }, bar]}
+        />
+      </View>
+    </View>
+  );
+}
+
 export default function CartScreen() {
   const { choiceProducts, productById, recommendations } = useCatalog();
   const { state, select, removeSelected, count, subtotal } = useShop();
@@ -242,6 +299,7 @@ export default function CartScreen() {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View style={{ paddingHorizontal: 10, gap: 10, marginBottom: 18 }}>
+            {!!state.cart.length && <FreeDeliveryBar subtotal={subtotal} />}
             <View
               style={{ backgroundColor: "#fff", borderRadius: 8, padding: 12 }}
             >

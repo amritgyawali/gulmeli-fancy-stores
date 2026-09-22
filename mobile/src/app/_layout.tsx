@@ -18,6 +18,7 @@ import { BottomNavigation } from "@/components/BottomNavigation";
 import { BrandDocument } from "@/components/BrandDocument";
 import { AppLock } from "@/components/AppLock";
 import { Button, Row, T } from "@/components/ui";
+import { ToastProvider } from "@/components/Toast";
 import { ClerkAuth } from "@/services/clerk-auth";
 import { initTelemetry, withErrorReporting } from "@/services/telemetry";
 import { queryClient } from "@/services/queries";
@@ -55,22 +56,35 @@ function AppFrame() {
   if (!hydrated || (!loaded && !error)) return null;
   // One navigator, rendered either inside the storefront frame or full-bleed
   // for the dashboard, so navigation state survives moving between the two.
+  //
+  // Transitions: the tab destinations (home, offers, messages, cart,
+  // account) switch in place, as tabs do, because sliding between siblings
+  // reads as going "deeper". Everything opened from them — a product,
+  // search, a feature page — pushes with the platform's own transition and
+  // can be swiped back on iOS.
+  const tab = { animation: "fade" as const, animationDuration: 140 };
   const navigator = (
     <Stack
       screenOptions={{
         headerShown: false,
         contentStyle: { backgroundColor: admin ? "#f6f7f9" : theme.background },
-        animation: "none",
+        animation: "default",
+        gestureEnabled: true,
       }}
     >
-      <Stack.Screen name="index" />
-      <Stack.Screen name="messages" />
-      <Stack.Screen name="offers" />
-      <Stack.Screen name="cart" />
-      <Stack.Screen name="account" />
-      <Stack.Screen name="admin" />
+      <Stack.Screen name="index" options={tab} />
+      <Stack.Screen name="messages" options={tab} />
+      <Stack.Screen name="offers" options={tab} />
+      <Stack.Screen name="cart" options={tab} />
+      <Stack.Screen name="account" options={tab} />
+      <Stack.Screen name="product/[id]" options={{ animation: "slide_from_right" }} />
+      <Stack.Screen name="search" options={{ animation: "fade_from_bottom" }} />
+      <Stack.Screen name="admin" options={{ animation: "none" }} />
     </Stack>
   );
+  // The product screen carries its own Add to cart bar where the tab bar sits.
+  const ownActionBar = path.startsWith("/product/");
+  const immersive = ownActionBar || path === "/search";
   // The dashboard is its own full-width surface, without the storefront chrome.
   if (admin)
     return (
@@ -140,7 +154,10 @@ function AppFrame() {
             {storageError}
           </T>
         )}
-        {live && (
+        {/* Account/connection status. Not on the product or search screens,
+            where the shopping task owns the whole screen — except for a
+            backend error, which always shows. */}
+        {live && (!immersive || !!backendError) && (
           <View
             style={{
               backgroundColor: theme.surface,
@@ -187,8 +204,10 @@ function AppFrame() {
             )}
           </View>
         )}
-        {navigator}
-        <BottomNavigation />
+        <ToastProvider>
+          {navigator}
+          {!ownActionBar && <BottomNavigation />}
+        </ToastProvider>
       </SafeAreaView>
     </View>
   );

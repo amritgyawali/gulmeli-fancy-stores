@@ -42,6 +42,9 @@ const AuthPage = lazy(() =>
   import("@/pages/AuthPage").then((m) => ({ default: m.AuthPage })),
 );
 const HelpPage = lazy(() => import("@/pages/HelpPage"));
+const WishlistPage = lazy(() =>
+  import("@/pages/WishlistPage").then((m) => ({ default: m.WishlistPage })),
+);
 const SellPage = lazy(() => import("@/pages/SellPage"));
 
 /* Staff surfaces. */
@@ -151,6 +154,7 @@ export default function App() {
               <Route path="offers" element={<OffersPage />} />
               <Route path="messages" element={<MessagesPage />} />
               <Route path="account" element={<AccountPage />} />
+              <Route path="wishlist" element={<WishlistPage />} />
               <Route path="auth" element={<AuthPage />} />
               <Route path="help" element={<HelpPage />} />
               <Route path="sell" element={<SellPage />} />

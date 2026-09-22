@@ -51,9 +51,12 @@ const sdRoundRect = (x, y, cx, cy, w, h, r) => {
   const ax = Math.max(dx, 0), ay = Math.max(dy, 0);
   return Math.hypot(ax, ay) + Math.min(Math.max(dx, dy), 0) - r;
 };
+// Negative inside the band between rInner and rOuter. (This used to return
+// max(rOuter - d, d - rInner), which is positive everywhere in the band, so
+// the bag's handle was never drawn and the icon was a plain white box.)
 const sdRing = (x, y, cx, cy, rOuter, rInner) => {
   const d = Math.hypot(x - cx, y - cy);
-  return Math.max(rOuter - d, d - rInner);
+  return Math.max(d - rOuter, rInner - d);
 };
 const cover = (dist, px = 1.5) => Math.min(1, Math.max(0, 0.5 - dist / (2 * px) + 0.5));
 

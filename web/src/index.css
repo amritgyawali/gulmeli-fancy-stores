@@ -94,6 +94,99 @@
 
   /* ---- layout ---- */
   --container-page: 1240px;
+
+  /* ---- motion ----
+     Curves are chosen by what moves rather than copied onto every
+     transition: things entering decelerate (out-quint), things leaving
+     accelerate and finish faster than they arrived, and only small
+     confirmations (a heart, a badge) get the overshooting spring. Everything
+     here is neutralised by the reduced-motion block at the bottom of the
+     file. */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-quad: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --animate-fade-in: fade-in 180ms var(--ease-out-quint) both;
+  --animate-fade-up: fade-up 320ms var(--ease-out-quint) both;
+  --animate-slide-in-right: slide-in-right 280ms var(--ease-out-quint) both;
+  --animate-slide-in-left: slide-in-left 280ms var(--ease-out-quint) both;
+  --animate-slide-up: slide-up 300ms var(--ease-out-quint) both;
+  --animate-scale-in: scale-in 200ms var(--ease-out-quint) both;
+  --animate-pop: pop 420ms var(--ease-spring) both;
+  --animate-bump: bump 460ms var(--ease-spring) both;
+}
+
+/* Keyframes live outside @theme so they are always emitted: the reveal and
+   route animations below reference them by name, not through a utility. */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+}
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+}
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+/* The wishlist heart: a quick overshoot, so the state change reads as a
+   response to the tap rather than a repaint. */
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.32);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/* The cart badge when an item lands in it. */
+@keyframes bump {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.35);
+  }
+  60% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* The hero's active indicator filling over the time until the next slide. */
+@keyframes hero-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
 }
 
 /* ------------------------------------------------------ runtime theming --- */
@@ -132,203 +225,272 @@
   --color-sunken: var(--sunken, #fafafa);
 }
 
-/* ---------------------------------------------------------------- base --- */
+/*
+ * Base and component rules sit in cascade layers so Tailwind utilities
+ * override them. They used to be unlayered, and unlayered CSS beats every
+ * layer regardless of specificity: `button { font: inherit; color: inherit }`
+ * silently cancelled every text-size and text-colour class on every button
+ * and input on the site, `img, svg { display: block }` cancelled `hidden`
+ * on icons, and `.rail { display: flex }` cancelled `sm:grid`.
+ */
+@layer base {
+  /* ---------------------------------------------------------------- base --- */
 
-:root {
-  color-scheme: light;
-  --page-gutter: 1rem;
-  --header-height: 56px;
-}
-
-@media (min-width: 768px) {
   :root {
-    --page-gutter: 1.5rem;
-    --header-height: 64px;
+    color-scheme: light;
+    --page-gutter: 1rem;
+    --header-height: 56px;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --page-gutter: 1.5rem;
+      --header-height: 64px;
+    }
+  }
+
+  * {
+    min-width: 0;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-synthesis-weight: none;
+  }
+
+  /* Tabular figures everywhere a number is compared against another number:
+     prices in a grid, quantities in a cart, metrics in a console. */
+  .tnum,
+  table,
+  input[type="number"] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    font-weight: 650;
+    letter-spacing: -0.011em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* --------------------------------------------------------------- focus --- */
+  /* One visible focus treatment for every interactive element. Keyboard users
+     previously got the browser default on some controls and nothing at all on
+     the ones that set `outline: none` for their own hover styling. */
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  .dark-surface :focus-visible {
+    outline-color: #ffffff;
+  }
+
+  /* ------------------------------------------------------------ controls --- */
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
   }
 }
 
-* {
-  min-width: 0;
-}
-
-html {
-  -webkit-text-size-adjust: 100%;
-}
-
-body {
-  margin: 0;
-  font-family: var(--font-sans);
-  font-size: var(--text-base);
-  line-height: var(--text-base--line-height);
-  background-color: var(--color-canvas);
-  color: var(--color-ink);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-synthesis-weight: none;
-}
-
-/* Tabular figures everywhere a number is compared against another number:
-   prices in a grid, quantities in a cart, metrics in a console. */
-.tnum,
-table,
-input[type="number"] {
-  font-variant-numeric: tabular-nums;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0;
-  font-weight: 650;
-  letter-spacing: -0.011em;
-  text-wrap: balance;
-}
-
-p {
-  text-wrap: pretty;
-}
-
-img,
-svg,
-video {
-  display: block;
-  max-width: 100%;
-}
-
-/* --------------------------------------------------------------- focus --- */
-/* One visible focus treatment for every interactive element. Keyboard users
-   previously got the browser default on some controls and nothing at all on
-   the ones that set `outline: none` for their own hover styling. */
-
-:focus-visible {
-  outline: 2px solid var(--color-brand);
-  outline-offset: 2px;
-  border-radius: var(--radius-xs);
-}
-
-.dark-surface :focus-visible {
-  outline-color: #ffffff;
-}
-
-/* ------------------------------------------------------------ controls --- */
-
-button,
-input,
-select,
-textarea {
-  font: inherit;
-  color: inherit;
-}
-
-button:not(:disabled) {
-  cursor: pointer;
-}
-
-button:disabled,
-[aria-disabled="true"] {
-  cursor: not-allowed;
-}
-
-/* A control smaller than this is hard to hit on a touch screen. Applied to
-   icon-only buttons via the .hit class rather than globally, so text links in
-   dense tables are not forced to 44px. */
-.hit {
-  min-height: 44px;
-  min-width: 44px;
-}
-
-@media (pointer: fine) {
+@layer components {
+  /* A control smaller than this is hard to hit on a touch screen. Applied to
+     icon-only buttons via the .hit class rather than globally, so text links in
+     dense tables are not forced to 44px. */
   .hit {
-    min-height: 36px;
-    min-width: 36px;
+    min-height: 44px;
+    min-width: 44px;
   }
-}
 
-/* ------------------------------------------------------------- layout --- */
-
-.page {
-  width: 100%;
-  max-width: var(--container-page);
-  margin-inline: auto;
-  padding-inline: var(--page-gutter);
-}
-
-/* Horizontal rails: hide the scrollbar chrome but keep the scroll, and snap so
-   a flick always lands on a card edge instead of halfway through one. */
-.rail {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  overscroll-behavior-x: contain;
-}
-
-.rail::-webkit-scrollbar {
-  display: none;
-}
-
-.rail > * {
-  scroll-snap-align: start;
-  flex: none;
-}
-
-/* Truncation helpers, since two-line product titles appear in six places. */
-.clamp-1,
-.clamp-2,
-.clamp-3 {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.clamp-1 {
-  -webkit-line-clamp: 1;
-}
-.clamp-2 {
-  -webkit-line-clamp: 2;
-}
-.clamp-3 {
-  -webkit-line-clamp: 3;
-}
-
-/* --------------------------------------------------------------- media --- */
-/* Placeholder shown while a product photo loads, and in place of one that is
-   missing. A neutral tint, not an emoji or a stock illustration. */
-
-.media {
-  position: relative;
-  overflow: hidden;
-  background-color: var(--color-sunken);
-}
-
-.media > img {
-  width: 100%;
-  height: 100%;
-}
-
-.skeleton {
-  background-image: linear-gradient(
-    90deg,
-    var(--color-line) 25%,
-    var(--color-sunken) 37%,
-    var(--color-line) 63%
-  );
-  background-size: 400% 100%;
-  animation: skeleton 1.4s ease infinite;
-}
-
-@keyframes skeleton {
-  from {
-    background-position: 100% 50%;
+  @media (pointer: fine) {
+    .hit {
+      min-height: 36px;
+      min-width: 36px;
+    }
   }
-  to {
-    background-position: 0 50%;
+
+  /* ------------------------------------------------------------- layout --- */
+
+  .page {
+    width: 100%;
+    max-width: var(--container-page);
+    margin-inline: auto;
+    padding-inline: var(--page-gutter);
+  }
+
+  /* Horizontal rails: hide the scrollbar chrome but keep the scroll, and snap so
+     a flick always lands on a card edge instead of halfway through one. */
+  .rail {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .rail > * {
+    scroll-snap-align: start;
+    flex: none;
+  }
+
+  /* Truncation helpers, since two-line product titles appear in six places. */
+  .clamp-1,
+  .clamp-2,
+  .clamp-3 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .clamp-1 {
+    -webkit-line-clamp: 1;
+  }
+  .clamp-2 {
+    -webkit-line-clamp: 2;
+  }
+  .clamp-3 {
+    -webkit-line-clamp: 3;
+  }
+
+  /* --------------------------------------------------------------- media --- */
+  /* Placeholder shown while a product photo loads, and in place of one that is
+     missing. A neutral tint, not an emoji or a stock illustration. */
+
+  .media {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-sunken);
+  }
+
+  .media > img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .skeleton {
+    background-image: linear-gradient(
+      90deg,
+      var(--color-line) 25%,
+      var(--color-sunken) 37%,
+      var(--color-line) 63%
+    );
+    background-size: 400% 100%;
+    animation: skeleton 1.4s ease infinite;
+  }
+
+  @keyframes skeleton {
+    from {
+      background-position: 100% 50%;
+    }
+    to {
+      background-position: 0 50%;
+    }
+  }
+
+  /* Rails with prev/next controls fade their far edge so a partly visible card
+     reads as "there is more this way" rather than as a clipping bug. */
+  .rail-fade {
+    mask-image: linear-gradient(90deg, #000 calc(100% - 48px), transparent);
+  }
+
+  /* Countdown digits: fixed-width boxes so the timer does not jitter as the
+     seconds tick over. */
+  .digit {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.75rem;
+    height: 1.75rem;
+    padding-inline: 0.25rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-ink);
+    color: var(--color-raised);
+    font-weight: 700;
+    font-size: var(--text-sm);
+    font-variant-numeric: tabular-nums;
   }
 }
 
 /* ------------------------------------------------------------ motion --- */
+
+/*
+ * Sections rise into place as they scroll into view. Scroll-driven, so there
+ * is no observer and no JavaScript; browsers without animation-timeline
+ * simply show the section, which is the correct fallback.
+ *
+ * The start state is deliberately faint rather than invisible: anything that
+ * renders the page without scrolling it (a full-page capture, a crawler's
+ * renderer) still sees every section, just not risen.
+ */
+@keyframes reveal-up {
+  from {
+    opacity: 0.35;
+    translate: 0 14px;
+  }
+}
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: reveal-up linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 30%;
+  }
+}
+
+/*
+ * Route change: the new page fades in instead of snapping. Opacity only, and
+ * not filled forwards: a transform (or a transform animation that stays in
+ * effect) on this wrapper would become the containing block for every
+ * `position: fixed` element on the page — the product page's action bar,
+ * the filter sheet, the photo viewer — and pin them to the page instead of
+ * the screen.
+ */
+.route-enter {
+  animation: fade-in 220ms ease-out backwards;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,

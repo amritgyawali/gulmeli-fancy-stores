@@ -6,6 +6,8 @@ import { ProductVisual } from "@/components/ProductCard";
 import { Icon } from "@/components/Icon";
 import { useOrderQuote } from "@/lib/order-quote";
 import { profileError, voucherTerms, VOUCHER } from "@/lib/commerce";
+import { useDeliveryTerms } from "@/lib/shipping";
+import { deliveryWindow } from "@/lib/hooks";
 import { rs } from "@/lib/format";
 import type { Profile } from "@/lib/types";
 
@@ -68,6 +70,8 @@ export default function CheckoutPage() {
   } = useShop();
   const navigate = useNavigate();
   const config = usePublishedConfig();
+  const terms = useDeliveryTerms();
+  const eta = deliveryWindow(terms.estimate);
 
   const [profile, setProfile] = useState<Profile>(commerce.profile);
   const [errors, setErrors] = useState<FieldErrors>({});
@@ -230,9 +234,17 @@ export default function CheckoutPage() {
           {/* Items */}
           <section className="rounded-md border border-line bg-raised">
             <div className="flex items-center justify-between border-b border-line px-4 py-3">
-              <h2 className="text-base font-semibold text-ink">
-                {count} {count === 1 ? "item" : "items"}
-              </h2>
+              <div>
+                <h2 className="text-base font-semibold text-ink">
+                  {count} {count === 1 ? "item" : "items"}
+                </h2>
+                {eta && (
+                  <p className="mt-0.5 flex items-center gap-1.5 text-xs text-ink-muted">
+                    <Icon name="truck" size={13} />
+                    Estimated delivery <span className="font-medium text-positive">{eta}</span>
+                  </p>
+                )}
+              </div>
               <Link
                 to="/cart"
                 className="flex items-center gap-1 text-sm font-medium text-brand hover:text-brand-strong"
@@ -252,7 +264,7 @@ export default function CheckoutPage() {
                   return (
                     <li key={item.productId} className="flex items-start gap-3 p-4">
                       <div className="media h-16 w-16 shrink-0 rounded-sm border border-line">
-                        <ProductVisual product={p} fit="contain" sizes="64px" />
+                        <ProductVisual product={p} fit="cover" width={64} />
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="clamp-2 text-sm text-ink">{p.name}</p>
@@ -362,10 +374,24 @@ export default function CheckoutPage() {
               type="button"
               disabled={busy || !lines.length || !quote}
               onClick={() => void place()}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-brand py-3 text-base font-semibold text-white hover:bg-brand-strong disabled:bg-line-strong disabled:text-ink-faint"
+              className="mt-4 hidden w-full items-center justify-center gap-2 rounded-full bg-brand py-3 text-base font-semibold text-white shadow-e1 hover:bg-brand-strong active:scale-[0.98] disabled:bg-line-strong disabled:text-ink-faint lg:flex"
             >
-              {busy ? "Placing order…" : "Place order"}
+              {busy ? (
+                <>
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                  Placing order…
+                </>
+              ) : (
+                <>
+                  <Icon name="lock" size={16} />
+                  Place order
+                </>
+              )}
             </button>
+            <p className="mt-2.5 flex items-center justify-center gap-1.5 text-xs text-ink-muted">
+              <Icon name="shieldCheck" size={14} />
+              Pay in cash when your order arrives
+            </p>
 
             <div aria-live="assertive">
               {(notice || quoteError) && (
@@ -401,6 +427,34 @@ export default function CheckoutPage() {
             </p>
           </div>
         </aside>
+      </div>
+
+      {/* Phone: the total and Place order stay on screen while the form
+          scrolls. */}
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-raised/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_16px_rgb(20_22_26/0.06)] backdrop-blur-md lg:hidden">
+        <div className="page flex items-center gap-3 py-2.5">
+          <div className="tnum min-w-0 flex-1">
+            <p className="text-xs text-ink-muted">
+              Total · {count} {count === 1 ? "item" : "items"}
+            </p>
+            <p className="text-lg font-bold leading-tight text-brand">
+              {quote ? rs(total) : "—"}
+            </p>
+          </div>
+          <button
+            type="button"
+            disabled={busy || !lines.length || !quote}
+            onClick={() => void place()}
+            className="flex h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-brand px-7 text-sm font-semibold text-white active:scale-[0.98] disabled:bg-line-strong disabled:text-ink-faint"
+          >
+            {busy ? (
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+            ) : (
+              <Icon name="lock" size={15} />
+            )}
+            {busy ? "Placing…" : "Place order"}
+          </button>
+        </div>
       </div>
     </div>
   );

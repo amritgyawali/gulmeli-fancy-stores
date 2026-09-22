@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useShop } from "@/store/ShopContext";
-import { ProductVisual } from "@/components/ProductCard";
+import { ProductCard, ProductVisual, discountPercent } from "@/components/ProductCard";
+import { Rail } from "@/components/Rail";
 import { Icon } from "@/components/Icon";
+import { useToast } from "@/components/Toast";
 import { voucherDiscount, voucherTerms, VOUCHER } from "@/lib/commerce";
 import { deliveryFeeFor, useDeliveryTerms } from "@/lib/shipping";
+import { useDocumentMeta } from "@/lib/hooks";
 import { rs } from "@/lib/format";
+import type { Product } from "@/lib/types";
 
 /*
  * The cart.
@@ -19,6 +23,10 @@ import { rs } from "@/lib/format";
  *
  * The cart is now a cart: review lines, change quantities, apply a voucher,
  * then continue to checkout, which is the one place an order is placed.
+ *
+ * Also here: progress towards free delivery, "Save for later" (moves a line
+ * to the wishlist), Undo after removing a line, a checkout bar fixed to the
+ * bottom of a phone screen, and products related to what is in the cart.
  */
 export function CartPage() {
   const {
@@ -33,8 +41,12 @@ export function CartPage() {
     updateCommerce,
     subtotal,
     count,
+    add,
+    products,
   } = useShop();
   const terms = useDeliveryTerms();
+  const toast = useToast();
+  useDocumentMeta({ title: "Cart" });
   const [voucherInput, setVoucherInput] = useState(commerce.voucher);
   const [voucherNotice, setVoucherNotice] = useState("");
 
@@ -48,6 +60,59 @@ export function CartPage() {
   const selectedCount = items.filter((e) => e.item.selected).length;
   const allSelected = items.length > 0 && selectedCount === items.length;
   const unavailable = items.filter((e) => e.item.selected && e.product.stock < 1);
+  const toFree = Math.max(0, terms.freeOver - subtotal);
+  const progress = terms.freeOver > 0 ? Math.min(100, (subtotal / terms.freeOver) * 100) : 100;
+  const savings = items.reduce(
+    (sum, { item, product }) =>
+      item.selected && product.originalPrice && product.originalPrice > product.price
+        ? sum + (product.originalPrice - product.price) * item.quantity
+        : sum,
+    0,
+  );
+  const blocked = count < 1 || unavailable.length > 0;
+
+  /* Related to what is in the cart: same categories first, best sellers. */
+  const suggestions = useMemo(() => {
+    const inCart = new Set(cart.map((i) => i.productId));
+    const categories = new Set(
+      cart.map((i) => productById[i.productId]?.category).filter(Boolean),
+    );
+    return products
+      .filter((p) => !inCart.has(p.id) && p.stock > 0)
+      .sort(
+        (a, b) =>
+          Number(categories.has(b.category)) - Number(categories.has(a.category)) ||
+          (b.sold ?? 0) - (a.sold ?? 0),
+      )
+      .slice(0, 12);
+  }, [cart, productById, products]);
+
+  const remove = (product: Product, quantity: number) => {
+    removeItem(product.id);
+    toast({
+      message: `Removed ${product.name}`,
+      tone: "info",
+      action: {
+        label: "Undo",
+        onClick: () => {
+          for (let i = 0; i < quantity; i += 1) add(product);
+        },
+      },
+    });
+  };
+  const saveForLater = (product: Product) => {
+    updateCommerce((current) => ({
+      ...current,
+      wishlist: current.wishlist.includes(product.id)
+        ? current.wishlist
+        : [...current.wishlist, product.id],
+    }));
+    removeItem(product.id);
+    toast({
+      message: "Moved to your wishlist",
+      action: { label: "View", to: "/wishlist" },
+    });
+  };
 
   const applyVoucher = () => {
     const code = voucherInput.trim().toUpperCase();
@@ -65,16 +130,40 @@ export function CartPage() {
 
   if (!items.length)
     return (
-      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3 text-center">
-        <Icon name="cart" size={40} strokeWidth={1.4} className="text-ink-faint" />
-        <h1 className="text-xl font-semibold text-ink">Your cart is empty</h1>
-        <p className="text-sm text-ink-muted">Items you add will show up here.</p>
-        <Link
-          to="/search"
-          className="mt-1 rounded-md bg-brand px-6 py-2.5 text-sm font-semibold text-white hover:bg-brand-strong"
-        >
-          Browse products
-        </Link>
+      <div>
+        <div className="flex min-h-[40vh] flex-col items-center justify-center gap-3 text-center">
+          <span className="grid h-20 w-20 place-items-center rounded-full bg-raised ring-1 ring-line">
+            <Icon name="cart" size={36} strokeWidth={1.4} className="text-ink-faint" />
+          </span>
+          <h1 className="text-xl font-semibold text-ink">Your cart is empty</h1>
+          <p className="text-sm text-ink-muted">Items you add will show up here.</p>
+          <div className="mt-1 flex flex-wrap justify-center gap-2">
+            <Link
+              to="/search"
+              className="rounded-full bg-brand px-6 py-2.5 text-sm font-semibold text-white hover:bg-brand-strong"
+            >
+              Browse products
+            </Link>
+            <Link
+              to="/wishlist"
+              className="rounded-full border border-line bg-raised px-6 py-2.5 text-sm font-semibold text-ink hover:border-brand hover:text-brand"
+            >
+              View wishlist
+            </Link>
+          </div>
+        </div>
+        {suggestions.length > 0 && (
+          <section className="mt-8">
+            <h2 className="mb-3 text-xl font-semibold tracking-tight text-ink">Popular right now</h2>
+            <Rail label="Popular right now">
+              {suggestions.map((p) => (
+                <li key={p.id} className="w-[168px] sm:w-[200px]">
+                  <ProductCard product={p} />
+                </li>
+              ))}
+            </Rail>
+          </section>
+        )}
       </div>
     );
 
@@ -87,8 +176,37 @@ export function CartPage() {
         </span>
       </h1>
 
+      {terms.freeOver > 0 && (
+        <div className="mb-4 rounded-xl border border-brand-border bg-brand-soft px-4 py-3">
+          <p className="flex items-center gap-2 text-sm text-brand-strong">
+            <Icon name="truckFast" size={17} className="shrink-0" />
+            {toFree > 0 ? (
+              <span>
+                Add <strong className="tnum">{rs(toFree)}</strong> more to get{" "}
+                <strong>free delivery</strong>
+              </span>
+            ) : (
+              <span className="font-semibold">Your order qualifies for free delivery</span>
+            )}
+          </p>
+          <div
+            className="mt-2 h-1.5 overflow-hidden rounded-full bg-brand-border"
+            role="progressbar"
+            aria-valuenow={Math.round(progress)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="Progress to free delivery"
+          >
+            <div
+              className="h-full rounded-full bg-brand transition-[width] duration-500 ease-out-quint"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+      )}
+
       <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
-        <section className="overflow-hidden rounded-md border border-line bg-raised">
+        <section className="overflow-hidden rounded-xl border border-line bg-raised">
           <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
             <label className="flex cursor-pointer items-center gap-2.5 text-sm font-medium text-ink">
               <input
@@ -127,9 +245,9 @@ export function CartPage() {
                   />
                   <Link
                     to={`/product/${product.id}`}
-                    className="media h-20 w-20 shrink-0 rounded-sm border border-line"
+                    className="media h-24 w-24 shrink-0 overflow-hidden rounded-lg border border-line"
                   >
-                    <ProductVisual product={product} fit="contain" sizes="80px" />
+                    <ProductVisual product={product} fit="cover" width={96} />
                   </Link>
 
                   <div className="min-w-[180px] flex-1">
@@ -139,7 +257,19 @@ export function CartPage() {
                     >
                       {product.name}
                     </Link>
-                    <p className="tnum mt-1 text-sm text-ink-muted">{rs(product.price)} each</p>
+                    <p className="tnum mt-1 flex flex-wrap items-baseline gap-x-1.5 text-sm text-ink-muted">
+                      {rs(product.price)} each
+                      {discountPercent(product) > 0 && (
+                        <>
+                          <span className="text-xs text-ink-faint line-through">
+                            {rs(product.originalPrice!)}
+                          </span>
+                          <span className="text-xs font-semibold text-positive">
+                            -{discountPercent(product)}%
+                          </span>
+                        </>
+                      )}
+                    </p>
                     {out ? (
                       <p className="mt-1 text-xs font-medium text-critical">
                         Out of stock — deselect to continue
@@ -149,6 +279,25 @@ export function CartPage() {
                         Only {product.stock} available
                       </p>
                     ) : null}
+                    <div className="mt-2 flex items-center gap-3 text-xs font-medium">
+                      <button
+                        type="button"
+                        onClick={() => saveForLater(product)}
+                        className="flex items-center gap-1 text-ink-muted hover:text-brand"
+                      >
+                        <Icon name="heart" size={13} />
+                        Save for later
+                      </button>
+                      <span aria-hidden="true" className="h-3 w-px bg-line-strong" />
+                      <button
+                        type="button"
+                        onClick={() => remove(product, item.quantity)}
+                        className="flex items-center gap-1 text-ink-muted hover:text-critical"
+                      >
+                        <Icon name="trash" size={13} />
+                        Remove
+                      </button>
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-3">
@@ -179,15 +328,6 @@ export function CartPage() {
                     <p className="tnum w-24 text-right text-sm font-semibold text-ink">
                       {rs(product.price * item.quantity)}
                     </p>
-
-                    <button
-                      type="button"
-                      aria-label={`Remove ${product.name} from cart`}
-                      onClick={() => removeItem(product.id)}
-                      className="rounded-sm p-1.5 text-ink-faint hover:text-critical"
-                    >
-                      <Icon name="trash" size={16} />
-                    </button>
                   </div>
                 </li>
               );
@@ -195,8 +335,8 @@ export function CartPage() {
           </ul>
         </section>
 
-        <aside className="lg:sticky lg:top-24">
-          <div className="rounded-md border border-line bg-raised p-4">
+        <aside className="lg:sticky lg:top-40">
+          <div className="rounded-xl border border-line bg-raised p-4">
             <h2 className="mb-3 text-base font-semibold text-ink">Summary</h2>
 
             <div className="flex gap-2">
@@ -260,6 +400,11 @@ export function CartPage() {
                 <dd className="text-xl text-brand">{rs(total)}</dd>
               </div>
             </dl>
+            {savings + discount > 0 && (
+              <p className="tnum mt-2 rounded-lg bg-positive-soft px-3 py-2 text-sm font-medium text-positive">
+                You save {rs(savings + discount)} on this order
+              </p>
+            )}
             <p className="mt-1 text-xs text-ink-muted">
               Confirmed at checkout, where stock and delivery are re-checked.
             </p>
@@ -277,19 +422,23 @@ export function CartPage() {
 
             <Link
               to="/checkout"
-              aria-disabled={count < 1 || unavailable.length > 0}
+              aria-disabled={blocked}
               onClick={(e) => {
-                if (count < 1 || unavailable.length > 0) e.preventDefault();
+                if (blocked) e.preventDefault();
               }}
-              className={`mt-4 flex w-full items-center justify-center gap-2 rounded-md py-3 text-base font-semibold ${
-                count < 1 || unavailable.length > 0
+              className={`mt-4 hidden w-full items-center justify-center gap-2 rounded-full py-3 text-base font-semibold lg:flex ${
+                blocked
                   ? "pointer-events-none bg-line-strong text-ink-faint"
-                  : "bg-brand text-white hover:bg-brand-strong"
+                  : "bg-brand text-white shadow-e1 hover:bg-brand-strong"
               }`}
             >
               {count < 1 ? "Select an item to continue" : "Continue to checkout"}
-              {count > 0 && unavailable.length === 0 && <Icon name="arrowRight" size={17} />}
+              {!blocked && <Icon name="arrowRight" size={17} />}
             </Link>
+            <p className="mt-3 hidden items-center justify-center gap-1.5 text-xs text-ink-muted lg:flex">
+              <Icon name="shieldCheck" size={14} />
+              Secure checkout · Cash on delivery
+            </p>
 
             <Link
               to="/search"
@@ -299,6 +448,54 @@ export function CartPage() {
             </Link>
           </div>
         </aside>
+      </div>
+
+      {suggestions.length > 0 && (
+        <section className="reveal mt-10">
+          <h2 className="mb-3 text-xl font-semibold tracking-tight text-ink">
+            You might also like
+          </h2>
+          <Rail label="You might also like">
+            {suggestions.map((p) => (
+              <li key={p.id} className="w-[168px] sm:w-[200px]">
+                <ProductCard product={p} />
+              </li>
+            ))}
+          </Rail>
+        </section>
+      )}
+
+      {/* Phone checkout bar: the total and the next step, always in reach. */}
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-raised/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_16px_rgb(20_22_26/0.06)] backdrop-blur-md lg:hidden">
+        <div className="page flex items-center gap-3 py-2.5">
+          <label className="flex shrink-0 items-center gap-2 text-xs text-ink-muted">
+            <input
+              type="checkbox"
+              checked={allSelected}
+              onChange={() => select(items.map((e) => e.item.productId), !allSelected)}
+              className="h-4 w-4 accent-[var(--color-brand)]"
+            />
+            All
+          </label>
+          <div className="tnum min-w-0 flex-1 text-right">
+            <p className="text-xs text-ink-muted">
+              Total{discount > 0 || savings > 0 ? ` · saved ${rs(savings + discount)}` : ""}
+            </p>
+            <p className="text-lg font-bold leading-tight text-brand">{rs(total)}</p>
+          </div>
+          <Link
+            to="/checkout"
+            aria-disabled={blocked}
+            onClick={(e) => {
+              if (blocked) e.preventDefault();
+            }}
+            className={`flex h-12 shrink-0 items-center justify-center rounded-full px-6 text-sm font-semibold ${
+              blocked ? "pointer-events-none bg-line-strong text-ink-faint" : "bg-brand text-white"
+            }`}
+          >
+            Checkout ({count})
+          </Link>
+        </div>
       </div>
     </div>
   );

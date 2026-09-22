@@ -206,11 +206,14 @@ test("search to wishlist, validated checkout, order persistence and cancellation
   page,
 }) => {
   await page.goto("/");
-  await page.getByRole("textbox").first().fill("keyboard");
+  // The home search field opens the dedicated search screen.
+  await page.getByRole("search", { name: "Search products" }).click();
+  await page.getByRole("textbox", { name: "Search products" }).fill("keyboard");
   await page.getByRole("button", { name: "Search", exact: true }).click();
-  await expect(page.getByText("1 products", { exact: true })).toBeVisible();
+  await expect(page.getByText("“keyboard” · 1 product", { exact: true })).toBeVisible();
   await page
     .getByRole("button", { name: /^Open Mini Wireless Keyboard/ })
+    .first()
     .click();
   await page
     .getByRole("button", { name: "Save to wishlist", exact: true })

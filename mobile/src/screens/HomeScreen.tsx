@@ -3,10 +3,14 @@ import { FlatList, Linking, View, useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
 import { useRouter, type Href } from "expo-router";
 import { Button, Row, T, Tap } from "@/components/ui";
-import { TextInput, ScrollView } from "@/components/store-ui";
+import { ScrollView } from "@/components/store-ui";
 import { BrandIdentity } from "@/components/BrandIdentity";
 import { FontIcon } from "@/components/FontIcon";
-import { ProductCard } from "@/components/ProductCard";
+import { ProductCard, ProductCardSkeleton, discountPercent } from "@/components/ProductCard";
+import { HeroCarousel } from "@/components/HeroCarousel";
+import { Countdown, DealCard } from "@/components/Deals";
+import { PressableScale } from "@/components/motion";
+import { sizedImage, productImage } from "@/services/product-media";
 import { useCatalog, useShop } from "@/store/ShopProvider";
 import { useStorefront, useStorefrontTheme } from "@/store/StorefrontProvider";
 import {
@@ -64,11 +68,10 @@ export default function HomeScreen({
   const router = useRouter();
   const theme = useStorefrontTheme();
   const { config, feature } = useStorefront();
-  const { products } = useCatalog();
-  const { retryBackend } = useShop();
+  const { products, productById } = useCatalog();
+  const { retryBackend, state, catalogReady, live } = useShop();
   const dimensions = useWindowDimensions();
   const width = previewWidth ?? dimensions.width;
-  const [query, setQuery] = useState("");
   const [failedBanners, setFailedBanners] = useState<string[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const blocks = usePublicContent("homepage_sections"),
@@ -91,13 +94,35 @@ export default function HomeScreen({
       theme.surface,
     ),
     footerText = readableColor(footerBackground, config.footer.textColor);
-  const sections = useMemo(
-    () =>
-      (layout[0]?.configured ? blocks : defaultSections)
-        .filter((s) => sectionVisible(s, width < 768))
-        .sort((a, b) => Number(a.sortOrder ?? 0) - Number(b.sortOrder ?? 0)),
-    [blocks, layout, width],
-  );
+  /*
+   * Sections come from the homepage builder when it has been configured. The
+   * built-in layout (hero, categories, product grid) gains two sections every
+   * marketplace home carries, both computed rather than authored: today's
+   * flash deals, when anything is discounted, and the customer's recently
+   * viewed products. Recently viewed is personal, not content, so it is
+   * added after the categories either way.
+   */
+  const sections = useMemo(() => {
+    const configured = !!layout[0]?.configured;
+    const base = (configured ? blocks : defaultSections)
+      .filter((s) => sectionVisible(s, width < 768))
+      .sort((a, b) => Number(a.sortOrder ?? 0) - Number(b.sortOrder ?? 0));
+    const out: ContentRecord[] = [];
+    for (const s of base) {
+      out.push(s);
+      if (s.type === "categories") {
+        if (!configured)
+          out.push({ id: "auto-flash", type: "flash_sale", title: "Flash deals", layout: "deals" });
+        out.push({ id: "auto-recent", type: "recently_viewed", title: "Continue browsing" });
+      }
+    }
+    return out;
+  }, [blocks, layout, width]);
+  const recentlyViewed = state.commerce.recent
+    .map((id) => productById[id])
+    .filter((p): p is Product => Boolean(p))
+    .slice(0, 12);
+  const loadingCatalog = live && !catalogReady && products.length === 0;
   const columns = Math.max(
     1,
     Math.min(
@@ -109,8 +134,8 @@ export default function HomeScreen({
       ) || 2,
     ),
   );
-  const search = (value = query) =>
-    openDestination("Search results", { query: value.trim() });
+  const search = (value = "") =>
+    openDestination("Search results", value.trim() ? { query: value.trim() } : {});
   const follow = (target: unknown) => {
     const link = safeStoreLink(target);
     if (link?.startsWith("https://")) void Linking.openURL(link);
@@ -222,41 +247,14 @@ export default function HomeScreen({
     let content;
     if (type === "hero_slider") {
       content = photo ? (
-        <ScrollView
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator
-          contentContainerStyle={{ gap: 12 }}
-        >
-          {selectedBanners.map((b) => (
-            <Tap
-              key={b.id}
-              label={String(b.heading || b.name || "Explore collection")}
-              onPress={() => openBanner(b)}
-              style={{
-                width: Math.max(240, Math.min(width, 1100) - theme.spacing * 2),
-                borderRadius: theme.cardRadius,
-                overflow: "hidden",
-                backgroundColor: theme.surface,
-              }}
-            >
-              <Image
-                source={{ uri: String(b.mobileImage || b.image) }}
-                onError={() =>
-                  setFailedBanners((current) => [...current, b.id])
-                }
-                contentFit="cover"
-                accessibilityLabel={String(b.heading || b.name || "")}
-                style={{ width: "100%", aspectRatio: 1.85 }}
-              />
-              {!!b.heading && (
-                <T preserveColor size={20} bold style={{ padding: 14 }}>
-                  {String(b.heading)}
-                </T>
-              )}
-            </Tap>
-          ))}
-        </ScrollView>
+        <HeroCarousel
+          banners={selectedBanners}
+          width={Math.max(240, Math.min(width, 1100) - theme.spacing * 2)}
+          radius={theme.cardRadius}
+          color={theme.primary}
+          onOpen={openBanner}
+          onFailed={(id) => setFailedBanners((current) => [...current, id])}
+        />
       ) : (
         <View
           style={{
@@ -302,53 +300,149 @@ export default function HomeScreen({
           !section.categoryIds.length ||
           section.categoryIds.includes(c.id),
       );
+      /* Round photo or icon over a label, the category row shoppers know
+         from every marketplace app. A category without its own image
+         borrows its best-selling product's photo. */
+      const leadPhoto = (name: string) => {
+        const lead = products
+          .filter((p) => p.category === name)
+          .sort((a, b) => (b.sold ?? 0) - (a.sold ?? 0))[0];
+        return lead ? productImage(lead, 128) : null;
+      };
+      content = (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ gap: 14, paddingRight: 8 }}
+        >
+          {entries.map((c) => {
+            const image = c.image ? sizedImage(String(c.image), 128) : leadPhoto(String(c.name));
+            return (
+              <PressableScale
+                key={c.id}
+                accessibilityRole="button"
+                accessibilityLabel={String(c.name)}
+                scaleTo={0.92}
+                onPress={() => openDestination("Search results", { category: String(c.name) })}
+                style={{ width: 72, alignItems: "center", gap: 7 }}
+              >
+                <View
+                  style={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: 32,
+                    overflow: "hidden",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: theme.surface,
+                    borderWidth: 1,
+                    borderColor: theme.border,
+                  }}
+                >
+                  {image ? (
+                    // Category images are wide product photos, not square
+                    // icons; cropping to a circle fills the tile the way the
+                    // web storefront does.
+                    <Image
+                      source={{ uri: image }}
+                      contentFit="cover"
+                      transition={200}
+                      accessibilityLabel=""
+                      style={{ width: 64, height: 64 }}
+                    />
+                  ) : (
+                    <FontIcon
+                      name={categoryIcon(String(c.name))}
+                      size={24}
+                      color={theme.primaryText}
+                    />
+                  )}
+                </View>
+                <T
+                  preserveColor
+                  size={12}
+                  numberOfLines={2}
+                  style={{ textAlign: "center", lineHeight: 15 }}
+                >
+                  {String(c.name)}
+                </T>
+              </PressableScale>
+            );
+          })}
+        </ScrollView>
+      );
+    } else if (type === "recently_viewed") {
+      if (!recentlyViewed.length) return null;
       content = (
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ gap: 10 }}
         >
-          {entries.map((c) => (
-            <Tap
-              key={c.id}
-              label={String(c.name)}
-              onPress={() => search(String(c.name))}
-              style={{
-                width: 100,
-                minHeight: 100,
-                padding: 12,
-                alignItems: "center",
-                gap: 10,
-                backgroundColor: theme.surface,
-                borderRadius: theme.cardRadius,
-                borderWidth: 1,
-                borderColor: theme.border,
-              }}
-            >
-              {c.image ? (
-                // Category images are wide product photos, not square icons.
-                // Fitting them inside a 36pt box letterboxed every one of them
-                // down to a strip a few pixels tall; cropping to a circle
-                // fills the tile the way the web storefront does.
-                <Image
-                  source={{ uri: String(c.image) }}
-                  contentFit="cover"
-                  accessibilityLabel=""
-                  style={{ width: 48, height: 48, borderRadius: 24 }}
-                />
-              ) : (
-                <FontIcon
-                  name={categoryIcon(String(c.name))}
-                  size={26}
-                  color={theme.primaryText}
-                />
-              )}
-              <T preserveColor size={12} bold style={{ textAlign: "center" }}>
-                {String(c.name)}
-              </T>
-            </Tap>
+          {recentlyViewed.map((p) => (
+            <DealCard key={p.id} product={p} width={120} />
           ))}
         </ScrollView>
+      );
+    } else if (type === "flash_sale" && section.layout === "deals") {
+      const deals = products
+        .filter((p) => discountPercent(p) > 0 && p.stock > 0)
+        .sort((a, b) => discountPercent(b) - discountPercent(a))
+        .slice(0, 12);
+      if (!deals.length) return null;
+      content = (
+        <View
+          style={{
+            backgroundColor: theme.surface,
+            borderRadius: theme.cardRadius + 4,
+            paddingVertical: 14,
+            gap: 12,
+            borderWidth: 1,
+            borderColor: `${theme.primary}33`,
+          }}
+        >
+          <Row style={{ paddingHorizontal: 14, gap: 10, justifyContent: "space-between" }}>
+            <Row style={{ gap: 8, flexShrink: 1 }}>
+              <View
+                style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: 14,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: theme.primary,
+                }}
+              >
+                <FontIcon name="bolt" size={13} color={theme.onPrimary} />
+              </View>
+              <T preserveColor accessibilityRole="header" bold size={18}>
+                {String(section.title || "Flash deals")}
+              </T>
+            </Row>
+            <Countdown />
+          </Row>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ gap: 10, paddingHorizontal: 14 }}
+          >
+            {deals.map((p) => (
+              <DealCard key={p.id} product={p} />
+            ))}
+          </ScrollView>
+          <Tap
+            label="See all deals"
+            onPress={() => router.push("/offers")}
+            style={{ alignSelf: "center", minHeight: 36, justifyContent: "center" }}
+          >
+            <Row style={{ gap: 6 }}>
+              <T preserveColor bold color={theme.primaryText}>
+                See all deals
+              </T>
+              <FontIcon name="chevron-right" size={11} color={theme.primaryText} />
+            </Row>
+          </Tap>
+        </View>
       );
     } else if (
       [
@@ -362,6 +456,14 @@ export default function HomeScreen({
       const items = productList(section);
       content = items.length ? (
         cardGrid(items, section)
+      ) : loadingCatalog ? (
+        <View style={{ flexDirection: "row", flexWrap: "wrap", marginHorizontal: -6, rowGap: 12 }}>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <View key={i} style={{ width: `${100 / columns}%`, paddingHorizontal: 6 }}>
+              <ProductCardSkeleton />
+            </View>
+          ))}
+        </View>
       ) : (
         <T preserveColor color={theme.muted}>
           New finds are on their way. Check back soon.
@@ -501,7 +603,7 @@ export default function HomeScreen({
             : undefined,
         }}
       >
-        {type !== "hero_slider" && !!section.title && (
+        {type !== "hero_slider" && section.layout !== "deals" && !!section.title && (
           <Row style={{ justifyContent: "space-between", gap: 12 }}>
             <T
               preserveColor
@@ -625,45 +727,42 @@ export default function HomeScreen({
               ))}
             </Row>
           )}
+          {/* The search field opens the search screen, where recent
+              searches and categories are waiting, rather than taking typing
+              here — the pattern every marketplace app uses. The camera opens
+              photo search. */}
           {config.header.showSearch && (
-            <Row
-              style={{
-                gap: 10,
-                backgroundColor: theme.background,
-                borderRadius: theme.inputRadius,
-                paddingHorizontal: 14,
-                borderWidth: 1,
-                borderColor: theme.border,
-              }}
-            >
-              <FontIcon name="magnifying-glass" size={18} color={theme.muted} />
-              <TextInput
+            <Row style={{ gap: 8 }}>
+              <PressableScale
+                accessibilityRole="search"
                 accessibilityLabel="Search products"
-                value={query}
-                onChangeText={setQuery}
-                placeholder={
-                  config.header.searchPlaceholder || config.text.search
-                }
-                onSubmitEditing={() => search()}
-                returnKeyType="search"
-                style={{ flex: 1, fontSize: 15, minHeight: 52 }}
-              />
-              <Tap
-                label="Search"
+                scaleTo={0.985}
                 onPress={() => search()}
                 style={{
-                  width: 48,
-                  height: 48,
+                  flex: 1,
+                  flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "center",
+                  gap: 10,
+                  minHeight: 46,
+                  paddingHorizontal: 14,
+                  backgroundColor: theme.surface,
+                  borderRadius: 23,
+                  borderWidth: 1,
+                  borderColor: theme.border,
                 }}
               >
-                <FontIcon
-                  name="arrow-right"
-                  color={theme.primaryText}
-                  size={17}
-                />
-              </Tap>
+                <FontIcon name="magnifying-glass" size={16} color={theme.muted} />
+                <T preserveColor size={15} color={theme.muted} numberOfLines={1} style={{ flex: 1 }}>
+                  {config.header.searchPlaceholder || config.text.search}
+                </T>
+                <Tap
+                  label="Search with a photo"
+                  onPress={() => openDestination("Visual search")}
+                  style={{ width: 36, height: 36, alignItems: "center", justifyContent: "center" }}
+                >
+                  <FontIcon name="camera" size={16} color={theme.text} />
+                </Tap>
+              </PressableScale>
             </Row>
           )}
         </View>

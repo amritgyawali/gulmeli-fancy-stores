@@ -1,7 +1,7 @@
 import { View, ScrollView, TextInput } from "@/components/store-ui";
 import { Suspense, lazy, useEffect, useState, type ReactNode } from "react";
 import { Image, KeyboardAvoidingView, Platform, Share, StyleSheet, Switch } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Redirect, useLocalSearchParams, useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { Button, Row, T, Tap } from "@/components/ui";
 import CameraCapture from "@/components/CameraCapture";
@@ -94,6 +94,22 @@ export default function FeatureScreen() {
     store?: string;
     code?: string;
   }>();
+  // Product details and search have dedicated screens now; old links to
+  // them through /feature (bookmarks, notifications, deep links) land there.
+  if (params.destination === "Product details" && params.id)
+    return <Redirect href={{ pathname: "/product/[id]", params: { id: params.id } }} />;
+  if (params.destination === "Search results")
+    return (
+      <Redirect
+        href={{
+          pathname: "/search",
+          params: {
+            ...(params.query ? { query: params.query } : {}),
+            ...(params.category ? { category: params.category } : {}),
+          },
+        }}
+      />
+    );
   // A new destination gets a fresh form, including when it is pushed from another feature.
   const renamedParams = Object.fromEntries(
     Object.entries(params).map(([key, value]) => [
