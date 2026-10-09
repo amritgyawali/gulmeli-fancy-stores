@@ -25,6 +25,8 @@ yarn-error.*
 .DS_Store
 *.pem
 
+play-service-account.json
+*service-account*.json
 .env
 .env.local
 supabase/.env.local

@@ -2,6 +2,8 @@
 
 Expo SDK 57 / React Native shopping app with Supabase accounts, catalog and orders, plus Cloudinary image uploads. An explicit local preview mode is also available.
 
+**Google Play release:** [step-by-step publishing guide](docs/play-store/README.md) — build, store listing, data safety answers, graphics and policy links.
+
 **Admin dashboard:** [control-centre guide](docs/admin-dashboard.md). Open `/admin` in the app, or tap the gauge icon in the Account header.
 
 **Current integration:** [Live backend setup, verified behavior and deployment status](docs/live-backend-handoff.md). This is the authoritative guide for the Supabase/Cloudinary integration.

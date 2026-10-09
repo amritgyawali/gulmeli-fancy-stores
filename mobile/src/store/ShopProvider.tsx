@@ -431,6 +431,14 @@ function useShopState() {
     const { error } = await requireSupabase().auth.signOut({ scope: "local" });
     if (error) throw error;
   };
+  const deleteAccount = async () => {
+    const client = requireSupabase();
+    // Let an in-flight profile save finish so it cannot fail against a removed user.
+    await remoteQueue.current.catch(() => undefined);
+    const { error } = await client.rpc("delete_my_account");
+    if (error) throw new Error(error.message);
+    await client.auth.signOut({ scope: "local" });
+  };
   const [hydrated, setHydrated] = useState(false);
   const [storageError, setStorageError] = useState<string | null>(null);
   const saveQueue = useRef(Promise.resolve());
@@ -679,6 +687,7 @@ function useShopState() {
     syncStatus,
     retryBackend,
     signOut,
+    deleteAccount,
     cancelOrder,
     updateCommerce,
     checkout,

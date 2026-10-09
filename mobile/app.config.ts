@@ -16,7 +16,8 @@ const env = process.env;
 // does not read the developer's .env.local or need a developer machine running.
 if (
   env.EAS_BUILD_PROFILE === "preview" ||
-  env.EAS_BUILD_PROFILE === "production"
+  env.EAS_BUILD_PROFILE === "production" ||
+  env.EAS_BUILD_PROFILE === "production-apk"
 ) {
   if (
     env.EXPO_PUBLIC_BACKEND !== "supabase" ||

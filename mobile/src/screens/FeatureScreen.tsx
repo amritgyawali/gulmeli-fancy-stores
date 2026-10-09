@@ -1,6 +1,7 @@
 import { View, ScrollView, TextInput } from "@/components/store-ui";
 import { Suspense, lazy, useEffect, useState, type ReactNode } from "react";
-import { Image, KeyboardAvoidingView, Platform, Share, StyleSheet, Switch } from "react-native";
+import { Image, KeyboardAvoidingView, Linking, Platform, Share, StyleSheet, Switch } from "react-native";
+import Constants from "expo-constants";
 import { Redirect, useLocalSearchParams, useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { Button, Row, T, Tap } from "@/components/ui";
@@ -17,6 +18,7 @@ import { uploadAvatar } from "@/services/cloudinary";
 import { paymentsAvailable } from "@/services/payments";
 import { usePrefs } from "@/store/prefs";
 import { currentBrand } from "@/utils/branding";
+import { legalLinks } from "@/services/legal";
 import { colors } from "@/theme/tokens";
 import type { Product } from "@/types/shop";
 
@@ -150,6 +152,7 @@ function FeatureContent({
     session,
     customerReady,
     signOut,
+    deleteAccount,
     subtotal,
     count,
     collect,
@@ -171,6 +174,7 @@ function FeatureContent({
   const [faq, setFaq] = useState(-1);
   const [game, setGame] = useState(0);
   const [answer, setAnswer] = useState(0);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const biometricsEnabled = usePrefs((s) => s.biometricsEnabled);
   const toggleBiometrics = async (value: boolean) => {
     if (!value) {
@@ -670,6 +674,52 @@ function FeatureContent({
                 }
               }}
             />
+            {confirmDelete ? (
+              <View style={styles.dangerBox}>
+                <T bold color={colors.critical}>
+                  Delete your account permanently?
+                </T>
+                <T>
+                  Your profile, saved addresses, cart, wishlist, reviews and
+                  support messages are erased and you are signed out. Completed
+                  orders are kept without your name or contact details for the
+                  store&apos;s sales records. This cannot be undone.
+                </T>
+                <Button
+                  title={busy ? "Deleting account..." : "Delete my account"}
+                  disabled={busy}
+                  onPress={async () => {
+                    setBusy(true);
+                    try {
+                      await deleteAccount();
+                      router.replace("/account");
+                    } catch (error) {
+                      setNotice(
+                        error instanceof Error
+                          ? error.message
+                          : "Could not delete your account. Try again.",
+                      );
+                    } finally {
+                      setBusy(false);
+                      setConfirmDelete(false);
+                    }
+                  }}
+                />
+                <Button
+                  title="Keep my account"
+                  outline
+                  disabled={busy}
+                  onPress={() => setConfirmDelete(false)}
+                />
+              </View>
+            ) : (
+              <Button
+                title="Delete account"
+                outline
+                disabled={busy}
+                onPress={() => setConfirmDelete(true)}
+              />
+            )}
           </>
         )}
         <Button
@@ -677,6 +727,23 @@ function FeatureContent({
           outline
           onPress={() => openDestination("Orders list")}
         />
+        <Row style={{ gap: 16, flexWrap: "wrap" }}>
+          <Tap
+            label="Open privacy policy"
+            onPress={() => void Linking.openURL(legalLinks.privacy)}
+          >
+            <T color={colors.brand}>Privacy policy</T>
+          </Tap>
+          <Tap
+            label="Open terms of use"
+            onPress={() => void Linking.openURL(legalLinks.terms)}
+          >
+            <T color={colors.brand}>Terms of use</T>
+          </Tap>
+        </Row>
+        <T color={colors.muted} size={12}>
+          {`Version ${Constants.expoConfig?.version ?? ""}`}
+        </T>
       </Card>
     );
   } else if (isOrders) {
@@ -1487,6 +1554,14 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   avatar: { width: 80, height: 80, borderRadius: 40 },
+  dangerBox: {
+    gap: 10,
+    padding: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.critical,
+    backgroundColor: colors.criticalSoft,
+  },
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
