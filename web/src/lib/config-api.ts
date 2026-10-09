@@ -1,11 +1,11 @@
 import { useSyncExternalStore } from "react";
-import { configErrors } from "../../../mobile/src/admin/core/config-validation";
+import { configErrors } from "@/shared/mobile/admin/core/config-validation";
 import { supabase } from "./supabase";
 import {
   defaultConfig,
   restoreConfig,
   type StorefrontConfig,
-} from "../../../mobile/src/admin/core/config";
+} from "@/shared/mobile/admin/core/config";
 export type { StorefrontConfig };
 export const fallbackConfig = defaultConfig;
 let current = defaultConfig;

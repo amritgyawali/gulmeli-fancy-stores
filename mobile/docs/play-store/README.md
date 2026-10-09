@@ -14,6 +14,7 @@ account.
 | Privacy policy | https://gulmeli-fancy-stores.vercel.app/privacy |
 | Account deletion | https://gulmeli-fancy-stores.vercel.app/delete-account |
 | Terms of use | https://gulmeli-fancy-stores.vercel.app/terms |
+| Support page | https://gulmeli-fancy-stores.vercel.app/support |
 
 ## What is configured in the code
 

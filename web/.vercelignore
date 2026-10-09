@@ -1,0 +1,6 @@
+node_modules
+dist
+shots
+preview.log
+*.tsbuildinfo
+.env.local

@@ -915,7 +915,7 @@ function StoreFooter({ brand }: { brand: string }) {
         ["How to buy", "/help"],
         ["Returns & refunds", "/help"],
         ["Track your order", "/account"],
-        ["Contact us", "/help"],
+        ["Contact us", "/support.html"],
       ],
     },
     {
