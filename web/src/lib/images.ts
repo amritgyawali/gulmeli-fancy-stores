@@ -1,5 +1,5 @@
 import type { Product } from "./types";
-import { photoFor, sizedImage } from "../../../mobile/src/services/product-media";
+import { photoFor, sizedImage } from "@/shared/mobile/services/product-media";
 
 /* Resized, modern-format delivery URL for a hosted photo (see sizedImage). */
 export const sized = sizedImage;

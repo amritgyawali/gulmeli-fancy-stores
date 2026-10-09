@@ -7,7 +7,7 @@ import { useShop } from "@/store/ShopContext";
 import { useWishlist } from "@/lib/hooks";
 import { Icon, Stars } from "./Icon";
 import { flyToCart, useToast } from "./Toast";
-import { photoFor } from "../../../mobile/src/services/product-media";
+import { photoFor } from "@/shared/mobile/services/product-media";
 
 /*
  * The product card, and the pieces of it reused on the product page.

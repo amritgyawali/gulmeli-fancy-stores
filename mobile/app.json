@@ -6,7 +6,9 @@
     "orientation": "portrait",
     "scheme": "gulmeli",
     "userInterfaceStyle": "light",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.gulmeli.fancystore",
@@ -24,7 +26,21 @@
         "monochromeImage": "./assets/monochrome-icon.png"
       },
       "icon": "./assets/icon.png",
-      "predictiveBackGestureEnabled": true
+      "predictiveBackGestureEnabled": true,
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO",
+        "android.permission.READ_MEDIA_AUDIO",
+        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.USE_FINGERPRINT"
+      ]
     },
     "web": {
       "output": "static"
@@ -52,7 +68,9 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow Gulmeli Fancy Stores to take product photos for reviews and profile pictures."
+          "cameraPermission": "Allow Gulmeli Fancy Stores to take product photos for reviews and profile pictures.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
         }
       ],
       "expo-local-authentication",
@@ -60,13 +78,6 @@
         "expo-notifications",
         {
           "color": "#f85606"
-        }
-      ],
-      [
-        "expo-location",
-        {
-          "locationWhenInUsePermission": "Allow Gulmeli Fancy Stores to show delivery areas and store locations near you.",
-          "locationAlwaysAndWhenInUsePermission": "Allow Gulmeli Fancy Stores to show delivery areas and store locations near you."
         }
       ],
       [
@@ -94,6 +105,7 @@
     },
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "description": "Shop fashion, electronics, groceries, jewellery and lifestyle goods with cash on delivery across Nepal."
   }
 }

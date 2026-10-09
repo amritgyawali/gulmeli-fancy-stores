@@ -915,15 +915,16 @@ function StoreFooter({ brand }: { brand: string }) {
         ["How to buy", "/help"],
         ["Returns & refunds", "/help"],
         ["Track your order", "/account"],
-        ["Contact us", "/help"],
+        ["Contact us", "/support.html"],
       ],
     },
     {
       title: brand,
       links: [
         [`About ${brand}`, "/help"],
-        ["Terms & conditions", "/help"],
-        ["Privacy policy", "/help"],
+        ["Terms & conditions", "/terms.html"],
+        ["Privacy policy", "/privacy.html"],
+        ["Delete account", "/delete-account.html"],
         [`Sell on ${brand}`, "/sell"],
         ["Offers & vouchers", "/offers"],
       ],
@@ -967,9 +968,16 @@ function StoreFooter({ brand }: { brand: string }) {
             <ul className="space-y-2">
               {col.links.map(([label, to]) => (
                 <li key={label}>
-                  <Link to={to} className="text-sm text-ink-muted hover:text-brand">
-                    {label}
-                  </Link>
+                  {/* Policy pages are static files outside the hash router. */}
+                  {to.endsWith(".html") ? (
+                    <a href={to} className="text-sm text-ink-muted hover:text-brand">
+                      {label}
+                    </a>
+                  ) : (
+                    <Link to={to} className="text-sm text-ink-muted hover:text-brand">
+                      {label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./supabase";
 import { usePublishedConfig } from "./config-api";
-import { resolveAppearance } from "../../../mobile/src/admin/core/appearance";
+import { resolveAppearance } from "@/shared/mobile/admin/core/appearance";
 export {
   defaultSections,
   sectionVisible,
   safeStoreLink,
   plainText,
-} from "../../../mobile/src/admin/core/storefront-content";
+} from "@/shared/mobile/admin/core/storefront-content";
 export type ContentRecord = Record<string, unknown> & { id: string };
 export function useTheme() {
   const config = usePublishedConfig();

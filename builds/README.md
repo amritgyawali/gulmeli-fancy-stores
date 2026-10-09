@@ -1,5 +1,10 @@
 # Mobile builds — Google Play & App Store
 
+> **Google Play:** the current, authoritative guide is
+> [mobile/docs/play-store/README.md](../mobile/docs/play-store/README.md).
+> Build from `mobile/` with `npx eas-cli build -p android --profile production`;
+> `mobile/eas.json` is the live configuration (this folder's `eas.json` is a legacy copy).
+
 Two folders, two targets:
 
 - `android/` — produces the **APK** (runs directly on phones) and the **AAB** (what Google Play requires).

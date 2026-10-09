@@ -46,7 +46,8 @@ export function useImagePicker() {
   const { store, write, notify, live } = useAdmin();
   return useCallback(async (): Promise<string | null> => {
     try {
-      if (Platform.OS !== "web") {
+      // Android uses the system photo picker, which needs no storage permission.
+      if (Platform.OS === "ios") {
         const permission =
           await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (!permission.granted) {

@@ -1,4 +1,4 @@
-import { AdminSync } from "../../../shared/admin-sync";
+import { AdminSync } from "@/shared/admin-sync";
 import { supabase } from "./supabase";
 export type AdminRecord = {
   id: string;
