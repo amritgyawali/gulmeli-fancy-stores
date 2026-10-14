@@ -163,9 +163,9 @@ The app collects none of them.
 - [ ] Open the tester link on your phone, accept, install from Play.
 - [ ] Test it: browse → open a product → add to cart → sign in → place a
       cash-on-delivery order → see it in My orders → cancel it.
-- [ ] Take **4–8 phone screenshots** of: home, a product, offers, cart,
-      checkout, account. Use these for Part 8. Do not use the old files in
-      `screenshots/`; they show demo ratings the real app does not have.
+- [ ] Screenshots are ready in `docs/play-store/screenshots/` (seven
+      1080×1920 PNGs of the live catalogue, captured 14 October 2026). You
+      can replace any of them with photos from your phone.
 
 ## Part 8 — Store listing (Grow users → Store presence → Main store listing)
 
@@ -213,7 +213,8 @@ Questions? Email amritgyawali999@gmail.com
 
 - [ ] **App icon**: upload `icon-512.png`
 - [ ] **Feature graphic**: upload `feature-graphic-1024x500.png`
-- [ ] **Phone screenshots**: upload the 4–8 you took in Part 7
+- [ ] **Phone screenshots**: upload all 7 files from `screenshots/`, in
+      order (01 → 07)
 - [ ] **Store settings**: Category **Shopping**, email
       `amritgyawali999@gmail.com`, website
       `https://gulmeli-fancy-stores.vercel.app`

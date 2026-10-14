@@ -51,7 +51,7 @@ account.
 - Privacy policy and terms links in Settings; policy pages live in
   `web/public/` and deploy with the website.
 - Store graphics in this folder: `icon-512.png`, `feature-graphic-1024x500.png`
-  and six 1080×1920 phone screenshots in `screenshots/`.
+  and seven 1080×1920 phone screenshots in `screenshots/`.
 
 ## 1. Before every release
 
@@ -192,12 +192,12 @@ Questions? Email amritgyawali999@gmail.com
 
 - App icon: `icon-512.png` (512×512)
 - Feature graphic: `feature-graphic-1024x500.png`
-- Phone screenshots: **take new ones from a phone running the production
-  build** (step 6) and upload 4–8 of them. The files in `screenshots/` came
-  from the demo build and show sample star ratings and "sold" counts that the
-  live app does not have; screenshots must show the real app, so use them only
-  as a guide for which screens to capture (home, product, offers, cart,
-  account).
+- Phone screenshots: `screenshots/01-home.png` … `07-cash-on-delivery.png`
+  (seven 1080×1920 PNGs, 9:16). Captured on 14 October 2026 from the app's
+  web build against the live backend with a temporary customer account
+  (deleted afterwards): home, Fashion browse, product, offers, cart, delivery
+  details and the cash-on-delivery checkout. No demo ratings or sold counts.
+  Re-capture them when the catalogue or design changes.
 
 **Contact details**: email amritgyawali999@gmail.com, website
 https://gulmeli-fancy-stores.vercel.app.
