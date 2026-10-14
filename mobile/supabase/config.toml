@@ -7,3 +7,9 @@ verify_jwt = false
 [functions.cloudinary-media]
 # The function validates the bearer token with auth.getUser() itself.
 verify_jwt = false
+
+[auth.email]
+# The built-in Supabase mailer only delivers to project team members, so
+# customers would never receive a confirmation email. Accounts are usable
+# immediately; turn this back on once custom SMTP is configured.
+enable_confirmations = false
