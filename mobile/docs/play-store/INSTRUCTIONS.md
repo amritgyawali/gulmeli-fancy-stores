@@ -77,15 +77,30 @@ On https://play.google.com/console → **Home**, complete everything it asks:
 - [ ] Free or paid: **Free**
 - [ ] Tick *Developer Program Policies* and *US export laws* → **Create app**
 
-## Part 5 — Make a test login for Google's reviewers
+## Part 5 — Test login for Google's reviewers
 
-- [ ] Open https://gulmeli-fancy-stores.vercel.app, tap **Sign in**, and **sign up** with a
-      new email you control, e.g. `playreview.gulmeli@gmail.com`. The website
-      and the app share the same accounts. Confirm the email if asked.
-- [ ] Sign in once and fill in a name, phone number and delivery address.
-- [ ] Write the email and password down. You will paste them in Part 6.
+Reviewers sign in with the store owner account:
 
-Never use your admin account for this.
+- Email: `amritgyawali999@gmail.com`
+- Password: the one you set for review (kept out of this file because the
+  repository is public).
+
+- [ ] Sign in once in the app and check that the profile has a name, phone
+      number and delivery address.
+- [ ] Do not change that password while the app is in review.
+
+Sign-up needs no email confirmation (turned off in Supabase on
+14 October 2026, because Supabase's built-in mailer does not deliver to
+customers). New accounts work immediately, so reviewers can also create their
+own customer account.
+
+Sign-in is role based: a staff account opens the **store dashboard**, a
+customer account opens **My account**. The dashboard menu (☰) has
+**View store** and **Sign out**.
+
+Staff accounts cannot delete themselves in the app (the store owner closes
+them), so the App access note below tells reviewers to test
+*Delete account* with a new customer account.
 
 ## Part 6 — App content (Policy → App content)
 
@@ -94,7 +109,7 @@ Answer every section until each one shows a green tick.
 | Section | What to choose |
 | --- | --- |
 | Privacy policy | `https://gulmeli-fancy-stores.vercel.app/privacy` |
-| App access | **All or some functionality is restricted** → add the test login from Part 5. Instructions: `Browse without signing in. Sign in on the Account tab to test cart, cash-on-delivery checkout, orders and Settings > Delete account.` |
+| App access | **All or some functionality is restricted** → add the test login from Part 5. Instructions: `Browse without signing in. The login above is the store owner account, so it opens the store dashboard; tap the menu (☰) > View store to shop with it and test cart, cash-on-delivery checkout and orders. To test Settings > Delete account, create a new account on the Account tab (sign-up is instant, no email confirmation) and delete that one; the login above is the store owner account and cannot delete itself.` |
 | Ads | **No, my app does not contain ads** |
 | Advertising ID | **No** |
 | Content rating | Start questionnaire → email → category **All other app types** (or *Shopping* if listed). Answer **No** to violence, sexual content, language, drugs, gambling. **Yes** to "users can interact / share user-generated content" (product reviews and customer-care messages). **No** to sharing location. **No** to buying digital goods. |

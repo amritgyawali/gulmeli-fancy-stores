@@ -25,7 +25,6 @@ export function AuthPage() {
   const config = usePublishedConfig();
   const navigate = useNavigate();
   const [create, setCreate] = useState(false);
-  const [admin, setAdmin] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [reveal, setReveal] = useState(false);
@@ -34,6 +33,13 @@ export function AuthPage() {
   const [invalid, setInvalid] = useState<"email" | "password" | null>(null);
 
   const brand = config.branding.companyName;
+
+  // One sign-in form for everyone: the account's role decides where it lands.
+  // Staff (any admin_members row) open the dashboard, customers their account.
+  const openHome = async () => {
+    const { data: staff } = await supabase.rpc("is_admin");
+    navigate(staff === true ? "/admin" : "/account");
+  };
 
   const submit = async () => {
     if (busy) return;
@@ -58,7 +64,7 @@ export function AuthPage() {
         ? await supabase.auth.signUp(credentials)
         : await supabase.auth.signInWithPassword(credentials);
       if (error) throw error;
-      if (data.session) navigate(admin ? "/admin" : "/account");
+      if (data.session) await openHome();
       else {
         setCreate(false);
         setPassword("");
@@ -99,21 +105,21 @@ export function AuthPage() {
 
       <div className="p-6 sm:p-8">
         <h1 className="text-2xl font-semibold text-ink">
-          {admin ? "Staff sign in" : create ? "Create your account" : "Sign in"}
+          {create ? "Create your account" : "Sign in"}
         </h1>
         <p className="mt-1 text-sm text-ink-muted">
-          {admin
-            ? "Staff email and password for the store dashboard."
-            : `Sign in to order from ${brand}.`}
+          {create
+            ? `Create an account to order from ${brand}.`
+            : `Sign in to order from ${brand}. Store staff go straight to the dashboard.`}
         </p>
 
         {session ? (
           <button
             type="button"
-            onClick={() => navigate(admin ? "/admin" : "/account")}
+            onClick={() => void openHome()}
             className="mt-6 w-full rounded-md bg-brand py-3 text-base font-semibold text-white hover:bg-brand-strong"
           >
-            Go to {admin ? "the dashboard" : "my account"}
+            Continue
           </button>
         ) : (
           <form
@@ -181,20 +187,18 @@ export function AuthPage() {
               {busy ? "Please wait…" : create ? "Create account" : "Sign in"}
             </button>
 
-            {!admin && (
-              <button
-                type="button"
-                disabled={busy}
-                onClick={() => {
-                  setCreate((v) => !v);
-                  setNotice("");
-                  setInvalid(null);
-                }}
-                className="w-full rounded-md border border-line py-3 text-base font-semibold text-ink hover:border-brand hover:text-brand"
-              >
-                {create ? "I already have an account" : "Create an account"}
-              </button>
-            )}
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => {
+                setCreate((v) => !v);
+                setNotice("");
+                setInvalid(null);
+              }}
+              className="w-full rounded-md border border-line py-3 text-base font-semibold text-ink hover:border-brand hover:text-brand"
+            >
+              {create ? "I already have an account" : "Create an account"}
+            </button>
           </form>
         )}
 
@@ -210,19 +214,7 @@ export function AuthPage() {
           )}
         </div>
 
-        <div className="mt-6 flex items-center justify-between border-t border-line pt-4 text-sm">
-          <button
-            type="button"
-            onClick={() => {
-              setAdmin((v) => !v);
-              setCreate(false);
-              setNotice("");
-              setInvalid(null);
-            }}
-            className="font-medium text-brand hover:text-brand-strong"
-          >
-            {admin ? "Customer sign-in" : "Staff sign-in"}
-          </button>
+        <div className="mt-6 flex items-center justify-end border-t border-line pt-4 text-sm">
           <Link to="/" className="text-ink-muted hover:text-ink">
             Continue shopping
           </Link>

@@ -94,6 +94,37 @@ Installed and wired (`src/services/clerk-auth.tsx`, social buttons on sign-in sc
 4. Apple: requires an Apple Developer Account key uploaded to Clerk.
 Clerk tokens are stored in expo-secure-store automatically.
 
+## Resend — email (configured 14 Oct 2026)
+Supabase Auth sends its emails (sign-in links, password reset, confirmation)
+through Resend SMTP instead of Supabase's built-in mailer, which only reaches
+project team members.
+
+| Setting (Supabase → Authentication → Emails → SMTP) | Value |
+| --- | --- |
+| Host / port | `smtp.resend.com` / `465` |
+| Username | `resend` |
+| Password | the Resend API key (`RESEND_API_KEY`) |
+| Sender | `Gulmeli Fancy Stores <onboarding@resend.dev>` |
+
+Site URL is `https://gulmeli-fancy-stores.vercel.app`; `gulmeli://**` and the
+site are allowed redirect URLs. The key is also an Edge Function secret
+(`RESEND_API_KEY`, kept in the git-ignored `supabase/.env.local`) for future
+server-side emails. Never put it in an `EXPO_PUBLIC_*` variable or the app:
+anyone could extract it and send mail as the store.
+
+**Limit until a domain is verified:** with the `onboarding@resend.dev` sender,
+Resend delivers only to the Resend account's own address
+(gulmelifancystores@gmail.com) and rejects every other recipient. That is why
+email confirmation stays **off**. To email customers:
+
+1. Buy a domain (e.g. `gulmelifancystores.com`). A `*.vercel.app` address
+   cannot be verified.
+2. resend.com → Domains → Add domain → add the DNS records it shows → Verify.
+3. Change the SMTP sender to e.g. `orders@gulmelifancystores.com` (Supabase →
+   Authentication → Emails → SMTP, or `admin_email` in a `config push`).
+4. Turn email confirmation back on (`[auth.email] enable_confirmations = true`
+   in `supabase/config.toml`, then `npx supabase config push`).
+
 ## Payments — intentionally none
 The app takes **cash on delivery only**. The Stripe SDK, its config plugin and
 the `stripe-payment-intent` Edge Function were removed for the Google Play
