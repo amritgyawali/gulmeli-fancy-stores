@@ -94,16 +94,13 @@ Installed and wired (`src/services/clerk-auth.tsx`, social buttons on sign-in sc
 4. Apple: requires an Apple Developer Account key uploaded to Clerk.
 Clerk tokens are stored in expo-secure-store automatically.
 
-## Stripe — payments (SDK wired)
-Installed. Checkout keeps **Cash on delivery** as default; card option appears
-when configured (server side).
-1. stripe.com → Developers → API keys: **publishable key** (`pk_test_…`) and **secret key** (`sk_test_…`).
-2. `.env.local`: `EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY=…` (enables native payment sheet).
-3. Secret (server only): `npx supabase secrets set STRIPE_SECRET_KEY=sk_…` —
-   the `stripe-payment-intent` function then issues PaymentIntents (deploy via `npm run backend:deploy`).
-4. Webhook for order fulfilment later: Stripe dashboard → Webhooks → point at your Edge Function URL.
-Nepal note: Stripe does not settle to Nepali banks directly; connect it to a supported
-account (e.g. US/HK entity) or keep COD/eSewa/Khalti as primary.
+## Payments — intentionally none
+The app takes **cash on delivery only**. The Stripe SDK, its config plugin and
+the `stripe-payment-intent` Edge Function were removed for the Google Play
+release, so the app never collects card, bank or wallet details and needs no
+Play payments or financial-features declarations. Adding any online payment
+later means a new store release plus updated Data safety answers and privacy
+policy (physical goods may use any processor; Play Billing is not required).
 
 ## Cloudflare R2 — file storage (tier)
 Cloudinary remains the active media store; R2 is the optional public mirror.
@@ -153,7 +150,6 @@ EXPO_PUBLIC_POSTHOG_KEY=
 EXPO_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 EXPO_PUBLIC_SENTRY_DSN=
 EXPO_PUBLIC_MAPBOX_TOKEN=
-EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY=
 EXPO_PUBLIC_R2_PUBLIC_URL=
 
 # Build-time (PowerShell: $env:NAME="value")
