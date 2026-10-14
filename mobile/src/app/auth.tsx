@@ -7,7 +7,7 @@ import { useRouter } from "expo-router";
 import { Button, Row, T } from "@/components/ui";
 import { requireSupabase } from "@/services/supabase";
 import { useShop } from "@/store/ShopProvider";
-import { go } from "@/admin/navigate";
+import { replace } from "@/admin/navigate";
 import { track } from "@/services/telemetry";
 import { useSocialSignIn, type SocialProvider } from "@/services/clerk-auth";
 import { credentialsSchema, type Credentials } from "@/lib/schemas";
@@ -25,7 +25,6 @@ export default function AuthScreen() {
   const { live, session } = useShop();
   const social = useSocialSignIn();
   const [create, setCreate] = useState(false);
-  const [admin, setAdmin] = useState(false);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
   const {
@@ -39,12 +38,14 @@ export default function AuthScreen() {
   });
   const email = useWatch({ control, name: "email" }) ?? "";
   const password = useWatch({ control, name: "password" }) ?? "";
-  const submit = async (values: Credentials, destination?: "/admin") => {
+  // One sign-in form for everyone: the account's role decides where it lands.
+  // Staff (any admin_members row) open the dashboard, customers their account.
+  const openHome = async () => {
+    const { data: staff } = await requireSupabase().rpc("is_admin");
+    replace(staff === true ? "/admin" : "/account");
+  };
+  const submit = async (values: Credentials) => {
     if (busy) return;
-    if (destination === "/admin" && session) {
-      go("/admin");
-      return;
-    }
     setBusy(true);
     setNotice("");
     try {
@@ -61,8 +62,7 @@ export default function AuthScreen() {
         track(create ? "account_created" : "signed_in", {
           method: "password",
         });
-        if (destination === "/admin") go("/admin");
-        else router.replace("/account");
+        await openHome();
       } else {
         setCreate(false);
         setValue("password", "");
@@ -88,7 +88,7 @@ export default function AuthScreen() {
       const done = await social.start(provider);
       if (done) {
         track("signed_in", { method: provider });
-        router.replace("/account");
+        await openHome();
       }
     } catch (error) {
       setNotice(
@@ -98,8 +98,7 @@ export default function AuthScreen() {
       setBusy(false);
     }
   };
-  const onValid = (destination?: "/admin") =>
-    handleSubmit((values) => void submit(values, destination));
+  const onValid = handleSubmit((values) => void submit(values));
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -110,16 +109,12 @@ export default function AuthScreen() {
         contentContainerStyle={{ padding: 24, gap: 18 }}
       >
         <T size={24} bold>
-          {admin
-            ? "Admin sign in"
-            : create
-              ? "Create your account"
-              : "Welcome back"}
+          {create ? "Create your account" : "Welcome back"}
         </T>
         <T>
-          {admin
-            ? "Enter your staff email and password to open the store dashboard."
-            : "Sign in to save your profile and place orders with Gulmeli Fancy Stores."}
+          {create
+            ? "Create an account to save your profile and place orders with Gulmeli Fancy Stores."
+            : "Sign in to your account. Store staff go straight to the store dashboard."}
         </T>
         {!live ? (
           <T>
@@ -127,10 +122,7 @@ export default function AuthScreen() {
             store is connected.
           </T>
         ) : session ? (
-          <Button
-            title="Go to my account"
-            onPress={() => router.replace("/account")}
-          />
+          <Button title="Continue" onPress={() => void openHome()} />
         ) : (
           <>
             <View style={{ gap: 6 }}>
@@ -172,14 +164,12 @@ export default function AuthScreen() {
               title={
                 busy
                   ? "Please wait…"
-                  : admin
-                    ? "Admin sign in"
-                    : create
-                      ? "Create account"
-                      : "Sign in"
+                  : create
+                    ? "Create account"
+                    : "Sign in"
               }
               disabled={busy}
-              onPress={() => void onValid(admin ? "/admin" : undefined)()}
+              onPress={() => void onValid()}
             />
             <Button
               title={
@@ -190,7 +180,6 @@ export default function AuthScreen() {
               disabled={busy}
               outline
               onPress={() => {
-                setAdmin(false);
                 setCreate(!create);
                 setNotice("");
               }}
@@ -226,17 +215,6 @@ export default function AuthScreen() {
               )}
             </Row>
           </View>
-        )}
-        {live && (
-          <Button
-            title={admin ? "Back to customer sign-in" : "Admin login"}
-            outline
-            onPress={() => {
-              setAdmin(!admin);
-              setCreate(false);
-              setNotice("");
-            }}
-          />
         )}
         <Button
           title="Continue shopping"

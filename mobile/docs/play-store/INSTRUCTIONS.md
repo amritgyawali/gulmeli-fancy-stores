@@ -94,6 +94,10 @@ Sign-up needs no email confirmation (turned off in Supabase on
 customers). New accounts work immediately, so reviewers can also create their
 own customer account.
 
+Sign-in is role based: a staff account opens the **store dashboard**, a
+customer account opens **My account**. The dashboard menu (☰) has
+**View store** and **Sign out**.
+
 Staff accounts cannot delete themselves in the app (the store owner closes
 them), so the App access note below tells reviewers to test
 *Delete account* with a new customer account.
@@ -105,7 +109,7 @@ Answer every section until each one shows a green tick.
 | Section | What to choose |
 | --- | --- |
 | Privacy policy | `https://gulmeli-fancy-stores.vercel.app/privacy` |
-| App access | **All or some functionality is restricted** → add the test login from Part 5. Instructions: `Browse without signing in. Sign in on the Account tab with the login above to test cart, cash-on-delivery checkout and orders. To test Settings > Delete account, create a new account on the Account tab (sign-up is instant, no email confirmation) and delete that one; the login above is the store owner account and cannot delete itself.` |
+| App access | **All or some functionality is restricted** → add the test login from Part 5. Instructions: `Browse without signing in. The login above is the store owner account, so it opens the store dashboard; tap the menu (☰) > View store to shop with it and test cart, cash-on-delivery checkout and orders. To test Settings > Delete account, create a new account on the Account tab (sign-up is instant, no email confirmation) and delete that one; the login above is the store owner account and cannot delete itself.` |
 | Ads | **No, my app does not contain ads** |
 | Advertising ID | **No** |
 | Content rating | Start questionnaire → email → category **All other app types** (or *Shopping* if listed). Answer **No** to violence, sexual content, language, drugs, gambling. **Yes** to "users can interact / share user-generated content" (product reviews and customer-care messages). **No** to sharing location. **No** to buying digital goods. |

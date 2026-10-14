@@ -28,7 +28,8 @@ import {
   type NavSection,
 } from "@/admin/core/resources/index";
 import { filterCommands, globalSearch } from "@/admin/core/search";
-import { go } from "@/admin/navigate";
+import { go, replace } from "@/admin/navigate";
+import { useShop } from "@/store/ShopProvider";
 
 function badgeCount(
   kind: NavItem["badge"],
@@ -133,6 +134,7 @@ function Sidebar({
 }) {
   const admin = useAdmin();
   const { allowed, published } = admin;
+  const { session, signOut } = useShop();
   const [expanded, setExpanded] = useState<string[]>([]);
 
   const sections = useMemo(
@@ -245,6 +247,35 @@ function Sidebar({
           );
         })}
       </ScrollView>
+      <Divider theme={theme} />
+      {/* Staff land here after signing in, so the way back to the shop and
+          out of the account has to live in the dashboard itself. */}
+      <View style={{ padding: 8, gap: 1 }}>
+        <NavRow
+          label="View store"
+          icon="shop"
+          active={false}
+          theme={theme}
+          onPress={() => {
+            onNavigate();
+            replace("/");
+          }}
+        />
+        {!!session && (
+          <NavRow
+            label="Sign out"
+            icon="right-from-bracket"
+            active={false}
+            theme={theme}
+            onPress={() => {
+              onNavigate();
+              void signOut()
+                .catch(() => undefined)
+                .then(() => replace("/auth"));
+            }}
+          />
+        )}
+      </View>
     </View>
   );
 }

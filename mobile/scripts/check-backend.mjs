@@ -89,6 +89,8 @@ if (process.argv.includes("--remote") && !failed) {
     ["save_admin_changes", { p_changes: [] }],
     ["quote_order", { p_items: [], p_voucher: "" }],
     ["my_support_tickets", {}],
+    ["is_admin", {}],
+    ["delete_my_account", {}],
   ]) {
     await remote(
       `${name} exists and rejects anonymous access`,
