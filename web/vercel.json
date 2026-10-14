@@ -11,6 +11,9 @@
     { "source": "/account-deletion", "destination": "/delete-account", "permanent": true },
     { "source": "/contact", "destination": "/support", "permanent": true }
   ],
+  "rewrites": [
+    { "source": "/((?!assets/).*)", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",

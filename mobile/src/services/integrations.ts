@@ -13,7 +13,6 @@ const raw = {
   posthogHost: process.env.EXPO_PUBLIC_POSTHOG_HOST,
   sentryDsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
   mapboxToken: process.env.EXPO_PUBLIC_MAPBOX_TOKEN,
-  stripePublishableKey: process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   r2PublicUrl: process.env.EXPO_PUBLIC_R2_PUBLIC_URL,
 };
 
@@ -34,9 +33,6 @@ export const integrations = {
   /** Mapbox — native maps. */
   mapboxToken: trim(raw.mapboxToken),
   mapboxEnabled: !!trim(raw.mapboxToken) && Platform.OS !== "web",
-  /** Stripe — in-app card payments (server side needs the secret key). */
-  stripePublishableKey: trim(raw.stripePublishableKey),
-  stripeEnabled: !!trim(raw.stripePublishableKey),
   /** Cloudflare R2 — optional public mirror for media. */
   r2PublicUrl: trim(raw.r2PublicUrl),
   /** Firebase Cloud Messaging — present once the native config files exist. */

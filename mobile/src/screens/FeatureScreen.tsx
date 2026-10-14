@@ -1,5 +1,5 @@
 import { View, ScrollView, TextInput } from "@/components/store-ui";
-import { Suspense, lazy, useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Image, KeyboardAvoidingView, Linking, Platform, Share, StyleSheet, Switch } from "react-native";
 import Constants from "expo-constants";
 import { Redirect, useLocalSearchParams, useRouter } from "expo-router";
@@ -15,15 +15,11 @@ import { useShop, useCatalog } from "@/store/ShopProvider";
 import { openDestination } from "@/services/navigation";
 import { voucherDiscount } from "@/store/commerce";
 import { uploadAvatar } from "@/services/cloudinary";
-import { paymentsAvailable } from "@/services/payments";
 import { usePrefs } from "@/store/prefs";
 import { currentBrand } from "@/utils/branding";
 import { legalLinks } from "@/services/legal";
 import { colors } from "@/theme/tokens";
 import type { Product } from "@/types/shop";
-
-// The Stripe SDK only enters the bundle on native builds that are configured.
-const StripePayButtonLazy = lazy(() => import("@/components/StripePayButton"));
 
 const money = (n: number) => `Rs. ${n.toLocaleString("en-US")}`;
 const categories = [
@@ -496,25 +492,9 @@ function FeatureContent({
                   : money(subtotal - discount)}
               </T>
               <T>
-                Payment preference: Cash on delivery. No payment is collected
-                here.
+                Payment: Cash on delivery. You pay when the order arrives; the
+                app never asks for card, bank or wallet details.
               </T>
-              {paymentsAvailable && (
-                <Suspense
-                  fallback={
-                    <T size={11} color="#6b7280">
-                      Loading secure payment…
-                    </T>
-                  }
-                >
-                  <StripePayButtonLazy
-                    total={subtotal - discount}
-                    onBusy={setBusy}
-                    onError={setNotice}
-                    onPaid={() => setNotice("Card payment approved.")}
-                  />
-                </Suspense>
-              )}
               {!!quoteError && <T color="#b91c1c">{quoteError}</T>}
               <Button
                 title={
@@ -1070,7 +1050,7 @@ function FeatureContent({
       ],
       [
         "Can I pay online?",
-        "Online payments are not connected. No card or wallet details are collected.",
+        "No. Every order is cash on delivery: you pay when it arrives. The app never asks for card, bank or wallet details.",
       ],
       [
         "Where is my order?",
@@ -1254,8 +1234,8 @@ function FeatureContent({
         </T>
         <T>
           {live
-            ? "Orders use cash on delivery. Online card and wallet payments are not enabled."
-            : "Cash on delivery is the preference used in local checkout. Online card and wallet payments are not connected."}
+            ? "Every order is cash on delivery: you pay when it arrives. The app has no online payments and never asks for card, bank or wallet details."
+            : "Cash on delivery is the only payment method. The app has no online payments and never asks for card, bank or wallet details."}
         </T>
         <Button
           title="Continue to cart"

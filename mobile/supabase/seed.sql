@@ -26,9 +26,7 @@ insert into public.products(id,name,price,stock,category,product_group,image_url
 ('horlicks', 'Horlicks Classic malt Jar 1 kg', '842', '99', 'Groceries', 'choice', null, '{"originalPrice":860,"illustration":"horlicks","brand":"Horlicks","store":"Gulmeli Fancy Stores Choice - Unilever"}', '22'),
 ('gyan', 'Gyan Chiura 800Gm', '110', '0', 'Groceries', 'unavailable', null, '{"illustration":"gyan","brand":"GYAN","store":"ZenFusion Grocer"}', '23'),
 ('monitor', 'Vartex 24" Frameless Gaming Monitor', '13999', '99', 'Lifestyle', 'recommendation', null, '{"discount":"-26%","illustration":"monitor","rating":"4.7 (109)","sold":359}', '24'),
-('restricted', 'Blow Masturvator T...', '2108', '99', 'Lifestyle', 'recommendation', null, '{"discount":"-30%","illustration":"restricted","rating":"4.6 (5)","sold":20}', '25'),
-('balaclava', 'Summer Balaclava...', '399', '99', 'Lifestyle', 'recommendation', null, '{"discount":"-53%","illustration":"balaclava","rating":"4.4 (42)","sold":309,"gems":12}', '26'),
-('speaker', 'Wireless Portable Bluetooth Speaker', '1050', '99', 'Lifestyle', 'recommendation', null, '{"discount":"-48%","illustration":"speaker","rating":"4.2 (133)","sold":915}', '27'),
-('posters', 'Attack On titan Anime Posters', '190', '99', 'Lifestyle', 'recommendation', null, '{"discount":"-16%","illustration":"posters","rating":"4.8 (61)","sold":237,"gems":2}', '28'),
-('film', '14-inch Premium Laptop Screen Protector', '81', '99', 'Lifestyle', 'recommendation', null, '{"discount":"-63%","illustration":"film","rating":"3 (20)","sold":152,"gems":4}', '29')
+('balaclava', 'Summer Balaclava...', '399', '99', 'Lifestyle', 'recommendation', null, '{"discount":"-53%","illustration":"balaclava","rating":"4.4 (42)","sold":309,"gems":12}', '25'),
+('speaker', 'Wireless Portable Bluetooth Speaker', '1050', '99', 'Lifestyle', 'recommendation', null, '{"discount":"-48%","illustration":"speaker","rating":"4.2 (133)","sold":915}', '26'),
+('film', '14-inch Premium Laptop Screen Protector', '81', '99', 'Lifestyle', 'recommendation', null, '{"discount":"-63%","illustration":"film","rating":"3 (20)","sold":152,"gems":4}', '27')
 on conflict (id) do nothing;

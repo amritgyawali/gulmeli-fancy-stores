@@ -110,15 +110,6 @@ export const recommendations: Product[] = [
     sold: 359,
   },
   {
-    id: "restricted",
-    name: "Blow Masturvator T...",
-    price: 2108,
-    discount: "-30%",
-    illustration: "restricted",
-    rating: "4.6 (5)",
-    sold: 20,
-  },
-  {
     id: "balaclava",
     name: "Summer Balaclava...",
     price: 399,
@@ -136,16 +127,6 @@ export const recommendations: Product[] = [
     illustration: "speaker",
     rating: "4.2 (133)",
     sold: 915,
-  },
-  {
-    id: "posters",
-    name: "Attack On titan Anime Posters",
-    price: 190,
-    discount: "-16%",
-    illustration: "posters",
-    rating: "4.8 (61)",
-    sold: 237,
-    gems: 2,
   },
   {
     id: "film",
