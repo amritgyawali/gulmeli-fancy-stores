@@ -69,14 +69,31 @@ Pro plan (or at least restore it and keep traffic flowing) before going live.
 
 ```powershell
 cd mobile
-npx eas-cli build -p android --profile production
+npm run release:android
 ```
+
+This runs `npm run check`, builds the `production` profile on EAS, waits for
+it and saves `builds/output/gulmeli-fancy-stores-<version>-<versionCode>.aab`
+plus `builds/output/latest.json`. Add `-- --skip-checks` to skip the tests or
+`-- --submit` to also upload it to the internal track.
 
 On the first production build EAS creates the **upload key** and stores it on
 Expo's servers. Back it up once: `npx eas-cli credentials -p android` →
 *Download credentials*. Keep the file somewhere safe and never commit it.
 
-Download the `.aab` from the link the build prints (also on expo.dev).
+### versionCode errors in Play Console
+
+The `versionCode` is stored on EAS, not in `app.json`, and every production
+build takes the next number. Play refuses a release that:
+
+- *"does not add or remove any app bundles"* — the bundle was already uploaded
+  (same `versionCode`), so the release changes nothing;
+- *"doesn't allow any existing users to upgrade to the newly added app
+  bundles"* — the bundle's `versionCode` is lower than one testers already have.
+
+Fix both by uploading a **new** build (higher `versionCode`): in the release,
+remove the old bundle, upload the new `.aab`, then save and roll out. Never
+re-upload an older `.aab` from `builds/output`.
 
 ## 3. Create the app in Play Console — **You**
 
@@ -234,7 +251,7 @@ npx eas-cli build -p android --profile production --auto-submit
 
 This uploads a draft to the internal track; promote it in the Console.
 `versionCode` increments automatically. Bump `"version"` in `app.json`
-(e.g. 1.0.1) for user-visible releases — the OTA `runtimeVersion` follows it.
+(currently 1.0.1) for user-visible releases — the OTA `runtimeVersion` follows it.
 
 JavaScript-only fixes can go out without a store release:
 `npx eas-cli update --branch production --message "Fix ..."`.

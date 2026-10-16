@@ -2,7 +2,7 @@
   "expo": {
     "name": "Gulmeli Fancy Stores",
     "slug": "gulmeli-fancy-store",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "scheme": "gulmeli",
     "userInterfaceStyle": "light",
@@ -12,14 +12,12 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.gulmeli.fancystore",
-      "buildNumber": "1",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
       "package": "com.gulmeli.fancystore",
-      "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#f85606",
         "foregroundImage": "./assets/adaptive-icon.png",
