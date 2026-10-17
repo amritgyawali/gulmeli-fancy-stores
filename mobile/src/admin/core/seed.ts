@@ -2,6 +2,7 @@ import { BUILT_IN_ROLES } from "./rbac.ts";
 import { nextNumber, slugify } from "./ids.ts";
 import type { Snapshot } from "./store.ts";
 import type { AdminRecord, OrderStatus, PaymentStatus } from "./types.ts";
+import { CATEGORY_BLURBS, CLOTHING_CATEGORIES } from "../../data/clothing.ts";
 
 /** The shape the customer catalogue already uses, kept loose on purpose. */
 export interface SeedSourceProduct {
@@ -17,6 +18,73 @@ export interface SeedSourceProduct {
   imageUrl?: string;
   sold?: number;
   rating?: string;
+  description?: string;
+  imageKey?: string;
+  imageIllustrative?: boolean;
+  sizes?: string[];
+  colors?: { name: string; hex: string }[];
+  sizeChart?: string;
+  fabric?: string;
+  fit?: string;
+  care?: string[];
+  highlights?: string[];
+  gender?: string;
+  discount?: string;
+  gems?: number;
+  fastDelivery?: boolean;
+  voucher?: boolean;
+  store?: string;
+}
+
+/* Storefront presentation fields the dashboard keeps under `details`; the
+   database copies them onto the live product unchanged. */
+export function storefrontDetails(source: SeedSourceProduct) {
+  const keys = [
+    "imageKey",
+    "imageIllustrative",
+    "sizes",
+    "colors",
+    "sizeChart",
+    "fabric",
+    "fit",
+    "care",
+    "highlights",
+    "gender",
+    "discount",
+    "badge",
+    "rating",
+    "sold",
+    "gems",
+    "fastDelivery",
+    "voucher",
+    "store",
+    "originalPrice",
+  ] as const;
+  return Object.fromEntries(
+    keys
+      .filter((key) => source[key] !== undefined && source[key] !== "")
+      .map((key) => [key, source[key]]),
+  );
+}
+
+/* One dashboard variant per size and colour, sharing the product's stock. */
+export function seedVariants(source: SeedSourceProduct, sku: string) {
+  const sizes = source.sizes?.length ? source.sizes : [""];
+  const colors = source.colors?.length ? source.colors.map((c) => c.name) : [""];
+  if (sizes.length === 1 && !sizes[0] && colors.length === 1) return [];
+  const combos = sizes.flatMap((size) => colors.map((color) => ({ size, color })));
+  const each = Math.floor(source.stock / combos.length);
+  return combos.map(({ size, color }, index) => ({
+    title: [size, color].filter(Boolean).join(" / ") || "Default",
+    sku: `${sku}-${String(index + 1).padStart(2, "0")}`,
+    price: null,
+    stock: index === 0 ? source.stock - each * (combos.length - 1) : each,
+    weight: null,
+    color,
+    size,
+    material: source.fabric ?? "",
+    image: "",
+  }));
 }
 
 /** Deterministic generator, so demo data and tests never drift. */
@@ -138,15 +206,24 @@ export function buildSeed(
     }),
   ];
 
+  /* Departments in the store's own order, then any others the catalogue has. */
+  const order = CLOTHING_CATEGORIES as readonly string[];
   const categoryNames = [
     ...new Set(catalog.map((product) => product.category)),
-  ].filter(Boolean);
+  ]
+    .filter(Boolean)
+    .sort(
+      (a, b) =>
+        (order.includes(a) ? order.indexOf(a) : 99) -
+        (order.includes(b) ? order.indexOf(b) : 99),
+    );
   const categories: AdminRecord[] = categoryNames.map((name, index) =>
     base(`cat_${slugify(name)}`, stamp, {
       name,
       slug: slugify(name),
       parentId: null,
-      description: `${name} available at Gulmeli Fancy Stores.`,
+      description:
+        CATEGORY_BLURBS[name] ?? `${name} available at Gulmeli Fancy Stores.`,
       image: "",
       icon: "",
       banner: "",
@@ -154,10 +231,10 @@ export function buildSeed(
       enabled: true,
       featured: index < 3,
       offerText: "",
-      filters: ["price", "brand", "rating", "availability"],
-      seoTitle: `${name} online in Nepal`,
-      seoDescription: `Shop ${name.toLowerCase()} with fast delivery.`,
-      seoKeywords: [name.toLowerCase()],
+      filters: ["price", "size", "color", "brand", "rating", "availability", "material"],
+      seoTitle: `${name} clothing online in Nepal`,
+      seoDescription: `Shop ${name.toLowerCase()} with cash on delivery and easy size exchanges.`,
+      seoKeywords: [name.toLowerCase(), "clothing", "Nepal"],
       searchable: true,
     }),
   );
@@ -185,7 +262,7 @@ export function buildSeed(
     ["New arrivals", "new_arrivals"],
     ["Best sellers", "best_sellers"],
     ["Trending now", "trending"],
-    ["Festival picks", "festival"],
+    ["Festive & wedding wear", "festival"],
   ].map(([name, kind], index) =>
     base(`coll_${kind}`, stamp, {
       name,
@@ -214,8 +291,8 @@ export function buildSeed(
       sku: `GFS-${String(index + 1).padStart(4, "0")}`,
       barcode: "",
       productCode: source.id,
-      shortDescription: "",
-      description: "",
+      shortDescription: source.highlights?.join(" · ") ?? "",
+      description: source.description ?? "",
       images: source.imageUrl ? [source.imageUrl] : [],
       imageAlt: source.name,
       videoUrl: "",
@@ -234,9 +311,15 @@ export function buildSeed(
       categoryId: `cat_${slugify(source.category)}`,
       brandId: source.brand ? `brand_${slugify(source.brand)}` : null,
       collectionIds: [],
-      tags: [source.category.toLowerCase()],
+      tags: [
+        ...new Set(
+          [source.category, source.gender, source.fabric?.split(/[ ,(]/)[0]]
+            .filter((tag): tag is string => Boolean(tag))
+            .map((tag) => tag.toLowerCase()),
+        ),
+      ],
       productType: "physical",
-      weight: between(100, 1500),
+      weight: between(150, 900),
       dimensions: "",
       shippingClass: "",
       stock: source.stock,
@@ -248,11 +331,19 @@ export function buildSeed(
       allowBackorder: false,
       minPurchaseQty: 1,
       maxPurchaseQty: 10,
-      variants: [],
-      specifications: [],
-      features: [],
+      variants: seedVariants(source, `GFS-${String(index + 1).padStart(4, "0")}`),
+      specifications: [
+        ["Fabric", source.fabric],
+        ["Fit", source.fit],
+        ["For", source.gender],
+        ["Sizes", source.sizes?.join(", ")],
+      ]
+        .filter((row): row is [string, string] => Boolean(row[1]))
+        .map(([label, value]) => ({ label, value })),
+      features: source.highlights ?? [],
       warranty: "",
-      careInstructions: "",
+      careInstructions: source.care?.join("\n") ?? "",
+      details: storefrontDetails(source),
       faqs: [],
       relatedProductIds: [],
       boughtTogetherIds: [],
@@ -582,8 +673,8 @@ export function buildSeed(
       title: rating >= 4 ? "Good value" : "It is fine",
       body:
         rating >= 4
-          ? "Arrived quickly and matches the photos. Quality is better than I expected for the price."
-          : "Works, but the finish could be better. Delivery took a little longer than promised.",
+          ? "Fits true to size and the fabric feels great. Arrived quickly and matches the photos."
+          : "Nice colour, but it runs a little small. Check the size guide and go one size up.",
       images: [],
       videoUrl: "",
       status: index < 3 ? "pending" : "approved",
@@ -825,9 +916,9 @@ export function buildSeed(
   ];
 
   const banners: AdminRecord[] = [
-    ["Festival sale", "home", "#f85606"],
+    ["Dashain & Tihar festive collection", "home", "#b5232f"],
     ["Free delivery over Rs. 1500", "home", "#ffba00"],
-    ["New in electronics", "category", "#2563eb"],
+    ["Winter wear has arrived", "category", "#26334f"],
   ].map(([name, placement, backgroundColor], index) =>
     base(`ban_${index + 1}`, stamp, {
       name,
@@ -966,6 +1057,14 @@ export function buildSeed(
       "How do I return an item?",
       "Open the order in the app and choose Return, within 7 days of delivery.",
     ],
+    [
+      "What if the size does not fit?",
+      "Exchange it for another size within 7 days of delivery. Keep the item unworn with its tags attached.",
+    ],
+    [
+      "How do I find my size?",
+      "Open the product and tap Size guide. It lists body measurements in centimetres for every size.",
+    ],
   ].map(([question, answer], index) =>
     base(`faq_${index + 1}`, stamp, {
       question,
@@ -979,7 +1078,7 @@ export function buildSeed(
 
   const suppliers: AdminRecord[] = [
     base("sup_1", stamp, {
-      name: "Kathmandu Wholesale House",
+      name: "Kathmandu Garment House",
       contactPerson: "Ram Bahadur",
       email: "sales@example.com",
       phone: "9801111111",

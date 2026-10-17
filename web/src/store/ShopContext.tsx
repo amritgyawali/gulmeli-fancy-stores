@@ -40,6 +40,11 @@ import {
   submitOrder,
 } from "@/lib/shop-api";
 import { errorMessage } from "@/lib/format";
+import {
+  lineKey,
+  missingChoice,
+  type VariantChoice,
+} from "@/shared/mobile/data/clothing";
 
 const GUEST_KEY = "gulmeli:shop:web:v1";
 
@@ -67,12 +72,14 @@ interface ShopValue {
   backendError: string;
   syncStatus: string;
   ui: ShopUi;
-  add: (p: Product) => void;
-  setQty: (p: Product, q: number) => void;
-  toggle: (id: string) => void;
-  select: (ids: string[], selected: boolean) => void;
+  /* Cart lines are addressed by lineKey(): the product id plus the chosen
+     size and colour, when the product has them. */
+  add: (p: Product, choice?: VariantChoice) => void;
+  setQty: (p: Product, q: number, key?: string) => void;
+  toggle: (key: string) => void;
+  select: (keys: string[], selected: boolean) => void;
   removeSelected: () => void;
-  removeItem: (id: string) => void;
+  removeItem: (key: string) => void;
   updateCommerce: (update: (current: Commerce) => Commerce) => void;
   collectVouchers: () => void;
   markMessagesRead: () => void;
@@ -416,28 +423,29 @@ export function ShopProvider({ children }: PropsWithChildren) {
   );
 
   const add = useCallback(
-    (product: Product) => setCart((current) => addItem(current, product)),
+    (product: Product, choice: VariantChoice = {}) =>
+      setCart((current) => addItem(current, product, choice)),
     [],
   );
   const setQty = useCallback(
-    (product: Product, count: number) =>
-      setCart((current) => setQuantity(current, product, count)),
+    (product: Product, count: number, key: string = product.id) =>
+      setCart((current) => setQuantity(current, product, count, key)),
     [],
   );
   const toggle = useCallback(
-    (id: string) =>
+    (key: string) =>
       setCart((current) =>
         current.map((i) =>
-          i.productId === id ? { ...i, selected: !i.selected } : i,
+          lineKey(i) === key ? { ...i, selected: !i.selected } : i,
         ),
       ),
     [],
   );
   const select = useCallback(
-    (ids: string[], selected: boolean) =>
+    (keys: string[], selected: boolean) =>
       setCart((current) =>
         current.map((i) =>
-          ids.includes(i.productId) ? { ...i, selected } : i,
+          keys.includes(lineKey(i)) ? { ...i, selected } : i,
         ),
       ),
     [],
@@ -447,7 +455,7 @@ export function ShopProvider({ children }: PropsWithChildren) {
     [],
   );
   const removeItem = useCallback(
-    (id: string) => setCart((current) => current.filter((i) => i.productId !== id)),
+    (key: string) => setCart((current) => current.filter((i) => lineKey(i) !== key)),
     [],
   );
   const collectVouchers = useCallback(
@@ -478,6 +486,14 @@ export function ShopProvider({ children }: PropsWithChildren) {
     try {
       const snapshot = stateRef.current;
       const voucher = voucherOverride ?? snapshot.commerce.voucher;
+      for (const line of snapshot.cart.filter((i) => i.selected)) {
+        const product = productById[line.productId];
+        const missing = product && missingChoice(product, line);
+        if (missing)
+          throw new Error(
+            `Choose a ${missing === "size" ? "size" : "colour"} for ${product.name} before checkout.`,
+          );
+      }
       const requestId = await checkoutRequest(owner, snapshot.cart, voucher);
       if (activeUser.current !== owner)
         throw new Error("Your account changed. Please sign in again.");
@@ -494,7 +510,7 @@ export function ShopProvider({ children }: PropsWithChildren) {
           (i) =>
             !snapshot.cart.some(
               (ordered) =>
-                ordered.selected && ordered.productId === i.productId,
+                ordered.selected && lineKey(ordered) === lineKey(i),
             ),
         ),
       );

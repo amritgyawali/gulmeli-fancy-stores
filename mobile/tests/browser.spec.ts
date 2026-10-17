@@ -54,13 +54,13 @@ test("offers search, cart selection, stock limit, persistence, removal, and all 
     .getByRole("button", { name: "Buy More Save More offer", exact: true })
     .click();
   await expect(page).toHaveURL(/\/offers$/);
-  await page.getByRole("textbox", { name: "Search offers" }).fill("keyboard");
+  await page.getByRole("textbox", { name: "Search offers" }).fill("balaclava");
   await page.getByRole("button", { name: "Search", exact: true }).click();
   await expect(
     page.getByRole("button", { name: /^Add .* to cart$/ }),
   ).toHaveCount(1);
   await page
-    .getByRole("button", { name: /^Add Mini Wireless Keyboard/ })
+    .getByRole("button", { name: /^Add Summer Cooling Balaclava/ })
     .click();
   await expect(
     page.getByRole("button", { name: "Check Out(1)", exact: true }),
@@ -69,14 +69,14 @@ test("offers search, cart selection, stock limit, persistence, removal, and all 
   await expect(page).toHaveURL(/\/cart$/);
   await page.getByRole("button", { name: "View All", exact: true }).click();
   await expect(
-    page.getByRole("button", { name: /^Increase Mini Wireless Keyboard/ }),
+    page.getByRole("button", { name: /^Increase Summer Cooling Balaclava/ }),
   ).toBeVisible();
   await page.getByRole("checkbox", { name: "Select all cart items" }).click();
   await expect(
     page.getByRole("button", { name: "Check Out(4)" }),
   ).toBeVisible();
   await page
-    .getByRole("button", { name: "Increase Dabur Glucose D 500 Gm" })
+    .getByRole("button", { name: "Increase Classic Denim Trucker Jacket" })
     .click();
   await expect(
     page.getByRole("button", { name: "Check Out(5)" }),
@@ -208,11 +208,11 @@ test("search to wishlist, validated checkout, order persistence and cancellation
   await page.goto("/");
   // The home search field opens the dedicated search screen.
   await page.getByRole("search", { name: "Search products" }).click();
-  await page.getByRole("textbox", { name: "Search products" }).fill("keyboard");
+  await page.getByRole("textbox", { name: "Search products" }).fill("linen shirt");
   await page.getByRole("button", { name: "Search", exact: true }).click();
-  await expect(page.getByText("“keyboard” · 1 product", { exact: true })).toBeVisible();
+  await expect(page.getByText("“linen shirt” · 1 product", { exact: true })).toBeVisible();
   await page
-    .getByRole("button", { name: /^Open Mini Wireless Keyboard/ })
+    .getByRole("button", { name: /^Open Half-Sleeve Linen Blend Shirt/ })
     .first()
     .click();
   await page
@@ -221,8 +221,14 @@ test("search to wishlist, validated checkout, order persistence and cancellation
   await expect(
     page.getByRole("button", { name: "Remove from wishlist" }),
   ).toBeVisible();
+  // Clothing needs a size: adding without one asks for it first.
+  await page.getByRole("button", { name: "Add to cart", exact: true }).click();
+  await expect(page.getByText("Choose your size first")).toBeVisible();
+  await page.getByRole("radio", { name: "Size M", exact: true }).click();
+  await page.getByRole("radio", { name: "Colour Sage", exact: true }).click();
   await page.getByRole("button", { name: "Add to cart", exact: true }).click();
   await page.getByRole("button", { name: "Go to cart", exact: true }).click();
+  await expect(page.getByText("Size M · Sage", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Check Out(1)", exact: true }).click();
   await page
     .getByRole("button", { name: "Save local order", exact: true })
@@ -248,7 +254,7 @@ test("search to wishlist, validated checkout, order persistence and cancellation
     .getByRole("button", { name: "Apply voucher", exact: true })
     .click();
   await expect(
-    page.getByText("Total: Rs. 1,610", { exact: true }),
+    page.getByText("Total: Rs. 1,190", { exact: true }),
   ).toBeVisible();
   await page
     .getByRole("button", { name: "Save local order", exact: true })
@@ -256,7 +262,7 @@ test("search to wishlist, validated checkout, order persistence and cancellation
   await expect(page.getByText("Saved locally", { exact: true })).toBeVisible();
   await page.reload();
   await expect(
-    page.getByText("Total Rs. 1,610", { exact: true }),
+    page.getByText("Total Rs. 1,190", { exact: true }),
   ).toBeVisible();
   await page
     .getByRole("button", { name: "Cancel local order", exact: true })
@@ -266,7 +272,7 @@ test("search to wishlist, validated checkout, order persistence and cancellation
   await page.getByRole("tab", { name: "Account", exact: true }).click();
   await page.getByRole("button", { name: "WishList", exact: true }).click();
   await expect(
-    page.getByRole("button", { name: /^Open Mini Wireless Keyboard/ }),
+    page.getByRole("button", { name: /^Open Half-Sleeve Linen Blend Shirt/ }),
   ).toBeVisible();
 });
 
@@ -283,14 +289,14 @@ test("profile, seller following, reviews and preferences persist", async ({
   await expect(
     page.getByRole("textbox", { name: "Full name", exact: true }),
   ).toHaveValue("Arjun G. Gyawali");
-  await page.goto("/feature?destination=Product%20details&id=home-0");
+  await page.goto("/feature?destination=Product%20details&id=men-oversized-tee");
   await page.getByRole("button", { name: "Visit seller", exact: true }).click();
   await page.getByRole("button", { name: "Follow store", exact: true }).click();
   await page.reload();
   await expect(
     page.getByRole("button", { name: "Unfollow store", exact: true }),
   ).toBeVisible();
-  await page.goto("/feature?destination=Product%20review&id=home-0");
+  await page.goto("/feature?destination=Product%20review&id=men-oversized-tee");
   await page.getByRole("tab", { name: "Rate 4 stars", exact: true }).click();
   await page
     .getByRole("textbox", { name: "Your review", exact: true })

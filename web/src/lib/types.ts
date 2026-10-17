@@ -1,8 +1,9 @@
 // Shared contracts with the mobile app (same Supabase tables and JSON docs).
+import type { ClothingDetails } from "@/shared/mobile/data/clothing";
 export type ProductGroup =
   "home" | "offer" | "recommendation" | "choice" | "unavailable";
 
-export interface Product {
+export interface Product extends ClothingDetails {
   createdAt?: string;
   id: string;
   name: string;
@@ -26,12 +27,16 @@ export interface Product {
   fastDelivery?: boolean;
   voucher?: boolean;
   badge?: string;
+  variants?: { title?: string; size?: string; color?: string; stock?: number }[];
 }
 
 export interface CartItem {
   productId: string;
   quantity: number;
   selected: boolean;
+  /* The size and colour chosen on the product page, when it has them. */
+  size?: string;
+  color?: string;
 }
 
 export interface Profile {
@@ -44,7 +49,14 @@ export interface Profile {
 export interface LocalOrder {
   id: string;
   createdAt: string;
-  items: { productId: string; name: string; quantity: number; price: number }[];
+  items: {
+    productId: string;
+    name: string;
+    quantity: number;
+    price: number;
+    size?: string;
+    color?: string;
+  }[];
   subtotal: number;
   discount: number;
   total: number;

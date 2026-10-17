@@ -11,6 +11,13 @@ import { FontIcon } from "./FontIcon";
 import { PressableScale, haptic, usePop } from "./motion";
 import { useToast } from "./Toast";
 import { productImage } from "@/services/product-media";
+import { unitsInCart } from "@/store/cart";
+import {
+  colorOptions,
+  defaultColor,
+  missingChoice,
+  sizeOptions,
+} from "@/data/clothing";
 
 /*
  * The product card.
@@ -127,7 +134,18 @@ export const ProductCard = memo(function ProductCard({
   const theme = useStorefrontTheme();
   const toast = useToast();
   const [addStyle, popAdd] = usePop(1.18);
-  const quantity = state.cart.find((i) => i.productId === product.id)?.quantity ?? 0;
+  const quantity = unitsInCart(state.cart, product.id);
+  /* Clothing needs a size: quick add opens the product to choose one. */
+  const color = defaultColor(product);
+  const needsChoice = missingChoice(product, { color });
+  const sizes = sizeOptions(product);
+  const colours = colorOptions(product);
+  const optionsLine = [
+    sizes.length > 1 ? `${sizes[0]}–${sizes[sizes.length - 1]}` : sizes[0],
+    colours.length > 1 ? `${colours.length} colours` : "",
+  ]
+    .filter(Boolean)
+    .join(" · ");
   const out = product.stock < 1;
   const atLimit = !out && quantity >= product.stock;
   const off = discountPercent(product);
@@ -136,7 +154,11 @@ export const ProductCard = memo(function ProductCard({
 
   const addToCart = () => {
     if (out || atLimit) return;
-    add(product);
+    if (needsChoice) {
+      openProduct(product.id);
+      return;
+    }
+    add(product, { color });
     popAdd();
     void haptic("medium");
     toast({
@@ -220,7 +242,11 @@ export const ProductCard = memo(function ProductCard({
             <PressableScale
               accessibilityRole="button"
               accessibilityLabel={
-                atLimit ? `${product.name} limit reached` : `Add ${product.name} to cart`
+                atLimit
+                  ? `${product.name} limit reached`
+                  : needsChoice
+                    ? `Choose ${needsChoice === "size" ? "a size" : "a colour"} for ${product.name}`
+                    : `Add ${product.name} to cart`
               }
               accessibilityState={{ disabled: atLimit }}
               disabled={atLimit}
@@ -251,6 +277,11 @@ export const ProductCard = memo(function ProductCard({
         <T preserveColor size={13} numberOfLines={2} style={{ minHeight: 36 }}>
           {product.name}
         </T>
+        {!!optionsLine && (
+          <T preserveColor size={11} color={theme.muted} numberOfLines={1}>
+            {optionsLine}
+          </T>
+        )}
         <Row style={{ gap: 6, flexWrap: "wrap", alignItems: "baseline" }}>
           <T preserveColor size={16} bold color={theme.primaryText}>
             {money(symbol, product.price)}

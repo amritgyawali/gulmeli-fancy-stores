@@ -6,6 +6,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { uploadAvatar } from "@/lib/media";
 import { profileError } from "@/lib/commerce";
 import { errorMessage, rs, shortDate } from "@/lib/format";
+import { lineKey, variantLabel } from "@/shared/mobile/data/clothing";
 
 /*
  * Account.
@@ -273,12 +274,13 @@ export function AccountPage() {
                     </div>
                     <ul className="mt-3 flex flex-wrap gap-1.5 border-t border-line pt-3">
                       {order.items.map((i) => (
-                        <li key={i.productId}>
+                        <li key={lineKey(i)}>
                           <Link
                             to={`/product/${i.productId}`}
                             className="tnum block rounded-sm bg-sunken px-2.5 py-1 text-xs text-ink-soft hover:bg-brand-soft hover:text-brand-strong"
                           >
-                            {(productById[i.productId]?.name ?? i.name).slice(0, 40)} ×{i.quantity}
+                            {(productById[i.productId]?.name ?? i.name).slice(0, 40)}
+                            {variantLabel(i) ? ` (${variantLabel(i)})` : ""} ×{i.quantity}
                           </Link>
                         </li>
                       ))}

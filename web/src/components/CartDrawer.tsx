@@ -8,7 +8,8 @@ import { rs } from "@/lib/format";
 import { voucherDiscount } from "@/lib/commerce";
 import { deliveryFeeFor, useDeliveryTerms } from "@/lib/shipping";
 import { prefersReducedMotion } from "@/lib/hooks";
-import type { Product } from "@/lib/types";
+import type { CartItem, Product } from "@/lib/types";
+import { cleanVariant, lineKey, missingChoice, variantLabel } from "@/shared/mobile/data/clothing";
 
 /*
  * Slide-in cart.
@@ -119,15 +120,16 @@ export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => vo
 
   if (!mounted) return null;
 
-  const remove = (p: Product, quantity: number) => {
-    removeItem(p.id);
+  const remove = (p: Product, item: CartItem) => {
+    const quantity = item.quantity;
+    removeItem(lineKey(item));
     toast({
       message: `Removed ${p.name}`,
       tone: "info",
       action: {
         label: "Undo",
         onClick: () => {
-          for (let i = 0; i < quantity; i += 1) add(p);
+          for (let i = 0; i < quantity; i += 1) add(p, cleanVariant(item));
         },
       },
     });
@@ -221,7 +223,7 @@ export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => vo
                   const overStock = item.quantity > p.stock;
                   const off = discountPercent(p);
                   return (
-                    <li key={item.productId} className="animate-fade-in flex gap-3 p-4">
+                    <li key={lineKey(item)} className="animate-fade-in flex gap-3 p-4">
                       <Link
                         to={`/product/${p.id}`}
                         onClick={onClose}
@@ -241,12 +243,24 @@ export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => vo
                           <button
                             type="button"
                             aria-label={`Remove ${p.name} from cart`}
-                            onClick={() => remove(p, item.quantity)}
+                            onClick={() => remove(p, item)}
                             className="-mr-1 -mt-1 shrink-0 rounded-md p-1.5 text-ink-faint hover:bg-critical-soft hover:text-critical"
                           >
                             <Icon name="trash" size={16} />
                           </button>
                         </div>
+                        {variantLabel(item) && (
+                          <p className="mt-0.5 text-xs font-medium text-ink-soft">{variantLabel(item)}</p>
+                        )}
+                        {missingChoice(p, item) && (
+                          <Link
+                            to={`/product/${p.id}`}
+                            onClick={onClose}
+                            className="mt-0.5 block text-xs font-semibold text-critical hover:underline"
+                          >
+                            Choose {missingChoice(p, item) === "size" ? "a size" : "a colour"} ›
+                          </Link>
+                        )}
                         {overStock && (
                           <p className="mt-1 text-xs font-medium text-critical">
                             Only {p.stock} in stock
@@ -272,7 +286,7 @@ export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => vo
                               type="button"
                               aria-label={`Decrease quantity of ${p.name}`}
                               disabled={item.quantity <= 1}
-                              onClick={() => setQty(p, item.quantity - 1)}
+                              onClick={() => setQty(p, item.quantity - 1, lineKey(item))}
                               className="grid h-8 w-8 place-items-center rounded-l-full text-ink-soft hover:bg-sunken disabled:opacity-30"
                             >
                               <Icon name="minus" size={14} />
@@ -284,7 +298,7 @@ export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => vo
                               type="button"
                               aria-label={`Increase quantity of ${p.name}`}
                               disabled={item.quantity >= p.stock}
-                              onClick={() => setQty(p, item.quantity + 1)}
+                              onClick={() => setQty(p, item.quantity + 1, lineKey(item))}
                               className="grid h-8 w-8 place-items-center rounded-r-full text-ink-soft hover:bg-sunken disabled:opacity-30"
                             >
                               <Icon name="plus" size={14} />

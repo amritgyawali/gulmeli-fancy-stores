@@ -17,6 +17,10 @@ import type { SVGProps } from "react";
 type Glyph = { d: string | string[]; fill?: boolean };
 
 const glyphs: Record<string, Glyph | string | string[]> = {
+  /* clothing */
+  shirt: "M8.5 3.5L3 6.5l2 4.5 2.5-1v10.5h9V10l2.5 1 2-4.5-5.5-3c-.6 1.6-2 2.5-3.5 2.5s-2.9-.9-3.5-2.5z",
+  ruler: ["M3.5 15.5L15.5 3.5l5 5-12 12-5-5z", "M7.5 11.5l2 2M10 9l1.5 1.5M12.5 6.5l2 2"],
+  droplet: "M12 3.5s-6 6.4-6 10.5a6 6 0 0012 0c0-4.1-6-10.5-6-10.5z",
   /* navigation & chrome */
   search: "M20 20l-3.6-3.6M18 11a7 7 0 11-14 0 7 7 0 0114 0z",
   menu: "M3 6h18M3 12h18M3 18h18",

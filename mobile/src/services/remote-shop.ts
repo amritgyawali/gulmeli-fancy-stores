@@ -88,7 +88,12 @@ export async function submitOrder(
   const { data, error } = await requireSupabase().rpc("place_order", {
     p_items: cart
       .filter((i) => i.selected)
-      .map((i) => ({ productId: i.productId, quantity: i.quantity })),
+      .map((i) => ({
+        productId: i.productId,
+        quantity: i.quantity,
+        ...(i.size ? { size: i.size } : {}),
+        ...(i.color ? { color: i.color } : {}),
+      })),
     p_profile: profile,
     p_voucher: voucher,
     p_request_id: requestId,

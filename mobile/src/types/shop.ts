@@ -1,7 +1,8 @@
 import type { Commerce } from "../store/commerce";
+import type { ClothingDetails } from "../data/clothing";
 export type ProductGroup =
   "home" | "offer" | "recommendation" | "choice" | "unavailable";
-export interface Product {
+export interface Product extends ClothingDetails {
   createdAt?: string;
   id: string;
   name: string;
@@ -25,11 +26,16 @@ export interface Product {
   fastDelivery?: boolean;
   voucher?: boolean;
   badge?: string;
+  /* Dashboard-defined variants (size/colour/stock), when the store adds them. */
+  variants?: { title?: string; size?: string; color?: string; stock?: number }[];
 }
 export interface CartItem {
   productId: string;
   quantity: number;
   selected: boolean;
+  /* The size and colour chosen on the product page, when the product has them. */
+  size?: string;
+  color?: string;
 }
 export interface AccountSnapshot {
   name: string;

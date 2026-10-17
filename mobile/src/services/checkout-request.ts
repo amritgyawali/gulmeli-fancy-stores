@@ -12,8 +12,17 @@ export async function checkoutRequest(
   const fingerprint = JSON.stringify({
     items: cart
       .filter((i) => i.selected)
-      .map(({ productId, quantity }) => ({ productId, quantity }))
-      .sort((a, b) => a.productId.localeCompare(b.productId)),
+      .map(({ productId, quantity, size, color }) => ({
+        productId,
+        quantity,
+        ...(size ? { size } : {}),
+        ...(color ? { color } : {}),
+      }))
+      .sort((a, b) =>
+        `${a.productId}|${a.size ?? ""}|${a.color ?? ""}`.localeCompare(
+          `${b.productId}|${b.size ?? ""}|${b.color ?? ""}`,
+        ),
+      ),
     voucher: voucher.trim().toUpperCase(),
   });
   const raw = await AsyncStorage.getItem(key(userId));

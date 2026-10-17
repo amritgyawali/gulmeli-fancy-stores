@@ -1,4 +1,5 @@
 import type { CartItem } from "../types/shop.ts";
+import { cleanVariant, lineKey } from "../data/clothing.ts";
 
 export function restoreCustomerCart(value: unknown): CartItem[] {
   if (!Array.isArray(value) || value.length > 100) return [];
@@ -11,13 +12,15 @@ export function restoreCustomerCart(value: unknown): CartItem[] {
       !Number.isInteger(item.quantity) ||
       item.quantity < 1 ||
       item.quantity > 9999 ||
-      typeof item.selected !== "boolean" ||
-      seen.has(item.productId)
+      typeof item.selected !== "boolean"
     )
       return [];
-    seen.add(item.productId);
+    const line = { productId: item.productId, ...cleanVariant(item) };
+    const key = lineKey(line);
+    if (seen.has(key)) return [];
+    seen.add(key);
     result.push({
-      productId: item.productId,
+      ...line,
       quantity: item.quantity,
       selected: item.selected,
     });
@@ -26,11 +29,12 @@ export function restoreCustomerCart(value: unknown): CartItem[] {
 }
 
 export function mergeCustomerCart(saved: CartItem[], guest: CartItem[]) {
-  const items = new Map(saved.map((item) => [item.productId, item]));
+  const items = new Map(saved.map((item) => [lineKey(item), item]));
   for (const item of guest) {
-    const previous = items.get(item.productId);
+    const key = lineKey(item);
+    const previous = items.get(key);
     items.set(
-      item.productId,
+      key,
       previous
         ? {
             ...item,

@@ -87,6 +87,8 @@
     "backend:prepare": "node scripts/prepare-backend.mjs",
     "backend:setup": "npm run backend:prepare && npm run backend:sql -- supabase/deploy.sql && npm run backend:sql -- supabase/catalog-photos.sql && npm run backend:deploy && npm run backend:check -- --remote",
     "backend:seed": "node --experimental-strip-types scripts/generate-seed.ts",
+    "backend:clothing": "node scripts/apply-sql.mjs supabase/deploy.sql && node scripts/apply-sql.mjs supabase/clothing-catalog.sql",
+    "catalog:art": "node --experimental-strip-types scripts/generate-catalog-art.ts",
     "test:backend:e2e": "playwright test -c playwright.backend.config.ts",
     "branding:prepare": "node scripts/prepare-branding.mjs",
     "eas-build-post-install": "node scripts/prepare-branding.mjs"

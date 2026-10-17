@@ -121,16 +121,16 @@ test("a product can be found, opened and edited from the catalogue list", async 
   await openAdmin(page, "/admin/r/products");
   await expect(page.getByRole("heading", { name: "Products" })).toBeVisible();
 
-  await page.getByLabel("Search Products").fill("Tactical");
+  await page.getByLabel("Search Products").fill("Nylon");
   await page.waitForTimeout(500);
   await expect(
-    page.getByText("Tactical Belt", { exact: false }).first(),
+    page.getByText("Nylon Belt", { exact: false }).first(),
   ).toBeVisible();
 
-  await page.getByText("Tactical Belt", { exact: false }).first().click();
+  await page.getByText("Nylon Belt", { exact: false }).first().click();
   await expect(page.getByRole("button", { name: "Save" })).toBeVisible();
 
-  await page.getByLabel("Product name").fill("Tactical Belt (browser test)");
+  await page.getByLabel("Product name").fill("Nylon Belt (browser test)");
   await page.getByRole("button", { name: "Save" }).click();
   await page.waitForTimeout(700);
 
@@ -139,7 +139,7 @@ test("a product can be found, opened and edited from the catalogue list", async 
   await page.getByLabel("Search Products").fill("browser test");
   await page.waitForTimeout(600);
   await expect(
-    page.getByText("Tactical Belt (browser test)").first(),
+    page.getByText("Nylon Belt (browser test)").first(),
   ).toBeVisible();
 
   expect(errors).toEqual([]);
@@ -206,7 +206,7 @@ test("global search reaches products, screens and settings from one box", async 
   await page.waitForTimeout(400);
   await expect(page.getByText("Create coupon").first()).toBeVisible();
 
-  await search.fill("Tactical");
+  await search.fill("Nylon");
   await page.waitForTimeout(400);
   await expect(page.getByText("Products").first()).toBeVisible();
 });

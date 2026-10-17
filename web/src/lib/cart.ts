@@ -1,27 +1,55 @@
 import type { CartItem, Product } from "./types";
+import {
+  cleanVariant,
+  lineKey,
+  type VariantChoice,
+} from "@/shared/mobile/data/clothing";
 
-// Ported from the mobile store so carts saved by either surface load identically.
-export function addItem(cart: CartItem[], product: Product): CartItem[] {
+// Ported from the mobile store so carts saved by either surface load
+// identically. A line is a product plus its chosen size and colour
+// (see lineKey); a product with no variant keeps its plain id.
+
+/* Units of a product already in the cart, across every size and colour. */
+export function unitsInCart(cart: CartItem[], productId: string) {
+  return cart.reduce(
+    (n, item) => (item.productId === productId ? n + item.quantity : n),
+    0,
+  );
+}
+
+export function addItem(
+  cart: CartItem[],
+  product: Product,
+  choice: VariantChoice = {},
+): CartItem[] {
   if (product.stock < 1) return cart;
-  const existing = cart.find((item) => item.productId === product.id);
+  if (unitsInCart(cart, product.id) >= product.stock) return cart;
+  const line = { productId: product.id, ...cleanVariant(choice) };
+  const key = lineKey(line);
+  const existing = cart.find((item) => lineKey(item) === key);
   if (existing)
     return cart.map((item) =>
-      item === existing
-        ? { ...item, quantity: Math.min(product.stock, item.quantity + 1) }
-        : item,
+      item === existing ? { ...item, quantity: item.quantity + 1 } : item,
     );
-  return [...cart, { productId: product.id, quantity: 1, selected: true }];
+  return [...cart, { ...line, quantity: 1, selected: true }];
 }
 
 export function setQuantity(
   cart: CartItem[],
   product: Product,
   quantity: number,
+  key: string = product.id,
 ): CartItem[] {
   if (!Number.isFinite(quantity)) return cart;
-  const clamped = Math.max(1, Math.min(product.stock, Math.floor(quantity)));
+  const others = cart
+    .filter((item) => item.productId === product.id && lineKey(item) !== key)
+    .reduce((n, item) => n + item.quantity, 0);
+  const clamped = Math.max(
+    1,
+    Math.min(Math.max(1, product.stock - others), Math.floor(quantity)),
+  );
   return cart.map((item) =>
-    item.productId === product.id ? { ...item, quantity: clamped } : item,
+    lineKey(item) === key ? { ...item, quantity: clamped } : item,
   );
 }
 
@@ -45,6 +73,7 @@ export function restoreCart(
 ): CartItem[] | null {
   if (!Array.isArray(value)) return null;
   const seen = new Set<string>();
+  const used: Record<string, number> = {};
   return value.flatMap((entry: unknown) => {
     if (
       !entry ||
@@ -57,15 +86,22 @@ export function restoreCart(
     )
       return [];
     const p = catalog[(entry as CartItem).productId];
-    if (!p || p.stock < 1 || seen.has(p.id)) return [];
-    seen.add(p.id);
+    const line = { productId: (entry as CartItem).productId, ...cleanVariant(entry) };
+    const key = lineKey(line);
+    if (!p || p.stock < 1 || seen.has(key)) return [];
+    const left = p.stock - (used[p.id] ?? 0);
+    if (left < 1) return [];
+    seen.add(key);
+    const quantity = Math.max(
+      1,
+      Math.min(left, Math.floor((entry as CartItem).quantity)),
+    );
+    used[p.id] = (used[p.id] ?? 0) + quantity;
     return [
       {
+        ...line,
         productId: p.id,
-        quantity: Math.max(
-          1,
-          Math.min(p.stock, Math.floor((entry as CartItem).quantity)),
-        ),
+        quantity,
         selected:
           "selected" in entry && (entry as { selected?: unknown }).selected === true,
       },
@@ -84,26 +120,25 @@ export function restoreCustomerCart(value: unknown): CartItem[] {
       !Number.isInteger(item.quantity) ||
       item.quantity < 1 ||
       item.quantity > 9999 ||
-      typeof item.selected !== "boolean" ||
-      seen.has(item.productId)
+      typeof item.selected !== "boolean"
     )
       return [];
-    seen.add(item.productId);
-    result.push({
-      productId: item.productId,
-      quantity: item.quantity,
-      selected: item.selected,
-    });
+    const line = { productId: item.productId, ...cleanVariant(item) };
+    const key = lineKey(line);
+    if (seen.has(key)) return [];
+    seen.add(key);
+    result.push({ ...line, quantity: item.quantity, selected: item.selected });
   }
   return result;
 }
 
 export function mergeCustomerCart(saved: CartItem[], guest: CartItem[]) {
-  const items = new Map(saved.map((item) => [item.productId, item]));
+  const items = new Map(saved.map((item) => [lineKey(item), item]));
   for (const item of guest) {
-    const previous = items.get(item.productId);
+    const key = lineKey(item);
+    const previous = items.get(key);
     items.set(
-      item.productId,
+      key,
       previous
         ? {
             ...item,

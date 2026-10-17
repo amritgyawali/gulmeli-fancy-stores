@@ -115,20 +115,7 @@ interface AdminValue {
 const AdminContext = createContext<AdminValue | null>(null);
 
 function catalogSeed(): SeedSourceProduct[] {
-  return localCatalog.map((product) => ({
-    id: product.id,
-    name: product.name,
-    price: product.price,
-    originalPrice: product.originalPrice,
-    category: product.category,
-    group: product.group,
-    stock: product.stock,
-    brand: product.brand,
-    badge: product.badge,
-    imageUrl: product.imageUrl,
-    sold: product.sold,
-    rating: product.rating,
-  }));
+  return localCatalog.map((product) => ({ ...product }));
 }
 
 const FALLBACK_ACTOR: Actor = {

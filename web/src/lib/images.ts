@@ -26,6 +26,8 @@ export function bundledImage(product: Product): string | null {
   if (product.imageUrl) return product.imageUrl; // already hosted (Cloudinary)
   const photo = photoFor(product);
   if (photo) return photo.url;
+  // Illustrated clothing artwork (mobile/scripts/generate-catalog-art.ts).
+  if (product.imageKey?.startsWith("art-")) return `/img/${product.imageKey}.jpg`;
   if (product.imageKey && IMAGE_KEYS.has(product.imageKey))
     return `/img/${product.imageKey}.jpg`;
   return null;
