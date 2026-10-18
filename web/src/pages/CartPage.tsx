@@ -9,7 +9,8 @@ import { voucherDiscount, voucherTerms, VOUCHER } from "@/lib/commerce";
 import { deliveryFeeFor, useDeliveryTerms } from "@/lib/shipping";
 import { useDocumentMeta } from "@/lib/hooks";
 import { rs } from "@/lib/format";
-import type { Product } from "@/lib/types";
+import type { CartItem, Product } from "@/lib/types";
+import { cleanVariant, lineKey, missingChoice, variantLabel } from "@/shared/mobile/data/clothing";
 
 /*
  * The cart.
@@ -87,27 +88,28 @@ export function CartPage() {
       .slice(0, 12);
   }, [cart, productById, products]);
 
-  const remove = (product: Product, quantity: number) => {
-    removeItem(product.id);
+  const remove = (product: Product, item: CartItem) => {
+    const quantity = item.quantity;
+    removeItem(lineKey(item));
     toast({
       message: `Removed ${product.name}`,
       tone: "info",
       action: {
         label: "Undo",
         onClick: () => {
-          for (let i = 0; i < quantity; i += 1) add(product);
+          for (let i = 0; i < quantity; i += 1) add(product, cleanVariant(item));
         },
       },
     });
   };
-  const saveForLater = (product: Product) => {
+  const saveForLater = (product: Product, item: CartItem) => {
     updateCommerce((current) => ({
       ...current,
       wishlist: current.wishlist.includes(product.id)
         ? current.wishlist
         : [...current.wishlist, product.id],
     }));
-    removeItem(product.id);
+    removeItem(lineKey(item));
     toast({
       message: "Moved to your wishlist",
       action: { label: "View", to: "/wishlist" },
@@ -213,7 +215,7 @@ export function CartPage() {
                 type="checkbox"
                 checked={allSelected}
                 onChange={() =>
-                  select(items.map((e) => e.item.productId), !allSelected)
+                  select(items.map((e) => lineKey(e.item)), !allSelected)
                 }
                 className="h-4 w-4 accent-[var(--color-brand)]"
               />
@@ -235,11 +237,11 @@ export function CartPage() {
               const out = product.stock < 1;
               const overStock = item.quantity > product.stock;
               return (
-                <li key={item.productId} className="flex flex-wrap items-start gap-3 p-4">
+                <li key={lineKey(item)} className="flex flex-wrap items-start gap-3 p-4">
                   <input
                     type="checkbox"
                     checked={item.selected}
-                    onChange={() => toggle(item.productId)}
+                    onChange={() => toggle(lineKey(item))}
                     aria-label={`Include ${product.name} in the order`}
                     className="mt-6 h-4 w-4 shrink-0 accent-[var(--color-brand)]"
                   />
@@ -257,6 +259,17 @@ export function CartPage() {
                     >
                       {product.name}
                     </Link>
+                    {variantLabel(item) && (
+                      <p className="mt-0.5 text-sm font-medium text-ink-soft">{variantLabel(item)}</p>
+                    )}
+                    {missingChoice(product, item) && (
+                      <Link
+                        to={`/product/${product.id}`}
+                        className="mt-0.5 block text-xs font-semibold text-critical hover:underline"
+                      >
+                        Choose {missingChoice(product, item) === "size" ? "a size" : "a colour"} ›
+                      </Link>
+                    )}
                     <p className="tnum mt-1 flex flex-wrap items-baseline gap-x-1.5 text-sm text-ink-muted">
                       {rs(product.price)} each
                       {discountPercent(product) > 0 && (
@@ -282,7 +295,7 @@ export function CartPage() {
                     <div className="mt-2 flex items-center gap-3 text-xs font-medium">
                       <button
                         type="button"
-                        onClick={() => saveForLater(product)}
+                        onClick={() => saveForLater(product, item)}
                         className="flex items-center gap-1 text-ink-muted hover:text-brand"
                       >
                         <Icon name="heart" size={13} />
@@ -291,7 +304,7 @@ export function CartPage() {
                       <span aria-hidden="true" className="h-3 w-px bg-line-strong" />
                       <button
                         type="button"
-                        onClick={() => remove(product, item.quantity)}
+                        onClick={() => remove(product, item)}
                         className="flex items-center gap-1 text-ink-muted hover:text-critical"
                       >
                         <Icon name="trash" size={13} />
@@ -306,7 +319,7 @@ export function CartPage() {
                         type="button"
                         aria-label={`Decrease quantity of ${product.name}`}
                         disabled={item.quantity <= 1}
-                        onClick={() => setQty(product, item.quantity - 1)}
+                        onClick={() => setQty(product, item.quantity - 1, lineKey(item))}
                         className="grid h-9 w-9 place-items-center text-ink-soft hover:bg-sunken disabled:opacity-30"
                       >
                         <Icon name="minus" size={14} />
@@ -318,7 +331,7 @@ export function CartPage() {
                         type="button"
                         aria-label={`Increase quantity of ${product.name}`}
                         disabled={item.quantity >= product.stock}
-                        onClick={() => setQty(product, item.quantity + 1)}
+                        onClick={() => setQty(product, item.quantity + 1, lineKey(item))}
                         className="grid h-9 w-9 place-items-center text-ink-soft hover:bg-sunken disabled:opacity-30"
                       >
                         <Icon name="plus" size={14} />
@@ -472,7 +485,7 @@ export function CartPage() {
             <input
               type="checkbox"
               checked={allSelected}
-              onChange={() => select(items.map((e) => e.item.productId), !allSelected)}
+              onChange={() => select(items.map((e) => lineKey(e.item)), !allSelected)}
               className="h-4 w-4 accent-[var(--color-brand)]"
             />
             All

@@ -18,6 +18,16 @@ import { bundledImage } from "@/lib/images";
 import { rs } from "@/lib/format";
 import { useDeliveryTerms, freeDeliveryCopy } from "@/lib/shipping";
 import { voucherTerms } from "@/lib/commerce";
+import { unitsInCart } from "@/lib/cart";
+import {
+  colorOptions,
+  defaultColor,
+  lineKey,
+  missingChoice,
+  sizeChartFor,
+  sizeOptions,
+  type SizeChart,
+} from "@/shared/mobile/data/clothing";
 import {
   deliveryWindow,
   useDocumentMeta,
@@ -71,6 +81,7 @@ export function ProductPage() {
     session,
     products,
     add: addSilently,
+    select,
   } = useShop();
   const config = usePublishedConfig();
   const terms = useDeliveryTerms();
@@ -80,6 +91,11 @@ export function ProductPage() {
   const product = id ? productById[id] : undefined;
   const [qty, setQty] = useState(1);
   const [tab, setTab] = useState<Tab>("Details");
+  const [size, setSize] = useState<string>();
+  const [color, setColor] = useState<string>();
+  const [needChoice, setNeedChoice] = useState<"size" | "color" | null>(null);
+  const [guideOpen, setGuideOpen] = useState(false);
+  const choiceRef = useRef<HTMLDivElement>(null);
 
   const galleryRef = useRef<HTMLDivElement>(null);
   const tabsRef = useRef<HTMLElement>(null);
@@ -91,6 +107,9 @@ export function ProductPage() {
   useEffect(() => {
     setQty(1);
     setTab("Details");
+    setSize(undefined);
+    setColor(undefined);
+    setNeedChoice(null);
   }, [id]);
 
   const gallery = useMemo(() => {
@@ -215,23 +234,46 @@ export function ProductPage() {
     );
 
   const out = product.stock < 1;
-  const inCart = cart.find((i) => i.productId === product.id)?.quantity ?? 0;
+  const inCart = unitsInCart(cart, product.id);
+  const sizes = sizeOptions(product);
+  const colorList = colorOptions(product);
+  const chosenColor = color ?? defaultColor(product);
+  const choice = { size, color: chosenColor };
+  const chart = sizeChartFor(product);
+  const freeSize = !sizes.length && (product.sizes ?? []).some((x) => /^free/i.test(x));
+  /* A shirt without a size is not an order: ask, and show where. */
+  const confirmChoice = () => {
+    const missing = missingChoice(product, choice);
+    if (!missing) return true;
+    setNeedChoice(missing);
+    choiceRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    toast({
+      message: missing === "size" ? "Choose your size first" : "Choose a colour first",
+      tone: "info",
+    });
+    return false;
+  };
   const remaining = Math.max(0, product.stock - inCart);
   const saving = discountPercent(product);
   const cannotAdd = out || remaining < 1;
   const eta = deliveryWindow(terms.estimate);
 
   const addToCart = () => {
-    if (cannotAdd) return;
+    if (cannotAdd || !confirmChoice()) return;
     const n = Math.min(qty, remaining);
-    add(product, galleryRef.current, n);
+    add(product, galleryRef.current, n, choice);
     setQty(1);
   };
   const buyNow = () => {
-    if (cannotAdd) return;
+    if (cannotAdd || !confirmChoice()) return;
     const n = Math.min(qty, remaining);
-    /* No toast: the customer is leaving for checkout, where the item is. */
-    for (let i = 0; i < n; i += 1) addSilently(product);
+    /* No toast: the customer is leaving for checkout, where the item is.
+       Buy now checks out this line alone; the rest of the cart stays. */
+    for (let i = 0; i < n; i += 1) addSilently(product, choice);
+    const key = lineKey({ productId: product.id, ...choice });
+    const others = cart.map(lineKey).filter((k) => k !== key);
+    if (others.length) select(others, false);
+    select([key], true);
     navigate("/checkout");
   };
 
@@ -406,6 +448,120 @@ export function ProductPage() {
             )}
           </div>
 
+          {/* Size and colour */}
+          {(sizes.length > 0 || colorList.length > 0 || freeSize) && (
+            <div
+              ref={choiceRef}
+              className={`mt-4 space-y-4 rounded-xl border bg-raised p-4 transition-colors ${
+                needChoice ? "border-critical" : "border-line"
+              }`}
+            >
+              {colorList.length > 0 && (
+                <fieldset>
+                  <legend className="text-sm font-semibold text-ink">
+                    Colour
+                    <span className="ml-2 font-normal text-ink-muted">
+                      {chosenColor ?? (colorList.length > 1 ? "Choose one" : "")}
+                    </span>
+                  </legend>
+                  <div className="mt-2.5 flex flex-wrap gap-2.5">
+                    {colorList.map((option) => {
+                      const active = option.name === chosenColor;
+                      return (
+                        <button
+                          key={option.name}
+                          type="button"
+                          role="radio"
+                          aria-checked={active}
+                          aria-label={`Colour ${option.name}`}
+                          title={option.name}
+                          onClick={() => {
+                            setColor(option.name);
+                            if (needChoice === "color") setNeedChoice(null);
+                          }}
+                          className={`grid h-10 w-10 place-items-center rounded-full border-2 transition-colors ${
+                            active ? "border-ink" : "border-transparent hover:border-line-strong"
+                          }`}
+                        >
+                          <span
+                            className="h-8 w-8 rounded-full border border-black/10"
+                            style={{ backgroundColor: option.hex || "var(--color-line)" }}
+                          />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </fieldset>
+              )}
+              {sizes.length > 0 && (
+                <fieldset>
+                  <div className="flex items-center justify-between gap-3">
+                    <legend className="text-sm font-semibold text-ink">
+                      Size
+                      <span
+                        className={`ml-2 font-normal ${
+                          needChoice === "size" ? "text-critical" : "text-ink-muted"
+                        }`}
+                      >
+                        {size ?? "Choose your size"}
+                      </span>
+                    </legend>
+                    {chart && (
+                      <button
+                        type="button"
+                        onClick={() => setGuideOpen(true)}
+                        className="flex items-center gap-1.5 text-sm font-semibold text-brand hover:text-brand-strong"
+                      >
+                        <Icon name="ruler" size={15} />
+                        Size guide
+                      </button>
+                    )}
+                  </div>
+                  <div className="mt-2.5 flex flex-wrap gap-2">
+                    {sizes.map((option) => {
+                      const active = option === size;
+                      return (
+                        <button
+                          key={option}
+                          type="button"
+                          role="radio"
+                          aria-checked={active}
+                          aria-label={`Size ${option}`}
+                          onClick={() => {
+                            setSize(option);
+                            if (needChoice === "size") setNeedChoice(null);
+                          }}
+                          className={`tnum h-11 min-w-[52px] rounded-lg border px-3 text-sm transition-colors ${
+                            active
+                              ? "border-2 border-ink bg-sunken font-semibold text-ink"
+                              : "border-line bg-raised text-ink hover:border-line-strong"
+                          }`}
+                        >
+                          {option}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {product.fit && (
+                    <p className="mt-2.5 flex items-center gap-1.5 text-sm text-ink-muted">
+                      <Icon name="shirt" size={14} />
+                      Fit: {product.fit}
+                    </p>
+                  )}
+                </fieldset>
+              )}
+              {freeSize && (
+                <p className="flex items-start gap-2 text-sm">
+                  <Icon name="ruler" size={16} className="mt-0.5 shrink-0 text-brand" />
+                  <span>
+                    <span className="block font-medium text-ink">Free size</span>
+                    <span className="block text-ink-muted">{product.fit || "One size fits most."}</span>
+                  </span>
+                </p>
+              )}
+            </div>
+          )}
+
           {!out && (
             <div className="mt-4 flex flex-wrap items-center gap-4">
               <div className="flex items-center gap-3">
@@ -435,7 +591,11 @@ export function ProductPage() {
               className="flex h-12 items-center justify-center gap-2 rounded-lg border-2 border-brand bg-raised text-base font-semibold text-brand transition-colors hover:bg-brand-soft active:scale-[0.98] disabled:border-line disabled:bg-sunken disabled:text-ink-faint"
             >
               <Icon name="cartPlus" size={18} />
-              {remaining < 1 && !out ? "All in your cart" : "Add to cart"}
+              {remaining < 1 && !out
+                ? "All in your cart"
+                : sizes.length && !size
+                  ? "Select size"
+                  : "Add to cart"}
             </button>
             <button
               type="button"
@@ -470,9 +630,12 @@ export function ProductPage() {
             <li className="flex items-start gap-3 p-3.5">
               <Icon name="undo" size={19} className="mt-0.5 shrink-0 text-brand" />
               <div className="text-sm">
-                <p className="font-medium text-ink">{terms.returnDays}-day returns</p>
+                <p className="font-medium text-ink">
+                  {terms.returnDays}-day returns and size exchange
+                </p>
                 <p className="text-ink-muted">
-                  Unused items in original packaging, from the delivery date.
+                  Wrong size? Exchange or return it unworn, with tags attached, from the delivery
+                  date.
                 </p>
               </div>
             </li>
@@ -558,8 +721,36 @@ export function ProductPage() {
                   {product.description}
                 </p>
               )}
+              {!!product.highlights?.length && (
+                <ul className="grid max-w-3xl gap-2 sm:grid-cols-2">
+                  {product.highlights.map((line) => (
+                    <li key={line} className="flex items-start gap-2 text-sm text-ink">
+                      <Icon name="check" size={16} className="mt-0.5 shrink-0 text-positive" />
+                      {line}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {!!product.care?.length && (
+                <div className="max-w-3xl rounded-lg border border-line bg-raised p-4">
+                  <h3 className="flex items-center gap-2 text-sm font-semibold text-ink">
+                    <Icon name="droplet" size={16} className="text-brand" />
+                    Wash and care
+                  </h3>
+                  <ul className="mt-2 space-y-1 text-sm text-ink-soft">
+                    {product.care.map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               <ul className="grid gap-3 sm:grid-cols-2">
                 {[
+                  product.fabric && {
+                    icon: "shirt",
+                    title: product.fabric,
+                    note: product.fit ? `Fit: ${product.fit}` : "Fabric as listed by the store.",
+                  },
                   product.brand && {
                     icon: "badgeCheck",
                     title: product.brand,
@@ -612,6 +803,11 @@ export function ProductPage() {
                       ["Product ID", product.id],
                       ["Brand", product.brand],
                       ["Category", product.category],
+                      ["For", product.gender],
+                      ["Fabric", product.fabric],
+                      ["Fit", product.fit],
+                      ["Sizes", product.sizes?.join(", ")],
+                      ["Colours", colorList.map((c) => c.name).join(", ")],
                       ["Seller", product.store],
                       ["Availability", out ? "Out of stock" : `${product.stock} in stock`],
                       ["Price", rs(product.price)],
@@ -713,6 +909,19 @@ export function ProductPage() {
         </section>
       )}
 
+      {chart && guideOpen && (
+        <SizeGuideDialog
+          chart={chart}
+          selected={size}
+          onPick={(value) => {
+            setSize(value);
+            setNeedChoice(null);
+            setGuideOpen(false);
+          }}
+          onClose={() => setGuideOpen(false)}
+        />
+      )}
+
       {/* The action bar. Always present on phones and tablets, where it takes
           the tab bar's place; on a desktop it rises only once the in-page
           buttons have scrolled away. */}
@@ -750,7 +959,13 @@ export function ProductPage() {
             className="flex h-12 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg border-2 border-brand bg-raised px-2 text-sm font-semibold text-brand active:scale-[0.98] disabled:border-line disabled:text-ink-faint sm:px-4 lg:w-48 lg:flex-none"
           >
             <Icon name="cartPlus" size={17} className="hidden sm:block" />
-            {out ? "Out of stock" : remaining < 1 ? "All in cart" : "Add to cart"}
+            {out
+              ? "Out of stock"
+              : remaining < 1
+                ? "All in cart"
+                : sizes.length && !size
+                  ? "Select size"
+                  : "Add to cart"}
           </button>
           <button
             type="button"
@@ -761,6 +976,104 @@ export function ProductPage() {
             Buy now
           </button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* The product's size chart. Choosing a row picks that size. */
+function SizeGuideDialog({
+  chart,
+  selected,
+  onPick,
+  onClose,
+}: {
+  chart: SizeChart;
+  selected?: string;
+  onPick: (size: string) => void;
+  onClose: () => void;
+}) {
+  const closeRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    closeRef.current?.focus();
+    const key = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", key);
+    return () => window.removeEventListener("keydown", key);
+  }, [onClose]);
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
+      <button
+        type="button"
+        aria-label="Close size guide"
+        onClick={onClose}
+        className="absolute inset-0 bg-black/45"
+      />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="size-guide-title"
+        className="relative max-h-[88vh] w-full overflow-y-auto rounded-t-2xl bg-raised p-5 shadow-e3 sm:max-w-lg sm:rounded-2xl"
+      >
+        <div className="flex items-center justify-between gap-3">
+          <h2 id="size-guide-title" className="text-lg font-semibold text-ink">
+            Size guide · {chart.title}
+          </h2>
+          <button
+            ref={closeRef}
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            className="grid h-10 w-10 place-items-center rounded-full text-ink-soft hover:bg-sunken"
+          >
+            <Icon name="close" size={18} />
+          </button>
+        </div>
+        <div className="mt-4 overflow-hidden rounded-lg border border-line">
+          <table className="w-full text-center text-sm">
+            <thead className="bg-sunken text-xs text-ink-muted">
+              <tr>
+                {["Size", ...chart.columns].map((h) => (
+                  <th key={h} scope="col" className="px-2 py-2.5 font-semibold">
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-line">
+              {chart.rows.map((row) => (
+                <tr
+                  key={row.size}
+                  className={`cursor-pointer hover:bg-brand-soft ${row.size === selected ? "bg-brand-soft" : ""}`}
+                  onClick={() => onPick(row.size)}
+                >
+                  <th scope="row" className="px-2 py-2.5 font-semibold text-ink">
+                    <button type="button" onClick={() => onPick(row.size)} className="w-full">
+                      {row.size}
+                    </button>
+                  </th>
+                  {row.values.map((v, i) => (
+                    <td key={i} className="tnum px-2 py-2.5 text-ink-soft">
+                      {v}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <h3 className="mt-4 text-sm font-semibold text-ink">How to measure</h3>
+        <ul className="mt-1.5 space-y-1 text-sm text-ink-muted">
+          {chart.howToMeasure.map((line) => (
+            <li key={line} className="flex gap-2">
+              <Icon name="ruler" size={14} className="mt-0.5 shrink-0" />
+              {line}
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-xs text-ink-muted">
+          Measurements are of the body, not the garment. Between sizes? Pick the larger for a
+          relaxed fit.
+        </p>
       </div>
     </div>
   );

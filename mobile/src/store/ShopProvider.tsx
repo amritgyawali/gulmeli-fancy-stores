@@ -47,6 +47,13 @@ import {
 } from "@/services/shop.service";
 import { addItem, restoreCart, setQuantity, totals } from "./cart";
 import { mergeCustomerCart, restoreCustomerCart } from "./customer-cart";
+import {
+  colorOptions,
+  lineKey,
+  missingChoice,
+  sizeOptions,
+  type VariantChoice,
+} from "@/data/clothing";
 
 import {
   initialCommerce,
@@ -72,7 +79,19 @@ const initialState: ShopState = {
   commerce: initialCommerce,
   cart: (backendConfig.live ? [] : choiceProducts)
     .filter((p) => p.stock > 0)
-    .map((p) => ({ productId: p.id, quantity: 1, selected: false })),
+    .map((p) => {
+      /* Preview cart lines arrive with a size and colour already chosen. */
+      const sizes = sizeOptions(p);
+      const size = sizes[Math.min(1, sizes.length - 1)];
+      const color = colorOptions(p)[0]?.name;
+      return {
+        productId: p.id,
+        quantity: 1,
+        selected: false,
+        ...(size ? { size } : {}),
+        ...(color ? { color } : {}),
+      };
+    }),
   messagesRead: false,
   vouchersCollected: false,
   account: initialAccount,
@@ -489,31 +508,40 @@ function useShopState() {
         setStorageError("Shopping state could not be saved on this device."),
       );
   }, [state, hydrated]);
-  const add = useCallback((product: Product) => {
-    track("add_to_cart", { product_id: product.id, price: product.price });
-    setState((s) => ({ ...s, cart: addItem(s.cart, product) }));
+  /* Cart lines are addressed by lineKey(): the product id, plus the chosen
+     size and colour when the product has them. */
+  const add = useCallback((product: Product, choice: VariantChoice = {}) => {
+    track("add_to_cart", {
+      product_id: product.id,
+      price: product.price,
+      ...(choice.size ? { size: choice.size } : {}),
+    });
+    setState((s) => ({ ...s, cart: addItem(s.cart, product, choice) }));
   }, []);
   const quantity = useCallback(
-    (product: Product, count: number) =>
-      setState((s) => ({ ...s, cart: setQuantity(s.cart, product, count) })),
+    (product: Product, count: number, key: string = product.id) =>
+      setState((s) => ({
+        ...s,
+        cart: setQuantity(s.cart, product, count, key),
+      })),
     [],
   );
   const toggle = useCallback(
-    (id: string) =>
+    (key: string) =>
       setState((s) => ({
         ...s,
         cart: s.cart.map((i) =>
-          i.productId === id ? { ...i, selected: !i.selected } : i,
+          lineKey(i) === key ? { ...i, selected: !i.selected } : i,
         ),
       })),
     [],
   );
   const select = useCallback(
-    (ids: string[], selected: boolean) =>
+    (keys: string[], selected: boolean) =>
       setState((s) => ({
         ...s,
         cart: s.cart.map((i) =>
-          ids.includes(i.productId) ? { ...i, selected } : i,
+          keys.includes(lineKey(i)) ? { ...i, selected } : i,
         ),
       })),
     [],
@@ -523,10 +551,10 @@ function useShopState() {
     [],
   );
   const remove = useCallback(
-    (id: string) =>
+    (key: string) =>
       setState((s) => ({
         ...s,
-        cart: s.cart.filter((i) => i.productId !== id),
+        cart: s.cart.filter((i) => lineKey(i) !== key),
       })),
     [],
   );
@@ -585,6 +613,14 @@ function useShopState() {
     try {
       const cart = stateRef.current.cart;
       const voucher = stateRef.current.commerce.voucher;
+      for (const line of cart.filter((i) => i.selected)) {
+        const product = productById[line.productId];
+        const missing = product && missingChoice(product, line);
+        if (missing)
+          throw new Error(
+            `Choose a ${missing === "size" ? "size" : "colour"} for ${product.name} before checkout.`,
+          );
+      }
       const requestId =
         backendConfig.live && owner
           ? await checkoutRequest(owner, cart, voucher)
@@ -608,7 +644,7 @@ function useShopState() {
           (i) =>
             !cart.some(
               (ordered) =>
-                ordered.selected && ordered.productId === i.productId,
+                ordered.selected && lineKey(ordered) === lineKey(i),
             ),
         ),
         commerce: {
@@ -721,13 +757,13 @@ export function useShop() {
 }
 
 export function useCatalog() {
-  const { products, productById, live } = useShop();
+  const { products, productById } = useShop();
   return useMemo(
     () => ({
       products,
       productById,
       homeProducts: products.filter(
-        (p) => p.group === "home" && (live || p.id.startsWith("home-")),
+        (p) => p.group === "home",
       ),
       offerProducts: products.filter((p) => p.group === "offer"),
       choiceProducts: products.filter(
@@ -735,6 +771,6 @@ export function useCatalog() {
       ),
       recommendations: products.filter((p) => p.group === "recommendation"),
     }),
-    [products, productById, live],
+    [products, productById],
   );
 }

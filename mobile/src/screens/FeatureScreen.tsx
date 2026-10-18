@@ -20,16 +20,16 @@ import { currentBrand } from "@/utils/branding";
 import { legalLinks } from "@/services/legal";
 import { colors } from "@/theme/tokens";
 import type { Product } from "@/types/shop";
+import {
+  CLOTHING_CATEGORIES,
+  cleanVariant,
+  lineKey,
+  missingChoice,
+  variantLabel,
+} from "@/data/clothing";
 
 const money = (n: number) => `Rs. ${n.toLocaleString("en-US")}`;
-const categories = [
-  "All",
-  "Fashion",
-  "Electronics",
-  "Groceries",
-  "Jewelry",
-  "Lifestyle",
-];
+const categories = ["All", ...CLOTHING_CATEGORIES];
 function Card({ children }: { children: ReactNode }) {
   return <View style={styles.card}>{children}</View>;
 }
@@ -363,10 +363,16 @@ function FeatureContent({
             title="Add to cart"
             disabled={
               product.stock < 1 ||
-              (state.cart.find((i) => i.productId === product.id)?.quantity ||
-                0) >= product.stock
+              state.cart
+                .filter((i) => i.productId === product.id)
+                .reduce((n, i) => n + i.quantity, 0) >= product.stock
             }
             onPress={() => {
+              /* Sizes and colours are chosen on the product page. */
+              if (missingChoice(product, {})) {
+                openDestination("Product details", { id: product.id });
+                return;
+              }
               add(product);
               setNotice("Added to cart.");
             }}
@@ -432,8 +438,9 @@ function FeatureContent({
         {state.cart
           .filter((i) => i.selected)
           .map((i) => (
-            <Card key={i.productId}>
+            <Card key={lineKey(i)}>
               <T bold>{productById[i.productId]?.name}</T>
+              {!!variantLabel(i) && <T>{variantLabel(i)}</T>}
               <T>
                 {i.quantity} × {money(productById[i.productId]?.price || 0)}
               </T>
@@ -753,14 +760,16 @@ function FeatureContent({
             </T>
             {o.items.map((i) => (
               <Tap
-                key={i.productId}
+                key={lineKey(i)}
                 label={`Order item ${i.name}`}
                 onPress={() =>
                   openDestination("Product details", { id: i.productId })
                 }
               >
                 <T>
-                  {i.quantity} × {i.name} · {money(i.quantity * i.price)}
+                  {i.quantity} × {i.name}
+                  {variantLabel(i) ? ` (${variantLabel(i)})` : ""} ·{" "}
+                  {money(i.quantity * i.price)}
                 </T>
               </Tap>
             ))}
@@ -795,10 +804,10 @@ function FeatureContent({
                   const p = productById[i.productId];
                   if (p)
                     for (let n = 0; n < Math.min(i.quantity, p.stock); n++)
-                      add(p);
+                      add(p, cleanVariant(i));
                 });
                 select(
-                  o.items.map((i) => i.productId),
+                  o.items.map((i) => lineKey({ ...i, ...cleanVariant(i) })),
                   true,
                 );
                 router.navigate("/cart");

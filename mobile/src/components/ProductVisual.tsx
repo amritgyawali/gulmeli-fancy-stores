@@ -1,12 +1,26 @@
 import { Image, type ImageStyle } from "expo-image";
 import { View, type StyleProp } from "react-native";
-import { stitchImages, type StitchImageKey } from "@/data/stitch-images";
+import { stitchImages } from "@/data/stitch-images";
+import { catalogImages } from "@/data/catalog-images";
 import type { Product } from "@/types/shop";
 import { T } from "./ui";
 import { FontIcon } from "./FontIcon";
 import { colors, shared } from "@/theme/tokens";
-import { photoFor, sizedImage } from "@/services/product-media";
+import { photoFor, productImage, sizedImage } from "@/services/product-media";
 import { useMediaUrl } from "@/services/media-library";
+
+const bundled: Record<string, number> = { ...stitchImages, ...catalogImages };
+
+/* An image source for a product: its hosted photo, else the artwork bundled
+   with the app, else null. For places that draw their own <Image>. */
+export function productSource(
+  product: Pick<Product, "id" | "imageKey" | "imageUrl">,
+  width: number,
+) {
+  const url = productImage(product, width);
+  if (url) return { uri: url };
+  return (product.imageKey && bundled[product.imageKey]) || null;
+}
 
 export function StitchImage({
   imageKey,
@@ -21,7 +35,7 @@ export function StitchImage({
   return (
     <Image
       source={
-        mediaUrl ? { uri: mediaUrl } : stitchImages[imageKey as StitchImageKey]
+        mediaUrl ? { uri: mediaUrl } : bundled[imageKey]
       }
       contentFit={fit}
       cachePolicy="memory-disk"
@@ -74,17 +88,33 @@ export function ProductVisual({
         )}
       </View>
     );
-  if (product.imageKey)
+  if (product.imageKey && bundled[product.imageKey])
     return (
-      <StitchImage
-        imageKey={product.imageKey}
-        fit={
-          product.group === "offer" &&
-          ["offer-0", "offer-1", "offer-4", "offer-5"].includes(product.id)
-            ? "contain"
-            : "cover"
-        }
-      />
+      <View
+        accessible
+        accessibilityRole="image"
+        accessibilityLabel={product.name}
+        style={{ width: "100%", height: "100%" }}
+      >
+        <StitchImage imageKey={product.imageKey} />
+        {product.imageIllustrative && !small && (
+          <View
+            style={{
+              position: "absolute",
+              left: 6,
+              bottom: 6,
+              backgroundColor: "#ffffffcc",
+              borderRadius: 4,
+              paddingHorizontal: 5,
+              paddingVertical: 1,
+            }}
+          >
+            <T size={9} color={colors.muted}>
+              Illustration
+            </T>
+          </View>
+        )}
+      </View>
     );
   /*
    * Placeholder for a product with no photo.

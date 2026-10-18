@@ -1,5 +1,6 @@
 import type { CartItem, Product } from "../types/shop.ts";
 import { currentBrand } from "../utils/branding.ts";
+import { cleanVariant, unitsCheck } from "../data/clothing.ts";
 
 export interface Profile {
   name: string;
@@ -10,7 +11,14 @@ export interface Profile {
 export interface LocalOrder {
   id: string;
   createdAt: string;
-  items: { productId: string; name: string; quantity: number; price: number }[];
+  items: {
+    productId: string;
+    name: string;
+    quantity: number;
+    price: number;
+    size?: string;
+    color?: string;
+  }[];
   subtotal: number;
   discount: number;
   total: number;
@@ -97,8 +105,11 @@ export function createLocalOrder(
         name: p.name,
         price: p.price,
         quantity: i.quantity,
+        ...cleanVariant(i),
       };
     });
+  if (!unitsCheck(items, catalog))
+    throw new Error("An item is out of stock. Update your cart.");
   if (!items.length) throw new Error("Select at least one item in your cart.");
   const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
   const discount = voucherDiscount(voucher, subtotal);

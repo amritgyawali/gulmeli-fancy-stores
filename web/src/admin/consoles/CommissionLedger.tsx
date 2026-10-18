@@ -81,8 +81,8 @@ export function CommissionLedger() {
           </h3>
           {[
             ["Marketplace standard", "5% + payment fee pass-through"],
-            ["Groceries & FMCG", "2.5% (loss-leader band)"],
-            ["Gold & jewelry", "3% + 1% hallmarks audit fee"],
+            ["Basics & innerwear", "4% (high-volume band)"],
+            ["Ethnic & bridal wear", "6% + 1% handloom quality check"],
             ["Mall flagship stores", "Negotiated · tiered after Rs. 5M/mo"],
           ].map(([k, v]) => (
             <div key={k} className="flex justify-between border-b border-line/50 py-1.5 last:border-0">

@@ -13,6 +13,7 @@ import type { CartItem } from "@/types/shop";
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated";
 import { useStorefront, useStorefrontTheme } from "@/store/StorefrontProvider";
 import { deliveryTerms } from "@/services/delivery";
+import { lineKey, missingChoice, variantLabel } from "@/data/clothing";
 
 function SwipeToDelete({
   onDelete,
@@ -52,8 +53,11 @@ function CartRow({ item }: { item: CartItem }) {
   const { quantity, toggle, remove } = useShop();
   const p = productById[item.productId];
   if (!p) return null;
+  const key = lineKey(item);
+  const variant = variantLabel(item);
+  const missing = missingChoice(p, item);
   return (
-    <SwipeToDelete label={p.name} onDelete={() => remove(p.id)}>
+    <SwipeToDelete label={p.name} onDelete={() => remove(key)}>
       <Row
         style={{
           alignItems: "flex-start",
@@ -67,7 +71,7 @@ function CartRow({ item }: { item: CartItem }) {
         <View style={{ marginTop: 32 }}>
           <CheckBox
             checked={item.selected}
-            onPress={() => toggle(p.id)}
+            onPress={() => toggle(key)}
             label={`Select ${p.name}`}
           />
         </View>
@@ -94,9 +98,26 @@ function CartRow({ item }: { item: CartItem }) {
               {p.name}
             </T>
           </Tap>
-          <T size={11} color="#9ca3af" style={{ marginTop: 2 }}>
-            {p.brand ?? p.category}
-          </T>
+          {variant ? (
+            <T size={12} color="#4b5563" style={{ marginTop: 2 }}>
+              {variant}
+            </T>
+          ) : (
+            <T size={11} color="#9ca3af" style={{ marginTop: 2 }}>
+              {p.brand ?? p.category}
+            </T>
+          )}
+          {!!missing && (
+            <Tap
+              label={`Choose ${missing === "size" ? "a size" : "a colour"} for ${p.name}`}
+              onPress={() => openDestination("Product details", { id: p.id })}
+              style={{ marginTop: 2 }}
+            >
+              <T size={11} bold color={colors.critical}>
+                Choose {missing === "size" ? "a size" : "a colour"} ›
+              </T>
+            </Tap>
+          )}
           {p.stock < 1 ? (
             <T size={11} color={colors.critical} style={{ marginTop: 2 }}>
               Out of stock
@@ -137,7 +158,7 @@ function CartRow({ item }: { item: CartItem }) {
               <Tap
                 label={`Decrease ${p.name}`}
                 disabled={item.quantity <= 1}
-                onPress={() => quantity(p, item.quantity - 1)}
+                onPress={() => quantity(p, item.quantity - 1, key)}
                 style={{ paddingHorizontal: 8, paddingVertical: 2 }}
               >
                 <T color={item.quantity <= 1 ? "#d1d5db" : "#4b5563"}>-</T>
@@ -146,7 +167,7 @@ function CartRow({ item }: { item: CartItem }) {
               <Tap
                 label={`Increase ${p.name}`}
                 disabled={item.quantity >= p.stock}
-                onPress={() => quantity(p, item.quantity + 1)}
+                onPress={() => quantity(p, item.quantity + 1, key)}
                 style={{ paddingHorizontal: 8, paddingVertical: 2 }}
               >
                 <T color="#4b5563">+</T>
@@ -235,18 +256,18 @@ export default function CartScreen() {
   const [expanded, setExpanded] = useState(false);
   const [voucher, setVoucher] = useState("");
   const list = useRef<FlatList>(null);
-  const ids = state.cart.map((i) => i.productId);
+  const ids = state.cart.map(lineKey);
   const all = ids.length > 0 && state.cart.every((i) => i.selected);
   const choiceIds = state.cart
     .filter((i) => productById[i.productId]?.group === "choice")
-    .map((i) => i.productId);
+    .map(lineKey);
   const choiceSelected =
     choiceIds.length > 0 &&
     state.cart
-      .filter((i) => choiceIds.includes(i.productId))
+      .filter((i) => choiceIds.includes(lineKey(i)))
       .every((i) => i.selected);
-  const choiceLines = state.cart.filter((i) => choiceIds.includes(i.productId));
-  const otherLines = state.cart.filter((i) => !choiceIds.includes(i.productId));
+  const choiceLines = state.cart.filter((i) => choiceIds.includes(lineKey(i)));
+  const otherLines = state.cart.filter((i) => !choiceIds.includes(lineKey(i)));
   const shown = expanded ? otherLines : otherLines.slice(0, 3);
   const unavailable = choiceProducts.find((p) => p.stock === 0);
   return (
@@ -341,7 +362,7 @@ export default function CartScreen() {
                 nobody could collect.
               */}
               {choiceLines.map((item) => (
-                <CartRow key={item.productId} item={item} />
+                <CartRow key={lineKey(item)} item={item} />
               ))}
               {!state.cart.length && (
                 <View style={{ alignItems: "center", gap: 10, paddingVertical: 28 }}>
@@ -380,7 +401,7 @@ export default function CartScreen() {
                     checked={otherLines.every((i) => i.selected)}
                     onPress={() =>
                       select(
-                        otherLines.map((i) => i.productId),
+                        otherLines.map(lineKey),
                         !otherLines.every((i) => i.selected),
                       )
                     }
@@ -394,7 +415,7 @@ export default function CartScreen() {
                   </T>
                 </Row>
                 {shown.map((item) => (
-                  <CartRow key={item.productId} item={item} />
+                  <CartRow key={lineKey(item)} item={item} />
                 ))}
               </View>
             )}
@@ -421,17 +442,17 @@ export default function CartScreen() {
                     label="Unavailable seller items"
                   />
                   <Tap
-                    label="ZenFusion Grocer"
+                    label={unavailable.store || "Seller"}
                     onPress={() =>
                       openDestination("Seller storefront", {
-                        store: "ZenFusion Grocer",
+                        store: unavailable.store || "Gulmeli Fancy Stores",
                       })
                     }
                   >
                     <Row style={{ gap: 6 }}>
                       <FontIcon name="store" color="#6b7280" size={12} />
                       <T size={14} bold>
-                        ZenFusion Grocer
+                        {unavailable.store || "Gulmeli Fancy Stores"}
                       </T>
                       <FontIcon
                         name="chevron-right"
@@ -451,7 +472,7 @@ export default function CartScreen() {
                 >
                   <View style={{ marginTop: 32 }}>
                     <CheckBox
-                      label="Gyan Chiura unavailable"
+                      label={`${unavailable.name} unavailable`}
                       checked={false}
                       disabled
                       onPress={() => undefined}
@@ -487,19 +508,10 @@ export default function CartScreen() {
                   </View>
                   <View style={{ flex: 1 }}>
                     <T numberOfLines={1}>
-                      <T
-                        size={9}
-                        bold
-                        color="#fff"
-                        style={{ backgroundColor: colors.orange }}
-                      >
-                        {" "}
-                        9.9{" "}
-                      </T>{" "}
-                      Gyan Chiura 800Gm
+                      {unavailable.name}
                     </T>
                     <T size={11} color="#9ca3af">
-                      GYAN
+                      Sold out · {unavailable.brand ?? unavailable.category}
                     </T>
                     <Row
                       style={{
@@ -510,14 +522,14 @@ export default function CartScreen() {
                       }}
                     >
                       <T size={14} bold color="#6b7280">
-                        Rs. 110
+                        Rs. {unavailable.price.toLocaleString("en-US")}
                       </T>
                       <Button
                         title="Find Similar"
                         outline
                         onPress={() =>
                           openDestination("Similar products", {
-                            category: "Groceries",
+                            category: unavailable.category,
                           })
                         }
                         style={{

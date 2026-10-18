@@ -396,7 +396,7 @@ export const defaultConfig: StorefrontConfig = {
   branding: {
     companyName: "Gulmeli Fancy Stores",
     legalName: "Gulmeli Fancy Stores Pvt. Ltd.",
-    tagline: "Everyday fancy goods, delivered.",
+    tagline: "Fashion for every season, delivered.",
     logo: "",
     logoDark: "",
     logoLight: "",
@@ -452,7 +452,7 @@ export const defaultConfig: StorefrontConfig = {
     sticky: true,
     backgroundColor: "#f85606",
     textColor: "#ffffff",
-    searchPlaceholder: "Search for products",
+    searchPlaceholder: "Search shirts, kurtis, jackets…",
   },
   footer: {
     enabled: true,
@@ -508,8 +508,9 @@ export const defaultConfig: StorefrontConfig = {
   seo: {
     siteTitle: "Gulmeli Fancy Stores",
     titleTemplate: "{page} | {site}",
-    metaDescription: "",
-    keywords: [],
+    metaDescription:
+      "Shop men's, women's and kids' clothing, ethnic wear and winter wear online in Nepal. Cash on delivery and easy size exchanges.",
+    keywords: ["clothing", "fashion", "kurti", "daura suruwal", "winter wear", "Nepal"],
     robots: "index, follow",
     sitemapEnabled: true,
     openGraphImage: "",
@@ -649,8 +650,9 @@ export const defaultConfig: StorefrontConfig = {
     signup: "Sign up",
     logout: "Log out",
     search: "Search",
-    homeHeading: "Shop with Gulmeli Fancy Stores",
-    homeSubheading: "",
+    homeHeading: "New season styles for the whole family",
+    homeSubheading:
+      "Men, women, kids and ethnic wear. Cash on delivery and easy size exchanges across Nepal.",
     offersHeading: "Buy more, save more",
     promoMessage: "",
     freeShippingMessage: "",

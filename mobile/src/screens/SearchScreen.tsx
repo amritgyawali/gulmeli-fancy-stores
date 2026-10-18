@@ -27,8 +27,8 @@ import type { Product } from "@/types/shop";
  * Search, as its own screen.
  *
  * Search used to be a text field inside a card on the generic feature
- * screen, beside six hardcoded category buttons ("Fashion", "Electronics"…)
- * that did not come from the catalogue, four sort words and a plain count,
+ * screen, beside six hardcoded category buttons that did not come from
+ * the catalogue, four sort words and a plain count,
  * with results in a non-virtualised grid under all of it.
  *
  * Now it behaves like the search in a marketplace app:
@@ -63,7 +63,20 @@ export function searchProducts(products: Product[], query: string) {
   const scored: { p: Product; score: number }[] = [];
   for (const p of products) {
     const name = fold(p.name);
-    const rest = `${fold(p.category)} ${fold(p.brand)} ${fold(p.store)}`;
+    /* Shoppers search clothes by colour, fabric and who they are for
+       ("navy linen", "kids hoodie"), so those count too. */
+    const rest = [
+      p.category,
+      p.brand,
+      p.store,
+      p.gender,
+      p.fabric,
+      p.fit,
+      ...(p.colors ?? []).map((c) => c.name),
+      ...(p.highlights ?? []),
+    ]
+      .map(fold)
+      .join(" ");
     let score = 0;
     let all = true;
     for (const w of words) {

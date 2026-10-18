@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import type { Product } from "@/lib/types";
 import { bundledImage, sized, srcSetFor } from "@/lib/images";
 import { rs } from "@/lib/format";
@@ -8,6 +8,12 @@ import { useWishlist } from "@/lib/hooks";
 import { Icon, Stars } from "./Icon";
 import { flyToCart, useToast } from "./Toast";
 import { photoFor } from "@/shared/mobile/services/product-media";
+import {
+  defaultColor,
+  missingChoice,
+  variantLabel,
+  type VariantChoice,
+} from "@/shared/mobile/data/clothing";
 
 /*
  * The product card, and the pieces of it reused on the product page.
@@ -192,12 +198,20 @@ export function useQuickAdd() {
   const { add, cart } = useShop();
   const toast = useToast();
   return {
-    inCart: (id: string) => cart.find((i) => i.productId === id)?.quantity ?? 0,
-    add: (product: Product, from?: Element | null, quantity = 1) => {
-      for (let i = 0; i < quantity; i += 1) add(product);
+    /* Units across all of a product's sizes and colours. */
+    inCart: (id: string) =>
+      cart.reduce((n, i) => (i.productId === id ? n + i.quantity : n), 0),
+    add: (
+      product: Product,
+      from?: Element | null,
+      quantity = 1,
+      choice: VariantChoice = {},
+    ) => {
+      for (let i = 0; i < quantity; i += 1) add(product, choice);
       flyToCart(from);
+      const picked = variantLabel(choice);
       toast({
-        message: quantity > 1 ? `${quantity} added to your cart` : "Added to your cart",
+        message: `${quantity > 1 ? `${quantity} added` : "Added"} to your cart${picked ? ` (${picked})` : ""}`,
         image: sized(bundledImage(product), 96),
         action: { label: "View cart", to: "/cart" },
       });
@@ -218,6 +232,7 @@ export function ProductCard({
   const lowStock = !out && product.stock <= 5;
   const saving = discountPercent(product);
   const { add, inCart } = useQuickAdd();
+  const navigate = useNavigate();
   const media = useRef<HTMLDivElement>(null);
   const atLimit = inCart(product.id) >= product.stock;
 
@@ -225,11 +240,19 @@ export function ProductCard({
   const primary = bundledImage(product);
   const alternate = product.images?.find((src) => src && src !== primary);
 
+  /* Clothing needs a size: the card's quick add opens the product page to
+     choose one rather than adding a shirt nobody can ship. */
+  const needsChoice = missingChoice(product, { color: defaultColor(product) });
+  const chooseLabel = needsChoice === "color" ? "Choose colour" : "Choose size";
   const quickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (out || atLimit) return;
-    add(product, media.current);
+    if (needsChoice) {
+      navigate(`/product/${encodeURIComponent(product.id)}`);
+      return;
+    }
+    add(product, media.current, 1, { color: defaultColor(product) });
   };
 
   return (
@@ -291,18 +314,22 @@ export function ProductCard({
               type="button"
               onClick={quickAdd}
               disabled={atLimit}
-              aria-label={`Add ${product.name} to cart`}
+              aria-label={
+                needsChoice ? `${chooseLabel} for ${product.name}` : `Add ${product.name} to cart`
+              }
               className="absolute inset-x-2 bottom-2 z-10 hidden h-9 translate-y-2 items-center justify-center gap-1.5 rounded-md bg-ink/90 text-sm font-semibold text-raised opacity-0 backdrop-blur-sm transition-[opacity,transform] duration-200 ease-out-quint hover:bg-brand focus-visible:translate-y-0 focus-visible:opacity-100 disabled:bg-ink-faint group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:hover)]:flex"
             >
               <Icon name={atLimit ? "check" : "cartPlus"} size={16} />
-              {atLimit ? "In your cart" : "Add to cart"}
+              {atLimit ? "In your cart" : needsChoice ? chooseLabel : "Add to cart"}
             </button>
             {/* Touch: a round button, always visible. */}
             <button
               type="button"
               onClick={quickAdd}
               disabled={atLimit}
-              aria-label={`Add ${product.name} to cart`}
+              aria-label={
+                needsChoice ? `${chooseLabel} for ${product.name}` : `Add ${product.name} to cart`
+              }
               className="absolute bottom-1.5 right-1.5 z-10 grid h-9 w-9 place-items-center rounded-full bg-brand text-white shadow-e2 active:scale-90 disabled:bg-ink-faint [@media(hover:hover)]:hidden"
             >
               <Icon name={atLimit ? "check" : "plus"} size={17} strokeWidth={2.2} />

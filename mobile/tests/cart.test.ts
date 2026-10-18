@@ -14,7 +14,7 @@ const product: Product = {
   price: 177,
   stock: 6,
   group: "choice",
-  category: "Groceries",
+  category: "Men",
 };
 const catalog = { p: product, sold: { ...product, id: "sold", stock: 0 } };
 test("adding repeatedly consolidates lines and caps stock", () => {

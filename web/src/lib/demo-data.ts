@@ -60,10 +60,10 @@ export interface CampaignSku {
 }
 
 export const campaignSkus: CampaignSku[] = [
-  { product: "Goldstar Shoes Black Classic 42", seller: "Everest Gadgets Nepal", price: 4500, campaignPrice: 2699, subsidySplit: "70/30", flashStock: 400, burned: 231, velocity: 38 },
-  { product: "Horlicks Classic Malt Jar 1 kg", seller: "NutriHub Store", price: 1890, campaignPrice: 1549, subsidySplit: "50/50", flashStock: 900, burned: 612, velocity: 74 },
-  { product: "Mini Wireless Keyboard + Mouse", seller: "Tech Bazaar", price: 1710, campaignPrice: 1199, subsidySplit: "80/20", flashStock: 250, burned: 180, velocity: 22 },
-  { product: "Vartex 24\" Frameless Gaming Monitor", seller: "Pixel Depot", price: 13999, campaignPrice: 11499, subsidySplit: "60/40", flashStock: 60, burned: 41, velocity: 6 },
+  { product: "Men's Traditional Daura Suruwal Set", seller: "Dhaka Ghar", price: 4290, campaignPrice: 3490, subsidySplit: "70/30", flashStock: 400, burned: 231, velocity: 38 },
+  { product: "Unisex Fleece Pullover Hoodie", seller: "Gulmeli Basics", price: 2490, campaignPrice: 1790, subsidySplit: "50/50", flashStock: 900, burned: 612, velocity: 74 },
+  { product: "Block Print Cotton A-Line Kurti", seller: "Gurans Studio", price: 1990, campaignPrice: 1490, subsidySplit: "80/20", flashStock: 250, burned: 180, velocity: 22 },
+  { product: "Lightweight Hooded Puffer Jacket", seller: "Urban Yak", price: 5490, campaignPrice: 3990, subsidySplit: "60/40", flashStock: 60, burned: 41, velocity: 6 },
 ];
 
 export interface CatalogSku {
@@ -81,11 +81,11 @@ export interface CatalogSku {
 }
 
 export const catalogSkus: CatalogSku[] = [
-  { sku: "GLM-ELEC-0001", product: "Vartex 24\" Frameless Gaming Monitor", merchant: "Pixel Depot", category: "Electronics", irdTax: "13% VAT", price: 13999, strike: 16500, stock: 34, reserved: 6, runRate: 4.2, status: "Active" },
-  { sku: "GLM-GROC-0142", product: "Horlicks Classic Malt Jar 1 kg", merchant: "ZenFusion Grocer", category: "Groceries", irdTax: "5% VAT", price: 1890, strike: 2150, stock: 212, reserved: 30, runRate: 28, status: "Active" },
-  { sku: "GLM-FASH-0417", product: "Summer Balaclava UV Face Mask", merchant: "Kicks & Fits", category: "Fashion", irdTax: "13% VAT", price: 399, strike: 699, stock: 0, reserved: 0, runRate: 9, status: "Review" },
-  { sku: "GLM-LIFE-0098", product: "Wireless Portable Bluetooth Speaker", merchant: "SoundNepal", category: "Lifestyle", irdTax: "13% VAT", price: 1050, strike: 1499, stock: 78, reserved: 12, runRate: 11, status: "Active" },
-  { sku: "GLM-JWEL-0011", product: "Gold Plated Ankle Collection", merchant: "Gulmeli Gold House", category: "Jewelry", irdTax: "13% + excise", price: 28900, strike: 32000, stock: 9, reserved: 2, runRate: 0.6, status: "Parked" },
+  { sku: "GLM-MEN-0001", product: "Slim Fit Stretch Denim Jeans", merchant: "Urban Yak", category: "Men", irdTax: "13% VAT", price: 1890, strike: 2490, stock: 90, reserved: 6, runRate: 4.2, status: "Active" },
+  { sku: "GLM-ETH-0142", product: "Banarasi Art Silk Saree", merchant: "Gurans Studio", category: "Ethnic Wear", irdTax: "13% VAT", price: 4990, strike: 6490, stock: 212, reserved: 30, runRate: 28, status: "Active" },
+  { sku: "GLM-ACC-0417", product: "Summer Cooling Balaclava", merchant: "Peak Motion", category: "Accessories", irdTax: "13% VAT", price: 399, strike: 849, stock: 0, reserved: 0, runRate: 9, status: "Review" },
+  { sku: "GLM-KID-0098", product: "Girls' Cotton Party Frock", merchant: "Little Gurans", category: "Kids", irdTax: "13% VAT", price: 1290, strike: 1790, stock: 78, reserved: 12, runRate: 11, status: "Active" },
+  { sku: "GLM-WIN-0011", product: "Handwoven Pashmina Shawl", merchant: "Himal Thread", category: "Winter Wear", irdTax: "13% VAT", price: 5490, strike: 6990, stock: 9, reserved: 2, runRate: 0.6, status: "Parked" },
 ];
 
 export const FULFILLMENT_STAGES = [
@@ -134,9 +134,9 @@ export interface PayoutBatch {
 }
 
 export const payoutBatches: PayoutBatch[] = [
-  { batchId: "IPS-WED-38", merchant: "Everest Gadgets Nepal", pan: "52-2214889", bank: "Nabil Bank", account: "0471-***-772", gross: 1_240_500, commission: 148_860, deductions: 16_120, net: 1_075_520, channel: "NCHL-IPS", status: "Ready" },
-  { batchId: "IPS-WED-38", merchant: "ZenFusion Grocer", pan: "63-1190442", bank: "Global IME", account: "0201-***-190", gross: 742_000, commission: 89_040, deductions: 0, net: 652_960, channel: "NCHL-IPS", status: "Disbursed" },
-  { batchId: "IPS-WED-39", merchant: "Gulmeli Gold House", pan: "30-9981204", bank: "Siddhartha Bank", account: "0091-***-221", gross: 2_318_900, commission: 347_835, deductions: 46_378, net: 1_924_687, channel: "RTGS", status: "Held" },
+  { batchId: "IPS-WED-38", merchant: "Urban Yak Apparel", pan: "52-2214889", bank: "Nabil Bank", account: "0471-***-772", gross: 1_240_500, commission: 148_860, deductions: 16_120, net: 1_075_520, channel: "NCHL-IPS", status: "Ready" },
+  { batchId: "IPS-WED-38", merchant: "Gurans Studio", pan: "63-1190442", bank: "Global IME", account: "0201-***-190", gross: 742_000, commission: 89_040, deductions: 0, net: 652_960, channel: "NCHL-IPS", status: "Disbursed" },
+  { batchId: "IPS-WED-39", merchant: "Dhaka Ghar Handloom", pan: "30-9981204", bank: "Siddhartha Bank", account: "0091-***-221", gross: 2_318_900, commission: 347_835, deductions: 46_378, net: 1_924_687, channel: "RTGS", status: "Held" },
 ];
 
 export interface KycApplication {
@@ -154,10 +154,10 @@ export interface KycApplication {
 }
 
 export const kycQueue: KycApplication[] = [
-  { id: "KYC-4410", merchant: "Himalayan Handloom", entity: "Private Ltd", category: "Fashion", registration: "U-99211-KTM", pan: "61-887201", location: "Lalitpur", hub: "Lubhu", riskScore: 12, maker: "Cleared", checker: "Pending" },
-  { id: "KYC-4411", merchant: "Terai Fresh Mart", entity: "Proprietorship", category: "Groceries", registration: "P-44120-JHR", pan: "39-100228", location: "Birgunj", hub: "Birgunj", riskScore: 34, maker: "Pending", checker: "Pending" },
-  { id: "KYC-4412", merchant: "Kathmandu Tech Hub", entity: "Private Ltd", category: "Electronics", registration: "U-10299-KTM", pan: "22-900114", location: "Kathmandu", hub: "Thapathali", riskScore: 78, maker: "Rejected", checker: "Blocked" },
-  { id: "KYC-4413", merchant: "Pokhara Organic Co", entity: "Cooperative", category: "Groceries", registration: "C-77120-PKR", pan: "71-441923", location: "Pokhara", hub: "Pokhara", riskScore: 8, maker: "Cleared", checker: "Cleared" },
+  { id: "KYC-4410", merchant: "Himalayan Handloom", entity: "Private Ltd", category: "Ethnic Wear", registration: "U-99211-KTM", pan: "61-887201", location: "Lalitpur", hub: "Lubhu", riskScore: 12, maker: "Cleared", checker: "Pending" },
+  { id: "KYC-4411", merchant: "Terai Kids Wear", entity: "Proprietorship", category: "Kids", registration: "P-44120-JHR", pan: "39-100228", location: "Birgunj", hub: "Birgunj", riskScore: 34, maker: "Pending", checker: "Pending" },
+  { id: "KYC-4412", merchant: "Kathmandu Denim Co", entity: "Private Ltd", category: "Men", registration: "U-10299-KTM", pan: "22-900114", location: "Kathmandu", hub: "Thapathali", riskScore: 78, maker: "Rejected", checker: "Blocked" },
+  { id: "KYC-4413", merchant: "Pokhara Woollens Co", entity: "Cooperative", category: "Winter Wear", registration: "C-77120-PKR", pan: "71-441923", location: "Pokhara", hub: "Pokhara", riskScore: 8, maker: "Cleared", checker: "Cleared" },
 ];
 
 export interface MallApplication {
@@ -174,9 +174,9 @@ export interface MallApplication {
 }
 
 export const mallQueue: MallApplication[] = [
-  { id: "MAL-0142", brand: "Goldstar Shoes", entity: "Classic Footwear Pvt", tier: "Brand Owner", category: "Fashion", doi: "DOI-8812", cbms: "Verified", submitted: "12 Sep 10:20", slaHours: 6, checker: "Nirmala P." },
-  { id: "MAL-0143", brand: "Dabur Nepal", entity: "Dabur IPL", tier: "Authorized Reseller", category: "Groceries", doi: "DOI-1145", cbms: "Pending", submitted: "13 Sep 14:02", slaHours: 22, checker: "—" },
-  { id: "MAL-0144", brand: "Vartex Displays", entity: "Vartex Trading", tier: "Distributor", category: "Electronics", doi: "DOI-2290", cbms: "Mismatch", submitted: "14 Sep 09:47", slaHours: 41, checker: "Suman R." },
+  { id: "MAL-0142", brand: "Dhaka Ghar", entity: "Dhaka Ghar Handloom Pvt", tier: "Brand Owner", category: "Ethnic Wear", doi: "DOI-8812", cbms: "Verified", submitted: "12 Sep 10:20", slaHours: 6, checker: "Nirmala P." },
+  { id: "MAL-0143", brand: "Gurans Studio", entity: "Gurans Fashion Pvt", tier: "Authorized Reseller", category: "Women", doi: "DOI-1145", cbms: "Pending", submitted: "13 Sep 14:02", slaHours: 22, checker: "—" },
+  { id: "MAL-0144", brand: "Peak Motion", entity: "Peak Motion Trading", tier: "Distributor", category: "Activewear", doi: "DOI-2290", cbms: "Mismatch", submitted: "14 Sep 09:47", slaHours: 41, checker: "Suman R." },
 ];
 
 export interface ThreatIncident {

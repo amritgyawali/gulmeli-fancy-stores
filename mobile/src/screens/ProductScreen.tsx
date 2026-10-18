@@ -39,6 +39,16 @@ import { openCart, openDestination } from "@/services/navigation";
 import { productImage, sizedImage, photoFor } from "@/services/product-media";
 import { VOUCHER_TERMS, deliveryTerms, deliveryWindow } from "@/services/delivery";
 import type { Product } from "@/types/shop";
+import {
+  colorOptions,
+  defaultColor,
+  lineKey,
+  missingChoice,
+  sizeChartFor,
+  sizeOptions,
+  type SizeChart,
+} from "@/data/clothing";
+import { unitsInCart } from "@/store/cart";
 
 /*
  * Product details, as its own screen.
@@ -86,7 +96,13 @@ export default function ProductScreen() {
   const [page, setPage] = useState(0);
   const [viewer, setViewer] = useState<number | null>(null);
   const [expanded, setExpanded] = useState(false);
+  const [size, setSize] = useState<string>();
+  const [color, setColor] = useState<string>();
+  const [needChoice, setNeedChoice] = useState<"size" | "color" | null>(null);
+  const [guideOpen, setGuideOpen] = useState(false);
   const scrollY = useSharedValue(0);
+  const scrollRef = useRef<Animated.ScrollView>(null);
+  const choiceY = useRef(0);
 
   const symbol = config.localisation.currencySymbol;
   const terms = deliveryTerms(config);
@@ -187,7 +203,13 @@ export default function ProductScreen() {
     );
 
   const out = product.stock < 1;
-  const inCart = state.cart.find((i) => i.productId === product.id)?.quantity ?? 0;
+  const inCart = unitsInCart(state.cart, product.id);
+  const sizes = sizeOptions(product);
+  const colorList = colorOptions(product);
+  const chosenColor = color ?? defaultColor(product);
+  const choice = { size, color: chosenColor };
+  const chart = sizeChartFor(product);
+  const freeSize = !sizes.length && (product.sizes ?? []).some((x) => /^free/i.test(x));
   const remaining = Math.max(0, product.stock - inCart);
   const cannotAdd = out || remaining < 1;
   const off = discountPercent(product);
@@ -197,22 +219,40 @@ export default function ProductScreen() {
 
   const addToCart = (andCheckout = false) => {
     if (cannotAdd) return;
+    /* A shirt without a size is not an order: ask, and show where. */
+    const missing = missingChoice(product, choice);
+    if (missing) {
+      setNeedChoice(missing);
+      void haptic("medium");
+      /* The picker's offset is within the details column, which starts
+         below the square photo and its 12pt padding. */
+      scrollRef.current?.scrollTo({
+        y: Math.max(0, width + 12 + choiceY.current - 80),
+        animated: true,
+      });
+      toast({ message: missing === "size" ? "Choose your size first" : "Choose a colour first" });
+      return;
+    }
     const n = Math.min(qty, remaining);
-    for (let i = 0; i < n; i += 1) add(product);
+    for (let i = 0; i < n; i += 1) add(product, choice);
     void haptic(andCheckout ? "medium" : "success");
     bumpBadge();
     setQty(1);
     if (andCheckout) {
       /* Buy now checks out this product alone: everything else in the cart
          stays there, just not selected for this order. */
-      const others = state.cart.map((i) => i.productId).filter((x) => x !== product.id);
+      const key = lineKey({ productId: product.id, ...choice });
+      const others = state.cart.map(lineKey).filter((x) => x !== key);
       if (others.length) select(others, false);
-      select([product.id], true);
+      select([key], true);
       openDestination("Checkout");
       return;
     }
+    const picked = [size ? `size ${size}` : "", chosenColor && colorList.length > 1 ? chosenColor : ""]
+      .filter(Boolean)
+      .join(", ");
     toast({
-      message: n > 1 ? `${n} added to your cart` : "Added to your cart",
+      message: `${n > 1 ? `${n} added` : "Added"} to your cart${picked ? ` (${picked})` : ""}`,
       image: productImage(product, 96),
       action: { label: "View cart", onPress: openCart },
     });
@@ -244,6 +284,7 @@ export default function ProductScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
       <Animated.ScrollView
+        ref={scrollRef}
         onScroll={onScroll}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
@@ -417,6 +458,147 @@ export default function ProductScreen() {
             </View>
           )}
 
+          {/* Size and colour */}
+          {(sizes.length > 0 || colorList.length > 0 || freeSize) && (
+            <View
+              style={{
+                ...card,
+                borderWidth: needChoice ? 1.5 : 0,
+                borderColor: needChoice ? "#c02626" : "transparent",
+              }}
+              onLayout={(e) => {
+                choiceY.current = e.nativeEvent.layout.y;
+              }}
+            >
+              {colorList.length > 0 && (
+                <View style={{ gap: 10 }}>
+                  <T preserveColor size={14} bold>
+                    Colour
+                    <T preserveColor size={14} color={theme.muted}>
+                      {chosenColor ? `  ${chosenColor}` : colorList.length > 1 ? "  Choose one" : ""}
+                    </T>
+                  </T>
+                  <Row style={{ gap: 10, flexWrap: "wrap" }}>
+                    {colorList.map((option) => {
+                      const active = option.name === chosenColor;
+                      return (
+                        <PressableScale
+                          key={option.name}
+                          accessibilityRole="radio"
+                          accessibilityLabel={`Colour ${option.name}`}
+                          accessibilityState={{ selected: active }}
+                          onPress={() => {
+                            void haptic("light");
+                            setColor(option.name);
+                            if (needChoice === "color") setNeedChoice(null);
+                          }}
+                          style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: 20,
+                            padding: 3,
+                            borderWidth: 2,
+                            borderColor: active ? theme.text : "transparent",
+                          }}
+                        >
+                          <View
+                            style={{
+                              flex: 1,
+                              borderRadius: 16,
+                              backgroundColor: option.hex || theme.border,
+                              borderWidth: 1,
+                              borderColor: "rgba(0,0,0,0.12)",
+                            }}
+                          />
+                        </PressableScale>
+                      );
+                    })}
+                  </Row>
+                </View>
+              )}
+              {sizes.length > 0 && (
+                <View style={{ gap: 10 }}>
+                  <Row style={{ justifyContent: "space-between" }}>
+                    <T preserveColor size={14} bold>
+                      Size
+                      <T
+                        preserveColor
+                        size={14}
+                        color={needChoice === "size" ? "#c02626" : theme.muted}
+                      >
+                        {size ? `  ${size}` : "  Choose your size"}
+                      </T>
+                    </T>
+                    {chart && (
+                      <Pressable
+                        accessibilityRole="button"
+                        accessibilityLabel="Open size guide"
+                        onPress={() => setGuideOpen(true)}
+                        hitSlop={10}
+                      >
+                        <Row style={{ gap: 6 }}>
+                          <FontIcon name="ruler-horizontal" size={13} color={theme.primaryText} />
+                          <T preserveColor size={13} bold color={theme.primaryText}>
+                            Size guide
+                          </T>
+                        </Row>
+                      </Pressable>
+                    )}
+                  </Row>
+                  <Row style={{ gap: 8, flexWrap: "wrap" }}>
+                    {sizes.map((option) => {
+                      const active = option === size;
+                      return (
+                        <PressableScale
+                          key={option}
+                          accessibilityRole="radio"
+                          accessibilityLabel={`Size ${option}`}
+                          accessibilityState={{ selected: active }}
+                          onPress={() => {
+                            void haptic("selection");
+                            setSize(option);
+                            if (needChoice === "size") setNeedChoice(null);
+                          }}
+                          style={{
+                            minWidth: 52,
+                            minHeight: 44,
+                            paddingHorizontal: 12,
+                            borderRadius: 10,
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderWidth: active ? 2 : 1,
+                            borderColor: active ? theme.text : theme.border,
+                            backgroundColor: active ? theme.background : theme.surface,
+                          }}
+                        >
+                          <T preserveColor size={14} bold={active}>
+                            {option}
+                          </T>
+                        </PressableScale>
+                      );
+                    })}
+                  </Row>
+                  {!!product.fit && (
+                    <Row style={{ gap: 6 }}>
+                      <FontIcon name="shirt" size={12} color={theme.muted} />
+                      <T preserveColor size={12} color={theme.muted} style={{ flex: 1 }}>
+                        Fit: {product.fit}
+                      </T>
+                    </Row>
+                  )}
+                </View>
+              )}
+              {freeSize && (
+                <InfoRow
+                  icon="ruler-horizontal"
+                  tone={theme.primaryText}
+                  title="Free size"
+                  note={product.fit || "One size fits most."}
+                />
+              )}
+            </View>
+          )}
+
           {/* Availability and quantity */}
           <View style={card}>
             {out ? (
@@ -454,8 +636,8 @@ export default function ProductScreen() {
             <InfoRow
               icon="rotate-left"
               tone={theme.primaryText}
-              title={`${terms.returnDays}-day returns`}
-              note="Unused items in original packaging, from the delivery date."
+              title={`${terms.returnDays}-day returns and size exchange`}
+              note="Wrong size? Exchange or return it unworn, with tags attached, from the delivery date."
             />
             <Divider />
             <Row style={{ gap: 12 }}>
@@ -519,7 +701,12 @@ export default function ProductScreen() {
             )}
             {[
               ["Category", product.category],
+              ["For", product.gender],
               ["Brand", product.brand],
+              ["Fabric", product.fabric],
+              ["Fit", product.fit],
+              ["Sizes", (product.sizes ?? []).join(", ")],
+              ["Colours", colorList.map((x) => x.name).join(", ")],
               ["Seller", seller],
               ["Availability", out ? "Out of stock" : `${product.stock} in stock`],
               ["Product ID", product.id],
@@ -536,6 +723,43 @@ export default function ProductScreen() {
                 </Row>
               ))}
           </View>
+
+          {/* Highlights and care */}
+          {(!!product.highlights?.length || !!product.care?.length) && (
+            <View style={card}>
+              {!!product.highlights?.length && (
+                <View style={{ gap: 8 }}>
+                  <T preserveColor size={16} bold accessibilityRole="header">
+                    Why you&apos;ll like it
+                  </T>
+                  {product.highlights.map((line) => (
+                    <Row key={line} style={{ gap: 10 }}>
+                      <FontIcon name="check" size={12} color="#1a7f4b" />
+                      <T preserveColor size={13} style={{ flex: 1 }}>
+                        {line}
+                      </T>
+                    </Row>
+                  ))}
+                </View>
+              )}
+              {!!product.highlights?.length && !!product.care?.length && <Divider />}
+              {!!product.care?.length && (
+                <View style={{ gap: 8 }}>
+                  <T preserveColor size={16} bold accessibilityRole="header">
+                    Wash and care
+                  </T>
+                  {product.care.map((line) => (
+                    <Row key={line} style={{ gap: 10 }}>
+                      <FontIcon name="soap" size={12} color={theme.muted} />
+                      <T preserveColor size={13} style={{ flex: 1 }}>
+                        {line}
+                      </T>
+                    </Row>
+                  ))}
+                </View>
+              )}
+            </View>
+          )}
 
           {/* Reviews */}
           <View style={card}>
@@ -718,7 +942,13 @@ export default function ProductScreen() {
           }}
         >
           <T preserveColor bold size={15} color={cannotAdd ? theme.muted : theme.primaryText}>
-            {out ? "Out of stock" : remaining < 1 ? "All in cart" : "Add to cart"}
+            {out
+              ? "Out of stock"
+              : remaining < 1
+                ? "All in cart"
+                : sizes.length && !size
+                  ? "Select size"
+                  : "Add to cart"}
           </T>
         </PressableScale>
         <PressableScale
@@ -742,6 +972,20 @@ export default function ProductScreen() {
         </PressableScale>
       </View>
 
+      {chart && (
+        <SizeGuide
+          chart={chart}
+          open={guideOpen}
+          selected={size}
+          onPick={(value) => {
+            setSize(value);
+            if (needChoice === "size") setNeedChoice(null);
+            setGuideOpen(false);
+          }}
+          onClose={() => setGuideOpen(false)}
+        />
+      )}
+
       <PhotoViewer
         key={viewer ?? "closed"}
         photos={photos}
@@ -754,6 +998,110 @@ export default function ProductScreen() {
 }
 
 /* ------------------------------------------------------------ pieces */
+
+/* The product's size chart in a sheet. Tapping a row picks that size. */
+function SizeGuide({
+  chart,
+  open,
+  selected,
+  onPick,
+  onClose,
+}: {
+  chart: SizeChart;
+  open: boolean;
+  selected?: string;
+  onPick: (size: string) => void;
+  onClose: () => void;
+}) {
+  const theme = useStorefrontTheme();
+  const insets = useSafeAreaInsets();
+  return (
+    <Modal visible={open} transparent animationType="slide" onRequestClose={onClose}>
+      <Pressable
+        accessibilityLabel="Close size guide"
+        onPress={onClose}
+        style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.45)" }}
+      />
+      <View
+        style={{
+          backgroundColor: theme.surface,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          padding: 18,
+          paddingBottom: Math.max(insets.bottom, 18),
+          gap: 14,
+          maxHeight: "85%",
+        }}
+      >
+        <Row style={{ justifyContent: "space-between" }}>
+          <T preserveColor size={18} bold accessibilityRole="header">
+            Size guide · {chart.title}
+          </T>
+          <HeaderButton icon="xmark" label="Close size guide" onPress={onClose} />
+        </Row>
+        <View style={{ borderRadius: 12, borderWidth: 1, borderColor: theme.border, overflow: "hidden" }}>
+          <Row style={{ backgroundColor: theme.background, paddingVertical: 10 }}>
+            {["Size", ...chart.columns].map((heading) => (
+              <T
+                key={heading}
+                preserveColor
+                size={12}
+                bold
+                color={theme.muted}
+                style={{ flex: 1, textAlign: "center" }}
+              >
+                {heading}
+              </T>
+            ))}
+          </Row>
+          {chart.rows.map((row) => {
+            const active = row.size === selected;
+            return (
+              <Pressable
+                key={row.size}
+                accessibilityRole="button"
+                accessibilityLabel={`Choose size ${row.size}`}
+                onPress={() => onPick(row.size)}
+                style={{
+                  flexDirection: "row",
+                  paddingVertical: 12,
+                  borderTopWidth: 1,
+                  borderTopColor: theme.border,
+                  backgroundColor: active ? `${theme.primary}18` : "transparent",
+                }}
+              >
+                <T preserveColor size={13} bold style={{ flex: 1, textAlign: "center" }}>
+                  {row.size}
+                </T>
+                {row.values.map((value, i) => (
+                  <T key={i} preserveColor size={13} style={{ flex: 1, textAlign: "center" }}>
+                    {value}
+                  </T>
+                ))}
+              </Pressable>
+            );
+          })}
+        </View>
+        <View style={{ gap: 6 }}>
+          <T preserveColor size={14} bold>
+            How to measure
+          </T>
+          {chart.howToMeasure.map((line) => (
+            <Row key={line} style={{ gap: 8, alignItems: "flex-start" }}>
+              <FontIcon name="ruler-horizontal" size={11} color={theme.muted} />
+              <T preserveColor size={13} color={theme.muted} style={{ flex: 1 }}>
+                {line}
+              </T>
+            </Row>
+          ))}
+          <T preserveColor size={12} color={theme.muted}>
+            Measurements are of the body, not the garment. Between sizes? Pick the larger for a relaxed fit.
+          </T>
+        </View>
+      </View>
+    </Modal>
+  );
+}
 
 function Dot({ active, color }: { active: boolean; color: string }) {
   const style = useAnimatedStyle(() => ({

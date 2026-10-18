@@ -28,6 +28,7 @@ import { Icon } from "@/components/Icon";
 import { useDocumentMeta, useInView, useMediaQuery, useRecentlyViewed } from "@/lib/hooks";
 import type { Product } from "@/lib/types";
 import { bundledImage, sized } from "@/lib/images";
+import { CLOTHING_CATEGORIES } from "@/shared/mobile/data/clothing";
 
 /*
  * Home.
@@ -469,8 +470,12 @@ export function Home() {
   const categories = useMemo(() => {
     const rows = content("categories");
     if (rows.length) return rows.slice(0, 12);
+    /* Departments in the store's own order (Men, Women, Kids…), then any
+       others by how many products they hold. */
+    const order = CLOTHING_CATEGORIES as readonly string[];
+    const rank = (name: string) => (order.includes(name) ? order.indexOf(name) : 99);
     return [...counts.entries()]
-      .sort((a, b) => b[1] - a[1])
+      .sort((a, b) => rank(a[0]) - rank(b[0]) || b[1] - a[1])
       .slice(0, 12)
       .map(([name]) => {
         /* A category without its own image borrows its best seller's. */

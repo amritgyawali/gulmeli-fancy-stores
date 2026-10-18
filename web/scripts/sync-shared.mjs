@@ -12,6 +12,7 @@ const repo = join(web, "..");
 const files = {
   "mobile/src/services/product-media.ts": "mobile/services/product-media.ts",
   "mobile/src/data/hosted-media.json": "mobile/data/hosted-media.json",
+  "mobile/src/data/clothing.ts": "mobile/data/clothing.ts",
   "mobile/src/admin/core/appearance.ts": "mobile/admin/core/appearance.ts",
   "mobile/src/admin/core/config.ts": "mobile/admin/core/config.ts",
   "mobile/src/admin/core/config-schema.ts": "mobile/admin/core/config-schema.ts",

@@ -10,6 +10,7 @@ import { useDeliveryTerms } from "@/lib/shipping";
 import { deliveryWindow } from "@/lib/hooks";
 import { rs } from "@/lib/format";
 import type { Profile } from "@/lib/types";
+import { lineKey, variantLabel } from "@/shared/mobile/data/clothing";
 
 /*
  * Checkout.
@@ -262,12 +263,15 @@ export default function CheckoutPage() {
                 {lines.map((item) => {
                   const p = productById[item.productId];
                   return (
-                    <li key={item.productId} className="flex items-start gap-3 p-4">
+                    <li key={lineKey(item)} className="flex items-start gap-3 p-4">
                       <div className="media h-16 w-16 shrink-0 rounded-sm border border-line">
                         <ProductVisual product={p} fit="cover" width={64} />
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="clamp-2 text-sm text-ink">{p.name}</p>
+                        {variantLabel(item) && (
+                          <p className="mt-0.5 text-xs font-medium text-ink-soft">{variantLabel(item)}</p>
+                        )}
                         <p className="tnum mt-0.5 text-sm text-ink-muted">
                           {rs(p.price)} × {item.quantity}
                         </p>

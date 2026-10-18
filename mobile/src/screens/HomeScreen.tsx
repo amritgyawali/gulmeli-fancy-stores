@@ -10,7 +10,8 @@ import { ProductCard, ProductCardSkeleton, discountPercent } from "@/components/
 import { HeroCarousel } from "@/components/HeroCarousel";
 import { Countdown, DealCard } from "@/components/Deals";
 import { PressableScale } from "@/components/motion";
-import { sizedImage, productImage } from "@/services/product-media";
+import { sizedImage } from "@/services/product-media";
+import { productSource } from "@/components/ProductVisual";
 import { useCatalog, useShop } from "@/store/ShopProvider";
 import { useStorefront, useStorefrontTheme } from "@/store/StorefrontProvider";
 import {
@@ -28,12 +29,12 @@ import {
 import { hexColor, readableColor } from "@/admin/core/appearance";
 import { TOUCH_SIZE } from "@/theme/tokens";
 import type { Product } from "@/types/shop";
+import { CLOTHING_CATEGORIES } from "@/data/clothing";
 
 /*
  * Pick a category icon from the category name rather than its position in the
- * list. The previous version indexed a five-icon array by array position, so
- * "Groceries" was a shirt on one screen and a gem on the next as soon as the
- * sort order changed, and the sixth category onwards repeated the first five.
+ * list, so an icon stays with its department whatever order the dashboard
+ * sorts the departments in.
  */
 /* One shape for every header action, so the wishlist, bag and account
    controls line up instead of one carrying a border the others lack. */
@@ -45,21 +46,23 @@ const headerAction = {
 } as const;
 
 const CATEGORY_ICONS: [RegExp, string][] = [
-  [/cloth|fashion|wear|shirt|dress|apparel/i, "shirt"],
+  [/kid|child|baby|girl|boy/i, "child-reaching"],
+  [/women|ladies|dress|saree|kurti/i, "person-dress"],
+  [/\bmen\b|gents/i, "user-tie"],
+  [/ethnic|traditional|daura|festive|wedding/i, "vest"],
+  [/winter|woollen|jacket|warm/i, "snowflake"],
+  [/active|sport|gym|yoga|running/i, "person-running"],
+  [/sock/i, "socks"],
+  [/accessor|cap|hat|belt|scarf/i, "hat-cowboy"],
   [/shoe|footwear|sandal|sneaker/i, "shoe-prints"],
-  [/watch|jewel|gem|ring|ornament/i, "gem"],
-  [/phone|mobile|electronic|laptop|computer|gadget/i, "mobile-screen"],
-  [/audio|headphone|speaker|music/i, "headphones"],
-  [/home|furniture|kitchen|decor|lifestyle/i, "house"],
-  [/beauty|cosmetic|care|health/i, "spray-can-sparkles"],
-  [/grocer|food|snack|drink|pantry/i, "basket-shopping"],
-  [/baby|toy|kid|child/i, "baby-carriage"],
-  [/sport|outdoor|fitness|gym/i, "dumbbell"],
-  [/book|stationery|paper/i, "book"],
-  [/auto|bike|motor|car/i, "car"],
+  [/cloth|fashion|wear|shirt|apparel/i, "shirt"],
 ];
+const departmentRank = (name: string) => {
+  const i = (CLOTHING_CATEGORIES as readonly string[]).indexOf(name);
+  return i < 0 ? 99 : i;
+};
 function categoryIcon(name: string) {
-  return CATEGORY_ICONS.find(([pattern]) => pattern.test(name))?.[1] ?? "tag";
+  return CATEGORY_ICONS.find(([pattern]) => pattern.test(name))?.[1] ?? "shirt";
 }
 
 export default function HomeScreen({
@@ -157,9 +160,9 @@ export default function HomeScreen({
         : follow(b.ctaLink);
   const categoryList = categories.length
     ? categories
-    : [...new Set(products.map((p) => p.category))].map(
-        (name) => ({ id: name, name }) as ContentRecord,
-      );
+    : [...new Set(products.map((p) => p.category))]
+        .sort((a, b) => departmentRank(a) - departmentRank(b))
+        .map((name) => ({ id: name, name }) as ContentRecord);
   function productList(section: ContentRecord) {
     let list = [...products];
     const ids = Array.isArray(section.productIds) ? section.productIds : [];
@@ -307,7 +310,7 @@ export default function HomeScreen({
         const lead = products
           .filter((p) => p.category === name)
           .sort((a, b) => (b.sold ?? 0) - (a.sold ?? 0))[0];
-        return lead ? productImage(lead, 128) : null;
+        return lead ? productSource(lead, 128) : null;
       };
       content = (
         <ScrollView
@@ -316,7 +319,9 @@ export default function HomeScreen({
           contentContainerStyle={{ gap: 14, paddingRight: 8 }}
         >
           {entries.map((c) => {
-            const image = c.image ? sizedImage(String(c.image), 128) : leadPhoto(String(c.name));
+            const image = c.image
+              ? { uri: sizedImage(String(c.image), 128) }
+              : leadPhoto(String(c.name));
             return (
               <PressableScale
                 key={c.id}
@@ -344,7 +349,7 @@ export default function HomeScreen({
                     // icons; cropping to a circle fills the tile the way the
                     // web storefront does.
                     <Image
-                      source={{ uri: image }}
+                      source={image}
                       contentFit="cover"
                       transition={200}
                       accessibilityLabel=""

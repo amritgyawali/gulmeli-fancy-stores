@@ -1,7 +1,7 @@
 {
   "name": "Gulmeli Fancy Stores",
   "short_name": "Gulmeli",
-  "description": "Everyday fancy goods, delivered across Nepal.",
+  "description": "Clothing for the whole family, delivered across Nepal.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

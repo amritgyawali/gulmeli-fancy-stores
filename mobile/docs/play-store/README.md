@@ -168,17 +168,24 @@ performance → Crash logs / Diagnostics* here and in the privacy policy.
 **App name** (30): `Gulmeli Fancy Stores`
 
 **Short description** (80):
-`Shop fashion, electronics & groceries with cash on delivery across Nepal.`
+`Clothing for men, women & kids. Ethnic & winter wear. Cash on delivery in Nepal.`
 
 **Full description** (4000):
 
 ```
-Gulmeli Fancy Stores brings everyday fancy goods to your door with cash on delivery across Nepal.
+Gulmeli Fancy Stores is your clothing store for the whole family, delivered to your door with cash on delivery across Nepal.
 
-SHOP EVERYTHING IN ONE PLACE
-• Fashion, electronics, groceries, jewellery and lifestyle products
-• Search by name or category, filter by price and rating
-• Clear prices in rupees, live stock and customer reviews
+CLOTHING FOR EVERYONE
+• Men, women and kids: shirts, T-shirts, jeans, dresses, tops and more
+• Ethnic wear: daura suruwal, Dhaka topi, kurtis, sarees and lehengas
+• Winter wear, activewear and accessories
+• Search by name, colour or fabric, filter by price and rating
+
+THE RIGHT FIT
+• Pick your size and colour on every product
+• Size guide with body measurements for every size
+• Fabric, fit and wash-care details for each item
+• Easy size exchange on unworn items with tags
 
 DEALS EVERY DAY
 • Offers page with the biggest savings first
